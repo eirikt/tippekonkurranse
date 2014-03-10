@@ -1,0 +1,11 @@
+{
+    "name": "Tippekonkurranse",
+    "version": "0.0.3",
+    "dependencies": {
+        "requirejs": "~2.1.11",
+        "jquery": "~2.1.0",
+        "bootstrap": "~3.1.1"
+    },
+    "devDependencies": {
+    }
+}
