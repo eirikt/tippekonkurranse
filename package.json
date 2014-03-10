@@ -1,0 +1,19 @@
+{
+    "name": "Tippekonkurranse",
+    "version": "0.0.2",
+    "description": "A simple Node-based web application",
+    "author": "Eirik Torske <eirik.torske@gmail.com>",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/eirikt/tippekonkurranse.git"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "logfmt": "~0.21.0",
+        "express": "~3.5.0"
+    },
+    "engine": "node 0.10.x"
+}
