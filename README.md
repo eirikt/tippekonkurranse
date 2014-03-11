@@ -15,33 +15,37 @@ A simple Node-based web application (in norwegian).
 ### v0.0.1 : Single-file browser-app version
 _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 
-### v0.0.2 : Initial server version
+### v0.0.2 : Initial server version (proof-of-concept)
 * Establish (minimalistic) server version with Node.js
 * Very minimalistic client version (just a web page skeleton)
 * [Deploy][31] to Heroku => http://lit-ravine-2113.herokuapp.com
 * Custom shortened URL using [Tiny.cc][40] => http://tiny.cc/tippekonkurranse
-* Launch it!
+* Deploy it!
 
 _Status_: OK
 
-### v0.0.3 : Remote data retrieval proof-of-concept (server-side)
+### v0.0.3 : Remote data retrieval (proof-of-concept) (server-side)
 * Try get Tippeliga data from some service => [NFF][10]
 * Screen-scrape and parse data (server-side), e.g. like [this][20]
 * Acquire Tippeliga information
 
 _Status_: OK
 
-### v0.0.4 :
+### v0.0.4 : User data and business rules (proof-of-concept)
 * Establish user data model and business rules logic
 * Implement "tabellplassering" point calculations
 
 _Status_: OK
 
-### v0.0.5 :
-* Establish minimal client-side UX (simple SPA with RESTful service calls)
-* First usable version ...kind of
+### v0.0.5 : Demo web-site
+* Establish minimal client-side UX
+* First presentable version ...
+* Launch it!
+
+_Status_: OK
 
 ### v0.0.6 :
+* Establish RESTful service calls from client
 * Implement "toppscorer" point calculations
 
 ### v0.0.7 :
@@ -49,15 +53,26 @@ _Status_: OK
 
 ### v0.0.8 :
 * Implement "adecco-opprykk" point calculations
-* First feature-complete usable version
 
 ### v0.0.9 :
-* Establish somewhat proper client-side UX
+* Feedback and fixes ...
+
+### v0.0.10 :
+* Feedback and fixes ...
+
+### v0.0.11 :
+* Feedback and fixes ...
+
+### v0.1.0 :
+* __First feature-complete usable version__
 
 ...
 
 ### v0.0.x
 Add/hard-code user predictions for this year
+
+### v0.0.x :
+* Establish somewhat proper client-side UX
 
 ### v0.0.x
 Touch-friendly version ...
