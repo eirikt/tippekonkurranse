@@ -10,7 +10,7 @@
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "postinstall": "node ./node_modules/bower/bin/bower install"
+        "postinstall": "node ./node_modules/bower/bin/bower update"
     },
     "dependencies": {
         "underscore": "~1.6.0",

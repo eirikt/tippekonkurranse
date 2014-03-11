@@ -2,10 +2,6 @@
 .idea
 
 # Ignore derived/generated/transient project resources
-node_modules
-.bower
-client/bower_components
-test/bower_components/
 dist
 docs
 README.html
