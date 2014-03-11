@@ -1,22 +1,11 @@
-lib-cov
-*.seed
-*.log
-*.csv
-*.dat
-*.out
-*.pid
-*.gz
-
-pids
-logs
-results
-
-npm-debug.log
-node_modules
-
-client/bower_components
-
+# Ignore IDE stuff
 .idea
+
+# Ignore derived/generated/transient project resources
+node_modules
+.bower
+client/bower_components
+test/bower_components/
 dist
 docs
-data
+README.html

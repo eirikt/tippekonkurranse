@@ -35,6 +35,8 @@ _Status_: OK
 * Establish user data model and business rules logic
 * Implement "tabellplassering" point calculations
 
+_Status_: OK
+
 ### v0.0.5 :
 * Establish minimal client-side UX (simple SPA with RESTful service calls)
 * First usable version ...kind of

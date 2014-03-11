@@ -1,6 +1,6 @@
 {
     "name": "Tippekonkurranse",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "dependencies": {
         "requirejs": "~2.1.11",
         "jquery": "~2.1.0",

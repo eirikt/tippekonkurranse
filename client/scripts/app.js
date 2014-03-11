@@ -1,5 +1,5 @@
 /* global require: false */
-require(['jquery', 'jquery.bootstrap'],
+require(["jquery", "jquery.bootstrap"],
 
     function ($/*, Bootstrap*/) {
         "use strict";
