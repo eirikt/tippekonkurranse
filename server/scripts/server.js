@@ -12,7 +12,7 @@ var app = express();
 app.use(express.static(path.join(__dirname, "../../client")));
 
 var server = http.createServer(app);
-var port = 5000;
+var port = Number(process.env.PORT || 5000);
 server.listen(port, function () {
     "use strict";
     console.log("Tippekonkurranse, Node.js Express server listening on port %d", port);
