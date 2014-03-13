@@ -2,6 +2,11 @@
 
 A simple Node-based web application (in norwegian).
 
+[![Build Status](https://travis-ci.org/eirikt/tippekonkurranse.png?branch=master)](https://travis-ci.org/eirikt/tippekonkurranse)
+
+[![Dependency Status](https://david-dm.org/eirikt/tippekonkurranse.png)](https://david-dm.org/eirikt/tippekonkurranse)
+[![devDependency Status](https://david-dm.org/eirikt/tippekonkurranse/dev-status.png)](https://david-dm.org/eirikt/tippekonkurranse#info=devDependencies)
+
 
 ## Scope
 * Screen-scraping norwegian soccer result web pages
@@ -18,8 +23,9 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 ### v0.0.2 : Initial server version (proof-of-concept)
 * Establish (minimalistic) server version with Node.js
 * Very minimalistic client version (just a web page skeleton)
-* [Deploy][31] to Heroku => http://lit-ravine-2113.herokuapp.com
-* Custom shortened URL using [Tiny.cc][40] => http://tiny.cc/tippekonkurranse
+* ~~[Deploy][31] to Heroku => http://lit-ravine-2113.herokuapp.com~~
+* [Deploy][31] to Heroku => ~~http://tippekonkurranse.herokuapp.com~~
+* ~~Custom shortened URL using [Tiny.cc][40] => http://tiny.cc/tippekonkurranse~~
 * Deploy it!
 
 _Status_: OK
@@ -45,11 +51,12 @@ _Status_: OK
 _Status_: OK
 
 ### v0.0.6 :
+* Add some test user data
 * Establish RESTful service calls from client
-* Implement "toppscorer" point calculations
+* Implement "cupmester" point calculations
 
 ### v0.0.7 :
-* Implement "cupmester" point calculations
+* Implement "toppscorer" point calculations
 
 ### v0.0.8 :
 * Implement "adecco-opprykk" point calculations
@@ -57,32 +64,29 @@ _Status_: OK
 ### v0.0.9 :
 * Feedback and fixes ...
 
-### v0.0.10 :
-* Feedback and fixes ...
+### v0.0.10
+Add/hard-code user predictions for this year
 
 ### v0.0.11 :
 * Feedback and fixes ...
 
-### v0.1.0 :
+### v1.0.0 : _Delivery goal 28.03.2014_
 * __First feature-complete usable version__
 
 ...
 
-### v0.0.x
-Add/hard-code user predictions for this year
-
-### v0.0.x :
+### v1.0.x :
 * Establish somewhat proper client-side UX
 
-### v0.0.x
+### v1.0.x
 Touch-friendly version ...
 
 Small-screen-friendly version ...
 
-### v0.0.x : Proper URL
+### v1.0.x : Proper URL
 [Heroku/Custom domains][31]
 
-### v0.0.x
+### v1.0.x
 Establish proper REST service for Tippeliga data for everybody to use without leaning to crappy web scraping routines ...
 
 

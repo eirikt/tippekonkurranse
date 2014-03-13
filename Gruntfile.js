@@ -1,13 +1,85 @@
 module.exports = function (grunt) {
-    "use strict";
+    'use strict';
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
+        shell: {
+            help: {
+                options: { stdout: true, stderr: true, failOnError: true },
+                command: [
+                    'echo.',
+                    'echo #######################################',
+                    'echo       <%= pkg.name %> v<%= pkg.version %>',
+                    'echo #######################################',
+                    'echo.',
+                    'echo Essential grunt tasks are:',
+                    'echo   foreman   (local Heroku) (blocking command)'
+                ].join('&&')
+            },
+            foreman: {
+                options: { stdout: true, stderr: true, failOnError: true },
+                command: 'foreman start'
+            }//,
+            /*
+            createDataDir: {
+                options: { stdout: true },
+                command: [
+                    'mkdir data',
+                    'cd data',
+                    'mkdir db'
+                ].join('&&')
+            },
+            */
+            /*
+            mongod: {
+                options: { stdout: true, stderr: true, failOnError: true },
+                command: 'mongod.exe --dbpath data/db'
+            },
+            */
+            // TODO: does not work => "Warning: stdout maxBuffer exceeded. Use --force to continue."
+            /*
+            node: {
+                //execOptions: {
+                //encoding: 'utf8',
+                //timeout: 0,
+                //    maxBuffer: 4096//,
+                //killSignal: 'SIGTERM'
+                //},
+                options: {
+                    stdout: true,
+                    stderr: true,
+                    failOnError: true
+                },
+                command: [
+                    'echo Starting Node.js (4GB max process size/max garbage size) ...',
+                    'node --max-old-space-size=4096 server/scripts/server.js'
+                ].join('&&')
+            }
+            */
+        },
+
+        copy: {
+            main: {
+                files: [
+                    { expand: true, cwd: 'client', src: ['**'], dest: 'build' }
+                ]
+            }
+        },
+
+        clean: {
+            options: {
+                "no-write": false
+            },
+            build: {
+                src: ['build']
+            }
+        },
+
         jshint: {
             all: [
                 //'Gruntfile.js'
-                //'server/scripts/*.js'
+                'server/scripts/*.js',
                 'client/scripts/*.js'
                 //'test/spec/**/*.js'
             ],
@@ -44,7 +116,7 @@ module.exports = function (grunt) {
                 strict: true,
                 trailing: true,
                 maxparams: 14,
-                maxdepth: 3,
+                maxdepth: 5,
                 maxstatements: 20,
                 maxcomplexity: 7,
                 maxlen: 180,
@@ -74,22 +146,46 @@ module.exports = function (grunt) {
             }
         },
 
+        /*
+         uglify: {
+         options: {
+         banner: '! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> \n'
+         },
+         build: {
+         src: 'client/scripts/*.js',
+         dest: 'dist/<%= pkg.name %>.min.js'
+         }
+         }
+         */
         uglify: {
             options: {
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                mangle: true,
+                compress: {
+                }
             },
-            build: {
-                src: 'client/scripts/**/*.js',
-                dest: 'dist/<%= pkg.name %>.min.js'
+            myUglifyTask: {
+                files: {
+                    'build/scripts/app.config.js': 'build/scripts/app.config.js',
+                    'build/scripts/app.js': 'build/scripts/app.js'
+                }
             }
         }
     });
 
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
+    grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-mocha');
     grunt.loadNpmTasks('grunt-jsdoc');
 
-    grunt.registerTask('build:travis', ['jshint', 'mocha', 'jsdoc', 'uglify']);
+    grunt.registerTask('help', ['shell:help']);
+    grunt.registerTask('foreman', ['shell:foreman']);
+
+    grunt.registerTask('build:travis', ['jshint', 'jsdoc', 'copy', 'uglify', 'mocha']);
+    grunt.registerTask('deploy:local', ['clean', 'copy', 'uglify', 'foreman']);
+
+    grunt.registerTask('default', ['help']);
 };

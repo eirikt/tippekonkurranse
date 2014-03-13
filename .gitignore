@@ -2,6 +2,5 @@
 .idea
 
 # Ignore derived/generated/transient project resources
-dist
-docs
+build
 README.html

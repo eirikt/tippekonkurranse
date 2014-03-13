@@ -1,8 +1,47 @@
 body {
-    font-family: Verdana, sans-serif;
+    font-family: 'Open Sans Condensed','Arial Narrow', serif;
+    font-weight: 400;
+    font-size: 15px;
+    color: #333;
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+    /*overflow-x: hidden;*/
 }
 
 /*
-@media screen and (max-width: 540px) {
+hr {
+    height: 0;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
+*/
+
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #eeeeee;
+}
+
+
+/**
+ *  Debug
+ ******************************************************************************/
+/*
+div {
+    border: 1px dashed;
+}
+
+header {
+    border: 1px dashed;
+}
+
+nav {
+    border: 1px dashed;
+}
+
+img {
+    border: dashed;
 }
 */

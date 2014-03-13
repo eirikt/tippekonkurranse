@@ -1,6 +1,6 @@
 /* global require: false, console: false, __dirname: false */
-var _ = require("underscore"),
-    logfmt = require("logfmt"),
+var //_ = require("underscore"),
+    //logfmt = require("logfmt"),
     path = require("path"),
     http = require("http"),
     express = require("express"),
@@ -8,20 +8,7 @@ var _ = require("underscore"),
     cheerio = require("cheerio");
 
 
-var app = express();
-app.use(express.static(path.join(__dirname, "../../client")));
-
-var server = http.createServer(app);
-
-// Heroku port acquiring idiom
-var port = Number(process.env.PORT || 5000);
-
-server.listen(port, function () {
-    "use strict";
-    console.log("Tippekonkurranse, Node.js Express server listening on port %d", port);
-});
-
-
+// TODO: move to 'user-predictions-2014.js'
 var predictions2014 = {
     "eirik": {
         tabell: {
@@ -46,8 +33,10 @@ var predictions2014 = {
         opprykk: ["", ""]
     }
 };
+// /TODO: move to 'user-predictions-2014.js'
 
 
+// TODO: move to '???.js'
 var currentTable = {};
 
 
@@ -56,7 +45,7 @@ var currentStanding = {
 };
 
 
-var fotballNoCurrentTippeligaTableUrl = "http://www.fotball.no/Landslag_og_toppfotball/Toppfotball/tippeligaen";
+var fotball_no_currentTippeligaTableUrl = "http://www.fotball.no/Landslag_og_toppfotball/Toppfotball/tippeligaen";
 
 var _parseFotballNoTippeligaTable = function (body) {
     "use strict";
@@ -102,7 +91,7 @@ var _updateTableScores = function () {
 var _handleTablePredictions = function (req, resp) {
     "use strict";
     request(
-        fotballNoCurrentTippeligaTableUrl,
+        fotball_no_currentTippeligaTableUrl,
         function (error, response, body) {
             if (!error && response.statusCode === 200) {
                 _parseFotballNoTippeligaTable(body);
@@ -116,8 +105,26 @@ var _handleTablePredictions = function (req, resp) {
         }
     );
 };
+// /TODO: move to '???.js'
 
 
+var app = express();
+
+// Static resources
+app.use(express.static(path.join(__dirname, "../../client")));
+//app.use(express.static(path.join(__dirname, "../../build")));
+
+// Dynamic resources (RESTful service API)
 app.get("/scores", _handleTablePredictions);
 app.get("/results", _handleTablePredictions);
 app.get("/res", _handleTablePredictions);
+
+var server = http.createServer(app);
+
+// NB! Heroku port acquiring idiom
+var port = Number(process.env.PORT || 5000);
+
+server.listen(port, function () {
+    "use strict";
+    console.log("Tippekonkurranse, Node.js Express server listening on port %d", port);
+});
