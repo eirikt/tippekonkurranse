@@ -184,7 +184,7 @@ module.exports = function (grunt) {
     grunt.registerTask('help', ['shell:help']);
     grunt.registerTask('foreman', ['shell:foreman']);
 
-    grunt.registerTask('build:travis', ['jshint', 'jsdoc', 'copy', 'uglify', 'mocha']);
+    grunt.registerTask('build:travis', ['jshint', 'jsdoc', 'clean', 'copy', 'uglify', 'mocha']);
     grunt.registerTask('deploy:local', ['clean', 'copy', 'uglify', 'foreman']);
 
     grunt.registerTask('default', ['help']);

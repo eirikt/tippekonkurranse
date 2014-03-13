@@ -9,7 +9,7 @@
     margin: 0;
     text-transform: uppercase;
     font-weight: 300;
-    text-shadow: 0 0 0 rgba(0, 0, 0, 0.0001);
+    text-shadow: 0 0 0 rgba(0,0,0,0.0001);
 }
 .rw-sentence span {
     color: #000;
