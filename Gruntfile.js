@@ -135,8 +135,8 @@ module.exports = function (grunt) {
             }
         },
 
-        'scripts': {
-            'postinstall': "echo postinstall time; ./node_modules/grunt/bin/grunt deploy:heroku"
+        scripts: {
+            postinstall: 'echo postinstall time; node ./node_modules/grunt-cli/bin/grunt deploy:heroku'
         }
     });
 
