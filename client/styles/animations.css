@@ -4,13 +4,14 @@
     margin: 110px auto 0 auto;
     padding: 10px;
 }
-
 .rw-sentence {
     margin: 0;
     text-transform: uppercase;
     font-weight: 300;
     text-shadow: 0 0 0 rgba(0,0,0,0.0001);
 }
+
+
 .rw-sentence span {
     color: #000;
     white-space: nowrap;
@@ -56,8 +57,6 @@
     -ms-animation: rotateWordsSecond 18s ease-in infinite 0s;
     animation: rotateWordsSecond 18s ease-in infinite 0s;
 }
-
-
 .rw-words span:nth-child(2) {
     -webkit-animation-delay: 3s;
     -moz-animation-delay: 3s;
@@ -148,7 +147,7 @@
 }
 
 
-@media screen and (max-width: 1060px) {
+@media screen and (max-width: 1100px) {
     .rw-words{ height: 55px; }
     .rw-words-1 span{ font-size: 280%; text-indent: 5px;}
     .rw-words-2 span { font-size: 160%; }

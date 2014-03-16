@@ -20,43 +20,7 @@ module.exports = function (grunt) {
             foreman: {
                 options: { stdout: true, stderr: true, failOnError: true },
                 command: 'foreman start'
-            }//,
-            /*
-            createDataDir: {
-                options: { stdout: true },
-                command: [
-                    'mkdir data',
-                    'cd data',
-                    'mkdir db'
-                ].join('&&')
-            },
-            */
-            /*
-            mongod: {
-                options: { stdout: true, stderr: true, failOnError: true },
-                command: 'mongod.exe --dbpath data/db'
-            },
-            */
-            // TODO: does not work => "Warning: stdout maxBuffer exceeded. Use --force to continue."
-            /*
-            node: {
-                //execOptions: {
-                //encoding: 'utf8',
-                //timeout: 0,
-                //    maxBuffer: 4096//,
-                //killSignal: 'SIGTERM'
-                //},
-                options: {
-                    stdout: true,
-                    stderr: true,
-                    failOnError: true
-                },
-                command: [
-                    'echo Starting Node.js (4GB max process size/max garbage size) ...',
-                    'node --max-old-space-size=4096 server/scripts/server.js'
-                ].join('&&')
             }
-            */
         },
 
         copy: {
@@ -169,6 +133,10 @@ module.exports = function (grunt) {
                     'build/scripts/app.js': 'build/scripts/app.js'
                 }
             }
+        },
+
+        'scripts': {
+            'postinstall': "echo postinstall time; ./node_modules/grunt/bin/grunt deploy:heroku"
         }
     });
 
@@ -186,6 +154,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build:travis', ['jshint', 'jsdoc', 'clean', 'copy', 'uglify', 'mocha']);
     grunt.registerTask('deploy:local', ['clean', 'copy', 'uglify', 'foreman']);
+    grunt.registerTask('deploy:heroku', ['clean', 'copy', 'uglify']);
 
     grunt.registerTask('default', ['help']);
 };
