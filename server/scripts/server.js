@@ -111,13 +111,13 @@ var _handleTablePredictions = function (req, resp) {
 var app = express();
 
 // Static resources
-//app.use(express.static(path.join(__dirname, "../../client")));
 app.use(express.static(path.join(__dirname, "../../build")));
 
 // Dynamic resources (RESTful service API)
-app.get("/scores", _handleTablePredictions);
-app.get("/results", _handleTablePredictions);
-app.get("/res", _handleTablePredictions);
+app.get("/currentScores", _handleTablePredictions);
+app.get("/scores", _handleTablePredictions);    // Alias
+app.get("/results", _handleTablePredictions);   // Alias
+app.get("/res", _handleTablePredictions);       // Alias
 
 var server = http.createServer(app);
 

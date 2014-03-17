@@ -133,10 +133,6 @@ module.exports = function (grunt) {
                     'build/scripts/app.js': 'build/scripts/app.js'
                 }
             }
-        },
-
-        scripts: {
-            postinstall: 'echo postinstall time; node ./node_modules/grunt-cli/bin/grunt deploy:heroku'
         }
     });
 
@@ -152,9 +148,28 @@ module.exports = function (grunt) {
     grunt.registerTask('help', ['shell:help']);
     grunt.registerTask('foreman', ['shell:foreman']);
 
-    grunt.registerTask('build:travis', ['jshint', 'jsdoc', 'clean', 'copy', 'uglify', 'mocha']);
-    grunt.registerTask('deploy:local', ['clean', 'copy', 'uglify', 'foreman']);
-    grunt.registerTask('deploy:heroku', ['clean', 'copy', 'uglify']);
+    grunt.registerTask('build', ['clean', 'copy', 'uglify']);
+
+    grunt.registerTask('build:travis', ['jshint', 'jsdoc', 'build', 'mocha']);
+    grunt.registerTask('deploy:local', ['build', 'foreman']);
+
+    /*
+     * Heroku buildpack: Node.js with grunt support
+     * https://github.com/mbuchetics/heroku-buildpack-nodejs-grunt
+     */
+    //>D:\workspace\Tippekonkurranse [master +11 ~2 -0 !]> heroku config:add BUILDPACK_URL=https://github.com/mbuchetics/heroku-buildpack-nodejs-grunt.git
+    //>Setting config vars and restarting tippekonkurranse... done, v19
+    //>BUILDPACK_URL: https://github.com/mbuchetics/heroku-buildpack-nodejs-grunt.git
+    //>D:\workspace\Tippekonkurranse [master +11 ~2 -0 !]> heroku labs:enable user-env-compile
+    //>Enabling user-env-compile for tippekonkurranse... done
+    //>WARNING: This feature is experimental and may change or be removed without notice.
+    //>For more information see: http://devcenter.heroku.com/articles/labs-user-env-compile
+    //>D:\workspace\Tippekonkurranse [master +11 ~2 -0 !]> heroku config:set NODE_ENV=production
+    //>Setting config vars and restarting tippekonkurranse... done, v20
+    //>NODE_ENV: production
+    //>D:\workspace\Tippekonkurranse [master +11 ~2 -0 !]>
+    //grunt.registerTask('heroku:development', 'clean less mincss');
+    grunt.registerTask('heroku:production', 'build');
 
     grunt.registerTask('default', ['help']);
 };
