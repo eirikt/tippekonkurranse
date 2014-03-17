@@ -151,8 +151,9 @@ module.exports = function (grunt) {
     grunt.registerTask('build', ['clean', 'copy', 'uglify']);
 
     grunt.registerTask('build:travis', ['jshint', 'jsdoc', 'build', 'mocha']);
-    grunt.registerTask('deploy:local', ['build', 'foreman']);
 
+    grunt.registerTask('deploy:local', ['build', 'foreman']);
+    grunt.registerTask('deploy:heroku', 'build');
     /*
      * Heroku buildpack: Node.js with grunt support
      * https://github.com/mbuchetics/heroku-buildpack-nodejs-grunt
@@ -169,7 +170,7 @@ module.exports = function (grunt) {
     //>NODE_ENV: production
     //>D:\workspace\Tippekonkurranse [master +11 ~2 -0 !]>
     //grunt.registerTask('heroku:development', 'clean less mincss');
-    grunt.registerTask('heroku:production', 'build');
+    grunt.registerTask('heroku:production', 'deploy:heroku');
 
     grunt.registerTask('default', ['help']);
 };
