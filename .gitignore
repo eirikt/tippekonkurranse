@@ -2,8 +2,9 @@
 .idea
 
 # Ignore derived/generated/transient project resources
-node_modules
 build
+client/bower_components
+node_modules
 README.html
 
 # Temporary dev stuff, not sure about their future ...

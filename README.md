@@ -17,7 +17,7 @@ A simple Node-based web application (in norwegian).
 
 ## Version history/roadmap
 
-### v0.0.1 : Single-file browser-app version
+#### v0.0.1 : Single-file browser-app version
 _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 
 #### v0.0.2 : Initial server version (proof-of-concept)

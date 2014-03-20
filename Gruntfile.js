@@ -173,7 +173,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build:travis', ['jshint', 'jsdoc', 'build-client', 'test']);
 
-    grunt.registerTask('deploy:local', ['build-client', 'foreman']);
+    grunt.registerTask('deploy:local', ['install-client', 'build-client', 'foreman']);
     grunt.registerTask('deploy:production', ['install-client', 'build-client']);
 
     grunt.registerTask('deploy:heroku', ['deploy:production']);
