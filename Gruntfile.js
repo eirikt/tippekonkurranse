@@ -28,7 +28,7 @@ module.exports = function (grunt) {
 
             'install-client': {
                 options: { stdout: true, stderr: true, failOnError: true },
-                command: 'bower install'
+                command: 'node ./node_modules/bower/bin/bower install'
             },
 
             'install-test': {
