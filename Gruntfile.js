@@ -56,10 +56,10 @@ module.exports = function (grunt) {
 
         jshint: {
             all: [
-                //'Gruntfile.js'
+                'Gruntfile.js',
                 'server/scripts/*.js',
-                'client/scripts/*.js'
-                //'test/spec/**/*.js'
+                'client/scripts/*.js',
+                'tests/specs/**/*.js'
             ],
             options: {
                 //reporter: 'jslint',
@@ -174,7 +174,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build:travis', ['jshint', 'jsdoc', 'build-client', 'test']);
 
     grunt.registerTask('deploy:local', ['build-client', 'foreman']);
-    grunt.registerTask('deploy:production', ['install-client, build-client']);
+    grunt.registerTask('deploy:production', ['install-client', 'build-client']);
 
     grunt.registerTask('deploy:heroku', ['deploy:production']);
     /*
