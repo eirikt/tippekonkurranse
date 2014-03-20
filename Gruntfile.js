@@ -14,12 +14,26 @@ module.exports = function (grunt) {
                     'echo #######################################',
                     'echo.',
                     'echo Essential grunt tasks are:',
-                    'echo   foreman   (local Heroku) (blocking command)'
+                    'echo   install-client  (installs client resources via Bower)',
+                    'echo   install-test    (installs test resources via Bower)',
+                    'echo   test            (executes Mocha tests)',
+                    'echo   foreman         (local Heroku) (blocking command)'
                 ].join('&&')
             },
+
             foreman: {
                 options: { stdout: true, stderr: true, failOnError: true },
                 command: 'foreman start'
+            },
+
+            'install-client': {
+                options: { stdout: true, stderr: true, failOnError: true },
+                command: 'bower install'
+            },
+
+            'install-test': {
+                options: { stdout: true, stderr: true, failOnError: true },
+                command: 'cd tests && bower install'
             }
         },
 
@@ -97,7 +111,7 @@ module.exports = function (grunt) {
 
         mocha: {
             test: {
-                src: ['tests/**/*.html']
+                src: ['tests/test.html']
             }
         },
 
@@ -122,13 +136,17 @@ module.exports = function (grunt) {
          }
          */
         uglify: {
-            options: {
-                mangle: true,
-                compress: {
-                }
-            },
+            /*
+             options: {
+             mangle: true,
+             compress: {
+
+             }
+             },
+             */
             myUglifyTask: {
                 files: {
+                    'build/bower_components/requirejs/require.js': 'build/bower_components/requirejs/require.js',
                     'build/scripts/app.config.js': 'build/scripts/app.config.js',
                     'build/scripts/app.js': 'build/scripts/app.js'
                 }
@@ -147,14 +165,22 @@ module.exports = function (grunt) {
 
     grunt.registerTask('help', ['shell:help']);
     grunt.registerTask('foreman', ['shell:foreman']);
+    grunt.registerTask('install-client', ['shell:install-client']);
+    grunt.registerTask('install-test', ['shell:install-test']);
+    grunt.registerTask('test', ['mocha']);
 
     grunt.registerTask('build', ['clean', 'copy', 'uglify']);
 
-    grunt.registerTask('build:travis', ['jshint', 'jsdoc', 'build', 'mocha']);
+    grunt.registerTask('build:travis', ['jshint', 'jsdoc', 'build', 'test']);
 
     grunt.registerTask('deploy:local', ['build', 'foreman']);
-    grunt.registerTask('deploy:heroku', 'build');
+    grunt.registerTask('deploy:production', ['build']);
+
+    grunt.registerTask('deploy:heroku', ['deploy:production']);
     /*
+     * http://stackoverflow.com/questions/13784600/how-to-deploy-node-app-that-uses-grunt-to-heroku
+     *
+     * =>
      * Heroku buildpack: Node.js with grunt support
      * https://github.com/mbuchetics/heroku-buildpack-nodejs-grunt
      */
@@ -170,7 +196,9 @@ module.exports = function (grunt) {
     //>NODE_ENV: production
     //>D:\workspace\Tippekonkurranse [master +11 ~2 -0 !]>
     //grunt.registerTask('heroku:development', 'clean less mincss');
-    grunt.registerTask('heroku:production', 'deploy:heroku');
+    grunt.registerTask('heroku:production', ['deploy:heroku']);
+
+    grunt.registerTask('run', ['deploy:local']);
 
     grunt.registerTask('default', ['help']);
 };

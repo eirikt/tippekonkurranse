@@ -2,5 +2,18 @@
 .idea
 
 # Ignore derived/generated/transient project resources
+node_modules
 build
 README.html
+
+# Temporary dev stuff, not sure about their future ...
+client/images/podium_resultats.jpeg
+client/images/sport-man-on-podium-184220.jpg
+client/medal.ico
+client/nff.ico
+client/styles/demo.css
+client/styles/normalize.css
+client/styles/style2.css
+client/styles/style3.css
+client/styles/style4.css
+client/styles/style5.css

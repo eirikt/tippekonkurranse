@@ -39,7 +39,7 @@ _Status_: OK
 
 #### v0.0.4 : User data and business rules (proof-of-concept)
 * Establish user data model and business rules logic
-* Implement "tabellplassering" point calculations
+* Implement "tabellplassering" points calculations
 
 _Status_: OK
 
@@ -53,19 +53,21 @@ _Status_: OK
 #### v0.0.6 :
 * Add some test user data
 * Establish RESTful service calls from client
-* Implement "cupmester" point calculations
+* Implement "pall" points calculations
 
 #### v0.0.7 :
+* Implement "cupmester" point calculations
 * Implement "toppscorer" point calculations
 
 #### v0.0.8 :
+* Implement "tippeliga-nedrykk" point calculations
 * Implement "adecco-opprykk" point calculations
 
 #### v0.0.9 :
 * Feedback and fixes ...
 
 #### v0.0.10
-Add/hard-code user predictions for this year
+* Add/hard-code user predictions for this year
 
 #### v0.0.11 :
 * Feedback and fixes ...
@@ -79,13 +81,18 @@ Add/hard-code user predictions for this year
 #### v1.0.0 : _Delivery goal 28.03.2014_
 * __First feature-complete usable version__
 
+#### v1.0.1 :
+* Bugfixes
+
 ...
 
-#### v1.x
+#### v1.1 : _Delivery goal 01.05.2014_
 * Presentation of historic data
+
+#### v1.1.x
 * Graphs and whatnot
 
-#### v2.x
+#### v2.0
 * Mobile app
 * Touch-friendly version ...
 * Small-screen-friendly version ...

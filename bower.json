@@ -1,0 +1,11 @@
+{
+    "name": "Tippekonkurranse",
+    "dependencies": {
+        "requirejs": "~2.1.11",
+        "socket.io": "~0.9.15",
+        "jquery": "~2.1.0",
+        "bootstrap": "~3.1.1",
+        "backbone": "~1.1.2",
+        "moment": "~2.5.1"
+    }
+}

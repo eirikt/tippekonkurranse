@@ -1,7 +1,7 @@
 /* global require: false */
 require.config({
     paths: {
-        'jquery': './vendor/jquery.min'
+        'jquery': './../bower_components/jquery/dist/jquery.min'
     }
 });
 
