@@ -9,7 +9,8 @@
         "url": "https://github.com/eirikt/tippekonkurranse.git"
     },
     "scripts": {
-        "postinstall": "grunt install-client && grunt install-test && grunt build",
+        /* Truble when deploying to Heroku */
+        /*"postinstall": "grunt install-client && grunt install-test && grunt build",*/
         "test": "grunt test"
     },
     "dependencies": {
