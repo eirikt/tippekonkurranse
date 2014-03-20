@@ -29,7 +29,7 @@ require(["jquery", "jquery.bootstrap"],
                                 "</table>")
                         .show("fast");
                 });
-            }, 18100);
+            }, 18000);
         });
     }
 );
