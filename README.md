@@ -51,31 +51,32 @@ _Status_: OK
 _Status_: OK
 
 #### v0.0.6 :
+* Establish client-side UX for showing table results
+
+_Status_: OK
+
+#### v0.0.7 :
 * Add some test user data
 * Establish RESTful service calls from client
 * Implement "pall" points calculations
 
-#### v0.0.7 :
+_Status_: Soon completed ...
+
+#### v0.0.8 :
 * Implement "cupmester" point calculations
 * Implement "toppscorer" point calculations
 
-#### v0.0.8 :
+#### v0.0.9 :
 * Implement "tippeliga-nedrykk" point calculations
 * Implement "adecco-opprykk" point calculations
 
-#### v0.0.9 :
+#### v0.0.10 :
 * Feedback and fixes ...
 
-#### v0.0.10
+#### v0.0.11
 * Add/hard-code user predictions for this year
 
-#### v0.0.11 :
-* Feedback and fixes ...
-
 #### v0.0.12 :
-* Establish client-side UX for showing table results
-
-#### v0.0.13 :
 * Feedback and fixes ...
 
 #### v1.0.0 : _Delivery goal 28.03.2014_
@@ -87,6 +88,7 @@ _Status_: OK
 ...
 
 #### v1.1 : _Delivery goal 01.05.2014_
+* Persistent data with MongoDB
 * Presentation of historic data
 
 #### v1.1.x

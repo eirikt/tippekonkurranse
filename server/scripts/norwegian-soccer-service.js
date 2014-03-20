@@ -8,7 +8,8 @@ var _ = require("underscore"),
 
 
 // www.fotball.no-specific stuff
-var _fotballNoCurrentTippeligaTableUrl = "http://www.fotball.no/Landslag_og_toppfotball/Toppfotball/tippeligaen",
+var _fotballNoCurrentTippeligaTableUrl =
+        "http://www.fotball.no/Landslag_og_toppfotball/Toppfotball/tippeligaen",
 
     _parseFotballNoTippeligaTable = function (body) {
         "use strict";
@@ -30,7 +31,8 @@ var _fotballNoCurrentTippeligaTableUrl = "http://www.fotball.no/Landslag_og_topp
     },
 
 
-    _fotballNoCurrentAdeccoligaTableUrl = "http://www.fotball.no/Landslag_og_toppfotball/Toppfotball/1_divisjon_menn",
+    _fotballNoCurrentAdeccoligaTableUrl =
+        "http://www.fotball.no/Landslag_og_toppfotball/Toppfotball/1_divisjon_menn",
 
     _parseFotballNoAdeccoligaTable = function (body) {
         "use strict";
@@ -40,11 +42,12 @@ var _fotballNoCurrentTippeligaTableUrl = "http://www.fotball.no/Landslag_og_topp
             rows = heading.next("table").find("tr");
         rows.each(function (idx, element) {
             if (idx > 0) {
-                var tableCells = $(element).find("td");
-                var no = $(tableCells[0]).html();
-                var team = $(tableCells[1]).find("a").html();
-                var matches = $(tableCells[2]).html();
+                var tableCells = $(element).find("td"),
+                    no = $(tableCells[0]).html(),
+                    team = $(tableCells[1]).find("a").html(),
+                    matches = $(tableCells[2]).html();
 
+                // The data format
                 currentTable[team] = { no: parseInt(no, 10), matches: matches };
             }
         });
@@ -122,5 +125,29 @@ var _getCurrentTippeligaTable = exports.getCurrentTippeligaTable = function () {
             "Sarpsborg 08": { no: 14, matches: 30 },
             "Tromsø": { no: 15, matches: 30 },
             "Hønefoss BK": { no: 16, matches: 30 }
+        });
+    },
+
+
+    _getAdeccoligaTable2013 = exports.getAdeccoligaTable2013 = function () {
+        "use strict";
+        var dfd = new promise.Deferred();
+        return dfd.resolve({
+            "Bodø/Glimt": { no: 1, matches: 30 },
+            "Stabæk": { no: 2, matches: 30 },
+            "Hødd": { no: 3, matches: 30 },
+            "Ranheim TF": { no: 4, matches: 30 },
+            "HamKam": { no: 5, matches: 30 },
+            "Mjøndalen": { no: 6, matches: 30 },
+            "Bryne": { no: 7, matches: 30 },
+            "Sandefjord Fotball": { no: 8, matches: 30 },
+            "Kristiansund": { no: 9, matches: 30 },
+            "Fredrikstad": { no: 10, matches: 30 },
+            "Strømmen": { no: 11, matches: 30 },
+            "Ullensaker/Kisa": { no: 12, matches: 30 },
+            "Vard Haugesund": { no: 13, matches: 30 },
+            "Kongsvinger": { no: 14, matches: 30 },
+            "Follo": { no: 15, matches: 30 },
+            "Elverum": { no: 16, matches: 30 }
         });
     };

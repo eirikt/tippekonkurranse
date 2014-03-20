@@ -47,9 +47,8 @@ var _getTableScore = function (predictedPlacing, actualPlacing) {
 
     _calculateCurrentScore = exports.calculateCurrentScore = function (req, resp) {
         "use strict";
-        var tippeligaPromise = norwegianSoccerLeagueService.getCurrentTippeligaTable(),
-            adeccoligaPromise = norwegianSoccerLeagueService.getCurrentAdeccoligaTable();
-        all(tippeligaPromise, adeccoligaPromise).then(
+        all(norwegianSoccerLeagueService.getCurrentTippeligaTable(),
+            norwegianSoccerLeagueService.getCurrentAdeccoligaTable()).then(
             function (resultArray) {
                 var currentTippeligaTable = resultArray[0],
                     currentAdeccoligaTable = resultArray[1],

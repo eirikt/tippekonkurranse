@@ -1,39 +1,52 @@
 body {
-    font-family: 'Open Sans Condensed','Arial Narrow', serif;
+    font-family: 'Open Sans Condensed', 'Arial Narrow', serif;
     font-weight: 400;
     font-size: 15px;
     color: #333;
     -webkit-font-smoothing: antialiased;
     -moz-font-smoothing: antialiased;
     font-smoothing: antialiased;
-    /*overflow-x: hidden;*/
 }
 
-/*
 hr {
-    height: 0;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
-}
-*/
-
-hr {
-    margin-top: 20px;
-    margin-bottom: 20px;
     border: 0;
     border-top: 1px solid #eeeeee;
 }
 
+/**
+ * Bootstrap overrides
+ */
+h2, .h2 {
+    font-size: 24px;
+}
+
+#content {
+    padding-top: 6rem;
+    padding-bottom: 1rem;
+}
 
 /**
  *  Debug
  ******************************************************************************/
 /*
 div {
-    border: 1px dashed;
+    border: 1px;
+    border-style: dotted;
 }
 
 header {
+    border: 1px dashed;
+}
+
+section {
+    border: 1px dashed;
+}
+
+article {
+    border: 1px dashed;
+}
+
+footer {
     border: 1px dashed;
 }
 
