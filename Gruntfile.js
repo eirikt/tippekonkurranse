@@ -169,12 +169,12 @@ module.exports = function (grunt) {
     grunt.registerTask('install-test', ['shell:install-test']);
     grunt.registerTask('test', ['mocha']);
 
-    grunt.registerTask('build', ['clean', 'copy', 'uglify']);
+    grunt.registerTask('build-client', ['clean', 'copy', 'uglify']);
 
-    grunt.registerTask('build:travis', ['jshint', 'jsdoc', 'build', 'test']);
+    grunt.registerTask('build:travis', ['jshint', 'jsdoc', 'build-client', 'test']);
 
-    grunt.registerTask('deploy:local', ['build', 'foreman']);
-    grunt.registerTask('deploy:production', ['build']);
+    grunt.registerTask('deploy:local', ['build-client', 'foreman']);
+    grunt.registerTask('deploy:production', ['install-client, build-client']);
 
     grunt.registerTask('deploy:heroku', ['deploy:production']);
     /*
