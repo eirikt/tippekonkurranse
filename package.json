@@ -8,11 +8,6 @@
         "type": "git",
         "url": "https://github.com/eirikt/tippekonkurranse.git"
     },
-    "scripts": {
-        /* Truble when deploying to Heroku */
-        /*"postinstall": "grunt install-client && grunt install-test && grunt build",*/
-        "test": "grunt test"
-    },
     "dependencies": {
         "underscore": "~1.6.0",
         "logfmt": "~0.21.0",
