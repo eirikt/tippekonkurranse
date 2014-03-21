@@ -33,7 +33,7 @@ module.exports = function (grunt) {
 
             'install-test': {
                 options: { stdout: true, stderr: true, failOnError: true },
-                command: 'cd tests && node ./node_modules/bower/bin/bower install'
+                command: 'cd tests && node ./../node_modules/bower/bin/bower install'
             }
         },
 

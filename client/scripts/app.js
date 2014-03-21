@@ -15,7 +15,16 @@ require(["jquery", "jquery.bootstrap"],
                     $("#content").append(
                             // Temporary table layout
                             "<table class='table table-condenced table-striped table-hover'>" +
-                                "<tr><th style='padding-left:2rem;'>#</th><th></th><th>Tabellplassering</th><th>Pall</th><th>Cup</th><th>Toppskårer</th><th>Opprykk</th><th>Nedrykk</th><th><strong>Sum</strong></th></tr>" +
+                                "<tr>" +
+                                "<th style='padding-left:2rem;'></th>" +
+                                "<th></th>" +
+                                "<th style='padding-right:3rem;'><strong>Sum</strong></th>" +
+                                "<th style='color:darkgray;width:8rem;'>Tabell</th>" +
+                                "<th style='color:darkgray;width:8rem;'>Pall</th>" +
+                                "<th style='color:darkgray;width:8rem;'>Cup</th>" +
+                                "<th style='color:darkgray;width:8rem;'>Toppskårer</th>" +
+                                "<th style='color:darkgray;width:8rem;'>Opprykk</th>" +
+                                "<th style='color:darkgray;width:8rem;'>Nedrykk</th></tr>" +
 
                                 "<tr><td style='padding-left:2rem;'>1</td><td>Einar</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>" +
                                 "<tr><td style='padding-left:2rem;'>2</td><td>Eirik</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>" +
