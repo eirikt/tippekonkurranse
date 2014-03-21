@@ -2,6 +2,7 @@
 
 var _pred2014 = exports.predictions2014 = {
 
+    "einar": null,
     "eirik": {
         tabell: [
             "Molde",
@@ -56,6 +57,8 @@ var _pred2014 = exports.predictions2014 = {
     },
     "oleerik": null,
     "rikard": null,
+    "sveintore": null,
+    "steinar": null,
     "tore": null,
     "trond": null
 };

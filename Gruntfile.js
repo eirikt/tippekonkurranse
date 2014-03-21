@@ -14,10 +14,10 @@ module.exports = function (grunt) {
                     'echo #######################################',
                     'echo.',
                     'echo Essential grunt tasks are:',
-                    'echo   install-client  (installs client resources via Bower)',
-                    'echo   install-test    (installs test resources via Bower)',
-                    'echo   test            (executes Mocha tests)',
-                    'echo   foreman         (local Heroku) (blocking command)'
+                    'echo   install-client   installs client resources via Bower',
+                    'echo   install-test     installs test resources via Bower',
+                    'echo   test             installs, builds, and executes Mocha tests',
+                    'echo   foreman          local Heroku runtime (blocking command)'
                 ].join('&&')
             },
 
@@ -33,7 +33,7 @@ module.exports = function (grunt) {
 
             'install-test': {
                 options: { stdout: true, stderr: true, failOnError: true },
-                command: 'cd tests && bower install'
+                command: 'cd tests && node ./node_modules/bower/bin/bower install'
             }
         },
 
@@ -103,8 +103,7 @@ module.exports = function (grunt) {
 
                 globals: {
                     require: false,
-                    define: false,
-                    prettyprintInteger: false
+                    define: false
                 }
             }
         },
@@ -165,16 +164,17 @@ module.exports = function (grunt) {
 
     grunt.registerTask('help', ['shell:help']);
     grunt.registerTask('foreman', ['shell:foreman']);
-    grunt.registerTask('install-client', ['shell:install-client']);
-    grunt.registerTask('install-test', ['shell:install-test']);
-    grunt.registerTask('test', ['mocha']);
+    grunt.registerTask('install:client', ['shell:install-client']);
+    grunt.registerTask('install:test', ['shell:install-test']);
 
-    grunt.registerTask('build-client', ['clean', 'copy', 'uglify']);
+    grunt.registerTask('build:client', ['clean', 'copy', 'uglify']);
+    grunt.registerTask('test', ['install:client', 'build:client', 'install:test', 'mocha']);
+    grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc']);
 
-    grunt.registerTask('build:travis', ['jshint', 'jsdoc', 'build-client', 'test']);
+    grunt.registerTask('deploy:local', ['install:client', 'build:client', 'foreman']);
+    grunt.registerTask('deploy:production', ['install:client', 'build:client']);
 
-    grunt.registerTask('deploy:local', ['install-client', 'build-client', 'foreman']);
-    grunt.registerTask('deploy:production', ['install-client', 'build-client']);
+    grunt.registerTask('run', ['deploy:local']);
 
     grunt.registerTask('deploy:heroku', ['deploy:production']);
     /*
@@ -197,8 +197,6 @@ module.exports = function (grunt) {
     //>D:\workspace\Tippekonkurranse [master +11 ~2 -0 !]>
     //grunt.registerTask('heroku:development', 'clean less mincss');
     grunt.registerTask('heroku:production', ['deploy:heroku']);
-
-    grunt.registerTask('run', ['deploy:local']);
 
     grunt.registerTask('default', ['help']);
 };

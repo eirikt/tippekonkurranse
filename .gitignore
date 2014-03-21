@@ -3,7 +3,8 @@
 
 # Ignore derived/generated/transient project resources
 build
-#client/bower_components
+client/bower_components
+#tests/bower_components
 node_modules
 README.html
 

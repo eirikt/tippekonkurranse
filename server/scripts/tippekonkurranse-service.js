@@ -4,13 +4,6 @@
 var _ = require("underscore"),
     promise = require("promised-io/promise"),
     all = promise.all,
-//logfmt = require("logfmt"),
-//path = require("path"),
-    http = require("http"),
-//express = require("express"),
-//request = require("request"),
-//cheerio = require("cheerio"),
-
 
 // Module dependencies, local
     predictions2014 = require("./user-predictions-2014.js").predictions2014,

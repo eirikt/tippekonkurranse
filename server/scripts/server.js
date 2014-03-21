@@ -1,21 +1,16 @@
 /* global require: false, console: false, __dirname: false */
 
 // Module dependencies, external
-var _ = require("underscore"),
-    //promise = require("promised-io/promise"),
-    //logfmt = require("logfmt"),
-    path = require("path"),
+var path = require("path"),
     http = require("http"),
     express = require("express"),
-    //request = require("request"),
-    //cheerio = require("cheerio"),
-
 
 // Module dependencies, local
-    tippekonkurranseService = require("./tippekonkurranse-service.js");
+    tippekonkurranseService = require("./tippekonkurranse-service.js"),
 
 
-var app = express();
+// The app server
+    app = express();
 
 // Static resources
 app.use(express.static(path.join(__dirname, "../../build")));
