@@ -20,7 +20,7 @@ define(['underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'app.models.Scor
                         });
                     results.fetch();
                 });
-            }, 17500);
+            }, 16500);
         });
     }
 );
