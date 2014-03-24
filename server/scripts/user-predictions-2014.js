@@ -1,64 +1,42 @@
-/* global require: false, console: false, __dirname: false */
+/* global exports:false */
 
 var _pred2014 = exports.predictions2014 = {
 
-    "einar": null,
-    "eirik": {
+    einar: null,
+    eirik: /*null,*/{
         tabell: [
-            "Molde",
-            "Rosenborg",
-            "Haugesund",
             "Aalesund",
-            "Viking",
-            "Strømsgodset",
-            "Odd Ballklubb",
             "Brann",
-            "Start",
+            "Haugesund",
             "Lillestrøm",
-            "Vålerenga",
-            "Sogndal",
+            "Molde",
+            "Odd",
+            "Rosenborg",
             "Sandnes Ulf",
-            "Sarpsborg 08",
-            "Tromsø",
-            "Hønefoss BK"
+            "Sarpsborg",
+            "Sogndal",
+            "Stabæk",
+            "Start",
+            "Strømsgodset",
+            "Viking",
+            "Vålerenga",
+            "Bodø/Glimt"
         ],
         toppscorer: [""],
         pall: ["", "", ""],
         nedrykk: ["", ""],
         opprykk: ["", ""]
     },
-    "geir": null,
-    "hansbernhard": null,
-    "jantore": null,
-    "oddgeir": null,
-    "oddvar": {
-        tabell: [
-            "Strømsgodset",
-            "Rosenborg",
-            "Haugesund",
-            "Aalesund",
-            "Viking",
-            "Molde",
-            "Odd Ballklubb",
-            "Brann",
-            "Start",
-            "Lillestrøm",
-            "Vålerenga",
-            "Sogndal",
-            "Sandnes Ulf",
-            "Sarpsborg 08",
-            "Tromsø",
-            "Hønefoss BK"
-        ],
-        toppscorer: [""],
-        pall: ["", "", ""],
-        nedrykk: ["", ""],
-        opprykk: ["", ""]
-    },
-    "oleerik": null,
-    "rikard": null,
-    "sveintore": null,
-    "steinar": null,
-    "tore": null,
-    "trond": null
+    geir: null,
+    hansbernhard: null,
+    jantore: null,
+    oddgeir: null,
+    oddvar: null,
+    oleerik: null,
+    rikard: null,
+    //sveintore: null,
+    //steinar: null,
+    sveinar: null,
+    tore: null,
+    trond: null
 };

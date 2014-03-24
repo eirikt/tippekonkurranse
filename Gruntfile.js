@@ -38,9 +38,10 @@ module.exports = function (grunt) {
         },
 
         copy: {
-            main: {
+            all: {
                 files: [
-                    { expand: true, cwd: 'client', src: ['**'], dest: 'build' }
+                    { expand: true, cwd: 'client', src: ['**'], dest: 'build' },
+                    { expand: true, cwd: 'shared', src: ['**'], dest: 'build' }
                 ]
             }
         },
@@ -95,7 +96,7 @@ module.exports = function (grunt) {
                 trailing: true,
                 maxparams: 14,
                 maxdepth: 5,
-                maxstatements: 20,
+                maxstatements: 30,
                 maxcomplexity: 7,
                 maxlen: 180,
 
@@ -145,10 +146,27 @@ module.exports = function (grunt) {
              */
             myUglifyTask: {
                 files: {
-                    'build/bower_components/requirejs/require.js': 'build/bower_components/requirejs/require.js',
-                    'build/scripts/app.config.js': 'build/scripts/app.config.js',
-                    'build/scripts/app.js': 'build/scripts/app.js'
+                    //'build/bower_components/requirejs/require.js': 'build/bower_components/requirejs/require.js',
+                    //'build/scripts/app.config.js': 'build/scripts/app.config.js',
+                    //'build/scripts/app.js': 'build/scripts/app.js'
                 }
+            }
+        },
+        watch: {
+            scripts: {
+                files: [
+                    'client/scripts/*.js',
+                    'shared/scripts/*.js',
+                    'client/styles/*.css',
+                    'client/index.html'
+                ],
+                tasks: ['copy']
+            },
+            options: {
+                debounceDelay: 500,
+                spawn: false,
+                reload: false,
+                livereload: false
             }
         }
     });
@@ -157,6 +175,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-mocha');

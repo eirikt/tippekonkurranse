@@ -1,4 +1,4 @@
-/* global require: false, console: false, __dirname: false */
+/* global require: false, console: false, __dirname: false, process: false */
 
 // Module dependencies, external
 var path = require("path"),
@@ -16,10 +16,7 @@ var path = require("path"),
 app.use(express.static(path.join(__dirname, "../../build")));
 
 // Dynamic resources (RESTful service API)
-app.get("/currentScores", tippekonkurranseService.calculateCurrentScore);
-app.get("/scores", tippekonkurranseService.calculateCurrentScore);          // Alias
-app.get("/results", tippekonkurranseService.calculateCurrentScore);         // Alias
-app.get("/res", tippekonkurranseService.calculateCurrentScore);             // Alias
+app.get("/current-scores", tippekonkurranseService.calculateCurrentScore);
 
 var server = http.createServer(app);
 

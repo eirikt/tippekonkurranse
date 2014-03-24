@@ -1,4 +1,4 @@
-/* global require: false, console: false, __dirname: false */
+/* global require: false, exports: false */
 
 // Module dependencies, external
 var _ = require("underscore"),
@@ -17,6 +17,7 @@ var _fotballNoCurrentTippeligaTableUrl =
             $ = cheerio.load(body),
             heading = $("h2:contains('Tippeligaen')"),
             rows = heading.next("table").find("tr");
+
         rows.each(function (idx, element) {
             if (idx > 0) {
                 var tableCells = $(element).find("td");
@@ -24,6 +25,7 @@ var _fotballNoCurrentTippeligaTableUrl =
                 var team = $(tableCells[1]).find("a").html();
                 var matches = $(tableCells[2]).html();
 
+                // The data format
                 currentTable[team] = { no: parseInt(no, 10), matches: matches };
             }
         });
@@ -57,32 +59,62 @@ var _fotballNoCurrentTippeligaTableUrl =
 
 
 var _getCurrentTippeligaTableUrl = function () {
+        "use strict";
         return _fotballNoCurrentTippeligaTableUrl;
     },
 
     _parseCurrentTippeligaTableData = _parseFotballNoTippeligaTable,
 
     _getCurrentAdeccoligaTableUrl = function () {
+        "use strict";
         return _fotballNoCurrentAdeccoligaTableUrl;
     },
 
-    _parseCurrentAdeccoligaTableData = _parseFotballNoAdeccoligaTable;
+    _parseCurrentAdeccoligaTableData = _parseFotballNoAdeccoligaTable,
+
+    _getCurrentTippeligaToppscorerUrl = function () {
+        "use strict";
+        return null;
+    },
+
+    _parseCurrentTippeligaToppscorerData = null;
 
 
 var _getCurrentTippeligaTable = exports.getCurrentTippeligaTable = function () {
         "use strict";
         var dfd = new promise.Deferred();
-        request(
-            _getCurrentTippeligaTableUrl(),
-            function (error, response, body) {
-                if (!error && response.statusCode === 200) {
-                    dfd.resolve(_parseCurrentTippeligaTableData(body));
-                }
-                else {
-                    dfd.reject();
-                }
-            }
-        );
+        /*
+         request(
+         _getCurrentTippeligaTableUrl(),
+         function (error, response, body) {
+         if (!error && response.statusCode === 200) {
+         dfd.resolve(_parseCurrentTippeligaTableData(body));
+         }
+         else {
+         dfd.reject();
+         }
+         }
+         );
+         */
+        // TODO: fake it for now ...
+        dfd.resolve({
+            "Bodø/Glimt": { no: 1, matches: 0 },
+            "Brann": { no: 2, matches: 0 },
+            "Haugesund": { no: 3, matches: 0 },
+            "Lillestrøm": { no: 4, matches: 0 },
+            "Molde": { no: 5, matches: 0 },
+            "Odd": { no: 6, matches: 0 },
+            "Rosenborg": { no: 7, matches: 0 },
+            "Sandnes Ulf": { no: 8, matches: 0 },
+            "Sarpsborg": { no: 9, matches: 0 },
+            "Sogndal": { no: 10, matches: 0 },
+            "Stabæk": { no: 11, matches: 0 },
+            "Start": { no: 12, matches: 0 },
+            "Strømsgodset": { no: 13, matches: 0 },
+            "Viking": { no: 14, matches: 0 },
+            "Vålerenga": { no: 15, matches: 0 },
+            "Aalesund": { no: 16, matches: 0 }
+        });
         return dfd.promise;
     },
 
@@ -90,17 +122,109 @@ var _getCurrentTippeligaTable = exports.getCurrentTippeligaTable = function () {
     _getCurrentAdeccoligaTable = exports.getCurrentAdeccoligaTable = function () {
         "use strict";
         var dfd = new promise.Deferred();
-        request(
-            _getCurrentAdeccoligaTableUrl(),
-            function (error, response, body) {
-                if (!error && response.statusCode === 200) {
-                    dfd.resolve(_parseCurrentAdeccoligaTableData(body));
-                }
-                else {
-                    dfd.reject();
-                }
-            }
-        );
+        /*
+         request(
+         _getCurrentAdeccoligaTableUrl(),
+         function (error, response, body) {
+         if (!error && response.statusCode === 200) {
+         dfd.resolve(_parseCurrentAdeccoligaTableData(body));
+         }
+         else {
+         dfd.reject();
+         }
+         }
+         );
+         */
+        // TODO: fake it for now ...
+        dfd.resolve({
+            "Alta IF": { no: 1, matches: 0 },
+            "Bærum SK": { no: 2, matches: 0 },
+            "Bryne FK": { no: 3, matches: 0 },
+            "Fredrikstad FK": { no: 4, matches: 0 },
+            "HamKam Fotball": { no: 5, matches: 0 },
+            "Hønefoss BK": { no: 6, matches: 0 },
+            "IL Hødd": { no: 7, matches: 0 },
+            "IL Nest-Sotra": { no: 8, matches: 0 },
+            "Kristiansund BK": { no: 9, matches: 0 },
+            "Mjøndalen IF": { no: 10, matches: 0 },
+            "Ranheim IL": { no: 11, matches: 0 },
+            "Sandefjord Fotball": { no: 12, matches: 0 },
+            "Strømmen IF": { no: 13, matches: 0 },
+            "Tromsdalen UIL": { no: 14, matches: 0 },
+            "Tromsø IL": { no: 15, matches: 0 },
+            "Ullensaker/Kisa IL": { no: 16, matches: 0 }
+        });
+        return dfd.promise;
+    },
+
+
+    _getCurrentTippeligaToppscorer = exports.getCurrentTippeligaToppscorer = function () {
+        "use strict";
+        var dfd = new promise.Deferred();
+        /*
+         request(
+         _getCurrentAdeccoligaTableUrl(),
+         function (error, response, body) {
+         if (!error && response.statusCode === 200) {
+         dfd.resolve(_parseCurrentAdeccoligaTableData(body));
+         }
+         else {
+         dfd.reject();
+         }
+         }
+         );
+         */
+        // TODO: fake it for now ...
+        dfd.resolve([
+            "Daniel Chima Chukwu",
+            "Fredrik Gulbrandsen",
+            "Tommy Høiland",
+            "Björn Bergmann Sigurdarson",
+            "Ben Spencer",
+            "Sander Svendsen"
+        ]);
+        return dfd.promise;
+    },
+
+
+    _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders = function () {
+        "use strict";
+        var dfd = new promise.Deferred();
+        // For the cup title, just manually remove the clubs when they screw up one by one ...
+        dfd.resolve([
+            "Bodø/Glimt",
+            "Brann",
+            "Haugesund",
+            "Lillestrøm",
+            "Molde",
+            "Odd",
+            "Rosenborg",
+            "Sandnes Ulf",
+            "Sarpsborg",
+            "Sogndal",
+            "Stabæk",
+            "Start",
+            "Strømsgodset",
+            "Viking",
+            "Vålerenga",
+            "Aalesund",
+            "Alta IF",
+            "Bærum SK",
+            "Bryne FK",
+            "Fredrikstad FK",
+            "HamKam Fotball",
+            "Hønefoss BK",
+            "IL Hødd",
+            "IL Nest-Sotra",
+            "Kristiansund BK",
+            "Mjøndalen IF",
+            "Ranheim IL",
+            "Sandefjord Fotball",
+            "Strømmen IF",
+            "Tromsdalen UIL",
+            "Tromsø IL",
+            "Ullensaker/Kisa IL"
+        ]);
         return dfd.promise;
     },
 

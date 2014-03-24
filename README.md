@@ -1,6 +1,7 @@
 # Tippekonkurranse
 
 A simple Node-based web application (in norwegian).
+In production [here][1].
 
 [![Build Status](https://travis-ci.org/eirikt/tippekonkurranse.png?branch=master)](https://travis-ci.org/eirikt/tippekonkurranse)
 
@@ -58,17 +59,21 @@ _Status_: OK
 #### v0.0.7 :
 * Add some test user data
 * Establish RESTful service calls from client
-* Implement "pall" points calculations
 
-_Status_: Soon completed ...
+_Status_: OK
 
 #### v0.0.8 :
+* Implement "pall" points calculations
+* Implement "tippeliga-nedrykk" point calculations
+* Implement "adecco-opprykk" point calculations
+
+_Status_: Anytime now ...
+
+#### v0.0.9 :
 * Implement "cupmester" point calculations
 * Implement "toppscorer" point calculations
 
-#### v0.0.9 :
-* Implement "tippeliga-nedrykk" point calculations
-* Implement "adecco-opprykk" point calculations
+_Status_: Shouldn't take long ...
 
 #### v0.0.10 :
 * Feedback and fixes ...
@@ -102,6 +107,9 @@ _Status_: Soon completed ...
 #### v2.x : Proper URL
 * [Heroku/Custom domains][31]
 
+#### v2.x : Offline support
+* Create offline-capable solution just for the heck of it
+
 #### v2.x
 * Establish proper REST service for Tippeliga data for everybody to use without leaning to crappy web scraping routines ...
 
@@ -130,8 +138,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-[1]:  http://tiny.cc/tippekonkurranse
-[2]:  http://lit-ravine-2113.herokuapp.com
+[1]:  http://tippekonkurranse.herokuapp.com
 [10]: http://www.fotball.no/Landslag_og_toppfotball/Toppfotball/tippeligaen
 [20]: https://www.digitalocean.com/community/articles/how-to-use-node-js-request-and-cheerio-to-set-up-simple-web-scraping
 [30]: https://www.heroku.com

@@ -1,4 +1,4 @@
-/* global require: false, console: false, __dirname: false */
+/* global require: false, exports: false */
 
 // Module dependencies, external
 var _ = require("underscore"),
@@ -7,7 +7,8 @@ var _ = require("underscore"),
 
 // Module dependencies, local
     predictions2014 = require("./user-predictions-2014.js").predictions2014,
-    norwegianSoccerLeagueService = require("./norwegian-soccer-service.js");
+    norwegianSoccerLeagueService = require("./norwegian-soccer-service.js"),
+    sharedModels = require("./../../shared/scripts/app.models.js");
 
 
 var _getTableScore = function (predictedPlacing, actualPlacing) {
@@ -16,40 +17,69 @@ var _getTableScore = function (predictedPlacing, actualPlacing) {
     },
 
 
-    _updateTableScores = function (currentTippeligaTable, currentAdeccoligaTable) {
+    _updateScores = function (currentTippeligaTable, currentAdeccoligaTable, currentTippeligaTopscorer, currentRemainingCupContenders) {
         "use strict";
+
         var currentStanding = {};
         for (var participant in predictions2014) {
             if (predictions2014.hasOwnProperty(participant)) {
                 var tabellScore = 0,
+                    pallScore = 0,
+                    cupScore = 0,
+                    toppscorerScore = 0,
+                    opprykkScore = 0,
+                    nedrykkScore = 0,
+
                     participantObj = predictions2014[participant];
+
                 if (participantObj) {
+
+                    // Tabell
                     _.each(participantObj.tabell, function (team, index) {
                         var predictedTeamPlacing = index + 1,
                             actualTeamPlacing = currentTippeligaTable[team].no;
 
                         tabellScore += _getTableScore(predictedTeamPlacing, actualTeamPlacing);
                     });
+
+                    // TODO: ...
+                    // Pall
+
+                    // TODO: ...
+                    // Cup
+
+                    // TODO: ...
+                    // Toppscorer
+
+                    // TODO: ...
+                    // Opprykk
+
+                    // TODO: ...
+                    // Nedrykk
+
                 }
+                currentStanding[participant] =
+                    sharedModels.ScoreModel.properties(tabellScore, pallScore, cupScore, toppscorerScore, opprykkScore, nedrykkScore);
             }
-            currentStanding[participant] = { tabell: tabellScore };
         }
-        return currentStanding
+        return currentStanding;
     },
 
 
     _calculateCurrentScore = exports.calculateCurrentScore = function (req, resp) {
         "use strict";
         all(norwegianSoccerLeagueService.getCurrentTippeligaTable(),
-            norwegianSoccerLeagueService.getCurrentAdeccoligaTable()).then(
+            norwegianSoccerLeagueService.getCurrentAdeccoligaTable(),
+            norwegianSoccerLeagueService.getCurrentTippeligaToppscorer(),
+            norwegianSoccerLeagueService.getCurrentRemainingCupContenders()).then(
             function (resultArray) {
                 var currentTippeligaTable = resultArray[0],
                     currentAdeccoligaTable = resultArray[1],
-                    currentStanding = _updateTableScores(currentTippeligaTable, currentAdeccoligaTable);
+                    currentTippeligaTopscorer = resultArray[2],
+                    currentRemainingCupContenders = resultArray[3],
+                    currentStanding = _updateScores(currentTippeligaTable, currentAdeccoligaTable, currentTippeligaTopscorer,currentRemainingCupContenders);
 
-                console.log(currentTippeligaTable);
-                console.log(currentAdeccoligaTable);
                 resp.send(JSON.stringify(currentStanding));
             }
-        )
+        );
     };

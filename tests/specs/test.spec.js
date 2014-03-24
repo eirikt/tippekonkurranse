@@ -2,9 +2,8 @@ var root = global || window;
 
 /* For WebStorm ...
 var expect = require('../scripts/vendor/chai').expect,
-    sinon = require('../scripts/vendor/sinon'),
+    sinon = require('../scripts/vendor/sinon');
 */
-
 
 describe("Trying out the test libraries", function () {
 
