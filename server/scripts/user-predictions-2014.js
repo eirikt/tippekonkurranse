@@ -57,7 +57,29 @@ var _pred2014 = exports.predictions2014 = {
     rikard: null,
     //sveintore: null,
     //steinar: null,
-    sveinar: null,
+    sveinar: {
+        tabell: [
+            "Molde",
+            "Rosenborg",
+            "Brann",
+            "Vålerenga",
+            "Strømsgodset",
+            "Lillestrøm",
+            "Aalesund",
+            "Viking",
+            "Haugesund",
+            "Odd",
+            "Start",
+            "Bodø Glimt",
+            "Sogndal",
+            "Sarpsborg 08",
+            "Sandnes Ulf",
+            "Stabækk",
+        ],
+        opprykk: ["Tromsø", "Ranheim"],
+        toppscorer: ["Bjørn Bergmann Sigurdarson"],
+        cup: ["Molde"]
+    },
     tore: null,
     trond: {
         tabell: [

@@ -32,7 +32,20 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
                     '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
                     '</tr>' +
 
-                    '<tr><td style="padding-left:2rem;"></td>' +
+                    '<tr>' +
+                    '<td style="padding-left:2rem;">1</td>' +
+                    '<td><strong>Sveinar</strong></td>' +
+                    '<td><i>data mottatt</i></td>' +
+                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
+                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
+                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
+                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
+                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
+                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
+                    '</tr>' +
+
+                    '<tr>' +
+                    '<td style="padding-left:2rem;"></td>' +
                     '<td><strong>Einar</strong></td>' +
                     '<td><strong>n/a</strong></td>' +
                     '<td style="color:darkgray;">data mangler</td>' +
@@ -43,7 +56,8 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
                     '<td style="color:darkgray;">data mangler</td>' +
                     '</tr>' +
 
-                    '<tr><td style="padding-left:2rem;"></td>' +
+                    '<tr>' +
+                    '<td style="padding-left:2rem;"></td>' +
                     '<td><strong>Eirik</strong></td>' +
                     '<td><strong>n/a</strong></td>' +
                     '<td style="color:darkgray;">data mangler</td>' +
@@ -54,7 +68,8 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
                     '<td style="color:darkgray;">data mangler</td>' +
                     '</tr>' +
 
-                    '<tr><td style="padding-left:2rem;"></td>' +
+                    '<tr>' +
+                    '<td style="padding-left:2rem;"></td>' +
                     '<td><strong>Geir</strong></td>' +
                     '<td><strong>n/a</strong></td>' +
                     '<td style="color:darkgray;">data mangler</td>' +
@@ -65,7 +80,8 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
                     '<td style="color:darkgray;">data mangler</td>' +
                     '</tr>' +
 
-                    '<tr><td style="padding-left:2rem;"></td>' +
+                    '<tr>' +
+                    '<td style="padding-left:2rem;"></td>' +
                     '<td><strong>Hans Bernhard</strong></td>' +
                     '<td><strong>n/a</strong></td>' +
                     '<td style="color:darkgray;">data mangler</td>' +
@@ -76,7 +92,8 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
                     '<td style="color:darkgray;">data mangler</td>' +
                     '</tr>' +
 
-                    '<tr><td style="padding-left:2rem;"></td>' +
+                    '<tr>' +
+                    '<td style="padding-left:2rem;"></td>' +
                     '<td><strong>Jan Tore</strong></td>' +
                     '<td><strong>n/a</strong></td>' +
                     '<td style="color:darkgray;">data mangler</td>' +
@@ -87,7 +104,8 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
                     '<td style="color:darkgray;">data mangler</td>' +
                     '</tr>' +
 
-                    '<tr><td style="padding-left:2rem;"></td>' +
+                    '<tr>' +
+                    '<td style="padding-left:2rem;"></td>' +
                     '<td><strong>Oddgeir</strong></td>' +
                     '<td><strong>n/a</strong></td>' +
                     '<td style="color:darkgray;">data mangler</td>' +
@@ -98,7 +116,8 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
                     '<td style="color:darkgray;">data mangler</td>' +
                     '</tr>' +
 
-                    '<tr><td style="padding-left:2rem;"></td>' +
+                    '<tr>' +
+                    '<td style="padding-left:2rem;"></td>' +
                     '<td><strong>Oddvar</strong></td>' +
                     '<td><strong>n/a</strong></td>' +
                     '<td style="color:darkgray;">data mangler</td>' +
@@ -109,7 +128,8 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
                     '<td style="color:darkgray;">data mangler</td>' +
                     '</tr>' +
 
-                    '<tr><td style="padding-left:2rem;"></td>' +
+                    '<tr>' +
+                    '<td style="padding-left:2rem;"></td>' +
                     '<td><strong>Ole Erik</strong></td>' +
                     '<td><strong>n/a</strong></td>' +
                     '<td style="color:darkgray;">data mangler</td>' +
@@ -120,7 +140,8 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
                     '<td style="color:darkgray;">data mangler</td>' +
                     '</tr>' +
 
-                    '<tr><td style="padding-left:2rem;"></td>' +
+                    '<tr>' +
+                    '<td style="padding-left:2rem;"></td>' +
                     '<td><strong>Rikard</strong></td>' +
                     '<td><strong>n/a</strong></td>' +
                     '<td style="color:darkgray;">data mangler</td>' +
@@ -131,18 +152,8 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
                     '<td style="color:darkgray;">data mangler</td>' +
                     '</tr>' +
 
-                    '<tr><td style="padding-left:2rem;"></td>' +
-                    '<td><strong>Sveinar</strong></td>' +
-                    '<td><strong>n/a</strong></td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '</tr>' +
-
-                    '<tr><td style="padding-left:2rem;"></td>' +
+                    '<tr>' +
+                    '<td style="padding-left:2rem;"></td>' +
                     '<td><strong>Tore</strong></td>' +
                     '<td><strong>n/a</strong></td>' +
                     '<td style="color:darkgray;">data mangler</td>' +
