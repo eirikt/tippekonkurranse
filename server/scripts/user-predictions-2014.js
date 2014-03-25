@@ -74,7 +74,7 @@ var _pred2014 = exports.predictions2014 = {
             "Sogndal",
             "Sarpsborg",
             "Sandnes Ulf",
-            "Stabækk",
+            "Stabæk"
         ],
         opprykk: ["Tromsø", "Ranheim"],
         toppscorer: ["Bjørn Bergmann Sigurdarson"],
