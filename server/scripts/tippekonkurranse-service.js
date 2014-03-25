@@ -25,10 +25,10 @@ var _getTableScore = function (predictedPlacing, actualPlacing) {
             if (predictions2014.hasOwnProperty(participant)) {
                 var tabellScore = 0,
                     pallScore = 0,
-                    cupScore = 0,
-                    toppscorerScore = 0,
-                    opprykkScore = 0,
                     nedrykkScore = 0,
+                    opprykkScore = 0,
+                    toppscorerScore = 0,
+                    cupScore = 0,
 
                     participantObj = predictions2014[participant];
 
@@ -40,22 +40,23 @@ var _getTableScore = function (predictedPlacing, actualPlacing) {
                             actualTeamPlacing = currentTippeligaTable[team].no;
 
                         tabellScore += _getTableScore(predictedTeamPlacing, actualTeamPlacing);
+                        //console.log(participant + "." + team + " done ...");
                     });
 
                     // TODO: ...
                     // Pall
 
                     // TODO: ...
-                    // Cup
-
-                    // TODO: ...
-                    // Toppscorer
+                    // Nedrykk
 
                     // TODO: ...
                     // Opprykk
 
                     // TODO: ...
-                    // Nedrykk
+                    // Toppscorer
+
+                    // TODO: ...
+                    // Cup
 
                 }
                 currentStanding[participant] =
@@ -77,7 +78,8 @@ var _getTableScore = function (predictedPlacing, actualPlacing) {
                     currentAdeccoligaTable = resultArray[1],
                     currentTippeligaTopscorer = resultArray[2],
                     currentRemainingCupContenders = resultArray[3],
-                    currentStanding = _updateScores(currentTippeligaTable, currentAdeccoligaTable, currentTippeligaTopscorer,currentRemainingCupContenders);
+
+                    currentStanding = _updateScores(currentTippeligaTable, currentAdeccoligaTable, currentTippeligaTopscorer, currentRemainingCupContenders);
 
                 resp.send(JSON.stringify(currentStanding));
             }

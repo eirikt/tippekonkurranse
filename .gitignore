@@ -1,3 +1,6 @@
+# Always
+.ssh
+
 # Ignore IDE stuff
 .idea
 

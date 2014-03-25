@@ -18,7 +18,7 @@ In production [here][1].
 
 ## Version history/roadmap
 
-#### v0.0.1 : Single-file browser-app version
+#### v0.0.1 : Single-local-file browser-app version
 _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 
 #### v0.0.2 : Initial server version (proof-of-concept)
@@ -51,37 +51,34 @@ _Status_: OK
 
 _Status_: OK
 
-#### v0.0.6 :
-* Establish client-side UX for showing table results
+#### v0.0.6 : Client-side UX for showing table results
 
 _Status_: OK
 
-#### v0.0.7 :
+#### v0.0.7 : RESTful service calls from client
 * Add some test user data
-* Establish RESTful service calls from client
 
 _Status_: OK
 
-#### v0.0.8 :
+#### v0.0.8 : Business logic
 * Implement "pall" points calculations
 * Implement "tippeliga-nedrykk" point calculations
 * Implement "adecco-opprykk" point calculations
 
 _Status_: Anytime now ...
 
-#### v0.0.9 :
+#### v0.0.9 : More business logic
 * Implement "cupmester" point calculations
 * Implement "toppscorer" point calculations
 
 _Status_: Shouldn't take long ...
 
-#### v0.0.10 :
+#### v0.0.10 : Bugfixes
 * Feedback and fixes ...
 
-#### v0.0.11
-* Add/hard-code user predictions for this year
+#### v0.0.11 : User predictions for this year
 
-#### v0.0.12 :
+#### v0.0.12 : Bugfixes
 * Feedback and fixes ...
 
 #### v1.0.0 : _Delivery goal 28.03.2014_
@@ -92,25 +89,25 @@ _Status_: Shouldn't take long ...
 
 ...
 
-#### v1.1 : _Delivery goal 01.05.2014_
+#### v1.x : _Delivery goal 01.05.2014_
 * Persistent data with MongoDB
 * Presentation of historic data
 
-#### v1.1.x
+#### v1.x
 * Graphs and whatnot
 
-#### v2.0
+#### v?
 * Mobile app
 * Touch-friendly version ...
 * Small-screen-friendly version ...
 
-#### v2.x : Proper URL
+#### v? : Proper URL
 * [Heroku/Custom domains][31]
 
-#### v2.x : Offline support
+#### v? : Offline support
 * Create offline-capable solution just for the heck of it
 
-#### v2.x
+#### v?
 * Establish proper REST service for Tippeliga data for everybody to use without leaning to crappy web scraping routines ...
 
 

@@ -1,10 +1,8 @@
 body {
-    font-family: 'Open Sans Condensed', 'Arial Narrow', serif;
+    font-family: 'Open Sans Condensed', 'Arial Narrow', sans-serif;
     font-weight: 400;
     font-size: 15px;
     color: #333;
-    -webkit-font-smoothing: antialiased;
-    -moz-font-smoothing: antialiased;
     font-smoothing: antialiased;
 }
 
@@ -21,8 +19,12 @@ h2, .h2 {
 }
 
 #content {
-    padding-top: 6rem;
-    padding-bottom: 1rem;
+    padding-top: 2.5rem;
+    padding-bottom: .5rem;
+}
+
+.my-slide-in-effect {
+    /*opacity: 0;*/
 }
 
 /**
@@ -58,3 +60,25 @@ img {
     border: dashed;
 }
 */
+
+/**
+ *  Module           : Font Awesome icons
+ *  Portable/reusable: Yes
+ *  Dependencies     : "bootstrap.css", "font-awesome.css"
+ *  Resources        : http://fontawesome.io/icons/
+ *
+ *  Example:
+ *      <a href="mylinkedinpage" class="axbit-icon-linkedin"></a>
+ ******************************************************************************/
+[class^="icon-"]::before {
+    font-family: FontAwesome, sans-serif;
+    font-size: 1.6em;
+    text-decoration: none;
+    display: inline-block;
+    padding-right: .7em;
+}
+
+.icon-check::before {
+    content: "\f00c";
+    font-size: inherit;
+}
