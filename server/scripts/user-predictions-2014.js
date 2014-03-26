@@ -51,7 +51,29 @@ var _pred2014 = exports.predictions2014 = {
         toppscorer: ["Alexander Søderlund"],
         cup: ["Rosenborg"]
     },
-    oddgeir: null,
+    oddgeir: {
+        tabell: [
+            "Rosenborg",
+            "Molde",
+            "Strømsgodset",
+            "Brann",
+            "Vålerenga",
+            "Haugesund",
+            "Viking",
+            "Aalesund",
+            "Odd",
+            "Lillestrøm",
+            "Start",
+            "Bodø/Glimt",
+            "Sandnes Ulf",
+            "Sarpsborg",
+            "Sogndal",
+            "Stabæk"
+        ],
+        opprykk: ["Tromsø", "Hønefoss"],
+        toppscorer: ["Alexander Søderlund"],
+        cup: ["Brann"]
+    },
     oddvar: null,
     oleerik: {
         tabell: [
@@ -77,8 +99,6 @@ var _pred2014 = exports.predictions2014 = {
         cup: [""]
     },
     rikard: null,
-    //sveintore: null,
-    //steinar: null,
     sveinar: {
         tabell: [
             "Molde",
@@ -102,6 +122,7 @@ var _pred2014 = exports.predictions2014 = {
         toppscorer: ["Bjørn Bergmann Sigurdarson"],
         cup: ["Molde"]
     },
+    //steinar: null,
     tore: null,
     trond: {
         tabell: [
