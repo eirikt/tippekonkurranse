@@ -45,6 +45,18 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
                     '</tr>' +
 
                     '<tr>' +
+                    '<td style="padding-left:2rem;">1</td>' +
+                    '<td><strong>Jan Tore</strong></td>' +
+                    '<td><i>data mottatt</i></td>' +
+                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
+                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
+                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
+                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
+                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
+                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
+                    '</tr>' +
+
+                    '<tr>' +
                     '<td style="padding-left:2rem;"></td>' +
                     '<td><strong>Einar</strong></td>' +
                     '<td><strong>n/a</strong></td>' +
@@ -83,18 +95,6 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
                     '<tr>' +
                     '<td style="padding-left:2rem;"></td>' +
                     '<td><strong>Hans Bernhard</strong></td>' +
-                    '<td><strong>n/a</strong></td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '</tr>' +
-
-                    '<tr>' +
-                    '<td style="padding-left:2rem;"></td>' +
-                    '<td><strong>Jan Tore</strong></td>' +
                     '<td><strong>n/a</strong></td>' +
                     '<td style="color:darkgray;">data mangler</td>' +
                     '<td style="color:darkgray;">data mangler</td>' +

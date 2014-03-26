@@ -188,7 +188,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build:client', ['clean', 'copy', 'uglify']);
     grunt.registerTask('test', ['install:client', 'build:client', 'install:test', 'mocha']);
-    grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc']);
+    grunt.registerTask('build:travis', ['test', /* TODO 'jshint',*/ 'jsdoc']);
 
     grunt.registerTask('deploy:local', ['install:client', 'build:client', 'foreman']);
     grunt.registerTask('deploy:production', ['install:client', 'build:client']);

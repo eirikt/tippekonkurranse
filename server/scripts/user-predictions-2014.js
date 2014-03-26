@@ -28,7 +28,29 @@ var _pred2014 = exports.predictions2014 = {
     },
     geir: null,
     hansbernhard: null,
-    jantore: null,
+    jantore: {
+        tabell: [
+            "Rosenborg",
+            "Strømsgodset",
+            "Molde",
+            "Vålerenga",
+            "Viking",
+            "Brann",
+            "Aalesund",
+            "Haugesund",
+            "Odd",
+            "Lillestrøm",
+            "Start",
+            "Bodø/Glimt",
+            "Sogndal",
+            "Stabæk",
+            "Sandnes Ulf",
+            "Sarpsborg"
+        ],
+        opprykk: ["Tromsø", "Sandefjord"],
+        toppscorer: ["Alexander Søderlund"],
+        cup: ["Rosenborg"]
+    },
     oddgeir: null,
     oddvar: null,
     oleerik: {

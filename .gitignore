@@ -6,6 +6,7 @@
 
 # Ignore derived/generated/transient project resources
 build
+docs
 client/bower_components
 tests/bower_components
 node_modules
