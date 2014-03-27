@@ -143,7 +143,7 @@ var _pred2014 = exports.predictions2014 = {
         toppscorer: ["Guldbrandsen"],
         cup: ["Molde"]
     },
-    sveinar: {
+    sveintore: {
         tabell: [
             "Molde",
             "Rosenborg",
@@ -166,7 +166,29 @@ var _pred2014 = exports.predictions2014 = {
         toppscorer: ["Bjørn Bergmann Sigurdarson"],
         cup: ["Molde"]
     },
-    //steinar: null,
+    steinar: {
+        tabell: [
+            "Molde",
+            "Strømsgodset",
+            "Rosenborg",
+            "Vålerenga",
+            "Brann",
+            "Viking",
+            "Aalesund",
+            "Haugesund",
+            "Bodø/Glimt",
+            "Lillestrøm",
+            "Sogndal",
+            "Odd",
+            "Stabæk",
+            "Sarpsborg",
+            "Sandnes Ulf",
+            "Start"
+        ],
+        opprykk: ["Tromsø", "Fredrikstad"],
+        toppscorer: ["Riku Riski"],
+        cup: ["Vålerenga"]
+    },
     tore: null,
     trond: {
         tabell: [
