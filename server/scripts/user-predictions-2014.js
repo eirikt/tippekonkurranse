@@ -98,7 +98,29 @@ var _pred2014 = exports.predictions2014 = {
         toppscorer: [""],
         cup: [""]
     },
-    rikard: null,
+    rikard: {
+        tabell: [
+            "Molde",
+            "Rosenborg",
+            "Strømsgodset",
+            "Aalesund",
+            "Odd",
+            "Brann",
+            "Vålerenga",
+            "Viking",
+            "Lillestrøm",
+            "Bodø/Glimt",
+            "Haugesund",
+            "Start",
+            "Sogndal",
+            "Stabæk",
+            "Sarpsborg",
+            "Sandnes Ulf"
+        ],
+        opprykk: ["Tromsø", "Hønefoss"],
+        toppscorer: ["Guldbrandsen"],
+        cup: ["Molde"]
+    },
     sveinar: {
         tabell: [
             "Molde",
