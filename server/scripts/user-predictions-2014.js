@@ -3,7 +3,7 @@
 var _pred2014 = exports.predictions2014 = {
 
     einar: {
-        tabell :[
+        tabell: [
             "Rosenborg",
             "Molde",
             "Strømsgodset",
@@ -99,26 +99,26 @@ var _pred2014 = exports.predictions2014 = {
     oddvar: null,
     oleerik: {
         tabell: [
-            "Bodø/Glimt",
-            "Brann",
-            "Haugesund",
-            "Lillestrøm",
             "Molde",
-            "Odd",
             "Rosenborg",
-            "Sandnes Ulf",
-            "Sarpsborg",
-            "Sogndal",
-            "Stabæk",
-            "Start",
+            "Haugesund",
+            "Brann",
             "Strømsgodset",
-            "Viking",
             "Vålerenga",
-            "Aalesund"
+            "Viking",
+            "Odd",
+            "Bodø/Glimt",
+            "Start",
+            "Sogndal",
+            "Aalesund",
+            "Sarpsborg",
+            "Lillestrøm",
+            "Stabæk",
+            "Sandnes Ulf"
         ],
-        opprykk: ["", ""],
-        toppscorer: [""],
-        cup: [""]
+        opprykk: ["Tromsø" , "Sandefjord"],
+        toppscorer: ["Bjørn Bergmann Sigurdarsson"],
+        cup: ["Molde"]
     },
     rikard: {
         tabell: [
