@@ -2,7 +2,29 @@
 
 var _pred2014 = exports.predictions2014 = {
 
-    einar: null,
+    einar: {
+        tabell :[
+            "Rosenborg",
+            "Molde",
+            "Strømsgodset",
+            "Brann",
+            "Viking",
+            "Haugesund",
+            "Aalesund",
+            "Odd",
+            "Vålerenga",
+            "Bodø/Glimt",
+            "Start",
+            "Lillestrøm",
+            "Stabæk",
+            "Sandnes Ulf",
+            "Sogndal",
+            "Sarpsborg"
+        ],
+        opprykk: ["Tromsø", "Sandefjord"],
+        toppscorer: ["Alexander Toft Søderlund"],
+        cup: ["Rosenborg"]
+    },
     eirik: {
         tabell: [
             "Viking",
