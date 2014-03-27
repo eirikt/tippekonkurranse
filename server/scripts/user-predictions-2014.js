@@ -49,7 +49,29 @@ var _pred2014 = exports.predictions2014 = {
         cup: ["Stabæk"]
     },
     geir: null,
-    hansbernhard: null,
+    hansbernhard: {
+        tabell: [
+            "Vålerenga",
+            "Molde",
+            "Rosenborg",
+            "Aalesund",
+            "Bodø/Glimt",
+            "Brann",
+            "Haugesund",
+            "Lillestrøm",
+            "Viking",
+            "Odd",
+            "Strømsgodset",
+            "Sandnes Ulf",
+            "Sarpsborg",
+            "Sogndal",
+            "Stabæk",
+            "Start"
+        ],
+        opprykk: ["Hønefoss", "Bryne"],
+        toppscorer: ["Frode Johnsen"],
+        cup: ["Vålerenga"]
+    },
     jantore: {
         tabell: [
             "Rosenborg",
@@ -96,7 +118,29 @@ var _pred2014 = exports.predictions2014 = {
         toppscorer: ["Alexander Søderlund"],
         cup: ["Brann"]
     },
-    oddvar: null,
+    oddvar: {
+        tabell: [
+            "Rosenborg",
+            "Strømsgodset",
+            "Molde",
+            "Brann",
+            "Viking",
+            "Aalesund",
+            "Vålerenga",
+            "Haugesund",
+            "Bodø/Glimt",
+            "Odd",
+            "Start",
+            "Lillestrøm",
+            "Sarpsborg",
+            "Sogndal",
+            "Sandnes Ulf",
+            "Stabæk"
+        ],
+        opprykk: ["Tromsø", "HamKam"],
+        toppscorer: ["Marvin Ogunjimi"],
+        cup: ["Bodø/Glimt"]
+    },
     oleerik: {
         tabell: [
             "Molde",
