@@ -40,24 +40,42 @@ var _getTableScore = function (predictedPlacing, actualPlacing) {
                             actualTeamPlacing = currentTippeligaTable[team].no;
 
                         tabellScore += _getTableScore(predictedTeamPlacing, actualTeamPlacing);
-                        //console.log(participant + "." + team + " done ...");
-                    });
 
-                    // TODO: ...
-                    // Pall
+                        if (index === 0 && predictedTeamPlacing === actualTeamPlacing) {
+                            pallScore += -1;
+                        }
+                        if (index === 1 && predictedTeamPlacing === actualTeamPlacing) {
+                            pallScore += -1;
+                        }
+                        if (index === 2 && predictedTeamPlacing === actualTeamPlacing) {
+                            pallScore += -1;
+                        }
+                        if (pallScore === 3) {
+                            pallScore += -1;
+                        }
+                        //console.log(participant + "." + team + " tabell calculations done ...");
+                    });
 
                     // TODO: ...
                     // Nedrykk
 
+                    // Toppscorer
+                    //_.each(participantObj.toppscorer, function (toppscorer, index) {
+                    //    if (index === 0 && _.contains(currentTippeligaTopscorer, toppscorer)) {
+                    //        cupScore = -1;
+                    //    }
+                    //});
+                    toppscorerScore = -1;
+
                     // TODO: ...
                     // Opprykk
 
-                    // TODO: ...
-                    // Toppscorer
-
-                    // TODO: ...
                     // Cup
-
+                    _.each(participantObj.cup, function (team, index) {
+                        if (index === 0 && _.contains(currentRemainingCupContenders, team)) {
+                            cupScore = -1;
+                        }
+                    });
                 }
                 currentStanding[participant] =
                     sharedModels.ScoreModel.properties(tabellScore, pallScore, cupScore, toppscorerScore, opprykkScore, nedrykkScore);

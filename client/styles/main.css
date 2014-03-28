@@ -23,8 +23,16 @@ h2, .h2 {
     padding-bottom: .5rem;
 }
 
+.my-transform {
+    transform: scale(1.5);
+    transform-origin: 0% 0%;
+    -webkit-transform: scaleX(1.5);
+    -webkit-transform: scaleY(0.5);
+    -webkit-transform-origin: 0% 0%;
+}
+
 .my-slide-in-effect {
-    /*opacity: 0;*/
+    opacity: 0.5;
 }
 
 /**

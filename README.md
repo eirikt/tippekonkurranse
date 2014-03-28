@@ -62,23 +62,19 @@ _Status_: OK
 
 #### v0.0.8 : Business logic
 * Implement "pall" points calculations
-* Implement "tippeliga-nedrykk" point calculations
-* Implement "adecco-opprykk" point calculations
-
-_Status_: Anytime now ...
-
-#### v0.0.9 : More business logic
 * Implement "cupmester" point calculations
 * Implement "toppscorer" point calculations
+
+_Status_: OK
+
+#### v0.0.9 : More business logic
+* Implement "tippeliga-nedrykk" point calculations
+* Implement "adecco-opprykk" point calculations
+* Add all user predictions for this year
 
 _Status_: Shouldn't take long ...
 
 #### v0.0.10 : Bugfixes
-* Feedback and fixes ...
-
-#### v0.0.11 : User predictions for this year
-
-#### v0.0.12 : Bugfixes
 * Feedback and fixes ...
 
 #### v1.0.0 : _Delivery goal 28.03.2014_
@@ -95,6 +91,9 @@ _Status_: Shouldn't take long ...
 
 #### v1.x
 * Graphs and whatnot
+
+#### v?
+* Admin UI for data management
 
 #### v?
 * Mobile app

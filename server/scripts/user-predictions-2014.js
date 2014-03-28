@@ -48,7 +48,7 @@ var _pred2014 = exports.predictions2014 = {
         toppscorer: ["Frode Johnsen"],
         cup: ["Stabæk"]
     },
-    geir: null,
+    //geir: null,
     hansbernhard: {
         tabell: [
             "Vålerenga",
@@ -233,7 +233,7 @@ var _pred2014 = exports.predictions2014 = {
         toppscorer: ["Riku Riski"],
         cup: ["Vålerenga"]
     },
-    tore: null,
+    //tore: null,
     trond: {
         tabell: [
             "Rosenborg",

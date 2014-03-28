@@ -190,7 +190,8 @@ var _getCurrentTippeligaTable = exports.getCurrentTippeligaTable = function () {
     _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders = function () {
         "use strict";
         var dfd = new promise.Deferred();
-        // For the cup title, just manually remove the clubs when they screw up one by one ...
+        // For the cup title, just manually remove the clubs when they screw up, one by one ...
+        // Only tippeliga clubs relevant here ...
         dfd.resolve([
             "Bodø/Glimt",
             "Brann",
@@ -207,23 +208,7 @@ var _getCurrentTippeligaTable = exports.getCurrentTippeligaTable = function () {
             "Strømsgodset",
             "Viking",
             "Vålerenga",
-            "Aalesund",
-            "Alta IF",
-            "Bærum SK",
-            "Bryne FK",
-            "Fredrikstad FK",
-            "HamKam Fotball",
-            "Hønefoss BK",
-            "IL Hødd",
-            "IL Nest-Sotra",
-            "Kristiansund BK",
-            "Mjøndalen IF",
-            "Ranheim IL",
-            "Sandefjord Fotball",
-            "Strømmen IF",
-            "Tromsdalen UIL",
-            "Tromsø IL",
-            "Ullensaker/Kisa IL"
+            "Aalesund"
         ]);
         return dfd.promise;
     },

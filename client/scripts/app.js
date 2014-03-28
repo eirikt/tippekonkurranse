@@ -1,4 +1,6 @@
-/* global define: false, console: false */
+/* global define: false, console: false, $:false */
+
+
 define(['underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'app.models.ScoreModel', 'app.result', 'app.resultCollection', 'app.results-view'],
 
     function (_, Backbone, $, Bootstrap, ScoreModel, TippekonkurranseCurrentResult, TippekonkurranseCurrentResultsCollection, TippekonkurranseCurrentResultsView) {
@@ -20,7 +22,19 @@ define(['underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'app.models.Scor
                         });
                     results.fetch();
                 });
-            }, 16500);
+            }, 1650);
         });
     }
 );
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Global helper functions
+///////////////////////////////////////////////////////////////////////////////
+
+function wait(ms) {
+    "use strict";
+    var deferred = $.Deferred();
+    setTimeout(deferred.resolve, ms);
+    return deferred.promise();
+}
