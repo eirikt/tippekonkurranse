@@ -1,4 +1,4 @@
-/* global define: false */
+/* global define:false */
 define(["jquery", "underscore", "backbone"],
     function ($, _, Backbone) {
         "use strict";
@@ -10,18 +10,17 @@ define(["jquery", "underscore", "backbone"],
                     '<td><strong><%= name %></strong></td>' +
                     '<td><strong><%= poengsum %></strong></td>' +
                     '<td style="color:darkgray;text-align:center;"><%= tabell %></td>' +
+                    '<td style="color:darkgray;text-align:center;"><%= pall %></td>' +
 
-                '<td style="color:darkgray;text-align:center;"><%= pall %></td>' +
+                    //'<td style="color:darkgray;text-align:center;"><%= nedrykk %></td>'
+                    '<td style="color:darkgray;text-align:center;"><small>(straks klart ...)</small></td>' +
 
-                //'<td style="color:darkgray;text-align:center;"><%= nedrykk %></td>'
-                '<td style="color:darkgray;text-align:center;"><small>straks klart</small></td>' +
+                    '<td style="color:darkgray;text-align:center;"><%= toppscorer %></td>' +
 
-                '<td style="color:darkgray;text-align:center;"><%= toppscorer %></td>' +
+                    //'<td style="color:darkgray;text-align:center;"><%= opprykk %></td>' +
+                    '<td style="color:darkgray;text-align:center;"><small>(straks klart ...)</small></td>' +
 
-                //'<td style="color:darkgray;text-align:center;"><%= opprykk %></td>' +
-                '<td style="color:darkgray;text-align:center;"><small>straks klart</small></td>' +
-
-                '<td style="color:darkgray;text-align:center;"><%= cup %></td>'
+                    '<td style="color:darkgray;text-align:center;"><%= cup %></td>'
             ),
             render: function () {
                 this.$el.append(this.template(this.model));

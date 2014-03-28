@@ -1,184 +1,9 @@
-/* global define: false */
+/* global define:false, wait:false */
 define(["jquery", "underscore", "backbone", "app.participant-score-view"],
     function ($, _, Backbone, ParticipantScoreView) {
         "use strict";
 
         return Backbone.View.extend({
-
-            pendingTemplate: _.template('' +
-                    '<table class="table table-condenced table-striped table-hover">' +
-                    '<thead><tr>' +
-                    '<th style="padding-left:2rem;"></th>' +
-                    '<th></th>' +
-                    '<th style="padding-right:3rem;"><strong></strong></th>' +
-                    '<th style="text-align:center;color:darkgray;width:9rem;">Tabell</th>' +
-                    '<th style="text-align:center;color:darkgray;width:9rem;">Pall</th>' +
-                    '<th style="text-align:center;color:darkgray;width:10rem;">Cup</th>' +
-                    '<th style="text-align:center;color:darkgray;width:10rem;">Toppskårer</th>' +
-                    '<th style="text-align:center;color:darkgray;width:10rem;">Opprykk</th>' +
-                    '<th style="text-align:center;color:darkgray;width:10rem;">Nedrykk</th>' +
-                    '</tr></thead>' +
-                    '<tbody>' +
-
-                    '<tr>' +
-                    '<td style="padding-left:2rem;">1</td>' +
-                    '<td><strong>Trond</strong></td>' +
-                    '<td><i>data mottatt</i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '</tr>' +
-
-                    '<tr>' +
-                    '<td style="padding-left:2rem;">1</td>' +
-                    '<td><strong>Svein Tore</strong></td>' +
-                    '<td><i>data mottatt</i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '</tr>' +
-
-                    '<tr>' +
-                    '<td style="padding-left:2rem;">1</td>' +
-                    '<td><strong>Jan Tore</strong></td>' +
-                    '<td><i>data mottatt</i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '</tr>' +
-
-                    '<tr>' +
-                    '<td style="padding-left:2rem;">1</td>' +
-                    '<td><strong>Oddgeir</strong></td>' +
-                    '<td><i>data mottatt</i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '</tr>' +
-
-                    '<tr>' +
-                    '<td style="padding-left:2rem;">1</td>' +
-                    '<td><strong>Eirik</strong></td>' +
-                    '<td><i>data mottatt</i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '</tr>' +
-
-                    '<tr>' +
-                    '<td style="padding-left:2rem;">1</td>' +
-                    '<td><strong>Rikard</strong></td>' +
-                    '<td><i>data mottatt</i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '</tr>' +
-
-                    '<tr>' +
-                    '<td style="padding-left:2rem;">1</td>' +
-                    '<td><strong>Einar</strong></td>' +
-                    '<td><i>data mottatt</i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '</tr>' +
-
-                    '<tr>' +
-                    '<td style="padding-left:2rem;">1</td>' +
-                    '<td><strong>Ole Erik</strong></td>' +
-                    '<td><i>data mottatt</i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '</tr>' +
-
-                    '<tr>' +
-                    '<td style="padding-left:2rem;">1</td>' +
-                    '<td><strong>Steinar</strong></td>' +
-                    '<td><i>data mottatt</i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '</tr>' +
-
-                    '<tr>' +
-                    '<td style="padding-left:2rem;">1</td>' +
-                    '<td><strong>Oddvar</strong></td>' +
-                    '<td><i>data mottatt</i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '</tr>' +
-
-                    '<tr>' +
-                    '<td style="padding-left:2rem;">1</td>' +
-                    '<td><strong>Hans Bernhard</strong></td>' +
-                    '<td><i>data mottatt</i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '<td style="color:darkgray;text-align:center;"><i class="fa fa-check" style="color:green;"></i></td>' +
-                    '</tr>' +
-
-                    '<tr>' +
-                    '<td style="padding-left:2rem;"></td>' +
-                    '<td><strong>Geir</strong></td>' +
-                    '<td><strong>n/a</strong></td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '</tr>' +
-
-                    '<tr>' +
-                    '<td style="padding-left:2rem;"></td>' +
-                    '<td><strong>Tore</strong></td>' +
-                    '<td><strong>n/a</strong></td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '<td style="color:darkgray;">data mangler</td>' +
-                    '</tr>' +
-
-                    '</tbody>' +
-                    '</table>'
-            ),
 
             template: _.template('' +
                     '<table class="table table-condenced table-striped table-hover">' +
@@ -199,20 +24,14 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
 
                     '</table>'
             ),
+
             initialize: function () {
-                //this.pendingRender();
                 this.listenTo(this.collection, "reset", this.render);
             },
-            pendingRender: function () {
-                this.$el.append(this.pendingTemplate());
 
-                this.$el.find("tr.the-first td").wrapInner("<div class='hidden'></div>");
-                this.$el.find("div.hidden").removeClass("hidden").addClass("my-transform");
-
-                return this;
-            },
             render: function () {
                 var addParticipant = function ($el, participantResult, index) {
+                        // TODO: somewhat more clever participant rating
                         participantResult.set("nr", index + 1, { silent: true });
                         $el.append(new ParticipantScoreView({ model: participantResult.toJSON() }).render().el);
                     },

@@ -1,7 +1,5 @@
 /* global exports:false */
-
 var _pred2014 = exports.predictions2014 = {
-
     einar: {
         tabell: [
             "Rosenborg",
@@ -233,7 +231,29 @@ var _pred2014 = exports.predictions2014 = {
         toppscorer: ["Riku Riski"],
         cup: ["Vålerenga"]
     },
-    //tore: null,
+    tore: {
+        tabell: [
+            "Molde",
+            "Rosenborg",
+            "Viking",
+            "Strømsgodset",
+            "Brann",
+            "Odd",
+            "Vålerenga",
+            "Haugesund",
+            "Aalesund",
+            "Lillestrøm",
+            "Start",
+            "Bodø/Glimt",
+            "Sarpsborg",
+            "Sogndal",
+            "Sandnes Ulf",
+            "Stabæk"
+        ],
+        opprykk: ["Tromsø", "Fredrikstad"],
+        toppscorer: ["Fredrik Gulbrandsen"],
+        cup: ["Molde"]
+    },
     trond: {
         tabell: [
             "Rosenborg",
