@@ -15,7 +15,7 @@ define(["jquery", "underscore", "backbone"],
                     '<td style="color:darkgray;text-align:center;"><%= toppscorer %></td>' +
 
                     //'<td style="color:darkgray;text-align:center;"><%= opprykk %></td>' +
-                    '<td style="color:darkgray;text-align:center;"><small>(07.04.2014)</small></td>' +
+                    '<td style="color:darkgray;text-align:center;">0</td>' +
 
                     '<td style="color:darkgray;text-align:center;"><%= cup %></td>'
             ),

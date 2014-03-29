@@ -59,13 +59,13 @@ var _ = require("underscore"),
 
 // www.altomfotball.no stuff
     _altomfotballCurrentTippeligaTableUrl =
-        "http://www.altomfotball.no/element.do?cmd=tournament&tournamentId=1&useFullUrl=false",
+        "http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&subCmd=total&live=true&useFullUrl=false",
 
     _parseAltomfotballTippeligaTable = function (body) {
         "use strict";
         var currentTable = {},
             $ = cheerio.load(body),
-            rows = $("#sd_table_1").find("tbody").find("tr");
+            rows = $($).find("tbody").find("tr");
 
         _.each(rows, function (element) {
             var $cells = $(element).find("td"),

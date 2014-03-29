@@ -77,6 +77,10 @@ img {
  *
  *  Example:
  *      <a href="mylinkedinpage" class="axbit-icon-linkedin"></a>
+ *
+ *  Prerequisites:
+ *      <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+ *      (add to index.html head)
  ******************************************************************************/
 [class^="icon-"]::before {
     font-family: FontAwesome, sans-serif;

@@ -34,16 +34,23 @@ var _ = require("underscore"),
 
     _getExtraPallScore = function (predictedTeamPlacing, currentPallScore) {
         "use strict";
-        return predictedTeamPlacing === 4 && currentPallScore === 3 ? -1 : 0;
+        return predictedTeamPlacing === 4 && currentPallScore === -3 ? -1 : 0;
     },
 
     _getNedrykkScore = function (predictedTeamPlacing, actualTeamPlacing) {
         "use strict";
+        var nedrykkHits = 0;
+        if (predictedTeamPlacing === 15 && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 16)) {
+            nedrykkHits += 1;
+        }
+        if (predictedTeamPlacing === 16 && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 15)) {
+            nedrykkHits += 1;
+        }
+        return nedrykkHits === 2 ? -1 : 0;
     },
 
     _updateScores = function (currentTippeligaTable, currentAdeccoligaTable, currentTippeligaTopscorer, currentRemainingCupContenders) {
         "use strict";
-
         var currentStanding = {};
         for (var participant in predictions2014) {
             if (predictions2014.hasOwnProperty(participant)) {
@@ -54,15 +61,9 @@ var _ = require("underscore"),
                     toppscorerScore = 0,
                     cupScore = 0,
 
-                    nedrykkHits = 0,
-                    opprykkHits = 0,
-
                     participantObj = predictions2014[participant];
 
                 if (participantObj) {
-                    nedrykkHits = 0;
-                    opprykkHits = 0;
-
                     _.each(participantObj.tabell, function (team, index) {
                         var predictedTeamPlacing = index + 1,
                             actualTeamPlacing = currentTippeligaTable[team].no;
@@ -75,13 +76,7 @@ var _ = require("underscore"),
                         pallScore += _getExtraPallScore(predictedTeamPlacing, pallScore);
 
                         // Nedrykk
-                        if (predictedTeamPlacing === 15 && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 16)) {
-                            nedrykkHits += 1;
-                        }
-                        if (predictedTeamPlacing === 16 && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 15)) {
-                            nedrykkHits += 1;
-                        }
-                        nedrykkScore = (nedrykkHits > 1) ? -1 : 0;
+                        nedrykkScore += _getNedrykkScore(predictedTeamPlacing, actualTeamPlacing);
 
                         //console.log(participant + "." + team + " tabell calculations done ...");
                     });
