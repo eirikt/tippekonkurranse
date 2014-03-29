@@ -57,13 +57,39 @@ var _fotballNoCurrentTippeligaTableUrl =
     };
 // /www.fotball.no-specific stuff
 
+// www.altomfotball.no stuff
+var _altomfotballCurrentTippeligaTableUrl =
+        "http://www.altomfotball.no/element.do?cmd=tournament&tournamentId=1&useFullUrl=false",
+
+    _parseAltomfotballTippeligaTable = function (body) {
+        "use strict";
+        var currentTable = {},
+            $ = cheerio.load(body),
+            heading = $("span:contains('Tabell')"),
+            rows = heading.next("table").find("tr");
+
+        rows.each(function (idx, element) {
+            if (idx > 0) {
+                var tableCells = $(element).find("td");
+                var no = $(tableCells[0]).html();
+                var team = $(tableCells[1]).find("a").html();
+                var matches = $(tableCells[2]).html();
+
+                // The data format
+                currentTable[team] = { no: parseInt(no, 10), matches: matches };
+            }
+        });
+        return currentTable;
+    };
+// /www.altomfotball.no stuff
+
 
 var _getCurrentTippeligaTableUrl = function () {
         "use strict";
-        return _fotballNoCurrentTippeligaTableUrl;
+        return _altomfotballCurrentTippeligaTableUrl;
     },
 
-    _parseCurrentTippeligaTableData = _parseFotballNoTippeligaTable,
+    _parseCurrentTippeligaTableData = _parseAltomfotballTippeligaTable,
 
     _getCurrentAdeccoligaTableUrl = function () {
         "use strict";
@@ -98,11 +124,11 @@ var _getCurrentTippeligaTable = exports.getCurrentTippeligaTable = function () {
          */
         // TODO: fake it for now ...
         dfd.resolve({
-            "Bodø/Glimt": { no: 1, matches: 0 },
-            "Brann": { no: 2, matches: 0 },
-            "Haugesund": { no: 3, matches: 0 },
-            "Lillestrøm": { no: 4, matches: 0 },
-            "Molde": { no: 5, matches: 0 },
+            "Molde": { no: 1, matches: 1 },
+            "Bodø/Glimt": { no: 2, matches: 0 },
+            "Brann": { no: 3, matches: 0 },
+            "Haugesund": { no: 4, matches: 0 },
+            "Lillestrøm": { no: 5, matches: 0 },
             "Odd": { no: 6, matches: 0 },
             "Rosenborg": { no: 7, matches: 0 },
             "Sandnes Ulf": { no: 8, matches: 0 },
@@ -112,8 +138,8 @@ var _getCurrentTippeligaTable = exports.getCurrentTippeligaTable = function () {
             "Start": { no: 12, matches: 0 },
             "Strømsgodset": { no: 13, matches: 0 },
             "Viking": { no: 14, matches: 0 },
-            "Vålerenga": { no: 15, matches: 0 },
-            "Aalesund": { no: 16, matches: 0 }
+            "Aalesund": { no: 15, matches: 0 },
+            "Vålerenga": { no: 16, matches: 1 }
         });
         return dfd.promise;
     },
@@ -176,12 +202,8 @@ var _getCurrentTippeligaTable = exports.getCurrentTippeligaTable = function () {
          */
         // TODO: fake it for now ...
         dfd.resolve([
-            "Daniel Chima Chukwu",
-            "Fredrik Gulbrandsen",
-            "Tommy Høiland",
-            "Björn Bergmann Sigurdarson",
-            "Ben Spencer",
-            "Sander Svendsen"
+            "Vegard Forren",
+            "Björn Bergmann Sigurdarson"
         ]);
         return dfd.promise;
     },

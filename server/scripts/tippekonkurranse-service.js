@@ -1,4 +1,4 @@
-/* global require: false, exports: false */
+/* global require:false, exports:false */
 
 // Module dependencies, external
 var _ = require("underscore"),
@@ -11,11 +11,40 @@ var _ = require("underscore"),
     sharedModels = require("./../../shared/scripts/app.models.js");
 
 
-var _getTableScore = function (predictedPlacing, actualPlacing) {
+var _getTableScore = function (predictedTeamPlacing, actualTeamPlacing) {
         "use strict";
-        return Math.abs(predictedPlacing - actualPlacing);
+        return Math.abs(predictedTeamPlacing - actualTeamPlacing);
     },
 
+    _getPallScore = function (predictedPlacing, actualPlacing) {
+        "use strict";
+        var pallScore = 0;
+        if (predictedPlacing === 1 && predictedPlacing === actualPlacing) {
+            pallScore += -1;
+        }
+        if (predictedPlacing === 2 && predictedPlacing === actualPlacing) {
+            pallScore += -1;
+        }
+        if (predictedPlacing === 3 && predictedPlacing === actualPlacing) {
+            pallScore += -1;
+        }
+        if (pallScore === 3) {
+            pallScore += -1;
+        }
+        return pallScore;
+    },
+
+    _getNedrykkScore = function (predictedPlacing, actualPlacing) {
+        "use strict";
+        var nedrykkHits = 0;
+        if (predictedPlacing === 15 && (predictedPlacing === actualPlacing || actualPlacing === 16)) {
+            nedrykkHits += 1;
+        }
+        if (predictedPlacing === 16 && (predictedPlacing === actualPlacing || actualPlacing === 15)) {
+            nedrykkHits += 1;
+        }
+        return (nedrykkHits > 1) ? -1 : 0;
+    },
 
     _updateScores = function (currentTippeligaTable, currentAdeccoligaTable, currentTippeligaTopscorer, currentRemainingCupContenders) {
         "use strict";
@@ -30,44 +59,62 @@ var _getTableScore = function (predictedPlacing, actualPlacing) {
                     toppscorerScore = 0,
                     cupScore = 0,
 
+                    nedrykkHits = 0,
+                    opprykkHits = 0,
+
                     participantObj = predictions2014[participant];
 
                 if (participantObj) {
+                    nedrykkHits = 0;
+                    opprykkHits = 0;
 
-                    // Tabell
                     _.each(participantObj.tabell, function (team, index) {
                         var predictedTeamPlacing = index + 1,
                             actualTeamPlacing = currentTippeligaTable[team].no;
 
+                        // Tabell
                         tabellScore += _getTableScore(predictedTeamPlacing, actualTeamPlacing);
 
-                        if (index === 0 && predictedTeamPlacing === actualTeamPlacing) {
+                        // Pall
+                        //pallScore += _getPallScore(predictedTeamPlacing, actualTeamPlacing);
+                        if (predictedTeamPlacing === 1 && predictedTeamPlacing === actualTeamPlacing) {
                             pallScore += -1;
                         }
-                        if (index === 1 && predictedTeamPlacing === actualTeamPlacing) {
+                        if (predictedTeamPlacing === 2 && predictedTeamPlacing === actualTeamPlacing) {
                             pallScore += -1;
                         }
-                        if (index === 2 && predictedTeamPlacing === actualTeamPlacing) {
+                        if (predictedTeamPlacing === 3 && predictedTeamPlacing === actualTeamPlacing) {
                             pallScore += -1;
                         }
                         if (pallScore === 3) {
                             pallScore += -1;
                         }
-                        //console.log(participant + "." + team + " tabell calculations done ...");
+
+                        // Nedrykk
+                        //nedrykkScore += _getNedrykkScore(predictedTeamPlacing, actualTeamPlacing);
+                        if (predictedTeamPlacing === 15 && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 16)) {
+                            nedrykkHits += 1;
+                        }
+                        if (predictedTeamPlacing === 16 && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 15)) {
+                            nedrykkHits += 1;
+                        }
+                        //return (nedrykkHits > 1) ? -1 : 0;
+                        //nedrykkScore = (nedrykkHits > 1) ? -1 : 0;
+                        if (nedrykkHits === 2) {
+                            nedrykkScore = -1;
+                        }
+
+                        console.log(participant + "." + team + " tabell calculations done ...");
                     });
 
-                    // TODO: ...
-                    // Nedrykk
-
                     // Toppscorer
-                    //_.each(participantObj.toppscorer, function (toppscorer, index) {
-                    //    if (index === 0 && _.contains(currentTippeligaTopscorer, toppscorer)) {
-                    //        cupScore = -1;
-                    //    }
-                    //});
-                    toppscorerScore = -1;
+                    _.each(participantObj.toppscorer, function (toppscorer, index) {
+                        if (index === 0 && _.contains(currentTippeligaTopscorer, toppscorer)) {
+                            toppscorerScore = -1;
+                        }
+                    });
 
-                    // TODO: ...
+                    // TODO: When Adeccoliga starts
                     // Opprykk
 
                     // Cup
@@ -78,7 +125,7 @@ var _getTableScore = function (predictedPlacing, actualPlacing) {
                     });
                 }
                 currentStanding[participant] =
-                    sharedModels.ScoreModel.properties(tabellScore, pallScore, cupScore, toppscorerScore, opprykkScore, nedrykkScore);
+                    sharedModels.ScoreModel.properties(tabellScore, pallScore, nedrykkScore, toppscorerScore, opprykkScore, cupScore);
             }
         }
         return currentStanding;

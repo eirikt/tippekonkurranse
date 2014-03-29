@@ -7,10 +7,10 @@ define(["underscore", "backbone", "app.models.ScoreModel"],
             sum: function () {
                 return parseInt(this.get(ScoreModel.tabell), 10) +
                     parseInt(this.get(ScoreModel.pall), 10) +
-                    parseInt(this.get(ScoreModel.cup), 10) +
+                    parseInt(this.get(ScoreModel.nedrykk), 10) +
                     parseInt(this.get(ScoreModel.toppscorer), 10) +
                     parseInt(this.get(ScoreModel.opprykk), 10) +
-                    parseInt(this.get(ScoreModel.nedrykk), 10);
+                    parseInt(this.get(ScoreModel.cup), 10);
             },
             printableName: function (nameKey) {
                 if (nameKey === "jantore") {

@@ -92,13 +92,16 @@ _Status_: Shouldn't take long ...
 #### v1.x
 * Graphs and whatnot
 
+#### v1.x
+* View all user's predictions
+
 #### v?
 * Admin UI for data management
 
 #### v?
 * Mobile app
 * Touch-friendly version ...
-* Small-screen-friendly version ...
+* ~~Small-screen-friendly version ...~~ Seems to be just fine
 
 #### v? : Proper URL
 * [Heroku/Custom domains][31]

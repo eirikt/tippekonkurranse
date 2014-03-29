@@ -159,7 +159,7 @@ var _pred2014 = exports.predictions2014 = {
             "Sandnes Ulf"
         ],
         opprykk: ["Tromsø" , "Sandefjord"],
-        toppscorer: ["Bjørn Bergmann Sigurdarsson"],
+        toppscorer: ["Björn Bergmann Sigurdarson"],
         cup: ["Molde"]
     },
     rikard: {
@@ -182,7 +182,7 @@ var _pred2014 = exports.predictions2014 = {
             "Sandnes Ulf"
         ],
         opprykk: ["Tromsø", "Hønefoss"],
-        toppscorer: ["Guldbrandsen"],
+        toppscorer: ["Fredrik Guldbrandsen"],
         cup: ["Molde"]
     },
     sveintore: {
@@ -205,7 +205,7 @@ var _pred2014 = exports.predictions2014 = {
             "Stabæk"
         ],
         opprykk: ["Tromsø", "Ranheim"],
-        toppscorer: ["Bjørn Bergmann Sigurdarson"],
+        toppscorer: ["Björn Bergmann Sigurdarson"],
         cup: ["Molde"]
     },
     steinar: {

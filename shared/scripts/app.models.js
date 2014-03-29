@@ -18,10 +18,10 @@ var ScoreModel = {
                 //ScoreModel.poengsum,
                 ScoreModel.tabell,
                 ScoreModel.pall,
-                ScoreModel.cup,
+                ScoreModel.nedrykk,
                 ScoreModel.toppscorer,
                 ScoreModel.opprykk,
-                ScoreModel.nedrykk
+                ScoreModel.cup
             ],
             args,
             model = {},
