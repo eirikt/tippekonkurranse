@@ -69,13 +69,19 @@ _Status_: OK
 
 #### v0.0.9 : More business logic
 * Implement "tippeliga-nedrykk" point calculations
+
+_Status_: OK
+
+#### v0.0.10 : Bugfixes
 * Implement "adecco-opprykk" point calculations
-* Add all user predictions for this year
+* Complete adding of user predictions for this year
 
 _Status_: Shouldn't take long ...
 
-#### v0.0.10 : Bugfixes
+#### v0.0.11 : More bugfixes
 * Feedback and fixes ...
+
+_Status_: Shouldn't take long ...
 
 #### v1.0.0 : _Delivery goal 28.03.2014_
 * __First feature-complete usable version__

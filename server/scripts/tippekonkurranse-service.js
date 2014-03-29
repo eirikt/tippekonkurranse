@@ -8,42 +8,37 @@ var _ = require("underscore"),
 // Module dependencies, local
     predictions2014 = require("./user-predictions-2014.js").predictions2014,
     norwegianSoccerLeagueService = require("./norwegian-soccer-service.js"),
-    sharedModels = require("./../../shared/scripts/app.models.js");
+    sharedModels = require("./../../shared/scripts/app.models.js"),
 
+// Below, "score" should be read as "penalty point", that is more accurate ...
 
-var _getTableScore = function (predictedTeamPlacing, actualTeamPlacing) {
+    _getTableScore = function (predictedTeamPlacing, actualTeamPlacing) {
         "use strict";
         return Math.abs(predictedTeamPlacing - actualTeamPlacing);
     },
 
-    _getPallScore = function (predictedPlacing, actualPlacing) {
+    _getPallScore = function (predictedTeamPlacing, actualTeamPlacing) {
         "use strict";
-        var pallScore = 0;
-        if (predictedPlacing === 1 && predictedPlacing === actualPlacing) {
-            pallScore += -1;
+        var pallPenaltyPoints = 0;
+        if (predictedTeamPlacing === 1 && predictedTeamPlacing === actualTeamPlacing) {
+            pallPenaltyPoints += -1;
         }
-        if (predictedPlacing === 2 && predictedPlacing === actualPlacing) {
-            pallScore += -1;
+        if (predictedTeamPlacing === 2 && predictedTeamPlacing === actualTeamPlacing) {
+            pallPenaltyPoints += -1;
         }
-        if (predictedPlacing === 3 && predictedPlacing === actualPlacing) {
-            pallScore += -1;
+        if (predictedTeamPlacing === 3 && predictedTeamPlacing === actualTeamPlacing) {
+            pallPenaltyPoints += -1;
         }
-        if (pallScore === 3) {
-            pallScore += -1;
-        }
-        return pallScore;
+        return pallPenaltyPoints;
     },
 
-    _getNedrykkScore = function (predictedPlacing, actualPlacing) {
+    _getExtraPallScore = function (predictedTeamPlacing, currentPallScore) {
         "use strict";
-        var nedrykkHits = 0;
-        if (predictedPlacing === 15 && (predictedPlacing === actualPlacing || actualPlacing === 16)) {
-            nedrykkHits += 1;
-        }
-        if (predictedPlacing === 16 && (predictedPlacing === actualPlacing || actualPlacing === 15)) {
-            nedrykkHits += 1;
-        }
-        return (nedrykkHits > 1) ? -1 : 0;
+        return predictedTeamPlacing === 4 && currentPallScore === 3 ? -1 : 0;
+    },
+
+    _getNedrykkScore = function (predictedTeamPlacing, actualTeamPlacing) {
+        "use strict";
     },
 
     _updateScores = function (currentTippeligaTable, currentAdeccoligaTable, currentTippeligaTopscorer, currentRemainingCupContenders) {
@@ -76,35 +71,19 @@ var _getTableScore = function (predictedTeamPlacing, actualTeamPlacing) {
                         tabellScore += _getTableScore(predictedTeamPlacing, actualTeamPlacing);
 
                         // Pall
-                        //pallScore += _getPallScore(predictedTeamPlacing, actualTeamPlacing);
-                        if (predictedTeamPlacing === 1 && predictedTeamPlacing === actualTeamPlacing) {
-                            pallScore += -1;
-                        }
-                        if (predictedTeamPlacing === 2 && predictedTeamPlacing === actualTeamPlacing) {
-                            pallScore += -1;
-                        }
-                        if (predictedTeamPlacing === 3 && predictedTeamPlacing === actualTeamPlacing) {
-                            pallScore += -1;
-                        }
-                        if (pallScore === 3) {
-                            pallScore += -1;
-                        }
+                        pallScore += _getPallScore(predictedTeamPlacing, actualTeamPlacing);
+                        pallScore += _getExtraPallScore(predictedTeamPlacing, pallScore);
 
                         // Nedrykk
-                        //nedrykkScore += _getNedrykkScore(predictedTeamPlacing, actualTeamPlacing);
                         if (predictedTeamPlacing === 15 && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 16)) {
                             nedrykkHits += 1;
                         }
                         if (predictedTeamPlacing === 16 && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 15)) {
                             nedrykkHits += 1;
                         }
-                        //return (nedrykkHits > 1) ? -1 : 0;
-                        //nedrykkScore = (nedrykkHits > 1) ? -1 : 0;
-                        if (nedrykkHits === 2) {
-                            nedrykkScore = -1;
-                        }
+                        nedrykkScore = (nedrykkHits > 1) ? -1 : 0;
 
-                        console.log(participant + "." + team + " tabell calculations done ...");
+                        //console.log(participant + "." + team + " tabell calculations done ...");
                     });
 
                     // Toppscorer
