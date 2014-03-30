@@ -15,10 +15,13 @@ define(["underscore", "backbone", "app.models.ScoreModel"],
             printableName: function (nameKey) {
                 if (nameKey === "jantore") {
                     return "Jan Tore";
+
                 } else if (nameKey === "hansbernhard") {
                     return "Hans Bernhard";
+
                 } else if (nameKey === "oleerik") {
                     return "Ole Erik";
+
                 } else if (nameKey === "sveintore") {
                     return "Svein Tore";
                 }
@@ -26,6 +29,7 @@ define(["underscore", "backbone", "app.models.ScoreModel"],
             }
 
         }, {
+            participantRatingNumberPropertyName: "nr",
             participantResultNamePropertyName: "name",
             participantResultPoengsumPropertyName: "poengsum",
             /** Ascending poengsum */

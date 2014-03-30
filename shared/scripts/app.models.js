@@ -3,13 +3,13 @@
 // For client-side: use RequireJS shims
 
 var ScoreModel = {
-    poengsum: "poengsum",
+    //poengsum: "poengsum",
     tabell: "tabell",
     pall: "pall",
-    cup: "cup",
+    nedrykk: "nedrykk",
     toppscorer: "toppscorer",
     opprykk: "opprykk",
-    nedrykk: "nedrykk",
+    cup: "cup",
 
     properties: function () {
         "use strict";

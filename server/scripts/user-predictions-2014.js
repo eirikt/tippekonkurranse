@@ -46,16 +46,29 @@ var _pred2014 = exports.predictions2014 = {
         toppscorer: ["Frode Johnsen"],
         cup: ["Stabæk"]
     },
-    /*
     geir: {
         tabell: [
+            "Molde",
+            "Strømsgodset",
+            "Rosenborg",
+            "Viking",
+            "Odd",
+            "Brann",
+            "Aalesund",
+            "Haugesund",
+            "Vålerenga",
+            "Lillestrøm",
+            "Start",
+            "Bodø/Glimt",
+            "Sogndal",
+            "Sarpsborg",
+            "Stabæk",
+            "Sandnes Ulf"
         ],
-        opprykk: ["", ""],
-        toppscorer: [""],
-        cup: [""]
-
+        opprykk: ["Tromsø", "Fredrikstad"],
+        toppscorer: ["Björn Bergmann Sigurdarson"],
+        cup: ["Rosenborg"]
     },
-    */
     hansbernhard: {
         tabell: [
             "Vålerenga",

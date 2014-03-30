@@ -37,7 +37,7 @@ var _ = require("underscore"),
         return predictedTeamPlacing === 4 && currentPallScore === -3 ? -1 : 0;
     },
 
-    _getNedrykkScore = function (predictedTeamPlacing, actualTeamPlacing) {
+    _getNedrykkScore = exports._getNedrykkScore = function (predictedTeamPlacing, actualTeamPlacing) {
         "use strict";
         var nedrykkHits = 0;
         if (predictedTeamPlacing === 15 && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 16)) {
@@ -49,7 +49,31 @@ var _ = require("underscore"),
         return nedrykkHits === 2 ? -1 : 0;
     },
 
-    _updateScores = function (currentTippeligaTable, currentAdeccoligaTable, currentTippeligaTopscorer, currentRemainingCupContenders) {
+    _getOpprykkScore = function (predictedTeamPlacing, actualTeamPlacing, currentOpprykkScore) {
+        "use strict";
+        //var opprykkHits = 0;
+        if (predictedTeamPlacing === 1 && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 2)) {
+            //opprykkHits += 1;
+            return -1;
+        }
+        if (predictedTeamPlacing === 2 && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 1)) {
+            // Re-adjust score
+            if (currentOpprykkScore < 0) {
+                return 0;
+            } else {
+                return 1;
+            }
+            //opprykkHits += 1;
+        }
+        //if (opprykkHits === 2) {
+        //    return -1;
+        //} else {
+        //    return 0;
+        //}
+        return 0;
+    },
+
+    _updateScores = exports._updateScores = function (predictions2014, currentTippeligaTable, currentAdeccoligaTable, currentTippeligaTopscorer, currentRemainingCupContenders) {
         "use strict";
         var currentStanding = {};
         for (var participant in predictions2014) {
@@ -76,9 +100,7 @@ var _ = require("underscore"),
                         pallScore += _getExtraPallScore(predictedTeamPlacing, pallScore);
 
                         // Nedrykk
-                        nedrykkScore += _getNedrykkScore(predictedTeamPlacing, actualTeamPlacing);
-
-                        //console.log(participant + "." + team + " tabell calculations done ...");
+                        nedrykkScore += _getNedrykkScore(predictedTeamPlacing, actualTeamPlacing, nedrykkScore);
                     });
 
                     // Toppscorer
@@ -88,8 +110,14 @@ var _ = require("underscore"),
                         }
                     });
 
-                    // TODO: When Adeccoliga starts
+                    // TODO: ...
                     // Opprykk
+                    //_.each(participantObj.opprykk, function (team, index) {
+                    //    var predictedTeamPlacing = index + 1,
+                    //        actualTeamPlacing = currentAdeccoligaTable[team].no;
+
+                    //    opprykkScore += _getOpprykkScore(predictedTeamPlacing, actualTeamPlacing, opprykkScore);
+                    //});
 
                     // Cup
                     _.each(participantObj.cup, function (team, index) {
@@ -118,7 +146,9 @@ var _ = require("underscore"),
                     currentTippeligaTopscorer = resultArray[2],
                     currentRemainingCupContenders = resultArray[3],
 
-                    currentStanding = _updateScores(currentTippeligaTable, currentAdeccoligaTable, currentTippeligaTopscorer, currentRemainingCupContenders);
+                    currentStanding = _updateScores(
+                        predictions2014,
+                        currentTippeligaTable, currentAdeccoligaTable, currentTippeligaTopscorer, currentRemainingCupContenders);
 
                 resp.send(JSON.stringify(currentStanding));
             }

@@ -146,9 +146,18 @@ module.exports = function (grunt) {
              */
             myUglifyTask: {
                 files: {
-                    //'build/bower_components/requirejs/require.js': 'build/bower_components/requirejs/require.js',
-                    //'build/scripts/app.config.js': 'build/scripts/app.config.js',
-                    //'build/scripts/app.js': 'build/scripts/app.js'
+                    'build/bower_components/requirejs/require.js': 'build/bower_components/requirejs/require.js',
+                    'build/bower_components/backbone/backbone.js': 'build/bower_components/backbone/backbone.js',
+                    'build/bower_components/underscore/underscore.js': 'build/bower_components/underscore/underscore.js',
+
+                    'build/scripts/app.models.js': 'build/scripts/app.models.js',
+
+                    'build/scripts/app.config.js': 'build/scripts/app.config.js',
+                    'build/scripts/app.js': 'build/scripts/app.js',
+                    'build/scripts/app.participant-score-view.js': 'build/scripts/app.participant-score-view.js',
+                    'build/scripts/app.result.js': 'build/scripts/app.result.js',
+                    'build/scripts/app.result-collection.js': 'build/scripts/app.result-collection.js',
+                    'build/scripts/app.results-view.js': 'build/scripts/app.results-view.js'
                 }
             }
         },

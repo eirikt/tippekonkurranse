@@ -1,8 +1,8 @@
 /* global require: false */
 require.config({
     paths: {
-        'jquery': '../bower_components/jquery/dist/jquery',
-        'jquery.bootstrap': '../bower_components/bootstrap/dist/js/bootstrap',
+        'jquery': '../bower_components/jquery/dist/jquery.min',
+        'jquery.bootstrap': '../bower_components/bootstrap/dist/js/bootstrap.min',
         'underscore': '../bower_components/underscore/underscore',
         'backbone': '../bower_components/backbone/backbone',
 

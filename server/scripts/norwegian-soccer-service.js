@@ -7,7 +7,11 @@ var _ = require("underscore"),
     cheerio = require("cheerio"),
 
 
-// www.fotball.no-specific stuff
+//////////////////////////////////
+// www.fotball.no (NFF)
+// (no live updates here ...)
+//////////////////////////////////
+
     _fotballNoCurrentTippeligaTableUrl =
         "http://www.fotball.no/Landslag_og_toppfotball/Toppfotball/tippeligaen",
 
@@ -55,9 +59,12 @@ var _ = require("underscore"),
         });
         return currentTable;
     },
-// /www.fotball.no-specific stuff
 
-// www.altomfotball.no stuff
+
+//////////////////////////////////
+// www.altomfotball.no
+//////////////////////////////////
+
     _altomfotballCurrentTippeligaTableUrl =
         "http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&subCmd=total&live=true&useFullUrl=false",
 
@@ -88,6 +95,36 @@ var _ = require("underscore"),
         return currentTable;
     },
 
+    _altomfotballCurrentAdeccoligaTableUrl =
+        "http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=2&subCmd=total&live=true&useFullUrl=false",
+
+    _parseAltomfotballAdeccoligaTable = function (body) {
+        "use strict";
+        var currentTable = {},
+            $ = cheerio.load(body),
+            rows = $($).find("tbody").find("tr");
+
+        _.each(rows, function (element) {
+            var $cells = $(element).find("td"),
+                no = $($cells[0]).html(),
+                team = $cells.find("a").first().html(),
+                matches = $($cells[2]).html();
+
+            // Launder ...
+            no = no.substring(0, no.length - 1);
+            team = team.replace("&nbsp;", " ");
+
+            // Normalize ...
+            //if (team === "Sarpsborg 08") {
+            //    team = "Sarpsborg";
+            //}
+
+            // The data format
+            currentTable[team] = { no: parseInt(no, 10), matches: matches };
+        });
+        return currentTable;
+    },
+
     _altomfotballCurrentToppscorerTableUrl =
         "http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&seasonId=&teamId=&useFullUrl=false",
 
@@ -104,8 +141,10 @@ var _ = require("underscore"),
                 goals = $($cells[3]).html();
 
             // Launder ...
-            player = player.replace("&nbsp;", " ");
-            player = player.replace("&nbsp;", " "); // => max two spaces in name ...
+            // => max two spaces in name ...
+            player = player
+                .replace("&nbsp;", " ")
+                .replace("&nbsp;", " ");
 
             // Normalize ...
 
@@ -123,10 +162,11 @@ var _ = require("underscore"),
         return toppscorers;
     },
 
-// /www.altomfotball.no stuff
 
-
+//////////////////////////////////
 // "Strategy switch" functions
+//////////////////////////////////
+
     _getCurrentTippeligaTableUrl = function () {
         "use strict";
         return _altomfotballCurrentTippeligaTableUrl;
@@ -136,10 +176,10 @@ var _ = require("underscore"),
 
     _getCurrentAdeccoligaTableUrl = function () {
         "use strict";
-        return _fotballNoCurrentAdeccoligaTableUrl;
+        return _altomfotballCurrentAdeccoligaTableUrl;
     },
 
-    _parseCurrentAdeccoligaTableData = _parseFotballNoAdeccoligaTable,
+    _parseCurrentAdeccoligaTableData = _parseAltomfotballAdeccoligaTable,
 
     _getCurrentTippeligaToppscorerUrl = function () {
         "use strict";
@@ -147,8 +187,11 @@ var _ = require("underscore"),
     },
 
     _parseCurrentTippeligaToppscorerData = _parseAltomfotballToppscorerTable,
-// /"Strategy switch" functions
 
+
+//////////////////////////////////
+// Public functions
+//////////////////////////////////
 
     _getCurrentTippeligaTable = exports.getCurrentTippeligaTable = function () {
         "use strict";
@@ -171,25 +214,18 @@ var _ = require("underscore"),
     _getCurrentAdeccoligaTable = exports.getCurrentAdeccoligaTable = function () {
         "use strict";
         var dfd = new promise.Deferred();
-        // TODO: fake it for now ...
-        dfd.resolve({
-            "Alta": { no: 1, matches: 0 },
-            "Bærum": { no: 2, matches: 0 },
-            "Bryne": { no: 3, matches: 0 },
-            "Fredrikstad": { no: 4, matches: 0 },
-            "HamKam": { no: 5, matches: 0 },
-            "Hønefoss": { no: 6, matches: 0 },
-            "Hødd": { no: 7, matches: 0 },
-            "Nest-Sotra": { no: 8, matches: 0 },
-            "Kristiansund": { no: 9, matches: 0 },
-            "Mjøndalen": { no: 10, matches: 0 },
-            "Ranheim": { no: 11, matches: 0 },
-            "Sandefjord": { no: 12, matches: 0 },
-            "Strømmen": { no: 13, matches: 0 },
-            "Tromsdalen": { no: 14, matches: 0 },
-            "Tromsø": { no: 15, matches: 0 },
-            "Ullensaker/Kisa": { no: 16, matches: 0 }
-        });
+
+        request(
+            _getCurrentAdeccoligaTableUrl(),
+            function (error, response, body) {
+                if (!error && response.statusCode === 200) {
+                    dfd.resolve(_parseCurrentAdeccoligaTableData(body));
+                }
+                else {
+                    dfd.reject();
+                }
+            }
+        );
         return dfd.promise;
     },
 
@@ -215,8 +251,8 @@ var _ = require("underscore"),
     _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders = function () {
         "use strict";
         var dfd = new promise.Deferred();
-        // For the cup title, just manually remove the clubs when they screw up, one by one ...
-        // Only tippeliga clubs relevant here ...
+        // For the cup title, just manually remove the teams when they consecutively screw up, one after the other ...
+        // Only tippeliga teams relevant for 2014 predictions ...
         dfd.resolve([
             "Bodø/Glimt",
             "Brann",

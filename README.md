@@ -72,21 +72,25 @@ _Status_: OK
 
 _Status_: OK
 
-#### v0.0.10 : Bugfixes
-* Implement "adecco-opprykk" point calculations
+#### v0.0.10 : UX
 * Complete adding of user predictions for this year
+* Proper participant rating numbers
+* Automatic page refresh
 
-_Status_: Shouldn't take long ...
+_Status_: OK
 
-#### v0.0.11 : More bugfixes
+#### v0.0.11 : Last iteration
+* Implement "adecco-opprykk" point calculations
+* Add specifications
 * Feedback and fixes ...
 
 _Status_: Shouldn't take long ...
 
-#### v1.0.0 : _Delivery goal 28.03.2014_
+#### v1.0.0 : _Delivery goal 06.04.2014_
 * __First feature-complete usable version__
 
-#### v1.0.1 :
+#### v1.0.1 : Verification
+* Add more specifications ...
 * Bugfixes
 
 ...

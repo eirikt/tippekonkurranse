@@ -31,8 +31,6 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
 
             render: function () {
                 var addParticipant = function ($el, participantResult, index) {
-                        // TODO: somewhat more clever participant rating
-                        participantResult.set("nr", index + 1, { silent: true });
                         $el.append(new ParticipantScoreView({ model: participantResult.toJSON() }).render().el);
                     },
                     delayedAddParticipant = function (timeOutInMillis, $el, participantResult, index) {

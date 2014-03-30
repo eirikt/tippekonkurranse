@@ -1,7 +1,7 @@
 /* global define: false, console: false, $:false */
 
 
-define(['underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'app.models.ScoreModel', 'app.result', 'app.resultCollection', 'app.results-view'],
+define(['underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'app.models.ScoreModel', 'app.result', 'app.result-collection', 'app.results-view'],
 
     function (_, Backbone, $, Bootstrap, ScoreModel, TippekonkurranseCurrentResult, TippekonkurranseCurrentResultsCollection, TippekonkurranseCurrentResultsView) {
         "use strict";
