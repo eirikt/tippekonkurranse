@@ -5,6 +5,8 @@ In production [here][1].
 
 [![Build Status](https://travis-ci.org/eirikt/tippekonkurranse.png?branch=master)](https://travis-ci.org/eirikt/tippekonkurranse)
 
+[![Coverage Status](https://coveralls.io/repos/eirikt/tippekonkurranse/badge.png?branch=master)](https://coveralls.io/r/eirikt/tippekonkurranse?branch=master)
+
 [![Dependency Status](https://david-dm.org/eirikt/tippekonkurranse.png)](https://david-dm.org/eirikt/tippekonkurranse)
 [![devDependency Status](https://david-dm.org/eirikt/tippekonkurranse/dev-status.png)](https://david-dm.org/eirikt/tippekonkurranse#info=devDependencies)
 
