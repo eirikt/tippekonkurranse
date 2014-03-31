@@ -85,9 +85,6 @@ var _ = require("underscore"),
             team = team.replace("&nbsp;", " ");
 
             // Normalize ...
-            if (team === "Sarpsborg 08") {
-                team = "Sarpsborg";
-            }
 
             // The data format
             currentTable[team] = { no: parseInt(no, 10), matches: matches };
@@ -115,9 +112,6 @@ var _ = require("underscore"),
             team = team.replace("&nbsp;", " ");
 
             // Normalize ...
-            //if (team === "Sarpsborg 08") {
-            //    team = "Sarpsborg";
-            //}
 
             // The data format
             currentTable[team] = { no: parseInt(no, 10), matches: matches };

@@ -13,11 +13,7 @@ define(["jquery", "underscore", "backbone"],
                     '<td style="color:darkgray;text-align:center;"><%= pall %></td>' +
                     '<td style="color:darkgray;text-align:center;"><%= nedrykk %></td>' +
                     '<td style="color:darkgray;text-align:center;"><%= toppscorer %></td>' +
-
-                    // TODO: ...
-                    //'<td style="color:darkgray;text-align:center;"><%= opprykk %></td>' +
-                    '<td style="color:darkgray;text-align:center;">0</td>' +
-
+                    '<td style="color:darkgray;text-align:center;"><%= opprykk %></td>' +
                     '<td style="color:darkgray;text-align:center;"><%= cup %></td>'
             ),
             render: function () {

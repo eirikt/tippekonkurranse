@@ -12,7 +12,7 @@ tests/bower_components
 node_modules
 README.html
 
-# Temporary dev stuff, not sure about their future ...
+# Temporary local dev stuff, not sure about their future ...
 client/images/podium_resultats.jpeg
 client/images/sport-man-on-podium-184220.jpg
 client/medal.ico

@@ -24,7 +24,7 @@ define(["underscore", "backbone", "app.result"],
                     lastSum = 0;
                 this.each(function (participant) {
                     if (participant.get(ParticipantResult.participantResultPoengsumPropertyName) > lastSum) {
-                        participant.set(ParticipantResult.participantRatingNumberPropertyName, rating, { silent: true });
+                        participant.set(ParticipantResult.participantRatingNumberPropertyName, rating + ".", { silent: true });
                         lastSum = participant.get(ParticipantResult.participantResultPoengsumPropertyName);
                         rating += 1;
                     }

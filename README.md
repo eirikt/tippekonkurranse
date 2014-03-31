@@ -84,7 +84,7 @@ _Status_: OK
 * Add specifications
 * Feedback and fixes ...
 
-_Status_: Shouldn't take long ...
+_Status_: OK
 
 #### v1.0.0 : _Delivery goal 06.04.2014_
 * __First feature-complete usable version__

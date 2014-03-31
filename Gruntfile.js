@@ -91,7 +91,7 @@ module.exports = function (grunt) {
                 plusplus: true,
                 //qoutmark: true, // Not forcing consistent use of 'single' or 'double' as of now ...
                 undef: true,
-                unused: true,
+                //unused: true,
                 strict: true,
                 trailing: true,
                 maxparams: 14,
@@ -112,15 +112,43 @@ module.exports = function (grunt) {
         mocha: {
             test: {
                 src: ['tests/test.html']
+            },
+            options: {
+                //run: true,
+                log: true,
+                logErrors: true,
+
+                //reporter: 'XUnit'
+                //reporter: 'List'
+                reporter: 'Spec'
             }
         },
 
-        jsdoc: {
-            dist: {
-                src: ['server/scripts/*.js', 'client/scripts/*.js'],
+        mochaTest: {
+            test: {
                 options: {
-                    destination: 'docs'
+                    reporter: 'spec'
+                },
+                src: ['tests/specs/tippekonkurranse-service.spec.js']
+            }
+        },
+
+        mochacov: {
+            travis: {
+                options: {
+                    coveralls: true
                 }
+            },
+            report: {
+                options: {
+                    log: true,
+                    logErrors: true,
+                    reporter: 'html-cov',
+                    output: 'docs/server-coverage.html'
+                }
+            },
+            options: {
+                files: 'tests/specs/tippekonkurranse-service.spec.js'
             }
         },
 
@@ -161,6 +189,26 @@ module.exports = function (grunt) {
                 }
             }
         },
+
+        cssmin: {
+            minify: {
+                expand: true,
+                cwd: 'build/styles/',
+                src: ['*.css', '!*.min.css'],
+                dest: 'build/styles/'//,
+                //ext: '.css'
+            }
+        },
+
+        jsdoc: {
+            dist: {
+                src: ['server/scripts/*.js', 'client/scripts/*.js'],
+                options: {
+                    destination: 'docs'
+                }
+            }
+        },
+
         watch: {
             scripts: {
                 files: [
@@ -183,11 +231,14 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-mocha');
+    grunt.loadNpmTasks('grunt-mocha-test');
+    grunt.loadNpmTasks('grunt-mocha-cov');
     grunt.loadNpmTasks('grunt-jsdoc');
 
     grunt.registerTask('help', ['shell:help']);
@@ -195,16 +246,17 @@ module.exports = function (grunt) {
     grunt.registerTask('install:client', ['shell:install-client']);
     grunt.registerTask('install:test', ['shell:install-test']);
 
-    grunt.registerTask('build:client', ['clean', 'copy', 'uglify']);
-    grunt.registerTask('test', ['install:client', 'build:client', 'install:test', 'mocha']);
-    grunt.registerTask('build:travis', ['test', /* TODO 'jshint',*/ 'jsdoc']);
+    grunt.registerTask('build:client', ['clean', 'copy', 'uglify', 'cssmin']);
+    grunt.registerTask('test:client', ['mocha']);
+    grunt.registerTask('test:server', ['mochaTest']);
+    grunt.registerTask('coverage:server', ['mochacov:report']);
+    grunt.registerTask('test', ['install:client', 'build:client', 'install:test', 'test:server', 'test:client']);
+    grunt.registerTask('build:travis', ['test', 'mochacov:travis', 'jshint', 'jsdoc']);
 
     grunt.registerTask('deploy:local', ['install:client', 'build:client', 'foreman']);
     grunt.registerTask('deploy:production', ['install:client', 'build:client']);
-
-    grunt.registerTask('run', ['deploy:local']);
-
     grunt.registerTask('deploy:heroku', ['deploy:production']);
+
     /*
      * http://stackoverflow.com/questions/13784600/how-to-deploy-node-app-that-uses-grunt-to-heroku
      *
@@ -225,6 +277,8 @@ module.exports = function (grunt) {
     //>D:\workspace\Tippekonkurranse [master +11 ~2 -0 !]>
     //grunt.registerTask('heroku:development', 'clean less mincss');
     grunt.registerTask('heroku:production', ['deploy:heroku']);
+
+    grunt.registerTask('run', ['deploy:local']);
 
     grunt.registerTask('default', ['help']);
 };

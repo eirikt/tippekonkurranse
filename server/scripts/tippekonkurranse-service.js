@@ -1,4 +1,5 @@
 /* global require:false, exports:false */
+/* jshint -W083 */
 
 // Module dependencies, external
 var _ = require("underscore"),
@@ -10,7 +11,7 @@ var _ = require("underscore"),
     norwegianSoccerLeagueService = require("./norwegian-soccer-service.js"),
     sharedModels = require("./../../shared/scripts/app.models.js"),
 
-// Below, "score" should be read as "penalty point", that is more accurate ...
+// Below, "score" should be read as "penalty point", that's more accurate ...
 
     _getTableScore = function (predictedTeamPlacing, actualTeamPlacing) {
         "use strict";
@@ -37,39 +38,42 @@ var _ = require("underscore"),
         return predictedTeamPlacing === 4 && currentPallScore === -3 ? -1 : 0;
     },
 
-    _getNedrykkScore = exports._getNedrykkScore = function (predictedTeamPlacing, actualTeamPlacing) {
+// TODO: combine '_getNedrykkScore' and '_getOpprykkScore' - and differensiate with currying
+    _getNedrykkScore = function (predictedTeamPlacing, actualTeamPlacing, currentNedrykkScore) {
         "use strict";
-        var nedrykkHits = 0;
         if (predictedTeamPlacing === 15 && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 16)) {
-            nedrykkHits += 1;
+            return -1;
         }
-        if (predictedTeamPlacing === 16 && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 15)) {
-            nedrykkHits += 1;
+        if (predictedTeamPlacing === 16) {
+            if (currentNedrykkScore === 0) {
+                return 0;
+            }
+            if (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 15) {
+                return 0;
+            } else {
+                // Revoke given bonus (minus) point
+                return 1;
+            }
         }
-        return nedrykkHits === 2 ? -1 : 0;
+        return 0;
     },
 
     _getOpprykkScore = function (predictedTeamPlacing, actualTeamPlacing, currentOpprykkScore) {
         "use strict";
-        //var opprykkHits = 0;
         if (predictedTeamPlacing === 1 && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 2)) {
-            //opprykkHits += 1;
             return -1;
         }
-        if (predictedTeamPlacing === 2 && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 1)) {
-            // Re-adjust score
-            if (currentOpprykkScore < 0) {
+        if (predictedTeamPlacing === 2) {
+            if (currentOpprykkScore === 0) {
+                return 0;
+            }
+            if (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === 1) {
                 return 0;
             } else {
+                // Revoke given bonus (minus) point
                 return 1;
             }
-            //opprykkHits += 1;
         }
-        //if (opprykkHits === 2) {
-        //    return -1;
-        //} else {
-        //    return 0;
-        //}
         return 0;
     },
 
@@ -110,14 +114,13 @@ var _ = require("underscore"),
                         }
                     });
 
-                    // TODO: ...
                     // Opprykk
-                    //_.each(participantObj.opprykk, function (team, index) {
-                    //    var predictedTeamPlacing = index + 1,
-                    //        actualTeamPlacing = currentAdeccoligaTable[team].no;
+                    _.each(participantObj.opprykk, function (team, index) {
+                        var predictedTeamPlacing = index + 1,
+                            actualTeamPlacing = currentAdeccoligaTable[team].no;
 
-                    //    opprykkScore += _getOpprykkScore(predictedTeamPlacing, actualTeamPlacing, opprykkScore);
-                    //});
+                        opprykkScore += _getOpprykkScore(predictedTeamPlacing, actualTeamPlacing, opprykkScore);
+                    });
 
                     // Cup
                     _.each(participantObj.cup, function (team, index) {

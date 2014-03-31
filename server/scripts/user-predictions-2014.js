@@ -17,7 +17,7 @@ var _pred2014 = exports.predictions2014 = {
             "Stabæk",
             "Sandnes Ulf",
             "Sogndal",
-            "Sarpsborg"
+            "Sarpsborg 08"
         ],
         opprykk: ["Tromsø", "Sandefjord"],
         toppscorer: ["Alexander Toft Søderlund"],
@@ -39,7 +39,7 @@ var _pred2014 = exports.predictions2014 = {
             "Sandnes Ulf",
             "Lillestrøm",
             "Start",
-            "Sarpsborg",
+            "Sarpsborg 08",
             "Stabæk"
         ],
         opprykk: ["Tromsø", "Bryne"],
@@ -61,7 +61,7 @@ var _pred2014 = exports.predictions2014 = {
             "Start",
             "Bodø/Glimt",
             "Sogndal",
-            "Sarpsborg",
+            "Sarpsborg 08",
             "Stabæk",
             "Sandnes Ulf"
         ],
@@ -83,7 +83,7 @@ var _pred2014 = exports.predictions2014 = {
             "Odd",
             "Strømsgodset",
             "Sandnes Ulf",
-            "Sarpsborg",
+            "Sarpsborg 08",
             "Sogndal",
             "Stabæk",
             "Start"
@@ -109,7 +109,7 @@ var _pred2014 = exports.predictions2014 = {
             "Sogndal",
             "Stabæk",
             "Sandnes Ulf",
-            "Sarpsborg"
+            "Sarpsborg 08"
         ],
         opprykk: ["Tromsø", "Sandefjord"],
         toppscorer: ["Alexander Søderlund"],
@@ -130,7 +130,7 @@ var _pred2014 = exports.predictions2014 = {
             "Start",
             "Bodø/Glimt",
             "Sandnes Ulf",
-            "Sarpsborg",
+            "Sarpsborg 08",
             "Sogndal",
             "Stabæk"
         ],
@@ -152,7 +152,7 @@ var _pred2014 = exports.predictions2014 = {
             "Odd",
             "Start",
             "Lillestrøm",
-            "Sarpsborg",
+            "Sarpsborg 08",
             "Sogndal",
             "Sandnes Ulf",
             "Stabæk"
@@ -175,7 +175,7 @@ var _pred2014 = exports.predictions2014 = {
             "Start",
             "Sogndal",
             "Aalesund",
-            "Sarpsborg",
+            "Sarpsborg 08",
             "Lillestrøm",
             "Stabæk",
             "Sandnes Ulf"
@@ -200,7 +200,7 @@ var _pred2014 = exports.predictions2014 = {
             "Start",
             "Sogndal",
             "Stabæk",
-            "Sarpsborg",
+            "Sarpsborg 08",
             "Sandnes Ulf"
         ],
         opprykk: ["Tromsø", "Hønefoss"],
@@ -222,7 +222,7 @@ var _pred2014 = exports.predictions2014 = {
             "Start",
             "Bodø/Glimt",
             "Sogndal",
-            "Sarpsborg",
+            "Sarpsborg 08",
             "Sandnes Ulf",
             "Stabæk"
         ],
@@ -245,7 +245,7 @@ var _pred2014 = exports.predictions2014 = {
             "Sogndal",
             "Odd",
             "Stabæk",
-            "Sarpsborg",
+            "Sarpsborg 08",
             "Sandnes Ulf",
             "Start"
         ],
@@ -267,7 +267,7 @@ var _pred2014 = exports.predictions2014 = {
             "Lillestrøm",
             "Start",
             "Bodø/Glimt",
-            "Sarpsborg",
+            "Sarpsborg 08",
             "Sogndal",
             "Sandnes Ulf",
             "Stabæk"
@@ -291,7 +291,7 @@ var _pred2014 = exports.predictions2014 = {
             "Sogndal",
             "Odd",
             "Sandnes Ulf",
-            "Sarpsborg",
+            "Sarpsborg 08",
             "Vålerenga",
             "Stabæk"
         ],
