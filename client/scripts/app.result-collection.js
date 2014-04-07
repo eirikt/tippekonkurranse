@@ -13,8 +13,8 @@ define(["underscore", "backbone", "app.result"],
                     if (response.hasOwnProperty(participant)) {
                         var participantResult = new this.model(response[participant]);
                         participantResult.set(ParticipantResult.participantRatingNumberPropertyName, "", { silent: true });
-                        participantResult.set(ParticipantResult.participantResultNamePropertyName, participantResult.printableName(participant), { silent: true });
-                        participantResult.set(ParticipantResult.participantResultPoengsumPropertyName, participantResult.sum(), { silent: true });
+                        participantResult.set(ParticipantResult.participantNamePropertyName, participantResult.printableName(participant), { silent: true });
+                        participantResult.set(ParticipantResult.participantPoengsumPropertyName, participantResult.sum(), { silent: true });
 
                         this.add(participantResult, { silent: true });
                     }
@@ -23,9 +23,9 @@ define(["underscore", "backbone", "app.result"],
                 var rating = 1,
                     lastSum = 0;
                 this.each(function (participant) {
-                    if (participant.get(ParticipantResult.participantResultPoengsumPropertyName) > lastSum) {
+                    if (participant.get(ParticipantResult.participantPoengsumPropertyName) > lastSum) {
                         participant.set(ParticipantResult.participantRatingNumberPropertyName, rating + ".", { silent: true });
-                        lastSum = participant.get(ParticipantResult.participantResultPoengsumPropertyName);
+                        lastSum = participant.get(ParticipantResult.participantPoengsumPropertyName);
                         rating += 1;
                     }
                 });

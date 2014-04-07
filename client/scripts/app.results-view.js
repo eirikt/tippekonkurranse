@@ -14,7 +14,7 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
                     '<th style="text-align:center;color:darkgray;width:9rem;">Tabell</th>' +
                     '<th style="text-align:center;color:darkgray;width:9rem;">Pall</th>' +
                     '<th style="text-align:center;color:darkgray;width:10rem;">Nedrykk</th>' +
-                    '<th style="text-align:center;color:darkgray;width:10rem;">Toppskårer</th>' +
+                    '<th style="text-align:center;color:darkgray;width:10rem;">Toppsk.</th>' +
                     '<th style="text-align:center;color:darkgray;width:10rem;">Opprykk</th>' +
                     '<th style="text-align:center;color:darkgray;width:10rem;">Cup</th>' +
                     '</tr></thead>' +
@@ -54,10 +54,10 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
                     delayedAddingOfParticipantInTableFunc;
 
                 for (i = 0; i < this.collection.length; i += 1) {
-                    // Bind a function to an object, meaning that whenever the function is called, the value of this will be the object
+                    // Underscore: Bind a function to an object, meaning that whenever the function is called, the value of this will be the object
                     delayedParticipantFunc = _.bind(delayedAddParticipant, this);
 
-                    // Partially apply a function by filling in any number of its arguments, without changing its dynamic this value.
+                    // Underscore: Partially apply a function by filling in any number of its arguments, without changing its dynamic this value.
                     // You may pass _ in your list of arguments to specify an argument that should not be pre-filled, but left open to supply at call-time.
                     sortedParticipant = this.collection.at(i);
                     delayedParticipantFunc = _.partial(delayedParticipantFunc, delayInMillis, $tbody, sortedParticipant, i);

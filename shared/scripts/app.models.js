@@ -1,9 +1,5 @@
 /* global exports: false */
-
-// For client-side: use RequireJS shims
-
 var ScoreModel = {
-    //poengsum: "poengsum",
     tabell: "tabell",
     pall: "pall",
     nedrykk: "nedrykk",
@@ -13,9 +9,7 @@ var ScoreModel = {
 
     properties: function () {
         "use strict";
-
         var scoreModelPropertiesArray = [
-                //ScoreModel.poengsum,
                 ScoreModel.tabell,
                 ScoreModel.pall,
                 ScoreModel.nedrykk,
@@ -44,6 +38,7 @@ var ScoreModel = {
     }
 };
 
+// For client-side: use RequireJS shims
 // For server-side/Node.js: CommonJS support
 if (typeof exports !== 'undefined') {
     exports.ScoreModel = ScoreModel;

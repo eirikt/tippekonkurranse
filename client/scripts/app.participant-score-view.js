@@ -5,6 +5,7 @@ define(["jquery", "underscore", "backbone"],
 
         return Backbone.View.extend({
             tagName: 'tr',
+            // TODO: use dynamic/common properties names for this
             template: _.template('' +
                     '<td style="padding-left:2rem;"><%= nr %></td>' +
                     '<td><strong><%= name %></strong></td>' +

@@ -30,11 +30,12 @@ define(["underscore", "backbone", "app.models.ScoreModel"],
 
         }, {
             participantRatingNumberPropertyName: "nr",
-            participantResultNamePropertyName: "name",
-            participantResultPoengsumPropertyName: "poengsum",
+            participantNamePropertyName: "name",
+            participantPoengsumPropertyName: "poengsum",
+
             /** Ascending poengsum */
             sortByPoengsum: function (model) {
-                return model.get(participantScore.participantResultPoengsumPropertyName);
+                return model.get(participantScore.participantPoengsumPropertyName);
             }
         });
 

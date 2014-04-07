@@ -17,13 +17,13 @@ module.exports = function (grunt) {
                     'echo   install-client   installs client resources via Bower',
                     'echo   install-test     installs test resources via Bower',
                     'echo   test             installs, builds, and executes Mocha tests',
-                    'echo   foreman          local Heroku runtime (blocking command)'
+                    'echo   run              starts up local Node.js runtime (blocking command)'
                 ].join('&&')
             },
 
-            foreman: {
+            run: {
                 options: { stdout: true, stderr: true, failOnError: true },
-                command: 'foreman start'
+                command: 'npm start'
             },
 
             'install-client': {
@@ -136,7 +136,9 @@ module.exports = function (grunt) {
         mochacov: {
             travis: {
                 options: {
-                    coveralls: true
+                    coveralls: {
+                        serviceName: "travis-ci"
+                    }
                 }
             },
             report: {
@@ -152,26 +154,7 @@ module.exports = function (grunt) {
             }
         },
 
-        /*
-         uglify: {
-         options: {
-         banner: '! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> \n'
-         },
-         build: {
-         src: 'client/scripts/*.js',
-         dest: 'dist/<%= pkg.name %>.min.js'
-         }
-         }
-         */
         uglify: {
-            /*
-             options: {
-             mangle: true,
-             compress: {
-
-             }
-             },
-             */
             myUglifyTask: {
                 files: {
                     'build/bower_components/requirejs/require.js': 'build/bower_components/requirejs/require.js',
@@ -242,7 +225,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-jsdoc');
 
     grunt.registerTask('help', ['shell:help']);
-    grunt.registerTask('foreman', ['shell:foreman']);
     grunt.registerTask('install:client', ['shell:install-client']);
     grunt.registerTask('install:test', ['shell:install-test']);
 
@@ -253,7 +235,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test', ['install:client', 'build:client', 'install:test', 'test:server', 'test:client']);
     grunt.registerTask('build:travis', ['test', 'mochacov:travis', 'jshint', 'jsdoc']);
 
-    grunt.registerTask('deploy:local', ['install:client', 'build:client', 'foreman']);
+    grunt.registerTask('deploy:local', ['install:client', 'build:client', 'shell:run']);
     grunt.registerTask('deploy:production', ['install:client', 'build:client']);
     grunt.registerTask('deploy:heroku', ['deploy:production']);
 

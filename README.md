@@ -3,12 +3,7 @@
 A simple Node-based web application (in norwegian).
 In production [here][1].
 
-[![Build Status](https://travis-ci.org/eirikt/tippekonkurranse.png?branch=master)](https://travis-ci.org/eirikt/tippekonkurranse)
-
-[![Coverage Status](https://coveralls.io/repos/eirikt/tippekonkurranse/badge.png?branch=master)](https://coveralls.io/r/eirikt/tippekonkurranse?branch=master)
-
-[![Dependency Status](https://david-dm.org/eirikt/tippekonkurranse.png)](https://david-dm.org/eirikt/tippekonkurranse)
-[![devDependency Status](https://david-dm.org/eirikt/tippekonkurranse/dev-status.png)](https://david-dm.org/eirikt/tippekonkurranse#info=devDependencies)
+[![Build Status](https://travis-ci.org/eirikt/tippekonkurranse.png?branch=master)](https://travis-ci.org/eirikt/tippekonkurranse)&nbsp;&nbsp;&nbsp;[![Coverage Status](https://coveralls.io/repos/eirikt/tippekonkurranse/badge.png?branch=master)](https://coveralls.io/r/eirikt/tippekonkurranse?branch=master)&nbsp;&nbsp;&nbsp;[![Dependency Status](https://david-dm.org/eirikt/tippekonkurranse.png)](https://david-dm.org/eirikt/tippekonkurranse)
 
 
 ## Scope
@@ -31,65 +26,65 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 * ~~Custom shortened URL using [Tiny.cc][40] => http://tiny.cc/tippekonkurranse~~ (obsolete)
 * Deploy it!
 
-_Status_: OK
+_Status: OK_
 
 #### v0.0.3 : Remote data retrieval (proof-of-concept) (server-side)
 * Try get Tippeliga data from some service => [NFF][10]
 * Screen-scrape and parse data (server-side), e.g. like [this][20]
 * Acquire Tippeliga information
 
-_Status_: OK
+_Status: OK_
 
 #### v0.0.4 : User data and business rules (proof-of-concept)
 * Establish user data model and business rules logic
 * Implement "tabellplassering" points calculations
 
-_Status_: OK
+_Status: OK_
 
 #### v0.0.5 : Demo/placeholder web-site
 * Establish simple campaign-like client-side UX
 * First presentable version ...
 * Launch it!
 
-_Status_: OK
+_Status: OK_
 
 #### v0.0.6 : Client-side UX for showing table results
 
-_Status_: OK
+_Status: OK_
 
 #### v0.0.7 : RESTful service calls from client
 * Add some test user data
 
-_Status_: OK
+_Status: OK_
 
 #### v0.0.8 : Business logic
 * Implement "pall" points calculations
 * Implement "cupmester" point calculations
 * Implement "toppscorer" point calculations
 
-_Status_: OK
+_Status: OK_
 
 #### v0.0.9 : More business logic
 * Implement "tippeliga-nedrykk" point calculations
 
-_Status_: OK
+_Status: OK_
 
 #### v0.0.10 : UX
 * Complete adding of user predictions for this year
 * Proper participant rating numbers
 * Automatic page refresh
 
-_Status_: OK
+_Status: OK_
 
 #### v0.0.11 : Last iteration
 * Implement "adecco-opprykk" point calculations
 * Add specifications
 * Feedback and fixes ...
 
-_Status_: OK
+_Status: OK_
 
 #### v1.0.0 : _Delivery goal 06.04.2014_
-* __First feature-complete usable version__
+* __First feature-complete version__
 
 #### v1.0.1 : Verification
 * Add more specifications ...
@@ -107,10 +102,10 @@ _Status_: OK
 #### v1.x
 * View all user's predictions
 
-#### v?
+#### v? Admin UI
 * Admin UI for data management
 
-#### v?
+#### v? Touch/Mobile
 * Mobile app
 * Touch-friendly version ...
 * ~~Small-screen-friendly version ...~~ Seems to be just fine
@@ -121,8 +116,12 @@ _Status_: OK
 #### v? : Offline support
 * Create offline-capable solution just for the heck of it
 
-#### v?
+#### v? : Official Tippeliga data service
+* Verify/validate data micro-formats in use
 * Establish proper REST service for Tippeliga data for everybody to use without leaning to crappy web scraping routines ...
+
+#### v? : Public web app
+* Establish multi-tenant 'Tippeligakonkurranse' groups with full web-based user- and group administration
 
 
 ## License

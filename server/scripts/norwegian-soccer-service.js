@@ -9,56 +9,8 @@ var _ = require("underscore"),
 
 //////////////////////////////////
 // www.fotball.no (NFF)
-// (no live updates here ...)
+// (no live updates there ...)
 //////////////////////////////////
-
-    _fotballNoCurrentTippeligaTableUrl =
-        "http://www.fotball.no/Landslag_og_toppfotball/Toppfotball/tippeligaen",
-
-    _parseFotballNoTippeligaTable = function (body) {
-        "use strict";
-        var currentTable = {},
-            $ = cheerio.load(body),
-            heading = $("h2:contains('Tippeligaen')"),
-            rows = heading.next("table").find("tr");
-
-        rows.each(function (idx, element) {
-            if (idx > 0) {
-                var tableCells = $(element).find("td");
-                var no = $(tableCells[0]).html();
-                var team = $(tableCells[1]).find("a").html();
-                var matches = $(tableCells[2]).html();
-
-                // The data format
-                currentTable[team] = { no: parseInt(no, 10), matches: parseInt(matches, 10) };
-            }
-        });
-        return currentTable;
-    },
-
-
-    _fotballNoCurrentAdeccoligaTableUrl =
-        "http://www.fotball.no/Landslag_og_toppfotball/Toppfotball/1_divisjon_menn",
-
-    _parseFotballNoAdeccoligaTable = function (body) {
-        "use strict";
-        var currentTable = {},
-            $ = cheerio.load(body),
-            heading = $("h2:contains('Adeccoligaen')"),
-            rows = heading.next("table").find("tr");
-        rows.each(function (idx, element) {
-            if (idx > 0) {
-                var tableCells = $(element).find("td"),
-                    no = $(tableCells[0]).html(),
-                    team = $(tableCells[1]).find("a").html(),
-                    matches = $(tableCells[2]).html();
-
-                // The data format
-                currentTable[team] = { no: parseInt(no, 10), matches: matches };
-            }
-        });
-        return currentTable;
-    },
 
 
 //////////////////////////////////
@@ -159,6 +111,7 @@ var _ = require("underscore"),
 
 //////////////////////////////////
 // "Strategy switch" functions
+// TODO: consider removing this
 //////////////////////////////////
 
     _getCurrentTippeligaTableUrl = function () {
@@ -256,7 +209,7 @@ var _ = require("underscore"),
             "Odd",
             "Rosenborg",
             "Sandnes Ulf",
-            "Sarpsborg",
+            "Sarpsborg 08",
             "Sogndal",
             "Stabæk",
             "Start",
@@ -266,6 +219,75 @@ var _ = require("underscore"),
             "Aalesund"
         ]);
         return dfd.promise;
+    },
+
+
+    _dataForRound201401 = exports.getDataForRound201401 = function () {
+        "use strict";
+        return {
+            "2014-01": {
+                "tippeliga": {
+                    "Sarpsborg 08": { no: 1, matches: 1 },
+                    "Stabæk": { no: 2, matches: 1 },
+                    "Strømsgodset": { no: 3, matches: 1 },
+                    "Molde": { no: 4, matches: 1 },
+                    "Rosenborg": { no: 5, matches: 1 },
+                    "Viking": { no: 6, matches: 1 },
+                    "Bodø/Glimt": { no: 7, matches: 1 },
+                    "Haugesund": { no: 8, matches: 1 },
+                    "Lillestrøm": { no: 9, matches: 1 },
+                    "Odd": { no: 10, matches: 1 },
+                    "Sandnes Ulf": { no: 11, matches: 1 },
+                    "Aalesund": { no: 12, matches: 1 },
+                    "Start": { no: 13, matches: 1 },
+                    "Vålerenga": { no: 14, matches: 1 },
+                    "Brann": { no: 15, matches: 1 },
+                    "Sogndal": { no: 16, matches: 1 }
+                },
+                "toppscorer": [
+                    "Gustav Wikheim",
+                    "Aaron Samuel",
+                    "Ernest Asante",
+                    "Jón Dadi Bödvarsson"
+                ],
+                "adeccoliga": {
+                    "Alta": { no: 1, matches: 0 },
+                    "Bryne": { no: 2, matches: 0 },
+                    "Bærum": { no: 3, matches: 0 },
+                    "Fredrikstad": { no: 4, matches: 0 },
+                    "HamKam": { no: 5, matches: 0 },
+                    "Hødd": { no: 6, matches: 0 },
+                    "Hønefoss": { no: 7, matches: 0 },
+                    "Kristiansund BK": { no: 8, matches: 0 },
+                    "Mjøndalen": { no: 9, matches: 0 },
+                    "Nest-Sotra": { no: 10, matches: 0 },
+                    "Ranheim": { no: 11, matches: 0 },
+                    "Sandefjord": { no: 12, matches: 0 },
+                    "Strømmen": { no: 13, matches: 0 },
+                    "Tromsdalen": { no: 14, matches: 0 },
+                    "Tromsø": { no: 15, matches: 0 },
+                    "Ullensaker/Kisa": { no: 16, matches: 0 }
+                },
+                "remainingCupContenders": [
+                    "Bodø/Glimt",
+                    "Brann",
+                    "Haugesund",
+                    "Lillestrøm",
+                    "Molde",
+                    "Odd",
+                    "Rosenborg",
+                    "Sandnes Ulf",
+                    "Sarpsborg 08",
+                    "Sogndal",
+                    "Stabæk",
+                    "Start",
+                    "Strømsgodset",
+                    "Viking",
+                    "Vålerenga",
+                    "Aalesund"
+                ]
+            }
+        };
     },
 
 

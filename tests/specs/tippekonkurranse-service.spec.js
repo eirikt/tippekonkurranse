@@ -19,12 +19,15 @@ describe("Tippekonkurranse service", function () {
         it("should get hold on private functions within Node.js file", function () {
             expect(updateScores).to.exist;
         });
+
         it("should do nothing and return empty object if no args are provided", function () {
             expect(updateScores()).to.be.empty;
         });
+
         it("should do nothing and return empty object if empty prediction object is provided only", function () {
             expect(updateScores({})).to.be.empty;
         });
+
         it("should return score object with zeros only if null user prediction object is provided", function () {
             var userPredictions = {
                 john: null
@@ -46,6 +49,7 @@ describe("Tippekonkurranse service", function () {
                 })
             );
         });
+
         it("should return score object with zeros only if empty user prediction object is provided", function () {
             var userPredictions = {
                 john: {}
@@ -67,6 +71,7 @@ describe("Tippekonkurranse service", function () {
                 })
             );
         });
+
         it("should return score object with zeros only if non-complete user prediction object is provided", function () {
             var userPredictions = {
                 john: {
@@ -90,6 +95,7 @@ describe("Tippekonkurranse service", function () {
                 })
             );
         });
+
         it("should return score object with zeros only if non-complete user prediction object is provided", function () {
             var userPredictions = {
                 john: {
@@ -119,6 +125,7 @@ describe("Tippekonkurranse service", function () {
             );
         });
     });
+
 
     describe("'Opprykk' penalty point calculations", function () {
         it("should throw exception if retrieved table data is missing 'no' property", function () {
