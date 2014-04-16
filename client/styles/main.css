@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700,300,300italic);
+
 body {
     font-family: 'Open Sans Condensed', 'Arial Narrow', sans-serif;
     font-weight: 400;
@@ -82,15 +84,36 @@ img {
  *      <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
  *      (add to index.html head)
  ******************************************************************************/
-[class^="icon-"]::before {
-    font-family: FontAwesome, sans-serif;
-    font-size: 1.6em;
-    text-decoration: none;
-    display: inline-block;
-    padding-right: .7em;
-}
-
 .icon-check::before {
+    font-family: FontAwesome, sans-serif;
     content: "\f00c";
     font-size: inherit;
+}
+
+.icon-up-plus::before {
+    font-family: FontAwesome, sans-serif;
+    content: "\f0d8";
+    font-size: inherit;
+    color: green;
+}
+
+.icon-up::before {
+    font-family: FontAwesome, sans-serif;
+    content: "\f0d8";
+    font-size: inherit;
+    color: #d3d3d3;
+}
+
+.icon-down::before {
+    font-family: FontAwesome, sans-serif;
+    content: "\f0d7";
+    font-size: inherit;
+    color: #d3d3d3;
+}
+
+.icon-down-plus::before {
+    font-family: FontAwesome, sans-serif;
+    content: "\f0d7";
+    font-size: inherit;
+    color: red;
 }

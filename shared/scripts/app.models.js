@@ -1,45 +1,54 @@
-/* global exports: false */
-var ScoreModel = {
-    tabell: "tabell",
-    pall: "pall",
-    nedrykk: "nedrykk",
-    toppscorer: "toppscorer",
-    opprykk: "opprykk",
-    cup: "cup",
+/* global exports:false */
 
-    properties: function () {
-        "use strict";
-        var scoreModelPropertiesArray = [
-                ScoreModel.tabell,
-                ScoreModel.pall,
-                ScoreModel.nedrykk,
-                ScoreModel.toppscorer,
-                ScoreModel.opprykk,
-                ScoreModel.cup
-            ],
-            args,
-            model = {},
-            i;
+var _ = require("underscore"),
 
-        if (arguments.length < 1) {
-            args = [];
-            for (i = 0; i < scoreModelPropertiesArray.length; i += 1) {
-                args.push(0);
+    scoreModel = {
+        sum: "sum",
+
+        tabell: "tabell",
+        pall: "pall",
+        nedrykk: "nedrykk",
+        toppscorer: "toppscorer",
+        opprykk: "opprykk",
+        cup: "cup",
+
+        /**
+         * Creates and populates the ScoreModel with the given properties,
+         */
+        properties: function () {
+            "use strict";
+            var scoreModelPropertiesArray = [
+                    scoreModel.sum,
+
+                    scoreModel.tabell,
+                    scoreModel.pall,
+                    scoreModel.nedrykk,
+                    scoreModel.toppscorer,
+                    scoreModel.opprykk,
+                    scoreModel.cup
+                ],
+                args,
+                model = {};
+
+            if (arguments.length > 0) {
+                args = _.toArray(arguments);
+
+            } else {
+                args = scoreModelPropertiesArray.map(function () {
+                    return 0;
+                });
             }
-        } else {
-            args = Array.prototype.slice.call(arguments, 0);
+
+            scoreModelPropertiesArray.forEach(function (propName, index) {
+                model[propName] = args[index];
+            });
+
+            return model;
         }
-
-        scoreModelPropertiesArray.forEach(function (propName, index) {
-            model[propName] = args[index];
-        });
-
-        return model;
-    }
-};
+    };
 
 // For client-side: use RequireJS shims
 // For server-side/Node.js: CommonJS support
 if (typeof exports !== 'undefined') {
-    exports.ScoreModel = ScoreModel;
+    exports.scoreModel = scoreModel;
 }

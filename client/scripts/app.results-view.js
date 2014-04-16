@@ -4,19 +4,19 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
         "use strict";
 
         return Backbone.View.extend({
-
             template: _.template('' +
                     '<table class="table table-condenced table-striped table-hover">' +
                     '<thead><tr>' +
-                    '<th style="padding-left:2rem;width:4rem;"></th>' +
-                    '<th style="width:20rem;"></th>' +
-                    '<th style="padding-right:3rem;"><strong></strong></th>' +
-                    '<th style="text-align:center;color:darkgray;width:9rem;">Tabell</th>' +
-                    '<th style="text-align:center;color:darkgray;width:9rem;">Pall</th>' +
-                    '<th style="text-align:center;color:darkgray;width:10rem;">Nedrykk</th>' +
-                    '<th style="text-align:center;color:darkgray;width:10rem;">Toppsk.</th>' +
-                    '<th style="text-align:center;color:darkgray;width:10rem;">Opprykk</th>' +
-                    '<th style="text-align:center;color:darkgray;width:10rem;">Cup</th>' +
+                    '<th style="padding-left:2rem;width:3rem;"></th>' +
+                    '<th style="width:12rem;"></th>' +
+                    '<th style="width:3rem;"></th>' +
+                    '<th style="margin-left:4rem;"></th>' +
+                    '<th style="text-align:center;color:darkgray;width:9rem;">tabell</th>' +
+                    '<th style="text-align:center;color:darkgray;width:9rem;">pall</th>' +
+                    '<th style="text-align:center;color:darkgray;width:10rem;">nedrykk</th>' +
+                    '<th style="text-align:center;color:darkgray;width:10rem;">toppsk.</th>' +
+                    '<th style="text-align:center;color:darkgray;width:10rem;">opprykk</th>' +
+                    '<th style="text-align:center;color:darkgray;width:10rem;">cup</th>' +
                     '</tr></thead>' +
 
                     // All participant data here
@@ -24,11 +24,9 @@ define(["jquery", "underscore", "backbone", "app.participant-score-view"],
 
                     '</table>'
             ),
-
             initialize: function () {
                 this.listenTo(this.collection, "reset", this.render);
             },
-
             render: function () {
                 var addParticipant = function ($el, participantResult, index) {
                         $el.append(new ParticipantScoreView({ model: participantResult.toJSON() }).render().el);

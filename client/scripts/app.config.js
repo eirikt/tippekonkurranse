@@ -6,11 +6,11 @@ require.config({
         'underscore': '../bower_components/underscore/underscore',
         'backbone': '../bower_components/backbone/backbone',
 
-        'moment': '../bower_components/moment/min/moment.min',
+        //'moment': '../bower_components/moment/min/moment.min',
 
         // Lib file must be copied in during build step ('grunt run')
-        'app.models.ScoreModel': './app.models'
-        //'app.models.ScoreModel': '../../shared/scripts/app.models' // Dev setting
+        'app.models.scoreModel': './app.models'
+        //'app.models.scoreModel': '../../shared/scripts/app.models' // Dev setting
     },
     shim: {
         'jquery': {
@@ -29,12 +29,13 @@ require.config({
             deps: ['underscore'],
             exports: 'Backbone'
         },
-        'moment': {
-            deps: [],
-            exports: 'Moment'
-        },
-        'app.models.ScoreModel': {
-            exports: 'ScoreModel'
+        //'moment': {
+        //    deps: [],
+        //    exports: 'Moment'
+        //},
+        'app.models.scoreModel': {
+            deps: ['underscore'],
+            exports: 'scoreModel'
         }
     }
 });

@@ -20,17 +20,26 @@ module.exports = function (grunt) {
                     'echo   run              starts up local Node.js runtime (blocking command)'
                 ].join('&&')
             },
-
+            createDataDir: {
+                options: { stdout: true },
+                command: [
+                    'mkdir data',
+                    'cd data',
+                    'mkdir db'
+                ].join('&&')
+            },
+            mongod: {
+                options: { stdout: true, stderr: true, failOnError: true },
+                command: 'mongod.exe --dbpath data/db'
+            },
             run: {
                 options: { stdout: true, stderr: true, failOnError: true },
                 command: 'npm start'
             },
-
             'install-client': {
                 options: { stdout: true, stderr: true, failOnError: true },
                 command: 'node ./node_modules/bower/bin/bower install'
             },
-
             'install-test': {
                 options: { stdout: true, stderr: true, failOnError: true },
                 command: 'cd tests && node ./../node_modules/bower/bin/bower install'
@@ -193,7 +202,7 @@ module.exports = function (grunt) {
         },
 
         watch: {
-            scripts: {
+            deploy: {
                 files: [
                     'client/scripts/*.js',
                     'shared/scripts/*.js',
@@ -202,11 +211,17 @@ module.exports = function (grunt) {
                 ],
                 tasks: ['copy']
             },
-            options: {
-                debounceDelay: 500,
-                spawn: false,
-                reload: false,
-                livereload: false
+            test: {
+                files: [
+                    'client/scripts/*.js',
+                    'shared/scripts/*.js',
+                    'tests/**/*'
+                ],
+                tasks: ['test']//,
+                //options: {
+                //    interval : 5000,
+                //    debounceDelay: 5000
+                //}
             }
         }
     });
@@ -227,13 +242,14 @@ module.exports = function (grunt) {
     grunt.registerTask('help', ['shell:help']);
     grunt.registerTask('install:client', ['shell:install-client']);
     grunt.registerTask('install:test', ['shell:install-test']);
+    grunt.registerTask('mongodb', ['shell:createDataDir', 'shell:mongod']);
 
-    grunt.registerTask('build:client', ['clean', 'copy', 'uglify', 'cssmin']);
+    grunt.registerTask('build:client', ['clean', 'copy'/*, 'uglify', 'cssmin'*/]);
     grunt.registerTask('test:client', ['mocha']);
     grunt.registerTask('test:server', ['mochaTest']);
     grunt.registerTask('coverage:server', ['mochacov:report']);
     grunt.registerTask('test', ['install:client', 'build:client', 'install:test', 'test:server', 'test:client']);
-    grunt.registerTask('build:travis', ['test', 'mochacov:travis', 'jshint', 'jsdoc']);
+    grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', 'mochacov:travis']);
 
     grunt.registerTask('deploy:local', ['install:client', 'build:client', 'shell:run']);
     grunt.registerTask('deploy:production', ['install:client', 'build:client']);

@@ -33,7 +33,7 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 _Status: OK_
 
 #### v0.0.3 : Remote data retrieval (proof-of-concept) (server-side)
-* Try get Tippeliga data from some service => [NFF][10]
+* Try get Tippeliga data from some service => ~~[NFF][10]~~ (no live updates) [altomfotball][11]
 * Screen-scrape and parse data (server-side), e.g. like [this][20]
 * Acquire Tippeliga information
 
@@ -90,26 +90,29 @@ _Status: OK_
 #### v1.0.0 : _Delivery goal 06.04.2014_
 * __First feature-complete version__
 
-#### v1.0.1 : Verification
-* Add more specifications ...
-* Bugfixes
+_Status: OK_
+
+#### v1.1.0 : _Delivery goal 16.04.2014_
+* Persistent data with MongoDB
+* Tendency markers in table (moving up or down compared to previous round)
+
+_Status: OK_
 
 ...
 
-#### v1.x : _Delivery goal 01.05.2014_
-* Persistent data with MongoDB
-* Presentation of historic data
+#### v1.x : _Delivery goal 01.06.2014_
+* Some simple presentation of historic data
 
-#### v1.x
-* Graphs and whatnot
-
-#### v1.x
+#### v1.x : _Delivery goal 01.06.2014_
 * View all user's predictions
 
-#### v? Admin UI
+#### v1.x
+* More cool graphs and whatnot
+
+#### v? : Admin UI
 * Admin UI for data management
 
-#### v? Touch/Mobile
+#### v? : Touch/Mobile
 * Mobile app
 * Touch-friendly version ...
 * ~~Small-screen-friendly version ...~~ Seems to be just fine
@@ -154,6 +157,7 @@ SOFTWARE.
 
 [1]:  http://tippekonkurranse.herokuapp.com
 [10]: http://www.fotball.no/Landslag_og_toppfotball/Toppfotball/tippeligaen
+[11]: http://www.altomfotball.no
 [20]: https://www.digitalocean.com/community/articles/how-to-use-node-js-request-and-cheerio-to-set-up-simple-web-scraping
 [30]: https://www.heroku.com
 [31]: https://devcenter.heroku.com/articles/getting-started-with-nodejs

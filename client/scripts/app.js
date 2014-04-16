@@ -1,10 +1,27 @@
 /* global define: false, console: false, $:false */
 
 
-define(['underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'app.models.ScoreModel', 'app.result', 'app.result-collection', 'app.results-view'],
+define(['underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'app.result-collection', 'app.results-view'],
 
-    function (_, Backbone, $, Bootstrap, ScoreModel, TippekonkurranseCurrentResult, TippekonkurranseCurrentResultsCollection, TippekonkurranseCurrentResultsView) {
+    function (_, Backbone, $, Bootstrap, TippekonkurranseCurrentResultsCollection, TippekonkurranseCurrentResultsView) {
         "use strict";
+
+        var HeaderView = Backbone.View.extend({
+            template: _.template('' +
+                    '<h1>' +
+                    '  <span style="padding-left:2rem;white-space:nowrap;">Tippekonkurranse 2014</span>' +
+                    '  <span style="font-size:2rem;color:#808080;">&nbsp;&nbsp;|&nbsp;&nbsp;runde&nbsp;<%= round %></span>' +
+                    '  <span style="font-size:2rem;color:#d3d3d3;">av 30</span>' +
+                    '</h1>'
+            ),
+            initialize: function () {
+                this.listenTo(this.collection, "reset", this.render);
+            },
+            render: function () {
+                this.$el.append(this.template({ round: this.collection.at(0).get("round") }));
+                return this;
+            }
+        });
 
         /** Application starting point (when DOM is ready ...) */
         $(document).ready(function () {
@@ -12,20 +29,26 @@ define(['underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'app.models.Scor
 
             setTimeout(function () {
                 $("#intro").hide("slow", function () {
-                    $("header").removeClass("hidden");
-                    $("footer").removeClass("hidden");
-                    $("#intro").remove();
                     var results = new TippekonkurranseCurrentResultsCollection(),
+                        headerView = new HeaderView({
+                            el: "header",
+                            collection: results
+                        }),
                         resultsView = new TippekonkurranseCurrentResultsView({
                             el: "#content",
                             collection: results
                         });
+
+                    $("header").removeClass("hidden");
+                    $("footer").removeClass("hidden");
+                    $("#intro").remove();
                     results.fetch();
                 });
             }, 1650);
         });
     }
-);
+)
+;
 
 
 ///////////////////////////////////////////////////////////////////////////////

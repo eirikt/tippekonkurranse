@@ -4,16 +4,24 @@
 # Ignore IDE stuff
 .idea
 
-# Ignore derived/generated/transient project resources
+# Ignore local db (test) folder
+data
+
+# Ignore local logs
+npm-debug.log
+
+# Ignore derived/generated/transient project files/resources
 build
 docs
 client/bower_components
 tests/bower_components
 node_modules
 README.html
+howto.txt
 
 # Temporary local dev stuff, not sure about their future ...
 client/images/podium_resultats.jpeg
 client/images/sport-man-on-podium-184220.jpg
 client/medal.ico
 client/nff.ico
+server/scripts/fun.js

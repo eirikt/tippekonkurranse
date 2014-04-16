@@ -1,17 +1,9 @@
 /* global define: false */
-define(["underscore", "backbone", "app.models.ScoreModel"],
+define(["underscore", "backbone", "app.models.scoreModel"],
     function (_, Backbone, ScoreModel) {
         "use strict";
 
         var participantScore = Backbone.Model.extend({
-            sum: function () {
-                return parseInt(this.get(ScoreModel.tabell), 10) +
-                    parseInt(this.get(ScoreModel.pall), 10) +
-                    parseInt(this.get(ScoreModel.nedrykk), 10) +
-                    parseInt(this.get(ScoreModel.toppscorer), 10) +
-                    parseInt(this.get(ScoreModel.opprykk), 10) +
-                    parseInt(this.get(ScoreModel.cup), 10);
-            },
             printableName: function (nameKey) {
                 if (nameKey === "jantore") {
                     return "Jan Tore";
@@ -29,13 +21,22 @@ define(["underscore", "backbone", "app.models.ScoreModel"],
             }
 
         }, {
-            participantRatingNumberPropertyName: "nr",
+            participantYearPropertyName: "year",
+            participantRoundPropertyName: "round",
             participantNamePropertyName: "name",
-            participantPoengsumPropertyName: "poengsum",
+            participantRatingPropertyName: "rating",
+            participantHiddenRatingPropertyName: "ratingHidden",
+            participantPreviousSumPropertyName: "previousSum",
+            participantPreviousRatingPropertyName: "previousRating",
 
-            /** Ascending poengsum */
-            sortByPoengsum: function (model) {
-                return model.get(participantScore.participantPoengsumPropertyName);
+            /** Ascending sum */
+            sortBySum: function (model) {
+                return "" + model.get(ScoreModel.sum) + model.get(participantScore.participantNamePropertyName);
+            },
+
+            /** Ascending previous sum */
+            sortByPreviousSum: function (model) {
+                return model.get(participantScore.participantPreviousSumPropertyName);
             }
         });
 
