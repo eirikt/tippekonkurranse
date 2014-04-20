@@ -1,4 +1,4 @@
-/* global global:false, require:false, describe:false, it:false, hello:false */
+/* global global:false, require:false, describe:false, it:false, expect:false, sinon:false, hello:false */
 /* jshint -W030 */
 
 var root = global || window;

@@ -8,8 +8,8 @@ define(['underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'app.result-coll
 
         var HeaderView = Backbone.View.extend({
             template: _.template('' +
-                    '<h1>' +
-                    '  <span style="padding-left:2rem;white-space:nowrap;">Tippekonkurranse 2014</span>' +
+                    '<h1 style="white-space:nowrap;">' +
+                    '  <span style="padding-left:2rem;">Tippekonkurranse 2014</span>' +
                     '  <span style="font-size:2rem;color:#808080;">&nbsp;&nbsp;|&nbsp;&nbsp;runde&nbsp;<%= round %></span>' +
                     '  <span style="font-size:2rem;color:#d3d3d3;">av 30</span>' +
                     '</h1>'

@@ -1,27 +1,24 @@
 /* global require:false */
 
+// Environment
+var env = process.env.NODE_ENV || "development",
+
 // Module dependencies, external
-var mongoose = require("mongoose"),
+    mongoose = require("mongoose"),
 
 // Module dependencies, local
     dbData = require("./db-fun.js"),
 
 // MongoDB URLs
-    standardDbUrlFormat = "mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]",
-
-    herokuMongoLabUrl = "mongodb://ds045897.mongolab.com:45897/heroku_app22911822",
-    devMongoDBUrl = "mongodb://localhost/tippekonkurranse",
-
-    mongoDBUrl = herokuMongoLabUrl,
-//mongoDBUrl = devMongoDBUrl,
-
-    dbUrl = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || mongoDBUrl;
+    dbUrl = process.env.MONGOLAB_URI || "mongodb://localhost/tippekonkurranse";
 
 // Connect to database via Mongoose
 mongoose.connect(dbUrl);
 
-// Base data
-dbData.persistRound1();
-dbData.persistRound2();
-//dbData.persistRound3();
-//dbData.persistRound4();
+if (env === "development") {
+    // Baseline data
+    dbData.persistRound1();
+    dbData.persistRound2();
+    dbData.persistRound3();
+    dbData.persistRound4();
+}

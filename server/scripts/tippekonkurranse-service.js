@@ -1,4 +1,4 @@
-/* global require:false, exports:false */
+/* global require:false, exports:false, RQ:false */
 /* jshint -W083 */
 /* jshint -W089 */
 
@@ -12,9 +12,12 @@ var __ = require("underscore"),
 // Module dependencies, local
     dbSchema = require("./db-schema.js"),
     predictions2014 = require("./user-predictions-2014.js").predictions2014,
-    norwegianSoccerLeagueService = require("./norwegian-soccer-service.js"),
+    //norwegianSoccerLeagueService = require("./norwegian-soccer-service.js"),
     utils = require("./utils.js"),
     sharedModels = require("./../../shared/scripts/app.models.js"),
+
+// TODO: ...
+    //RQ = require("./vendor/rq.js"),
 
 
 ////////////////////////////////////////
@@ -171,18 +174,24 @@ var __ = require("underscore"),
                 tippeligaResults = storedTippeligaRound.tippeliga;
                 dbMatchesCount = __.groupBy(tippeligaResults, "matches");
 
-                if (dbMatchesCount[round]) {
+                if (!dbMatchesCount[round]) {
+                    method = "CREATE";
+                    logMsg += " is not yet stored";
+
+                } else {
                     dbCount = dbMatchesCount[round].length;
-                    logMsg += " already stored with " + dbCount + " teams - current data has " + currentRoundCount + " teams";
-                    if (currentRoundCount >= dbCount) {
-                        //console.log(logMsg + " => updating db with data for round #" + round + "!");
-                        method = "UPDATE";
+                    if (dbCount >= 16) {
+                        logMsg += " already stored with " + dbCount + " teams - completed";
+                        console.log(logMsg + " => no need for updating db with new results");
+
+                    } else if (currentRoundCount < dbCount) {
+                        logMsg += " already stored with " + dbCount + " teams - current data has " + currentRoundCount + " teams";
+                        console.log(logMsg + " => no need for updating db with new results");
 
                     } else {
-                        console.log(logMsg + " => no need for updating db with new results");
+                        method = "UPDATE";
+                        logMsg += " already stored with " + dbCount + " teams - current data has " + currentRoundCount + " teams";
                     }
-                } else {
-                    logMsg += " is not yet stored";
                 }
             }
             if (method) {
@@ -210,8 +219,8 @@ var __ = require("underscore"),
             args = __.toArray(arguments)[0],
             resultArray = args.resultArray,
             currentTippeligaTable = resultArray[0],
-            currentAdeccoligaTable = resultArray[1],
-            currentTippeligaToppscorer = resultArray[2],
+            currentTippeligaToppscorer = resultArray[1],
+            currentAdeccoligaTable = resultArray[2],
             currentRemainingCupContenders = resultArray[3],
 
             currentMatchesCount = __.groupBy(currentTippeligaTable, "matches"),
@@ -227,8 +236,8 @@ var __ = require("underscore"),
             currentRound: currentRound,
             scores: scores,
             currentTippeligaTable: currentTippeligaTable,
-            currentAdeccoligaTable: currentAdeccoligaTable,
             currentTippeligaToppscorer: currentTippeligaToppscorer,
+            currentAdeccoligaTable: currentAdeccoligaTable,
             currentRemainingCupContenders: currentRemainingCupContenders
         });
         return dfd.promise;
@@ -243,8 +252,8 @@ var __ = require("underscore"),
             currentMatchesCount = args.currentMatchesCount,
             currentRound = args.currentRound,
             scores = args.scores,
-            currentTippeligaTable = args.currentTippeligaTable,
             currentAdeccoligaTable = args.currentAdeccoligaTable,
+            currentTippeligaTable = args.currentTippeligaTable,
             currentTippeligaToppscorer = args.currentTippeligaToppscorer,
             currentRemainingCupContenders = args.currentRemainingCupContenders,
 
@@ -273,8 +282,8 @@ var __ = require("underscore"),
                     currentMatchesCount: currentMatchesCount,
                     currentStanding: currentStanding,
                     currentTippeligaTable: currentTippeligaTable,
-                    currentAdeccoligaTable: currentAdeccoligaTable,
                     currentTippeligaToppscorer: currentTippeligaToppscorer,
+                    currentAdeccoligaTable: currentAdeccoligaTable,
                     currentRemainingCupContenders: currentRemainingCupContenders
                 });
             });
@@ -291,8 +300,8 @@ var __ = require("underscore"),
             currentMatchesCount = args.currentMatchesCount,
             currentStanding = args.currentStanding,
             currentTippeligaTable = args.currentTippeligaTable,
-            currentAdeccoligaTable = args.currentAdeccoligaTable,
             currentTippeligaToppscorer = args.currentTippeligaToppscorer,
+            currentAdeccoligaTable = args.currentAdeccoligaTable,
             currentRemainingCupContenders = args.currentRemainingCupContenders;
 
         response.send(JSON.stringify(currentStanding));
@@ -300,8 +309,8 @@ var __ = require("underscore"),
         dfd.resolve({
             currentMatchesCount: currentMatchesCount,
             currentTippeligaTable: currentTippeligaTable,
-            currentAdeccoligaTable: currentAdeccoligaTable,
             currentTippeligaToppscorer: currentTippeligaToppscorer,
+            currentAdeccoligaTable: currentAdeccoligaTable,
             currentRemainingCupContenders: currentRemainingCupContenders
         });
         return dfd.promise;
@@ -315,8 +324,8 @@ var __ = require("underscore"),
             args = __.toArray(arguments)[0],
             currentMatchesCount = args.currentMatchesCount,
             currentTippeligaTable = args.currentTippeligaTable,
-            currentAdeccoligaTable = args.currentAdeccoligaTable,
             currentTippeligaToppscorer = args.currentTippeligaToppscorer,
+            currentAdeccoligaTable = args.currentAdeccoligaTable,
             currentRemainingCupContenders = args.currentRemainingCupContenders,
 
             year = new Date().getFullYear();
@@ -326,8 +335,8 @@ var __ = require("underscore"),
                 currentMatchCountInRound = currentMatchesCount[round].length,
 
             // TODO: Both works, what's the difference between them?
-                conditionallyStoreTippeligaRound = curry(_storeTippeligaRound)(currentTippeligaTable)(currentAdeccoligaTable)(currentTippeligaToppscorer)(currentRemainingCupContenders)(year)(round)(currentMatchCountInRound);
-            //conditionallyStoreTippeligaRound = __.partial(_storeTippeligaRound, currentTippeligaTable, currentAdeccoligaTable, currentTippeligaToppscorer, currentRemainingCupContenders, year, round, currentMatchCountInRound);
+                conditionallyStoreTippeligaRound = curry(_storeTippeligaRound)(currentTippeligaTable)(currentTippeligaToppscorer)(currentAdeccoligaTable)(currentRemainingCupContenders)(year)(round)(currentMatchCountInRound);
+            //conditionallyStoreTippeligaRound = __.partial(_storeTippeligaRound, currentTippeligaTable, currentTippeligaToppscorer, currentAdeccoligaTable, currentRemainingCupContenders, year, round, currentMatchCountInRound);
 
             dbSchema.TippeligaRound
                 .findOne({ year: year, round: roundNo })
@@ -345,12 +354,27 @@ var __ = require("underscore"),
      */
     _getTippeligaData = function () {
         "use strict";
-        return all(
-            norwegianSoccerLeagueService.getCurrentTippeligaTable(),
-            norwegianSoccerLeagueService.getCurrentAdeccoligaTable(),
-            norwegianSoccerLeagueService.getCurrentTippeligaToppscorer(),
-            norwegianSoccerLeagueService.getCurrentRemainingCupContenders()
-        );
+        /* Get data from db - dev setting ... */
+        console.warn(utils.logPreamble() + "NB! Local/Development Tippeliga data source in use");
+        var dfd = new promise.Deferred();
+        dbSchema.TippeligaRound.findOne({ year: 2014, round: 3 }).exec(
+            function (err, previousTippeligaRound) {
+                dfd.resolve([
+                    previousTippeligaRound.tippeliga,
+                    previousTippeligaRound.toppscorer,
+                    previousTippeligaRound.adeccoliga,
+                    previousTippeligaRound.remainingCupContenders
+                ]);
+            });
+        return dfd.promise;
+        /*
+         return all(
+         norwegianSoccerLeagueService.getCurrentTippeligaTable(),
+         norwegianSoccerLeagueService.getCurrentTippeligaToppscorer(),
+         norwegianSoccerLeagueService.getCurrentAdeccoligaTable(),
+         norwegianSoccerLeagueService.getCurrentRemainingCupContenders()
+         );
+         */
     },
 
     /**
@@ -392,6 +416,14 @@ var __ = require("underscore"),
 // Public functions
 ////////////////////////////////////////
 
+    _handlePredictionsRequest = exports.handlePredictionsRequest =
+        function (request, response) {
+            "use strict";
+            var userId = request.params.userId,
+                predictions = predictions2014[userId];
+            response.send(200, JSON.stringify(predictions));
+        },
+
     _handleCurrentScoreRequest = exports.handleCurrentScoreRequest =
         function (request, response) {
             "use strict";
@@ -399,4 +431,89 @@ var __ = require("underscore"),
                 handleTippeligaData = __.partial(_handleTippeligaData, request, response);
 
             getTippeligaData().then(handleTippeligaData);
+        },
+
+    _handleRqTest = exports.handleRqTest =
+        function (request, response) {
+            "use strict";
+            response.send(200, "Not yet implemented");
+
+            /* Take 1
+             var wrap = function (func) {
+             return function requestor(requestion, value) {
+             console.log(func);
+             console.log("Executing func(" + value + ")");
+             return requestion(func(value));
+             };
+             };
+
+             var eiriktorske = {
+             firstname: "Eirik",
+             lastname: "Torske"
+             };
+             var fullname = function (nameObj) {
+             return nameObj.firstname + " " + nameObj.lastname;
+             };
+             var printFullname = function (nameObj) {
+             return console.log(fullname(nameObj));
+             };
+             var fullnameBound = __.partial(printFullname, eiriktorske);
+             var nameRequestor = wrap(fullnameBound);
+
+             var now = function () {
+             return Date.now;
+             };
+             //var nowRequestor = curry(identityRequestor1)(identityRequestor1, Date.now());
+             var nowRequestor = wrap(now);
+
+             var identityRequestor1 = function (requestion, value) {
+             console.log("identityRequestor1: value=" + value);
+             requestion(value);
+             };
+             var identityRequestor2 = function (requestion, value) {
+             console.log("identityRequestor2: value=" + value);
+             requestion(value);
+             };
+
+             var go = function (success, failure) {
+             var i = 0;
+             };
+
+             RQ.RQ.sequence([
+             identityRequestor1
+             , identityRequestor2
+             , nowRequestor
+             , nameRequestor
+             ])(go);
+             */
+
+
+            /* Take 2
+             "use strict";
+             var async = function (func) {
+             return function requestor(requestion, value) {
+             //console.log(func);
+             //console.log("Executing func(" + value + ")");
+             var success = func(value),
+             failure = undefined;
+             return requestion(success, failure);
+             };
+             };
+             var identity = function (value) {
+             console.log("identity(" + value + ")");
+             return value;
+             };
+             //var eirikBound = __.partial(identity, "eirik");
+             //var torskeBound = __.partial(identity, "torske");
+             var eirikRequestor = async(__.partial(identity, "eirik"));
+             var torskeRequestor = async(__.partial(identity, "torske"));
+
+             var go = function (success, failure) {
+             console.log("go(" + success + ", " + failure + ")");
+             };
+
+             RQ.RQ.sequence([eirikRequestor, torskeRequestor])(go);
+
+             response.send(200);
+             */
         };

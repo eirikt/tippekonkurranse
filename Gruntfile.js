@@ -107,7 +107,7 @@ module.exports = function (grunt) {
                 maxdepth: 5,
                 maxstatements: 30,
                 maxcomplexity: 7,
-                maxlen: 180,
+                //maxlen: 180,
 
                 laxcomma: true,
 
@@ -187,8 +187,7 @@ module.exports = function (grunt) {
                 expand: true,
                 cwd: 'build/styles/',
                 src: ['*.css', '!*.min.css'],
-                dest: 'build/styles/'//,
-                //ext: '.css'
+                dest: 'build/styles/'
             }
         },
 
@@ -202,7 +201,7 @@ module.exports = function (grunt) {
         },
 
         watch: {
-            deploy: {
+            clientCode: {
                 files: [
                     'client/scripts/*.js',
                     'shared/scripts/*.js',
@@ -211,7 +210,7 @@ module.exports = function (grunt) {
                 ],
                 tasks: ['copy']
             },
-            test: {
+            tests: {
                 files: [
                     'client/scripts/*.js',
                     'shared/scripts/*.js',

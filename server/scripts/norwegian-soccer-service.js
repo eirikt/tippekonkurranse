@@ -387,6 +387,16 @@ var __ = require("underscore"),
     },
 
 
+    _dataForRound201404 = exports.round201404 = {
+        year: 2014,
+        round: 4,
+        tippeliga: [],
+        toppscorer: [],
+        adeccoliga: [],
+        remainingCupContenders: []
+    },
+
+
     _getTippeligaTable2013 = exports.getTippeligaTable2013 = function () {
         "use strict";
         var dfd = new promise.Deferred();

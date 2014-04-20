@@ -33,7 +33,7 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 _Status: OK_
 
 #### v0.0.3 : Remote data retrieval (proof-of-concept) (server-side)
-* Try get Tippeliga data from some service => ~~[NFF][10]~~ (no live updates) [altomfotball][11]
+* Try get Tippeliga data from some service => ~~[NFF][10]~~ (no live updates) [altomfotball.no][11]
 * Screen-scrape and parse data (server-side), e.g. like [this][20]
 * Acquire Tippeliga information
 
@@ -98,19 +98,23 @@ _Status: OK_
 
 _Status: OK_
 
-...
-
-#### v1.x : _Delivery goal 01.06.2014_
-* Some simple presentation of historic data
-
-#### v1.x : _Delivery goal 01.06.2014_
+#### v1.1.1 : _Delivery goal 18.05.2014_
 * View all user's predictions
 
-#### v1.x
-* More cool graphs and whatnot
+_Status: OK_
 
-#### v? : Admin UI
-* Admin UI for data management
+#### v1.1.2 : _Delivery goal 01.05.2014_
+* View current Tippeliga table, and other relevant results
+
+_Status: In progress_
+
+...
+
+#### v1.2 : _Delivery goal 01.06.2014_
+* Some simple presentation of historic data
+
+#### v1.2.x
+* More cool graphs and whatnot
 
 #### v? : Touch/Mobile
 * Mobile app
@@ -123,9 +127,17 @@ _Status: OK_
 #### v? : Offline support
 * Create offline-capable solution just for the heck of it
 
+#### v? : Some kind of Facebook integration
+* User image
+* Inline presentation of tippekonkurranse standings
+
 #### v? : Official Tippeliga data service
 * Verify/validate data micro-formats in use
 * Establish proper REST service for Tippeliga data for everybody to use without leaning to crappy web scraping routines ...
+* Brag about it
+
+#### v? : Admin UI
+* Admin UI for data management
 
 #### v? : Public web app
 * Establish multi-tenant 'Tippeligakonkurranse' groups with full web-based user- and group administration

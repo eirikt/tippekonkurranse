@@ -1,10 +1,10 @@
 /* global require:false, console:false */
+/* jshint -W089 */
 
 // Module dependencies, external
-var mongoose = require("mongoose"),
 
 // Module dependencies, local
-    dbSchema = require("./db-schema.js"),
+var dbSchema = require("./db-schema.js"),
     soccerResultService = require("./norwegian-soccer-service.js"),
     utils = require("./utils.js"),
 

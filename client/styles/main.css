@@ -1,5 +1,11 @@
+/**
+ * Imports
+ */
 @import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700,300,300italic);
 
+/**
+ * Base
+ */
 body {
     font-family: 'Open Sans Condensed', 'Arial Narrow', sans-serif;
     font-weight: 400;
@@ -20,6 +26,15 @@ h2, .h2 {
     font-size: 24px;
 }
 
+.modal-content {
+    width: 340px;
+    margin-top: 75px;
+    background-image: linear-gradient(to bottom right, #ffffff 0%, #ef7200 100%);
+}
+
+/**
+ * Other content
+ */
 #content {
     padding-top: 1rem;
     padding-bottom: .5rem;
@@ -38,7 +53,10 @@ h2, .h2 {
 }
 
 /**
- *  Debug
+ *  Module           : Debug
+ *  Portable/reusable: Yes
+ *  Dependencies     : -
+ *  Resources        : -
  ******************************************************************************/
 /*
 div {
@@ -78,11 +96,7 @@ img {
  *  Resources        : http://fontawesome.io/icons/
  *
  *  Example:
- *      <a href="mylinkedinpage" class="axbit-icon-linkedin"></a>
- *
- *  Prerequisites:
- *      <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
- *      (add to index.html head)
+ *      <a href="mylinkedinpage" class="icon-up"></a>
  ******************************************************************************/
 .icon-check::before {
     font-family: FontAwesome, sans-serif;
@@ -116,4 +130,35 @@ img {
     content: "\f0d7";
     font-size: inherit;
     color: red;
+}
+
+.icon-trophy-gold::before {
+    font-family: FontAwesome, sans-serif;
+    content: "\f091";
+    font-size: inherit;
+    color: #ffcd00;
+}
+
+.icon-trophy-silver::before {
+    font-family: FontAwesome, sans-serif;
+    content: "\f091";
+    font-size: inherit;
+    color: #c0c0c0;
+}
+
+.icon-trophy-bronze::before {
+    font-family: FontAwesome, sans-serif;
+    content: "\f091";
+    font-size: inherit;
+    color: #cd7f32;
+}
+
+.icon-prediction {
+    cursor: pointer;
+}
+
+.icon-prediction::before {
+    font-family: FontAwesome, sans-serif;
+    content: "\f044";
+    font-size: smaller;
 }
