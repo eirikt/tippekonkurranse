@@ -12,12 +12,12 @@ var __ = require("underscore"),
 // Module dependencies, local
     dbSchema = require("./db-schema.js"),
     predictions2014 = require("./user-predictions-2014.js").predictions2014,
-    //norwegianSoccerLeagueService = require("./norwegian-soccer-service.js"),
+    norwegianSoccerLeagueService = require("./norwegian-soccer-service.js"),
     utils = require("./utils.js"),
     sharedModels = require("./../../shared/scripts/app.models.js"),
 
 // TODO: ...
-    //RQ = require("./vendor/rq.js"),
+//RQ = require("./vendor/rq.js"),
 
 
 ////////////////////////////////////////
@@ -354,27 +354,26 @@ var __ = require("underscore"),
      */
     _getTippeligaData = function () {
         "use strict";
-        /* Get data from db - dev setting ... */
-        console.warn(utils.logPreamble() + "NB! Local/Development Tippeliga data source in use");
-        var dfd = new promise.Deferred();
-        dbSchema.TippeligaRound.findOne({ year: 2014, round: 3 }).exec(
-            function (err, previousTippeligaRound) {
-                dfd.resolve([
-                    previousTippeligaRound.tippeliga,
-                    previousTippeligaRound.toppscorer,
-                    previousTippeligaRound.adeccoliga,
-                    previousTippeligaRound.remainingCupContenders
-                ]);
-            });
-        return dfd.promise;
-        /*
-         return all(
-         norwegianSoccerLeagueService.getCurrentTippeligaTable(),
-         norwegianSoccerLeagueService.getCurrentTippeligaToppscorer(),
-         norwegianSoccerLeagueService.getCurrentAdeccoligaTable(),
-         norwegianSoccerLeagueService.getCurrentRemainingCupContenders()
-         );
+        /* Get data from db - dev setting ...
+         console.warn(utils.logPreamble() + "NB! Local/Development Tippeliga data source in use");
+         var dfd = new promise.Deferred();
+         dbSchema.TippeligaRound.findOne({ year: 2014, round: 3 }).exec(
+         function (err, previousTippeligaRound) {
+         dfd.resolve([
+         previousTippeligaRound.tippeliga,
+         previousTippeligaRound.toppscorer,
+         previousTippeligaRound.adeccoliga,
+         previousTippeligaRound.remainingCupContenders
+         ]);
+         });
+         return dfd.promise;
          */
+        return all(
+            norwegianSoccerLeagueService.getCurrentTippeligaTable(),
+            norwegianSoccerLeagueService.getCurrentTippeligaToppscorer(),
+            norwegianSoccerLeagueService.getCurrentAdeccoligaTable(),
+            norwegianSoccerLeagueService.getCurrentRemainingCupContenders()
+        );
     },
 
     /**
