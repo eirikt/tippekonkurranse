@@ -104,12 +104,18 @@ _Status: OK_
 
 _Status: OK_
 
-#### v1.1.2 : _Delivery goal 01.05.2014_
+...
+
+#### v1.1.2 : _Delivery goal 27.04.2014_
 * View current Tippeliga table, and other relevant results
 
-_Status: OK_
+_Status: In progress_
 
-...
+#### v1.1.3 : _Delivery goal 04.05.2014_
+* Revisit automatic reload of page
+* Simple countdown timer
+
+_Status: In progress_
 
 #### v1.2 : _Delivery goal 01.06.2014_
 * Some simple presentation of historic data
