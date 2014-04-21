@@ -1,4 +1,4 @@
-/* global require:false, exports:false, RQ:false */
+/* global require:false, exports:false */
 /* jshint -W083 */
 /* jshint -W089 */
 
@@ -14,10 +14,10 @@ var __ = require("underscore"),
     predictions2014 = require("./user-predictions-2014.js").predictions2014,
     norwegianSoccerLeagueService = require("./norwegian-soccer-service.js"),
     utils = require("./utils.js"),
+    asyncExecution = utils.asyncExecution,
     sharedModels = require("./../../shared/scripts/app.models.js"),
 
-// TODO: ...
-//RQ = require("./vendor/rq.js"),
+    //RQ = require("./vendor/rq.js"),
 
 
 ////////////////////////////////////////
@@ -207,18 +207,9 @@ var __ = require("underscore"),
         },
 
 // TODO: spec/test this one!
-    /**
-     *
-     * @returns {*}
-     * @private
-     */
-    _getTippekonkurranseScores = function () {
+    _getTippekonkurranseScores = function (resultArray, success, failure) {
         "use strict";
-        var dfd = new promise.Deferred(),
-
-            args = __.toArray(arguments)[0],
-            resultArray = args.resultArray,
-            currentTippeligaTable = resultArray[0],
+        var currentTippeligaTable = resultArray[0],
             currentTippeligaToppscorer = resultArray[1],
             currentAdeccoligaTable = resultArray[2],
             currentRemainingCupContenders = resultArray[3],
@@ -231,7 +222,7 @@ var __ = require("underscore"),
                 predictions2014,
                 currentTippeligaTable, currentTippeligaToppscorer, currentAdeccoligaTable, currentRemainingCupContenders);
 
-        dfd.resolve({
+        success({
             currentMatchesCount: currentMatchesCount,
             currentRound: currentRound,
             scores: scores,
@@ -240,88 +231,64 @@ var __ = require("underscore"),
             currentAdeccoligaTable: currentAdeccoligaTable,
             currentRemainingCupContenders: currentRemainingCupContenders
         });
-        return dfd.promise;
     },
 
 // TODO: spec/test this one!
-    _addPreviousMatchRoundSumToEachParticipant = function () {
+    _addPreviousMatchRoundSumToEachParticipant = function (success, failure) {
         "use strict";
-        var dfd = new promise.Deferred(),
-
-            args = __.toArray(arguments)[0],
-            currentMatchesCount = args.currentMatchesCount,
-            currentRound = args.currentRound,
-            scores = args.scores,
-            currentAdeccoligaTable = args.currentAdeccoligaTable,
-            currentTippeligaTable = args.currentTippeligaTable,
-            currentTippeligaToppscorer = args.currentTippeligaToppscorer,
-            currentRemainingCupContenders = args.currentRemainingCupContenders,
+        var args = __.toArray(arguments)[2],
 
             year = new Date().getFullYear(),
             currentStanding = {};
 
         dbSchema.TippeligaRound.findOne({
                 year: year,
-                round: (currentRound - 1) }
+                round: (args.currentRound - 1) }
         ).exec(
             function (err, previousTippeligaRound) {
                 var previousRoundScores = _updateScores(
                     predictions2014,
                     previousTippeligaRound.tippeliga, previousTippeligaRound.toppscorer, previousTippeligaRound.adeccoliga, previousTippeligaRound.remainingCupContenders);
-                for (var participant in scores) {
-                    if (scores.hasOwnProperty(participant)) {
-                        scores[participant].previousSum = previousRoundScores[participant].sum;
+                for (var participant in args.scores) {
+                    if (args.scores.hasOwnProperty(participant)) {
+                        args.scores[participant].previousSum = previousRoundScores[participant].sum;
                     }
                 }
-                currentStanding.scores = scores;
+                currentStanding.scores = args.scores;
 
                 // Adding Tippeliga round meta data to scores
-                currentStanding.metadata = { year: year, round: currentRound };
+                currentStanding.metadata = { year: year, round: args.currentRound };
 
-                dfd.resolve({
-                    currentMatchesCount: currentMatchesCount,
+                success({
+                    currentMatchesCount: args.currentMatchesCount,
                     currentStanding: currentStanding,
-                    currentTippeligaTable: currentTippeligaTable,
-                    currentTippeligaToppscorer: currentTippeligaToppscorer,
-                    currentAdeccoligaTable: currentAdeccoligaTable,
-                    currentRemainingCupContenders: currentRemainingCupContenders
+                    currentTippeligaTable: args.currentTippeligaTable,
+                    currentTippeligaToppscorer: args.currentTippeligaToppscorer,
+                    currentAdeccoligaTable: args.currentAdeccoligaTable,
+                    currentRemainingCupContenders: args.currentRemainingCupContenders
                 });
             });
-        return dfd.promise;
     },
 
 // TODO: spec/test this one!
-    _dispatchToClientForPresentation = function () {
+    _dispatchToClientForPresentation = function (response, success, failure) {
         "use strict";
-        var dfd = new promise.Deferred(),
-
-            response = __.toArray(arguments)[0],
-            args = __.toArray(arguments)[1],
-            currentMatchesCount = args.currentMatchesCount,
-            currentStanding = args.currentStanding,
-            currentTippeligaTable = args.currentTippeligaTable,
-            currentTippeligaToppscorer = args.currentTippeligaToppscorer,
-            currentAdeccoligaTable = args.currentAdeccoligaTable,
-            currentRemainingCupContenders = args.currentRemainingCupContenders;
-
-        response.send(JSON.stringify(currentStanding));
-
-        dfd.resolve({
-            currentMatchesCount: currentMatchesCount,
-            currentTippeligaTable: currentTippeligaTable,
-            currentTippeligaToppscorer: currentTippeligaToppscorer,
-            currentAdeccoligaTable: currentAdeccoligaTable,
-            currentRemainingCupContenders: currentRemainingCupContenders
+        var args = __.toArray(arguments)[3];
+        response.send(JSON.stringify(args.currentStanding));
+        success({
+            currentMatchesCount: args.currentMatchesCount,
+            currentTippeligaTable: args.currentTippeligaTable,
+            currentTippeligaToppscorer: args.currentTippeligaToppscorer,
+            currentAdeccoligaTable: args.currentAdeccoligaTable,
+            currentRemainingCupContenders: args.currentRemainingCupContenders
         });
-        return dfd.promise;
     },
 
 // TODO: spec/test this one!
-    _storeTippeligaRoundMatchData = function () {
+    _storeTippeligaRoundMatchData = function (success, failure) {
         "use strict";
-        var dfd = new promise.Deferred(),
+        var args = __.toArray(arguments)[0],
 
-            args = __.toArray(arguments)[0],
             currentMatchesCount = args.currentMatchesCount,
             currentTippeligaTable = args.currentTippeligaTable,
             currentTippeligaToppscorer = args.currentTippeligaToppscorer,
@@ -341,11 +308,10 @@ var __ = require("underscore"),
             dbSchema.TippeligaRound
                 .findOne({ year: year, round: roundNo })
                 .exec(conditionallyStoreTippeligaRound);
-
-            dfd.resolve();
+            success();
         }
-        return dfd.promise;
     },
+
 
     /**
      * Retrieval of Tippeliga data.
@@ -354,26 +320,38 @@ var __ = require("underscore"),
      */
     _getTippeligaData = function () {
         "use strict";
-        /* Get data from db - dev setting ...
-         console.warn(utils.logPreamble() + "NB! Local/Development Tippeliga data source in use");
-         var dfd = new promise.Deferred();
-         dbSchema.TippeligaRound.findOne({ year: 2014, round: 3 }).exec(
-         function (err, previousTippeligaRound) {
-         dfd.resolve([
-         previousTippeligaRound.tippeliga,
-         previousTippeligaRound.toppscorer,
-         previousTippeligaRound.adeccoliga,
-         previousTippeligaRound.remainingCupContenders
-         ]);
-         });
-         return dfd.promise;
+
+        // TODO:
+        /* Get data from db - dev setting - rq.js */
+
+        /* Get data from db - dev setting - PromisedIO */
+        var getTippeligaRoundFromDb = function (success, failure, year, round) {
+                dbSchema.TippeligaRound.findOne({ year: year, round: round }).exec(
+                    function (err, tippeligaRound) {
+                        if (err) {
+                            return failure(err);
+                        }
+                        return success([
+                            tippeligaRound.tippeliga,
+                            tippeligaRound.toppscorer,
+                            tippeligaRound.adeccoliga,
+                            tippeligaRound.remainingCupContenders
+                        ]);
+                    });
+            },
+            getTippeligaDataAsync = new utils.PromisedIoAsyncExecutor(getTippeligaRoundFromDb);
+
+        console.warn(utils.logPreamble() + "NB! Local/Development Tippeliga data source in use");
+        return getTippeligaDataAsync.exec(2014, 3);
+
+        /* Production version - screen scraping routines in parallel
+         return all(
+         norwegianSoccerLeagueService.getCurrentTippeligaTable(),
+         norwegianSoccerLeagueService.getCurrentTippeligaToppscorer(),
+         norwegianSoccerLeagueService.getCurrentAdeccoligaTable(),
+         norwegianSoccerLeagueService.getCurrentRemainingCupContenders()
+         );
          */
-        return all(
-            norwegianSoccerLeagueService.getCurrentTippeligaTable(),
-            norwegianSoccerLeagueService.getCurrentTippeligaToppscorer(),
-            norwegianSoccerLeagueService.getCurrentAdeccoligaTable(),
-            norwegianSoccerLeagueService.getCurrentRemainingCupContenders()
-        );
     },
 
     /**
@@ -381,32 +359,23 @@ var __ = require("underscore"),
      * Strict sequential execution of functions.
      * @private
      */
-    _handleTippeligaData = function () {
+    _handleTippeligaData = function (request, response, tippeligaData) {
         "use strict";
         var
-        // Function arguments handling
-            args = __.toArray(arguments),
-            request = args[0],
-            response = args[1],
-            resultArray = args[2],
+        // Function initializations
+            getTippekonkurranseScoresCurried = __.partial(_getTippekonkurranseScores, tippeligaData),
 
-        // Function preparations
-            getTippekonkurranseScores = __.partial(_getTippekonkurranseScores, { resultArray: resultArray }),
-            addPreviousMatchRoundSumToEachParticipant = _addPreviousMatchRoundSumToEachParticipant,
-
-            dispatchDataToClientForPresentation = __.partial(_dispatchToClientForPresentation, response),
+            dispatchToClientForPresentationCurried = __.partial(_dispatchToClientForPresentation, response);
         // TODO: try with
         //dispatchDataToClientForPresentation = curry(_dispatchToClientForPresentation)(response),
         // What's the difference between them?
 
-            dispatchDataToDbForStoring = _storeTippeligaRoundMatchData;
-
         // Sequential execution
         seq([
-            getTippekonkurranseScores,
-            addPreviousMatchRoundSumToEachParticipant,
-            dispatchDataToClientForPresentation,
-            dispatchDataToDbForStoring
+            asyncExecution(getTippekonkurranseScoresCurried),
+            asyncExecution(_addPreviousMatchRoundSumToEachParticipant),
+            asyncExecution(dispatchToClientForPresentationCurried),
+            asyncExecution(_storeTippeligaRoundMatchData)
         ]);
     },
 
@@ -488,31 +457,30 @@ var __ = require("underscore"),
 
 
             /* Take 2
-             "use strict";
-             var async = function (func) {
-             return function requestor(requestion, value) {
-             //console.log(func);
-             //console.log("Executing func(" + value + ")");
-             var success = func(value),
-             failure = undefined;
-             return requestion(success, failure);
-             };
-             };
-             var identity = function (value) {
-             console.log("identity(" + value + ")");
-             return value;
-             };
-             //var eirikBound = __.partial(identity, "eirik");
-             //var torskeBound = __.partial(identity, "torske");
-             var eirikRequestor = async(__.partial(identity, "eirik"));
-             var torskeRequestor = async(__.partial(identity, "torske"));
+            var async = function (func) {
+                return function requestor(requestion, value) {
+                    //console.log(func);
+                    //console.log("Executing func(" + value + ")");
+                    var success = func(value),
+                        failure = undefined;
+                    return requestion(success, failure);
+                };
+            };
+            var identity = function (value) {
+                console.log("identity(" + value + ")");
+                return value;
+            };
+            //var eirikBound = __.partial(identity, "eirik");
+            //var torskeBound = __.partial(identity, "torske");
+            var eirikRequestor = async(__.partial(identity, "eirik"));
+            var torskeRequestor = async(__.partial(identity, "torske"));
 
-             var go = function (success, failure) {
-             console.log("go(" + success + ", " + failure + ")");
-             };
+            var go = function (success, failure) {
+                console.log("go(" + success + ", " + failure + ")");
+            };
 
-             RQ.RQ.sequence([eirikRequestor, torskeRequestor])(go);
+            RQ.RQ.sequence([eirikRequestor, torskeRequestor])(go);
 
-             response.send(200);
-             */
+            response.send(200);
+            */
         };
