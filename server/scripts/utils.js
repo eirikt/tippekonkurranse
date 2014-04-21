@@ -20,23 +20,37 @@ var __ = require("underscore"),
      * @see https://github.com/kriszyp/promised-io
      * @constructor
      */
-    PromisedIoAsyncExecutor = exports.PromisedIoAsyncExecutor = function (func) {
-        "use strict";
-        this._func = func;
-        this._deferred = new promise.Deferred();
-        this._success = this._deferred.resolve;
-        this._failure = this._deferred.reject;
-        this.exec = function () {
-            var asyncReadyFunc = __.partial(this._func, this._success, this._failure);
-            asyncReadyFunc.apply(this, __.toArray(arguments));
-            return this._deferred.promise;
-        };
-    },
+    PromisedIoAsyncExecutor = exports.PromisedIoAsyncExecutor =
+        function (func) {
+            "use strict";
+            this._func = func;
+            this._deferred = new promise.Deferred();
+            this._success = this._deferred.resolve;
+            this._failure = this._deferred.reject;
+            this.exec = function () {
+                var asyncReadyFunc = __.partial(this._func, this._success, this._failure);
+                asyncReadyFunc.apply(this, __.toArray(arguments));
+                return this._deferred.promise;
+            };
+        },
 
     /** @returns {Function} Bound PromisedIoAsyncExecutor.exec */
-    asyncExecution = exports.asyncExecution = function (func) {
-        "use strict";
-        var wrapper = new PromisedIoAsyncExecutor(func);
-        return __.bind(wrapper.exec, wrapper);
-    };
+    promisedIoAsyncExecution = exports.promisedIoAsyncExecution =
+        function (func) {
+            "use strict";
+            var wrapper = new PromisedIoAsyncExecutor(func);
+            return __.bind(wrapper.exec, wrapper);
+        },
 
+    /** @returns {Function} RQ.ja requestor */
+    rqAsyncExecution = exports.rqAsyncExecution =
+        function (func) {
+            "use strict";
+            return function requestor(requestion, value) {
+                //console.log("Executing as success requestion/callback/continuation: func(" + value + ")");
+                return func(requestion, value);
+            };
+        },
+
+    /** Convenient RQ.js trivial requestion */
+    go = exports.go = __.identity;

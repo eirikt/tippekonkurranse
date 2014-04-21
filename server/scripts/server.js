@@ -23,7 +23,6 @@ app.use(express.static(path.join(applicationRoot, "../../build")));
 // Dynamic resources (RESTful service API)
 app.get("/predictions/:userId", tippekonkurranseService.handlePredictionsRequest);
 app.get("/current-scores", tippekonkurranseService.handleCurrentScoreRequest);
-app.get("/rqtest", tippekonkurranseService.handleRqTest);
 
 // HTTP server
 server = http.createServer(app);

@@ -18,6 +18,9 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
                     $tendency;
 
                 if (!statusQuo) {
+                    if (!this.model.previousRating) {
+                        this.model.previousRating = "?";
+                    }
                     this.$el.append(this.template(this.model));
                     $tendency = this.$('span.tendency-arrow');
 
