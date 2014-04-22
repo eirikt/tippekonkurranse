@@ -35,19 +35,28 @@ _Status: In progress_
 _Status: In progress_
 
 
-#### v1.1.3 : _Delivery goal 04.05.2014_
+#### v1.1.4 : _Delivery goal 04.05.2014_
 * Revisit automatic reload of page
 * Simple countdown timer
 
 _Status: In progress_
 
 
-#### v1.1.2 : _Delivery goal 27.04.2014_
+#### v1.1.3 : _Delivery goal 27.04.2014_
 * View current Tippeliga table, and other relevant results
 * Touch-friendly version, uniform finger-friendly buttons
-* Touch-device aware => remove striping
+* Touch-device aware => remove hover striping
 
 _Status: In progress_
+
+
+#### v1.1.2 : Bugfix release
+* Tippeliga 2014, round 4 bugfixes
+* Bug: MongoDB won't save new data
+* Bug: Won't update round with 16 ongoing matches (masked by previous bug :-)
+* Bug: Previous rating sometimes dropping out
+
+_Status: Done_
 
 
 #### v1.1.1 : _Delivery goal 21.04.2014_

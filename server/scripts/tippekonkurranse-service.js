@@ -10,15 +10,14 @@ var __ = require("underscore"),
     seq = promise.seq,
 
 // Module dependencies, local
+    RQ = require("./vendor/rq.js").RQ,
     dbSchema = require("./db-schema.js"),
     predictions2014 = require("./user-predictions-2014.js").predictions2014,
     norwegianSoccerLeagueService = require("./norwegian-soccer-service.js"),
     utils = require("./utils.js"),
-//asyncExecution = utils.asyncExecution,
-    asyncExecution = utils.functionExecutionRequestory,
+    asyncExecution = utils.rqAsyncExecution,
+    go = utils.rqGo,
     sharedModels = require("./../../shared/scripts/app.models.js"),
-
-    RQ = require("./vendor/rq.js"),
 
 
 ////////////////////////////////////////
@@ -32,6 +31,7 @@ var __ = require("underscore"),
         "use strict";
         return Math.abs(predictedTeamPlacing - actualTeamPlacing);
     },
+
 
 // TODO: spec/test/document this one?
     _getPallScore = function (predictedTeamPlacing, actualTeamPlacing) {
@@ -49,11 +49,13 @@ var __ = require("underscore"),
         return pallPenaltyPoints;
     },
 
+
 // TODO: spec/test/document this one?
     _getExtraPallScore = function (predictedTeamPlacing, currentPallScore) {
         "use strict";
         return predictedTeamPlacing === 4 && currentPallScore === -3 ? -1 : 0;
     },
+
 
 // TODO: spec/test/document this one?
     _getGroupScore = function (fromPlace, predictedTeamPlacing, actualTeamPlacing, currentGroupScore) {
@@ -75,9 +77,12 @@ var __ = require("underscore"),
         return 0;
     },
 
+
     _getNedrykkScore = curry(_getGroupScore)(15),
 
+
     _getOpprykkScore = curry(_getGroupScore)(1),
+
 
     /**
      * Exported with underscore prefix as it is exported for specification/testing purposes only ...
@@ -151,6 +156,7 @@ var __ = require("underscore"),
             return currentStanding;
         },
 
+
 // TODO: spec/test this one!
     /**
      * Conditionally storing/updating of match round results in MongoDB.
@@ -159,7 +165,7 @@ var __ = require("underscore"),
      * @private
      */
     _storeTippeligaRound = exports._storeTippeligaRound =
-        function (currentTippeligaTable, currentAdeccoligaTable, currentTippeligaTopscorer, currentRemainingCupContenders, year, round, currentRoundCount, mongoDbErr, storedTippeligaRound) {
+        function (currentTippeligaTable, currentTippeligaTopscorer, currentAdeccoligaTable, currentRemainingCupContenders, year, round, currentRoundCount, mongoDbErr, storedTippeligaRound) {
             "use strict";
             var method = null,
                 tippeligaResults,
@@ -181,11 +187,7 @@ var __ = require("underscore"),
 
                 } else {
                     dbCount = dbMatchesCount[round].length;
-                    if (dbCount >= 16) {
-                        logMsg += " already stored with " + dbCount + " teams - completed";
-                        console.log(logMsg + " => no need for updating db with new results");
-
-                    } else if (currentRoundCount < dbCount) {
+                    if (currentRoundCount < dbCount) {
                         logMsg += " already stored with " + dbCount + " teams - current data has " + currentRoundCount + " teams";
                         console.log(logMsg + " => no need for updating db with new results");
 
@@ -206,6 +208,7 @@ var __ = require("underscore"),
                 );
             }
         },
+
 
 // TODO: spec/test this one!
     _getTippekonkurranseScores = function (resultArray, requestion) {
@@ -234,62 +237,65 @@ var __ = require("underscore"),
         }, undefined);
     },
 
+
 // TODO: spec/test this one!
-    _addPreviousMatchRoundSumToEachParticipant = function (requestion, args) {
+    _addPreviousMatchRoundSumToEachParticipant = function (requestion, arg) {
         "use strict";
         var year = new Date().getFullYear(),
             currentStanding = {};
 
         dbSchema.TippeligaRound.findOne({
                 year: year,
-                round: (args.currentRound - 1) }
+                round: (arg.currentRound - 1) }
         ).exec(
             function (err, previousTippeligaRound) {
                 var previousRoundScores = _updateScores(
                     predictions2014,
                     previousTippeligaRound.tippeliga, previousTippeligaRound.toppscorer, previousTippeligaRound.adeccoliga, previousTippeligaRound.remainingCupContenders);
-                for (var participant in args.scores) {
-                    if (args.scores.hasOwnProperty(participant)) {
-                        args.scores[participant].previousSum = previousRoundScores[participant].sum;
+                for (var participant in arg.scores) {
+                    if (arg.scores.hasOwnProperty(participant)) {
+                        arg.scores[participant].previousSum = previousRoundScores[participant].sum;
                     }
                 }
-                currentStanding.scores = args.scores;
+                currentStanding.scores = arg.scores;
 
                 // Adding Tippeliga round meta data to scores
-                currentStanding.metadata = { year: year, round: args.currentRound };
+                currentStanding.metadata = { year: year, round: arg.currentRound };
 
                 return requestion({
-                    currentMatchesCount: args.currentMatchesCount,
+                    currentMatchesCount: arg.currentMatchesCount,
                     currentStanding: currentStanding,
-                    currentTippeligaTable: args.currentTippeligaTable,
-                    currentTippeligaToppscorer: args.currentTippeligaToppscorer,
-                    currentAdeccoligaTable: args.currentAdeccoligaTable,
-                    currentRemainingCupContenders: args.currentRemainingCupContenders
+                    currentTippeligaTable: arg.currentTippeligaTable,
+                    currentTippeligaToppscorer: arg.currentTippeligaToppscorer,
+                    currentAdeccoligaTable: arg.currentAdeccoligaTable,
+                    currentRemainingCupContenders: arg.currentRemainingCupContenders
                 });
             });
     },
 
+
 // TODO: spec/test this one!
-    _dispatchToClientForPresentation = function (response, requestion, args) {
+    _dispatchToClientForPresentation = function (response, requestion, arg) {
         "use strict";
-        response.send(JSON.stringify(args.currentStanding));
+        response.send(JSON.stringify(arg.currentStanding));
         return requestion({
-            currentMatchesCount: args.currentMatchesCount,
-            currentTippeligaTable: args.currentTippeligaTable,
-            currentTippeligaToppscorer: args.currentTippeligaToppscorer,
-            currentAdeccoligaTable: args.currentAdeccoligaTable,
-            currentRemainingCupContenders: args.currentRemainingCupContenders
+            currentMatchesCount: arg.currentMatchesCount,
+            currentTippeligaTable: arg.currentTippeligaTable,
+            currentTippeligaToppscorer: arg.currentTippeligaToppscorer,
+            currentAdeccoligaTable: arg.currentAdeccoligaTable,
+            currentRemainingCupContenders: arg.currentRemainingCupContenders
         });
     },
 
+
 // TODO: spec/test this one!
-    _storeTippeligaRoundMatchData = function (requestion, args) {
+    _storeTippeligaRoundMatchData = function (requestion, arg) {
         "use strict";
-        var currentMatchesCount = args.currentMatchesCount,
-            currentTippeligaTable = args.currentTippeligaTable,
-            currentTippeligaToppscorer = args.currentTippeligaToppscorer,
-            currentAdeccoligaTable = args.currentAdeccoligaTable,
-            currentRemainingCupContenders = args.currentRemainingCupContenders,
+        var currentMatchesCount = arg.currentMatchesCount,
+            currentTippeligaTable = arg.currentTippeligaTable,
+            currentTippeligaToppscorer = arg.currentTippeligaToppscorer,
+            currentAdeccoligaTable = arg.currentAdeccoligaTable,
+            currentRemainingCupContenders = arg.currentRemainingCupContenders,
 
             year = new Date().getFullYear();
 
@@ -304,8 +310,8 @@ var __ = require("underscore"),
             dbSchema.TippeligaRound
                 .findOne({ year: year, round: roundNo })
                 .exec(conditionallyStoreTippeligaRound);
-            requestion();
         }
+        return requestion();
     },
 
 
@@ -367,6 +373,13 @@ var __ = require("underscore"),
             norwegianSoccerLeagueService.getCurrentAdeccoligaTable(),
             norwegianSoccerLeagueService.getCurrentRemainingCupContenders()
         );
+        // TODO: Replace with RQ.js
+        //RQ.parallel([
+        //    asyncExecution(norwegianSoccerLeagueService.getCurrentTippeligaTable),
+        //    asyncExecution(norwegianSoccerLeagueService.getCurrentTippeligaToppscorer),
+        //    asyncExecution(norwegianSoccerLeagueService.getCurrentAdeccoligaTable),
+        //    asyncExecution(norwegianSoccerLeagueService.getCurrentRemainingCupContenders)
+        //])(go);
     },
 
 
@@ -382,13 +395,12 @@ var __ = require("underscore"),
             getTippekonkurranseScoresCurried = curry(_getTippekonkurranseScores)(tippeligaData),
             dispatchToClientForPresentationCurried = curry(_dispatchToClientForPresentation)(response);
 
-        // Sequential execution
-        RQ.RQ.sequence([
-            utils.rqAsyncExecution(getTippekonkurranseScoresCurried),
-            utils.rqAsyncExecution(_addPreviousMatchRoundSumToEachParticipant),
-            utils.rqAsyncExecution(dispatchToClientForPresentationCurried),
-            utils.rqAsyncExecution(_storeTippeligaRoundMatchData)
-        ])(utils.go);
+        RQ.sequence([
+            asyncExecution(getTippekonkurranseScoresCurried),
+            asyncExecution(_addPreviousMatchRoundSumToEachParticipant),
+            asyncExecution(dispatchToClientForPresentationCurried),
+            asyncExecution(_storeTippeligaRoundMatchData)
+        ])(go);
     },
 
 
@@ -404,6 +416,7 @@ var __ = require("underscore"),
             response.send(200, JSON.stringify(predictions));
         },
 
+
     _handleCurrentScoreRequest = exports.handleCurrentScoreRequest =
         function (request, response) {
             "use strict";
@@ -411,4 +424,8 @@ var __ = require("underscore"),
                 handleTippeligaData = __.partial(_handleTippeligaData, request, response);
 
             getTippeligaData().then(handleTippeligaData);
+            // TODO: Replace with RQ.js
+            //var getTippeligaData = asyncExecution(_getTippeligaData),
+            //    handleTippeligaData = asyncExecution(curry(_handleTippeligaData)(request)(response));
+            //RQ.sequence([getTippeligaData, handleTippeligaData])(go);
         };

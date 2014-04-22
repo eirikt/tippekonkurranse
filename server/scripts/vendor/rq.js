@@ -1,146 +1,146 @@
 /*
- rq.js
+    rq.js
 
- Douglas Crockford
- 2013-10-11
- Public Domain
+    Douglas Crockford
+    2013-10-11
+    Public Domain
 
- This package uses four kinds of functions:
- requestor
- requestion
- quash
- requestory
-
-
- requestor(requestion [, initial])
- may return a quash function
-
- A requestor is a function that makes a request. Such a request need not
- be satisified immediately. It is likely that the request will not be
- satisified until some future turn. Requestors provide a means of dealing
- with future activities without blocking.
-
- A requestor is a function that takes a requestion function as its first
- parameter, and optionally an initial value as its second parameter. The
- requestor uses the requestion to report its result. A requestor may
- optionally return a quash function that might be used to cancel the
- request, triggering the requestion function with a failure result.
-
- The initial parameter contains a value that may be used to initialize the
- request. It is provided specifically for RQ.sequence, but it may be passed
- to any requestor.
+This package uses four kinds of functions:
+    requestor
+    requestion
+    quash
+    requestory
 
 
- requestion(success, failure)
- returns undefined
+requestor(requestion [, initial])
+    may return a quash function
 
- A requestion function is a continuation or callback. It is used to deliver
- the result of a request. A requestion takes two arguments: success and
- failure. If the request succeeds, then the result will be passed to the
- requestion function as the success parameter, and the failure parameter
- will be undefined. If the request fails, then the requestion function will
- be passed the reason as the failure parameter. If failure is undefined,
- then the request succeeded. If failure is any other value, then the request
- failed.
+    A requestor is a function that makes a request. Such a request need not
+    be satisified immediately. It is likely that the request will not be
+    satisified until some future turn. Requestors provide a means of dealing
+    with future activities without blocking.
 
+    A requestor is a function that takes a requestion function as its first
+    parameter, and optionally an initial value as its second parameter. The
+    requestor uses the requestion to report its result. A requestor may
+    optionally return a quash function that might be used to cancel the
+    request, triggering the requestion function with a failure result.
 
- quash(reason)
- returns undefined
-
- If a request is likely to be expensive to satisfy, the requestor may
- optionally return a quash function that would allow the request to be
- cancelled. A requestor is not required to return a quash function, and
- the quash function will not be guaranteed to cancel the request. The
- quash's reason argument may become the requestion's failure argument.
+    The initial parameter contains a value that may be used to initialize the
+    request. It is provided specifically for RQ.sequence, but it may be passed
+    to any requestor.
 
 
- requestory([arguments])
- returns a requestor function
+requestion(success, failure)
+    returns undefined
 
- A requestory is a factory function that produces a requestor function. A
- requestory function will usually take parameters that will customize or
- specialize a request. It is possible to write requestor functions by hand,
- but it is usually easier to generate them with requestories.
-
-
- The RQ object contains some requestory functions that permit the composition of
- requestors:
-
- RQ.fallback(requestors, milliseconds)
- RQ.race(requestors, milliseconds)
- RQ.parallel(requestors, optionals, milliseconds, tilliseconds)
- RQ.sequence(requestors, milliseconds)
-
- Each of these four requestory functions returns a requestor function that
- returns a quash function.
+    A requestion function is a continuation or callback. It is used to deliver
+    the result of a request. A requestion takes two arguments: success and
+    failure. If the request succeeds, then the result will be passed to the
+    requestion function as the success parameter, and the failure parameter
+    will be undefined. If the request fails, then the requestion function will
+    be passed the reason as the failure parameter. If failure is undefined,
+    then the request succeeded. If failure is any other value, then the request
+    failed.
 
 
- RQ.fallback(requestors, milliseconds)
+quash(reason)
+    returns undefined
 
- RQ.fallback returns a requestor function that will call the first element
- in the requestors array. If that is ultimately successful, its value will
- be passed to the requestion. But if it fails, the next element will be
- called, and so on. If none of the elements are successful, then the
- fallback fails. If any succeeds, then the fallback succeeds.
-
- If the optional milliseconds argument is supplied, then if a request is not
- successful in the allotted time, then the fallback fails, and the pending
- requestor is cancelled.
+    If a request is likely to be expensive to satisfy, the requestor may
+    optionally return a quash function that would allow the request to be
+    cancelled. A requestor is not required to return a quash function, and
+    the quash function will not be guaranteed to cancel the request. The
+    quash's reason argument may become the requestion's failure argument.
 
 
- RQ.race(requestors [, milliseconds])
+requestory([arguments])
+    returns a requestor function
 
- RQ.race returns a requestor that starts all of the functions in the
- requestors array in parallel. Its result is the result of the first of
- those requestors to successfully finish (all of the other requestors are
- cancelled). If all of those requestors fail, then the race fails.
-
- If the optional milliseconds argument is supplied, then if no requestor has
- been successful in the allotted time, then the race fails, and all pending
- requestors are cancelled.
+    A requestory is a factory function that produces a requestor function. A
+    requestory function will usually take parameters that will customize or
+    specialize a request. It is possible to write requestor functions by hand,
+    but it is usually easier to generate them with requestories.
 
 
- RQ.parallel(requestors [, milliseconds])
- RQ.parallel(requestors, optionals [, milliseconds, [tilliseconds]])
+The RQ object contains some requestory functions that permit the composition of
+requestors:
 
- RQ.parallel returns a requestor that processes many requestors in parallel,
- producing an array of all of the successful results. It can take two arrays
- of requests: Those that are required to produce results, and those that may
- optionally produce results. Each of the optional requestors has until all
- of the required requestors have finished, or until the optional
- tilliseconds timer has expired.
+    RQ.fallback(requestors, milliseconds)
+    RQ.race(requestors, milliseconds)
+    RQ.parallel(requestors, optionals, milliseconds, tilliseconds)
+    RQ.sequence(requestors, milliseconds)
 
- The result maps the requestors and optionals into a single array. The
- value produced by the first element of the requestors array provides the
- first element of the result.
-
- If the optional milliseconds argument is supplied, then if all of the
- required requestors are not successful in the allotted time, then the
- parallel fails. If there are no required requestors, and if at least one
- optional requestor is successful within the allotted time, then the
- parallel succeeds.
+Each of these four requestory functions returns a requestor function that
+returns a quash function.
 
 
- RQ.sequence(requestors [, milliseconds])
+RQ.fallback(requestors, milliseconds)
 
- RQ.sequence returns a requestor that processes each element of the
- requestors array one at a time. Each will be passed the result of the
- previous. If all succeed, then the sequence succeeds, having the result of
- the last of the requestors. If any fail, then the sequence fails.
+    RQ.fallback returns a requestor function that will call the first element
+    in the requestors array. If that is ultimately successful, its value will
+    be passed to the requestion. But if it fails, the next element will be
+    called, and so on. If none of the elements are successful, then the
+    fallback fails. If any succeeds, then the fallback succeeds.
 
- If the optional milliseconds argument is supplied, then if all of the
- requestors have not all completed in the allotted time, then the sequence
- fails and the pending requestor is cancelled.
- */
+    If the optional milliseconds argument is supplied, then if a request is not
+    successful in the allotted time, then the fallback fails, and the pending
+    requestor is cancelled.
+
+
+RQ.race(requestors [, milliseconds])
+
+    RQ.race returns a requestor that starts all of the functions in the
+    requestors array in parallel. Its result is the result of the first of
+    those requestors to successfully finish (all of the other requestors are
+    cancelled). If all of those requestors fail, then the race fails.
+
+    If the optional milliseconds argument is supplied, then if no requestor has
+    been successful in the allotted time, then the race fails, and all pending
+    requestors are cancelled.
+
+
+RQ.parallel(requestors [, milliseconds])
+RQ.parallel(requestors, optionals [, milliseconds, [tilliseconds]])
+
+    RQ.parallel returns a requestor that processes many requestors in parallel,
+    producing an array of all of the successful results. It can take two arrays
+    of requests: Those that are required to produce results, and those that may
+    optionally produce results. Each of the optional requestors has until all
+    of the required requestors have finished, or until the optional
+    tilliseconds timer has expired.
+
+    The result maps the requestors and optionals into a single array. The
+    value produced by the first element of the requestors array provides the
+    first element of the result.
+
+    If the optional milliseconds argument is supplied, then if all of the
+    required requestors are not successful in the allotted time, then the
+    parallel fails. If there are no required requestors, and if at least one
+    optional requestor is successful within the allotted time, then the
+    parallel succeeds.
+
+
+RQ.sequence(requestors [, milliseconds])
+
+    RQ.sequence returns a requestor that processes each element of the
+    requestors array one at a time. Each will be passed the result of the
+    previous. If all succeed, then the sequence succeeds, having the result of
+    the last of the requestors. If any fail, then the sequence fails.
+
+    If the optional milliseconds argument is supplied, then if all of the
+    requestors have not all completed in the allotted time, then the sequence
+    fails and the pending requestor is cancelled.
+*/
 
 /*global
- clearTimeout, setImmediate, setTimeout
- */
+    clearTimeout, setImmediate, setTimeout
+*/
 
 /*properties
- array, evidence, fallback, freeze, forEach, index, isArray, length,
- message, method, milliseconds, name, parallel, race, sequence, value
- */
+    array, evidence, fallback, freeze, forEach, index, isArray, length,
+    message, method, milliseconds, name, parallel, race, sequence, value
+*/
 
 var RQ = exports.RQ = (function () {
     'use strict';
@@ -190,11 +190,11 @@ var RQ = exports.RQ = (function () {
         }
         requestors.forEach(is_function);
         if (milliseconds &&
-            (typeof milliseconds !== 'number' || milliseconds < 0)) {
+                (typeof milliseconds !== 'number' || milliseconds < 0)) {
             throw new TypeError(method + " milliseconds");
         }
         if (tilliseconds &&
-            (typeof tilliseconds !== 'number' || tilliseconds < 0)) {
+                (typeof tilliseconds !== 'number' || tilliseconds < 0)) {
             throw new TypeError(method + " tilliseconds");
         }
     }
@@ -209,7 +209,7 @@ var RQ = exports.RQ = (function () {
     }
 
     return {
-        fallback: function fallback(requestors, milliseconds) {
+        fallback : function fallback(requestors, milliseconds) {
 
 // RQ.fallback takes an array of requestor functions, and returns a requestor
 // that will call them each in order until it finds a successful outcome.
@@ -285,7 +285,8 @@ var RQ = exports.RQ = (function () {
                 return quash;
             };
         },
-        parallel: function parallel(requestors, optionals, milliseconds, tilliseconds) {
+        parallel: function parallel(requestors, optionals, milliseconds,
+                tilliseconds) {
 
 // RQ.parallel takes an array of requestors, and an optional second array of
 // requestors, and starts them all. It succeeds if all of the requestors in
@@ -347,7 +348,7 @@ var RQ = exports.RQ = (function () {
                     timeout_id = setTimeout(function () {
                         timeout_id = null;
                         return requestors_remaining === 0 &&
-                            (requestors_length > 0 ||
+                                (requestors_length > 0 ||
                                 optionals_successes > 0)
                             ? finish(results)
                             : quash(expired("RQ.parallel", milliseconds));
@@ -380,7 +381,8 @@ var RQ = exports.RQ = (function () {
                                         }
                                         results[index] = success;
                                         requestors_remaining -= 1;
-                                        if (requestors_remaining === 0 && !timeout_till) {
+                                        if (requestors_remaining === 0 &&
+                                                !timeout_till) {
                                             return finish(results);
                                         }
                                     }
@@ -412,7 +414,7 @@ var RQ = exports.RQ = (function () {
                                         if (optionals_remaining === 0) {
                                             if (requestors_remaining === 0) {
                                                 return requestors_length > 0 ||
-                                                    optionals_successes > 0
+                                                        optionals_successes > 0
                                                     ? finish(results)
                                                     : quash(failure);
                                             }
@@ -426,7 +428,7 @@ var RQ = exports.RQ = (function () {
                                 initial
                             );
                             if (quashes[requestors_length + index] ===
-                                undefined) {
+                                    undefined) {
                                 quashes[requestors_length + index] = cancel;
                             }
                         });

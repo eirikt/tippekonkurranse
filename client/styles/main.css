@@ -108,7 +108,7 @@ img {
     font-family: FontAwesome, sans-serif;
     content: "\f0d8";
     font-size: inherit;
-    color: green;
+    color: #61c100;
 }
 
 .icon-up::before {

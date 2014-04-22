@@ -50,6 +50,8 @@ define(["underscore", "backbone", "app.models.scoreModel", "app.result"],
                     if (participant.get(ParticipantResult.participantPreviousSumPropertyName) > previousLastSum) {
                         participant.set(ParticipantResult.participantPreviousRatingPropertyName, (previousRating += 1), { silent: true });
                         previousLastSum = participant.get(ScoreModel.sum);
+                    } else {
+                        participant.set(ParticipantResult.participantPreviousRatingPropertyName, previousRating, { silent: true });
                     }
                 });
                 this.comparator = ParticipantResult.sortBySum;
