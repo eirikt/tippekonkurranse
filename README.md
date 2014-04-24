@@ -1,7 +1,10 @@
 # Tippekonkurranse
 
-A simple Node-based web application (in norwegian).
-In production [here][1].
+A simple [Node][50]-based web application,
+persisting data using [MongoDB][51],
+with server-side function composition using [RQ][52],
+and keeping client-side somewhat tidy with [Backbone][53].
+It is in production [here][1].
 
 [![Build Status](https://travis-ci.org/eirikt/tippekonkurranse.png?branch=master)](https://travis-ci.org/eirikt/tippekonkurranse)
 &nbsp;&nbsp;&nbsp;
@@ -14,7 +17,7 @@ In production [here][1].
 ## Scope
 * Screen-scraping norwegian soccer result web pages
 * Simple calculations
-* Simple presentation
+* Simple multi-device-friendly presentation
 * Deployment to [Heroku][30]
 
 
@@ -31,21 +34,24 @@ _Status: In progress_
 
 #### v1.2 : _Delivery goal 01.06.2014_
 * Some simple presentation of historic data
+* Multiple draggable windows (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
 
 _Status: In progress_
 
 
-#### v1.1.4 : _Delivery goal 04.05.2014_
-* Revisit automatic reload of page
+#### v1.1.4 : _Delivery goal 11.05.2014_
+* Better FaceBook URL presence: see http://stackoverflow.com/questions/6530420/control-the-image-that-facebook-shows-when-i-like-a-url
+* Revisit automatic reloading of web page
 * Simple countdown timer
 
 _Status: In progress_
 
 
-#### v1.1.3 : _Delivery goal 27.04.2014_
-* View current Tippeliga table, and other relevant results
-* Touch-friendly version, uniform finger-friendly buttons
-* Touch-device aware => remove hover striping
+#### v1.1.3 : _Delivery goal 28.04.2014_
+* View current Tippeliga results, and other relevant data
+* Better touch device UX: uniform finger-friendly buttons
+* Better touch device UX: remove hover striping
+* Better touch device UX: colours and font sizes
 
 _Status: In progress_
 
@@ -174,8 +180,9 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 * Create offline-capable solution just for the heck of it
 
 #### v? : Some kind of Facebook integration
-* User image
-* Inline presentation of tippekonkurranse standings
+* User images
+* Better FaceBook URL presence: see http://stackoverflow.com/questions/6530420/control-the-image-that-facebook-shows-when-i-like-a-url
+* Inline presentation of tippekonkurranse standings ...
 
 #### v? : Public and official (hopefully) Tippeliga data service
 * Verify/validate data micro-formats in use
@@ -222,3 +229,7 @@ SOFTWARE.
 [31]: https://devcenter.heroku.com/articles/getting-started-with-nodejs
 [32]: https://devcenter.heroku.com/articles/custom-domains
 [40]: http://tiny.cc
+[50]: http://nodejs.org
+[51]: https://www.mongodb.org
+[52]: https://github.com/douglascrockford/RQ
+[53]: http://backbonejs.org

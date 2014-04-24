@@ -3,6 +3,7 @@
 var _ = require("underscore"),
 
     scoreModel = {
+        // TODO: rename to 'sumPropertyName' ...
         sum: "sum",
 
         tabell: "tabell",
@@ -17,7 +18,7 @@ var _ = require("underscore"),
          */
         properties: function () {
             "use strict";
-            var scoreModelPropertiesArray = [
+            var scoreModelPropertyNamesArray = [
                     scoreModel.sum,
 
                     scoreModel.tabell,
@@ -34,12 +35,12 @@ var _ = require("underscore"),
                 args = _.toArray(arguments);
 
             } else {
-                args = scoreModelPropertiesArray.map(function () {
+                args = scoreModelPropertyNamesArray.map(function () {
                     return 0;
                 });
             }
 
-            scoreModelPropertiesArray.forEach(function (propName, index) {
+            scoreModelPropertyNamesArray.forEach(function (propName, index) {
                 model[propName] = args[index];
             });
 

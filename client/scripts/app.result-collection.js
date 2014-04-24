@@ -4,7 +4,7 @@ define(["underscore", "backbone", "app.models.scoreModel", "app.result"],
         "use strict";
 
         return Backbone.Collection.extend({
-            url: "/current-scores",
+            url: "/api/scores/current",
             model: ParticipantResult,
             comparator: ParticipantResult.sortBySum,
 

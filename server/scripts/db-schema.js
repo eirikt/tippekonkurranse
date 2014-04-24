@@ -16,6 +16,7 @@ var mongoose = require("mongoose"),
     TippeligaRoundMongooseSchema = exports.TippeligaRoundMongooseSchema = new Schema({
         year: { type: Number, index: true },
         round: { type: Number, index: true },
+        date: { type: Date },
         tippeliga: { type: [TeamStatusMongooseSchema] },
         toppscorer: { type: [String] },
         adeccoliga: { type: [TeamStatusMongooseSchema] },

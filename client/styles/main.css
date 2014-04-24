@@ -26,10 +26,20 @@ h2, .h2 {
     font-size: 24px;
 }
 
-.modal-content {
+.btn {
+    width: 100px;
+}
+
+#currentResultsTable .modal-content {
+    width: 500px;
+    margin-top: 75px;
+    background-image: linear-gradient(to bottom right, #ffffff 0%, #f96e00 50%);
+}
+
+#predictionsTable .modal-content {
     width: 340px;
     margin-top: 75px;
-    background-image: linear-gradient(to bottom right, #ffffff 0%, #ef7200 100%);
+    background-image: linear-gradient(to bottom right, #ffffff 0%, #f96e00 75%);
 }
 
 /**
@@ -40,6 +50,7 @@ h2, .h2 {
     padding-bottom: .5rem;
 }
 
+/* TODO: ...
 .my-transform {
     transform: scale(1.5);
     transform-origin: 0% 0%;
@@ -51,6 +62,7 @@ h2, .h2 {
 .my-slide-in-effect {
     opacity: 0.5;
 }
+*/
 
 /**
  *  Module           : Debug
@@ -151,14 +163,4 @@ img {
     content: "\f091";
     font-size: inherit;
     color: #cd7f32;
-}
-
-.icon-prediction {
-    cursor: pointer;
-}
-
-.icon-prediction::before {
-    font-family: FontAwesome, sans-serif;
-    content: "\f044";
-    font-size: smaller;
 }

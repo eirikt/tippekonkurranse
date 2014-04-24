@@ -1,13 +1,13 @@
-/* global require:false, exports:false */
+/* global root:false, require:false, exports:false */
 /* jshint -W083 */
 /* jshint -W089 */
 
+// Environment
+var env = process.env.NODE_ENV || "development",
+
 // Module dependencies, external
-var __ = require("underscore"),
+    __ = require("underscore"),
     curry = require("curry"),
-    promise = require("promised-io/promise"),
-    all = promise.all,
-    seq = promise.seq,
 
 // Module dependencies, local
     RQ = require("./vendor/rq.js").RQ,
@@ -15,7 +15,6 @@ var __ = require("underscore"),
     predictions2014 = require("./user-predictions-2014.js").predictions2014,
     norwegianSoccerLeagueService = require("./norwegian-soccer-service.js"),
     utils = require("./utils.js"),
-    asyncExecution = utils.rqAsyncExecution,
     go = utils.rqGo,
     sharedModels = require("./../../shared/scripts/app.models.js"),
 
@@ -211,12 +210,12 @@ var __ = require("underscore"),
 
 
 // TODO: spec/test this one!
-    _getTippekonkurranseScores = function (resultArray, requestion) {
+    _getTippekonkurranseScores = function (requestion, arg) {
         "use strict";
-        var currentTippeligaTable = resultArray[0],
-            currentTippeligaToppscorer = resultArray[1],
-            currentAdeccoligaTable = resultArray[2],
-            currentRemainingCupContenders = resultArray[3],
+        var currentTippeligaTable = arg[0],
+            currentTippeligaToppscorer = arg[1],
+            currentAdeccoligaTable = arg[2],
+            currentRemainingCupContenders = arg[3],
 
             currentMatchesCount = __.groupBy(currentTippeligaTable, "matches"),
             allMatchRoundsPresentInCurrentTippeligaTable = __.keys(currentMatchesCount),
@@ -234,7 +233,7 @@ var __ = require("underscore"),
             currentTippeligaToppscorer: currentTippeligaToppscorer,
             currentAdeccoligaTable: currentAdeccoligaTable,
             currentRemainingCupContenders: currentRemainingCupContenders
-        }, undefined);
+        });
     },
 
 
@@ -275,16 +274,33 @@ var __ = require("underscore"),
 
 
 // TODO: spec/test this one!
-    _dispatchToClientForPresentation = function (response, requestion, arg) {
+    _dispatchScoresToClientForPresentation = function (response, requestion, arg) {
         "use strict";
         response.send(JSON.stringify(arg.currentStanding));
         return requestion({
+            // TODO: Move property names to common function in 'shared'
             currentMatchesCount: arg.currentMatchesCount,
             currentTippeligaTable: arg.currentTippeligaTable,
             currentTippeligaToppscorer: arg.currentTippeligaToppscorer,
             currentAdeccoligaTable: arg.currentAdeccoligaTable,
             currentRemainingCupContenders: arg.currentRemainingCupContenders
         });
+    },
+
+
+    _dispatchResultsToClientForPresentation = function (response, requestion, arg) {
+        "use strict";
+        var res = {
+            currentTippeligaTable: arg[0],
+            currentTippeligaToppscorer: arg[1],
+            currentAdeccoligaTable: arg[2],
+            currentRemainingCupContenders: arg[3],
+            currentYear: arg[4],
+            currentRound: arg[5],
+            currentDate: arg[6]
+        };
+        response.send(JSON.stringify(res));
+        return requestion();
     },
 
 
@@ -302,10 +318,7 @@ var __ = require("underscore"),
         for (var round in currentMatchesCount) {
             var roundNo = parseInt(round, 10),
                 currentMatchCountInRound = currentMatchesCount[round].length,
-
-            // TODO: Both works, what's the difference between them?
                 conditionallyStoreTippeligaRound = curry(_storeTippeligaRound)(currentTippeligaTable)(currentTippeligaToppscorer)(currentAdeccoligaTable)(currentRemainingCupContenders)(year)(round)(currentMatchCountInRound);
-            //conditionallyStoreTippeligaRound = __.partial(_storeTippeligaRound, currentTippeligaTable, currentTippeligaToppscorer, currentAdeccoligaTable, currentRemainingCupContenders, year, round, currentMatchCountInRound);
 
             dbSchema.TippeligaRound
                 .findOne({ year: year, round: roundNo })
@@ -320,87 +333,65 @@ var __ = require("underscore"),
      * Parallel execution of functions.
      * @private
      */
-    _getTippeligaData = function () {
+    _getStoredTippeligaData = function (year, round, requestion) {
         "use strict";
-
-        // TODO:
-        /* Get data from db - dev setting - rq.js
-         var getTippeligaRoundFromDb = function (requestion, year, round) {
-         dbSchema.TippeligaRound.findOne({ year: year, round: round }).exec(
-         function (err, tippeligaRound) {
-         if (err) {
-         return requestion, undefined, err);
-         }
-         return requestion([
-         tippeligaRound.tippeliga,
-         tippeligaRound.toppscorer,
-         tippeligaRound.adeccoliga,
-         tippeligaRound.remainingCupContenders
-         ]);
-         });
-         },
-         getTippeligaRoundFromDbCurried = curry(//getTippeligaDataAsync = new utils.PromisedIoAsyncExecutor(getTippeligaRoundFromDb);
-
-         console.warn(utils.logPreamble() + "NB! Local/Development Tippeliga data source in use"));
-         return getTippeligaDataAsync.exec(2014, 3);
-         */
-
-        /* Get data from db - dev setting - Promised-IO
-         var getTippeligaRoundFromDb = function (success, failure, year, round) {
-         dbSchema.TippeligaRound.findOne({ year: year, round: round }).exec(
-         function (err, tippeligaRound) {
-         if (err) {
-         return failure(err);
-         }
-         return success([
-         tippeligaRound.tippeliga,
-         tippeligaRound.toppscorer,
-         tippeligaRound.adeccoliga,
-         tippeligaRound.remainingCupContenders
-         ]);
-         });
-         },
-         getTippeligaDataAsync = new utils.PromisedIoAsyncExecutor(getTippeligaRoundFromDb);
-
-         console.warn(utils.logPreamble() + "NB! Local/Development Tippeliga data source in use");
-         return getTippeligaDataAsync.exec(2014, 3);
-         */
-
-        /* Production version - screen scraping routines in parallel */
-        return all(
-            norwegianSoccerLeagueService.getCurrentTippeligaTable(),
-            norwegianSoccerLeagueService.getCurrentTippeligaToppscorer(),
-            norwegianSoccerLeagueService.getCurrentAdeccoligaTable(),
-            norwegianSoccerLeagueService.getCurrentRemainingCupContenders()
+        dbSchema.TippeligaRound.findOne({ year: year, round: round }).exec(
+            function (err, tippeligaRound) {
+                if (err) {
+                    return requestion(undefined, err);
+                }
+                return requestion([
+                    tippeligaRound.tippeliga,
+                    tippeligaRound.toppscorer,
+                    tippeligaRound.adeccoliga,
+                    tippeligaRound.remainingCupContenders,
+                    tippeligaRound.year,
+                    tippeligaRound.round,
+                    tippeligaRound.date
+                ]);
+            }
         );
-        // TODO: Replace with RQ.js
-        //RQ.parallel([
-        //    asyncExecution(norwegianSoccerLeagueService.getCurrentTippeligaTable),
-        //    asyncExecution(norwegianSoccerLeagueService.getCurrentTippeligaToppscorer),
-        //    asyncExecution(norwegianSoccerLeagueService.getCurrentAdeccoligaTable),
-        //    asyncExecution(norwegianSoccerLeagueService.getCurrentRemainingCupContenders)
-        //])(go);
     },
 
 
     /**
-     * Handling of retrieved Tippeliga data.
-     * Strict sequential execution of functions.
+     * ...
+     * @param handleTippeligaData
+     * @param request
+     * @param response
      * @private
      */
-    _handleTippeligaData = function (request, response, tippeligaData) {
+    _handleRequest = function (handleTippeligaData, request, response) {
         "use strict";
-        var
-        // Function initializations
-            getTippekonkurranseScoresCurried = curry(_getTippekonkurranseScores)(tippeligaData),
-            dispatchToClientForPresentationCurried = curry(_dispatchToClientForPresentation)(response);
+        var year = request.params.year,
+            round = request.params.round;
 
-        RQ.sequence([
-            asyncExecution(getTippekonkurranseScoresCurried),
-            asyncExecution(_addPreviousMatchRoundSumToEachParticipant),
-            asyncExecution(dispatchToClientForPresentationCurried),
-            asyncExecution(_storeTippeligaRoundMatchData)
-        ])(go);
+        // Override with stored tippeliga data => for statistics/history/development ...
+        if (env === "development") {
+            if (root.overrideTippeligaDataWithYear && root.overrideTippeligaDataWithRound) {
+                console.warn(utils.logPreamble() + "Overriding current Tippeliga results with stored data from year=" + yearOverridden + " and round=" + roundOverridden);
+                year = root.overrideTippeligaDataWithYear;
+                round = root.overrideTippeligaDataWithRound;
+            }
+        }
+
+        if (year && round) {
+            RQ.sequence([
+                curry(_getStoredTippeligaData)(year)(round),
+                handleTippeligaData
+            ])(go);
+
+        } else {
+            RQ.sequence([
+                RQ.parallel([
+                    norwegianSoccerLeagueService.getCurrentTippeligaTable,
+                    norwegianSoccerLeagueService.getCurrentTippeligaToppscorer,
+                    norwegianSoccerLeagueService.getCurrentAdeccoligaTable,
+                    norwegianSoccerLeagueService.getCurrentRemainingCupContenders
+                ]),
+                handleTippeligaData
+            ])(go);
+        }
     },
 
 
@@ -416,16 +407,27 @@ var __ = require("underscore"),
             response.send(200, JSON.stringify(predictions));
         },
 
-
-    _handleCurrentScoreRequest = exports.handleCurrentScoreRequest =
+    _handleResultsRequest = exports.handleResultsRequest =
         function (request, response) {
             "use strict";
-            var getTippeligaData = _getTippeligaData,
-                handleTippeligaData = __.partial(_handleTippeligaData, request, response);
+            var curriedHandleRequest = curry(_handleRequest)(
+                //RQ.sequence([
+                curry(_dispatchResultsToClientForPresentation)(response)
+                //])
+            );
+            curriedHandleRequest(request, response);
+        },
 
-            getTippeligaData().then(handleTippeligaData);
-            // TODO: Replace with RQ.js
-            //var getTippeligaData = asyncExecution(_getTippeligaData),
-            //    handleTippeligaData = asyncExecution(curry(_handleTippeligaData)(request)(response));
-            //RQ.sequence([getTippeligaData, handleTippeligaData])(go);
+    _handleScoresRequest = exports.handleScoresRequest =
+        function (request, response) {
+            "use strict";
+            var curriedHandleRequest = curry(_handleRequest)(
+                RQ.sequence([
+                    _getTippekonkurranseScores,
+                    _addPreviousMatchRoundSumToEachParticipant,
+                    curry(_dispatchScoresToClientForPresentation)(response),
+                    _storeTippeligaRoundMatchData
+                ])
+            );
+            curriedHandleRequest(request, response);
         };

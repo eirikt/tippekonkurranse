@@ -46,7 +46,7 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
                 if (!this.get("userId")) {
                     throw new Error("Missing userId");
                 }
-                return "/predictions/" + this.get("userId");
+                return "/api/predictions/" + this.get("userId");
             }
         });
 
@@ -54,7 +54,7 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
         var ModalPredictionsTableView = Backbone.View.extend({
             template: _.template('' +
                     '<div class="modal-dialog">' +
-                    '  <div class="modal-content" style="background-color:#ffcd00;">' +
+                    '  <div class="modal-content">' +
                     '    <div class="modal-header">' +
                     '      <button type="button" class="close" style="font-size:xx-large;font-weight:bold;" data-dismiss="modal" aria-hidden="true">&times;</button>' +
                     '      <h4 class="modal-title" id="predictionsLabel"><strong><%= userId %>s tippetips <%= year %></strong></h4>' +
@@ -66,9 +66,12 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
                     '            <p>Tippeliga:<br/><strong><%= tabell %></strong></p>' +
                     '          </td>' +
                     '          <td style="vertical-align:top;padding-left:4rem;">' +
-                    '            <p>Toppskårer:<br/><table><tr><td><strong><%= toppscorer %></strong></td></tr></table></p>' +
-                    '            <p style="margin-top:4rem;">Opprykk:<br/><table><tr><td><strong><%= opprykk %></strong></td></tr></table></p>' +
-                    '            <p style="margin-top:4rem;">Cupmester:<br/><table><tr><td><strong><%= cup %></strong></td></tr></table></p>' +
+                    '            <p>Toppskårer:</p>' +
+                    '            <p><strong><%= toppscorer %></strong></p>' +
+                    '            <p style="margin-top:4rem;">Opprykk:</p>' +
+                    '            <p><strong><%= opprykk %></strong></p>' +
+                    '            <p style="margin-top:4rem;">Cupmester:</p>' +
+                    '            <p><strong><%= cup %></strong></p>' +
                     '          </td>' +
                     '        </tr>' +
                     '      </table>' +
@@ -121,12 +124,12 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
 
             // TODO: use dynamic/common properties names for this
             template: _.template('' +
-                    '<td style="padding-left:2rem;"><%= rating %></td>' +
-                    '<td><strong><%= name %></strong></td>' +
-                    '<td style="text-align:right;"><strong><%= sum %></strong></td>' +
+                    '<td style="padding-left:2rem;"><span style="font-weight:bold;font-size:large;"><%= rating %></span></td>' +
+                    '<td><span style="font-weight:bold;font-size:large;"><%= name %></span></td>' +
+                    '<td style="text-align:right;"><span style="font-weight:bold;font-size:large;"><%= sum %></span></td>' +
                     '<td class="tendency"></td>' +
                     '<td class="prediction" style="padding-left:3rem;">' +
-                    '  <span class="icon-prediction" data-id="<%= userId %>" data-toggle="modal" data-target="#predictionsTable"></span>' +
+                    '  <button type="button" class="btn btn-sm btn-primary" data-id="<%= userId %>" data-toggle="modal" data-target="#predictionsTable"><%= name %>s tips</button>' +
                     '</td>' +
                     '<td style="color:darkgray;text-align:center;"><%= tabell %></td>' +
                     '<td style="color:darkgray;text-align:center;"><%= pall %></td>' +
@@ -150,6 +153,7 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
 
             render: function () {
                 var self = this;
+
                 this.$el.append(this.template(this.model));
 
                 // Add tendency marker

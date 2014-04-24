@@ -18,6 +18,7 @@ tests/bower_components
 node_modules
 README.html
 howto.txt
+snapshot-round4.PNG
 
 # Temporary local dev stuff, not sure about their future ...
 client/images/podium_resultats.jpeg

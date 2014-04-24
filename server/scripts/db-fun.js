@@ -8,7 +8,16 @@ var dbSchema = require("./db-schema.js"),
     soccerResultService = require("./norwegian-soccer-service.js"),
     utils = require("./utils.js"),
 
+
+// TODO: rather generic MongoDB requestor functions ...
+    getTippeligaRound = exports.getTippeligaRound = function (requestion, year, round) {
+        "use strict";
+        // TODO: ...
+    },
+
+
 // Store hardcoded tippeliga round results in db
+
     persistRound1 = exports.persistRound1 = function () {
         "use strict";
         dbSchema.TippeligaRound.count({ year: 2014, round: 1 }, function (err, count) {

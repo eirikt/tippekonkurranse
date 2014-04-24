@@ -5,8 +5,7 @@ require.config({
         'jquery.bootstrap': '../bower_components/bootstrap/dist/js/bootstrap.min',
         'underscore': '../bower_components/underscore/underscore',
         'backbone': '../bower_components/backbone/backbone',
-
-        //'moment': '../bower_components/moment/min/moment.min',
+        'moment': '../bower_components/moment/min/moment.min',
 
         // Lib file must be copied in during build step ('grunt run')
         'app.models.scoreModel': './app.models'
@@ -29,10 +28,10 @@ require.config({
             deps: ['underscore'],
             exports: 'Backbone'
         },
-        //'moment': {
-        //    deps: [],
-        //    exports: 'Moment'
-        //},
+        'moment': {
+            deps: [],
+            exports: 'Moment'
+        },
         'app.models.scoreModel': {
             deps: ['underscore'],
             exports: 'scoreModel'

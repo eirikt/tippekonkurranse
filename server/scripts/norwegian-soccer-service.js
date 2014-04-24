@@ -2,7 +2,6 @@
 
 // Module dependencies, external
 var __ = require("underscore"),
-    promise = require("promised-io/promise"),
     request = require("request"),
     cheerio = require("cheerio"),
 
@@ -107,90 +106,73 @@ var __ = require("underscore"),
 // Public functions
 //////////////////////////////////
 
-    _getCurrentTippeligaTable = exports.getCurrentTippeligaTable = function () {
+    _getCurrentTippeligaTable = exports.getCurrentTippeligaTable = function (requestion, arg) {
         "use strict";
-        var dfd = new promise.Deferred();
-        request(
+        return request(
             _currentTippeligaTableUrl,
-            function (error, response, body) {
-                if (!error && response.statusCode === 200) {
-                    dfd.resolve(_parseTippeligaTable(body));
+            function (err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    return requestion(_parseTippeligaTable(body));
                 }
                 else {
-                    dfd.reject();
+                    return requestion(undefined, err);
                 }
             }
         );
-        return dfd.promise;
     },
 
 
-    _getCurrentAdeccoligaTable = exports.getCurrentAdeccoligaTable = function () {
+    _getCurrentAdeccoligaTable = exports.getCurrentAdeccoligaTable = function (requestion, arg) {
         "use strict";
-        var dfd = new promise.Deferred();
-        request(
+        return request(
             _currentAdeccoligaTableUrl,
-            function (error, response, body) {
-                if (!error && response.statusCode === 200) {
-                    dfd.resolve(_parseAdeccoligaTable(body));
+            function (err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    return requestion(_parseAdeccoligaTable(body));
                 }
                 else {
-                    dfd.reject();
+                    return requestion(undefined, err);
                 }
             }
         );
-        return dfd.promise;
     },
 
 
-    _getCurrentTippeligaToppscorer = exports.getCurrentTippeligaToppscorer = function () {
+    _getCurrentTippeligaToppscorer = exports.getCurrentTippeligaToppscorer = function (requestion, arg) {
         "use strict";
-        var dfd = new promise.Deferred();
-        request(
+        return request(
             _currentTippeligaToppscorerTableUrl,
-            function (error, response, body) {
-                if (!error && response.statusCode === 200) {
-                    dfd.resolve(_parseTippeligaToppscorerTable(body));
+            function (err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    return requestion(_parseTippeligaToppscorerTable(body));
                 }
                 else {
-                    dfd.reject();
+                    return requestion(undefined, err);
                 }
             }
         );
-        return dfd.promise;
     },
 
 
-    _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders = function () {
+    _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders = function (requestion, arg) {
         "use strict";
-        var dfd = new promise.Deferred();
         // For the cup title, just manually remove the teams when they consecutively screw up, one after the other ...
         // Only tippeliga teams relevant for 2014 predictions ...
-        dfd.resolve([
+        return requestion([
             "Bodø/Glimt",
             "Brann",
-            "Haugesund",
-            "Lillestrøm",
             "Molde",
-            "Odd",
             "Rosenborg",
-            "Sandnes Ulf",
-            "Sarpsborg 08",
-            "Sogndal",
             "Stabæk",
-            "Start",
-            "Strømsgodset",
-            "Viking",
-            "Vålerenga",
-            "Aalesund"
+            "Vålerenga"
         ]);
-        return dfd.promise;
     },
 
 
     _dataForRound201401 = exports.round201401 = {
         year: 2014,
         round: 1,
+        date: "2014-03-30",
         tippeliga: [
             { name: "Sarpsborg 08", no: 1, matches: 1 },
             { name: "Stabæk", no: 2, matches: 1 },
@@ -257,6 +239,7 @@ var __ = require("underscore"),
     _dataForRound201402 = exports.round201402 = {
         year: 2014,
         round: 2,
+        date: "2014-04-06",
         tippeliga: [
             { name: "Stabæk", no: 1, matches: 2 },
             { name: "Lillestrøm", no: 2, matches: 2 },
@@ -325,6 +308,7 @@ var __ = require("underscore"),
     _dataForRound201403 = exports.round201403 = {
         year: 2014,
         round: 3,
+        date: "2014-04-13",
         tippeliga: [
             { name: "Strømsgodset", no: 1, matches: 3 },
             { name: "Molde", no: 2, matches: 3 },
@@ -390,6 +374,7 @@ var __ = require("underscore"),
     _dataForRound201404 = exports.round201404 = {
         year: 2014,
         round: 4,
+        date: "2014-04-21",
         tippeliga: [
             { name: "Strømsgodset", no: 1, matches: 4 },
             { name: "Molde", no: 2, matches: 4 },
@@ -452,8 +437,7 @@ var __ = require("underscore"),
 
     _getTippeligaTable2013 = exports.getTippeligaTable2013 = function () {
         "use strict";
-        var dfd = new promise.Deferred();
-        return dfd.resolve([
+        return [
             { name: "Strømsgodset", no: 1, matches: 30 },
             { name: "Rosenborg", no: 2, matches: 30 },
             { name: "Haugesund", no: 3, matches: 30 },
@@ -470,14 +454,13 @@ var __ = require("underscore"),
             { name: "Sarpsborg 08", no: 14, matches: 30 },
             { name: "Tromsø", no: 15, matches: 30 },
             { name: "Hønefoss", no: 16, matches: 30 }
-        ]);
+        ];
     },
 
 
     _getAdeccoligaTable2013 = exports.getAdeccoligaTable2013 = function () {
         "use strict";
-        var dfd = new promise.Deferred();
-        return dfd.resolve([
+        return [
             { name: "Bodø/Glimt", no: 1, matches: 30 },
             { name: "Stabæk", no: 2, matches: 30 },
             { name: "Hødd", no: 3, matches: 30 },
@@ -494,5 +477,5 @@ var __ = require("underscore"),
             { name: "Kongsvinger", no: 14, matches: 30 },
             { name: "Follo", no: 15, matches: 30 },
             { name: "Elverum", no: 16, matches: 30 }
-        ]);
+        ];
     };
