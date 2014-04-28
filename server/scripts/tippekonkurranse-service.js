@@ -243,17 +243,32 @@ var env = process.env.NODE_ENV || "development",
         var year = new Date().getFullYear(),
             currentStanding = {};
 
+        /*
+        if (arg.currentRound <= 1) {
+            return requestion({
+                currentMatchesCount: arg.currentMatchesCount,
+                currentStanding: currentStanding,
+                currentTippeligaTable: arg.currentTippeligaTable,
+                currentTippeligaToppscorer: arg.currentTippeligaToppscorer,
+                currentAdeccoligaTable: arg.currentAdeccoligaTable,
+                currentRemainingCupContenders: arg.currentRemainingCupContenders
+            });
+        }
+        */
+
         dbSchema.TippeligaRound.findOne({
                 year: year,
                 round: (arg.currentRound - 1) }
         ).exec(
             function (err, previousTippeligaRound) {
-                var previousRoundScores = _updateScores(
-                    predictions2014,
-                    previousTippeligaRound.tippeliga, previousTippeligaRound.toppscorer, previousTippeligaRound.adeccoliga, previousTippeligaRound.remainingCupContenders);
-                for (var participant in arg.scores) {
-                    if (arg.scores.hasOwnProperty(participant)) {
-                        arg.scores[participant].previousSum = previousRoundScores[participant].sum;
+                if (previousTippeligaRound) {
+                    var previousRoundScores = _updateScores(
+                        predictions2014,
+                        previousTippeligaRound.tippeliga, previousTippeligaRound.toppscorer, previousTippeligaRound.adeccoliga, previousTippeligaRound.remainingCupContenders);
+                    for (var participant in arg.scores) {
+                        if (arg.scores.hasOwnProperty(participant)) {
+                            arg.scores[participant].previousSum = previousRoundScores[participant].sum;
+                        }
                     }
                 }
                 currentStanding.scores = arg.scores;
@@ -369,9 +384,9 @@ var env = process.env.NODE_ENV || "development",
         // Override with stored tippeliga data => for statistics/history/development ...
         if (env === "development") {
             if (root.overrideTippeligaDataWithYear && root.overrideTippeligaDataWithRound) {
-                console.warn(utils.logPreamble() + "Overriding current Tippeliga results with stored data from year=" + yearOverridden + " and round=" + roundOverridden);
                 year = root.overrideTippeligaDataWithYear;
                 round = root.overrideTippeligaDataWithRound;
+                console.warn(utils.logPreamble() + "Overriding current Tippeliga results with stored data from year=" + year + " and round=" + round);
             }
         }
 

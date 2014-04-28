@@ -11,7 +11,6 @@ var assert = require("../bower_components/chai/chai.js").assert,
 describe("Tippekonkurranse service", function () {
     "use strict";
 
-
     describe("Underlying basics", function () {
         it("should ensure (native) sorting of number strings", function () {
             expect(Math.max.apply(null, ["1", "2"])).to.equal(2);

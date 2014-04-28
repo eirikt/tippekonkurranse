@@ -1,9 +1,26 @@
 module.exports = function (grunt) {
     'use strict';
 
+    // Web server test port
+    var port = 8981;
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
+        connect: {
+            server: {
+                options: {
+                    port: port,
+                    protocol: 'http',
+                    hostname: '127.0.0.1',
+                    base: '.',
+                    directory: null,
+                    keepalive: false,
+                    debug: true,
+                    livereload: false
+                }
+            }
+        },
         shell: {
             help: {
                 options: { stdout: true, stderr: true, failOnError: true },
@@ -43,6 +60,23 @@ module.exports = function (grunt) {
             'install-test': {
                 options: { stdout: true, stderr: true, failOnError: true },
                 command: 'cd tests && node ./../node_modules/bower/bin/bower install'
+            },
+            /*
+             'mocha-phantomjs': {
+             command: 'node ./node_modules/mocha-phantomjs/bin/mocha-phantomjs -R spec http://localhost:8000/testrunner.html',
+             options: {
+             stdout: true,
+             stderr: true
+             }
+             },
+             */
+            //'ci': {
+            'mocha-phantomjs': {
+                command: 'node ./node_modules/mocha-phantomjs/bin/mocha-phantomjs -R spec http://localhost:' + port + '/tests/test-amd.html',
+                options: {
+                    stdout: true,
+                    stderr: true
+                }
             }
         },
 
@@ -67,9 +101,12 @@ module.exports = function (grunt) {
         jshint: {
             all: [
                 'Gruntfile.js',
-                'server/scripts/*.js',
-                'client/scripts/*.js',
-                'tests/specs/**/*.js'
+                'package.json',
+                'bower.json',
+                'server/scripts/**/*.js', '!server/scripts/vendor/**/*.js',
+                'client/scripts/**/*.js',
+                'shared/scripts/**/*.js',
+                'tests/app/**/*.js', 'tests/specs/**/*.js', 'tests/*.js', 'tests/*.json'
             ],
             options: {
                 //reporter: 'jslint',
@@ -118,21 +155,45 @@ module.exports = function (grunt) {
             }
         },
 
-        mocha: {
-            test: {
-                src: ['tests/test.html']
-            },
-            options: {
-                //run: true,
-                log: true,
-                logErrors: true,
+        // Client-side specs/tests
+        // (TODO: Trouble with RequireJS ...)
+        /*
+         mocha: {
+         test: {
+         src: [
+         //'tests/test.html'
+         'tests/test-amd.html'
+         ]
+         },
+         options: {
+         run: false,
+         log: true,
+         logErrors: true,
 
-                //reporter: 'XUnit'
-                //reporter: 'List'
-                reporter: 'Spec'
-            }
-        },
+         //reporter: 'XUnit'
+         //reporter: 'List'
+         reporter: 'Spec'
+         }
+         },
+         */
 
+        // Client-side specs/tests
+        // (TODO: Another plugin tailored for AMD/RequireJS and PhantomJS)
+        /*
+         mocha_require_phantom: {
+         options: {
+         //base: 'D:\\workspace\\Tippekonkurranse\\tests',
+         //base: 'D:\\workspace\\Tippekonkurranse\\tests',
+         main: 'test.config.js',
+         requireLib: 'bower_components/requirejs/require.js',
+         files: ['specs/model-test.spec.js']
+         },
+         target: {
+         }
+         },
+         */
+
+        // Server-side/Node.js specs/tests
         mochaTest: {
             test: {
                 options: {
@@ -177,7 +238,8 @@ module.exports = function (grunt) {
                     'build/scripts/app.participant-score-view.js': 'build/scripts/app.participant-score-view.js',
                     'build/scripts/app.result.js': 'build/scripts/app.result.js',
                     'build/scripts/app.result-collection.js': 'build/scripts/app.result-collection.js',
-                    'build/scripts/app.results-view.js': 'build/scripts/app.results-view.js'
+                    'build/scripts/app.results-view.js': 'build/scripts/app.results-view.js',
+                    'build/scripts/utils.js': 'build/scripts/utils.js'
                 }
             }
         },
@@ -225,6 +287,7 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -233,8 +296,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.loadNpmTasks('grunt-shell');
-    grunt.loadNpmTasks('grunt-mocha');
+    //grunt.loadNpmTasks('grunt-mocha');
     grunt.loadNpmTasks('grunt-mocha-test');
+    //grunt.loadNpmTasks('grunt-mocha-require-phantom');
     grunt.loadNpmTasks('grunt-mocha-cov');
     grunt.loadNpmTasks('grunt-jsdoc');
 
@@ -243,8 +307,12 @@ module.exports = function (grunt) {
     grunt.registerTask('install:test', ['shell:install-test']);
     grunt.registerTask('mongodb', ['shell:createDataDir', 'shell:mongod']);
 
-    grunt.registerTask('build:client', ['clean', 'copy'/*, 'uglify', 'cssmin'*/]);
-    grunt.registerTask('test:client', ['mocha']);
+    //grunt.registerTask('build:client', ['clean', 'copy']); // dev task mode
+    grunt.registerTask('build:client', ['clean', 'copy', 'uglify', 'cssmin']);
+
+    //grunt.registerTask('test:client', ['mocha', 'mocha_require_phantom']);
+    grunt.registerTask('test:client', ['connect', 'shell:mocha-phantomjs']);
+
     grunt.registerTask('test:server', ['mochaTest']);
     grunt.registerTask('coverage:server', ['mochacov:report']);
     grunt.registerTask('test', ['install:client', 'build:client', 'install:test', 'test:server', 'test:client']);

@@ -41,6 +41,6 @@ server.listen(port, function () {
 // Development tweaks ...
 if (env === "development") {
     // Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
-    root.overrideTippeligaDataWithYear = null;  // 2014;
-    root.overrideTippeligaDataWithRound = null; // 1 2 3 4 5 6 7 8 9;
+    root.overrideTippeligaDataWithYear = null;//2014;
+    root.overrideTippeligaDataWithRound = null;//4;
 }

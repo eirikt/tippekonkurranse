@@ -1,9 +1,8 @@
-/* global define: false, console: false, $:false */
+/* global define:false, console:false, $:false */
 
+define(['underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'app.result-collection', 'app.results-view', 'utils'],
 
-define(['underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'app.result-collection', 'app.results-view'],
-
-    function (_, Backbone, $, Bootstrap, TippekonkurranseCurrentResultsCollection, TippekonkurranseCurrentResultsView) {
+    function (_, Backbone, $, Bootstrap, TippekonkurranseCurrentResultsCollection, TippekonkurranseCurrentResultsView, Utils) {
         "use strict";
 
         var HeaderView = Backbone.View.extend({
@@ -42,22 +41,10 @@ define(['underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'app.result-coll
                     $("header").removeClass("hidden");
                     $("footer").removeClass("hidden");
                     $("#intro").remove();
+
                     results.fetch();
                 });
             }, 1650);
         });
     }
-)
-;
-
-
-///////////////////////////////////////////////////////////////////////////////
-// Global helper functions
-///////////////////////////////////////////////////////////////////////////////
-
-function wait(ms) {
-    "use strict";
-    var deferred = $.Deferred();
-    setTimeout(deferred.resolve, ms);
-    return deferred.promise();
-}
+);

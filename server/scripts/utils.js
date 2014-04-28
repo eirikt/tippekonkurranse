@@ -15,52 +15,6 @@ var __ = require("underscore"),
         return "[" + moment().format("YYYY-MM-DD HH:mm:ss") + "] ";
     },
 
-
-// Promise-IO helpers
-
-    /**
-     * Async wrapper using Promised-IO.
-     * @see https://github.com/kriszyp/promised-io
-     * @constructor
-     */
-    //PromisedIoAsyncExecutor = exports.PromisedIoAsyncExecutor =
-    //    function (func) {
-    //        "use strict";
-    //        this._func = func;
-    //        this._deferred = new promise.Deferred();
-    //        this._success = this._deferred.resolve;
-    //        this._failure = this._deferred.reject;
-    //        this.exec = function () {
-    //            var asyncReadyFunc = __.partial(this._func, this._success, this._failure);
-    //            asyncReadyFunc.apply(this, __.toArray(arguments));
-    //            return this._deferred.promise;
-    //        };
-    //    },
-
-    /** @returns {Function} Bound PromisedIoAsyncExecutor.exec */
-    //promisedIoAsyncExecution = exports.promisedIoAsyncExecution =
-    //    function (func) {
-    //        "use strict";
-    //        var wrapper = new PromisedIoAsyncExecutor(func);
-    //        return __.bind(wrapper.exec, wrapper);
-    //    },
-
-
-// RQ.js helpers
-
-    /**
-     * Trivial RQ.js requestory (requestor factory) for just executing given function.
-     * @returns {Function} RQ.js requestor
-     */
-    //rqAsyncExecution = exports.rqAsyncExecution =
-    //    function (func) {
-    //        "use strict";
-    //        return function requestor(requestion, arg) {
-    //            //console.log("Executing requestion/callback/continuation: func(" + arg + ")");
-    //            return func(requestion, arg);
-    //        };
-    //    },
-
     /**
      * Trivial RQ.js requestion.
      * Convenient for triggering arrays of RQ.js requestors.

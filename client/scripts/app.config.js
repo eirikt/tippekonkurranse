@@ -7,14 +7,14 @@ require.config({
         'backbone': '../bower_components/backbone/backbone',
         'moment': '../bower_components/moment/min/moment.min',
 
-        // Lib file must be copied in during build step ('grunt run')
+        // Shared lib files must be copied in during build step ('grunt run')
         'app.models.scoreModel': './app.models'
         //'app.models.scoreModel': '../../shared/scripts/app.models' // Dev setting
     },
     shim: {
         'jquery': {
             deps: [],
-            exports: 'jquery'
+            exports: '$'
         },
         'jquery.bootstrap': {
             deps: ['jquery'],
