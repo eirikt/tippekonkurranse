@@ -124,9 +124,9 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
 
             // TODO: use dynamic/common properties names for this
             template: _.template('' +
-                    '<td style="padding-left:2rem;"><span style="font-weight:bold;font-size:large;"><%= rating %></span></td>' +
-                    '<td><span style="font-weight:bold;font-size:large;"><%= name %></span></td>' +
-                    '<td style="text-align:right;"><span style="font-weight:bold;font-size:large;"><%= sum %></span></td>' +
+                    '<td style="padding-left:2rem;"><span style="font-weight:bold;font-size:larger;"><%= rating %></span></td>' +
+                    '<td><span style="font-weight:bold;font-size:larger;"><%= name %></span></td>' +
+                    '<td style="text-align:right;"><span style="font-weight:bold;font-size:larger;"><%= sum %></span></td>' +
                     '<td class="tendency"></td>' +
                     '<td class="prediction" style="padding-left:3rem;">' +
                     '  <button type="button" class="btn btn-sm btn-primary" data-id="<%= userId %>" data-toggle="modal" data-target="#predictionsTable"><%= name %>s tips</button>' +

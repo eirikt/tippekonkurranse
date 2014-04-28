@@ -1,6 +1,6 @@
-/* global define:false, wait:false */
-define(["jquery", "underscore", "backbone", "moment", "app.participant-score-view"],
-    function ($, _, Backbone, Moment, ParticipantScoreView) {
+/* global define:false, wait:false, isTouchDevice:false */
+define(["jquery", "underscore", "backbone", "moment", "app.participant-score-view", "utils"],
+    function ($, _, Backbone, Moment, ParticipantScoreView, Utils) {
         "use strict";
 
         var CurrentResults = Backbone.Model.extend({
@@ -50,16 +50,16 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
                     if (index < 3 || index > 13) {
                         return result +=
                             "<tr>" +
-                            "<td style='font-weight:bold;'>" + team.no + ".&nbsp;</td>" +
-                            "<td style='font-weight:bold;'>(" + team.matches + ")&nbsp;</td>" +
-                            "<td style='font-weight:bold;'>" + team.name + "</td>" +
+                            "  <td style='font-weight:bold;'>" + team.no + ".&nbsp;</td>" +
+                            "  <td style='font-weight:bold;'>(" + team.matches + ")&nbsp;</td>" +
+                            "  <td style='font-weight:bold;'>" + team.name + "</td>" +
                             "</tr>";
                     } else {
                         return result +=
                             "<tr>" +
-                            "<td style='color:#5c5c5c;font-weight:bold;'>" + team.no + ".&nbsp;</td>" +
-                            "<td style='color:#5c5c5c;font-weight:bold;'>(" + team.matches + ")&nbsp;</td>" +
-                            "<td style='color:#5c5c5c;font-weight:bold;'>" + team.name + "</td>" +
+                            "  <td style='color:#5c5c5c;font-weight:bold;'>" + team.no + ".&nbsp;</td>" +
+                            "  <td style='color:#5c5c5c;font-weight:bold;'>(" + team.matches + ")&nbsp;</td>" +
+                            "  <td style='color:#5c5c5c;font-weight:bold;'>" + team.name + "</td>" +
                             "</tr>";
                     }
                 }, "<table>");
@@ -72,16 +72,16 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
                     if (index < 3 || index > 13) {
                         return result +=
                             "<tr>" +
-                            "<td style='font-weight:bold;'>" + team.no + ".&nbsp;</td>" +
-                            "<td style='font-weight:bold;'>(" + team.matches + ")&nbsp;</td>" +
-                            "<td style='font-weight:bold;'>" + team.name + "</td>" +
+                            "  <td style='font-weight:bold;'>" + team.no + ".&nbsp;</td>" +
+                            "  <td style='font-weight:bold;'>(" + team.matches + ")&nbsp;</td>" +
+                            "  <td style='font-weight:bold;'>" + team.name + "</td>" +
                             "</tr>";
                     } else {
                         return result +=
                             "<tr>" +
-                            "<td style='color:#5c5c5c;font-weight:bold;'>" + team.no + ".&nbsp;</td>" +
-                            "<td style='color:#5c5c5c;font-weight:bold;'>(" + team.matches + ")&nbsp;</td>" +
-                            "<td style='color:#5c5c5c;font-weight:bold;'>" + team.name + "</td>" +
+                            "  <td style='color:#5c5c5c;font-weight:bold;'>" + team.no + ".&nbsp;</td>" +
+                            "  <td style='color:#5c5c5c;font-weight:bold;'>(" + team.matches + ")&nbsp;</td>" +
+                            "  <td style='color:#5c5c5c;font-weight:bold;'>" + team.name + "</td>" +
                             "</tr>";
                     }
                 }, "<table>");
@@ -102,7 +102,7 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
                 //    //return result += team + "<br/>";
                 //}, "");
                 //this.model.set("currentRemainingCupContenders", cupContenders, { silent: true });
-                this.model.set("currentRemainingCupContenders", "Alle de viktigste ...", { silent: true });
+                this.model.set("currentRemainingCupContenders", "Alle relevante ...", { silent: true });
 
                 // Pretty date presentation
                 var date = this.model.get("currentDate");
@@ -119,9 +119,11 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
 
 
         return Backbone.View.extend({
+
             template: _.template('' +
                     '<table class="table table-condenced table-striped table-hover">' +
-                    '<thead><tr>' +
+                    '<thead>' +
+                    '<tr>' +
                     '  <th style="padding-left:2rem;width:3rem;"></th>' +
                     '  <th style="width:15rem;"></th>' +
                     '  <th style="width:3rem;"></th>' +
@@ -135,15 +137,19 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
                     '  <th style="text-align:center;color:darkgray;width:10rem;">Toppsk.</th>' +
                     '  <th style="text-align:center;color:darkgray;width:10rem;">Opprykk</th>' +
                     '  <th style="text-align:center;color:darkgray;width:10rem;">Cup</th>' +
-                    '</tr></thead>' +
+                    '</tr>' +
+                    '</thead>' +
 
                     // All participant data here
                     '<tbody></tbody>' +
 
                     '</table>'
             ),
+
             currentResults: null,
+
             modalCurrentResultsView: null,
+
             initialize: function () {
                 this.currentResults = new CurrentResults();
                 this.modalCurrentResultsView = new ModalCurrentResultsView({
@@ -153,6 +159,7 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
 
                 this.listenTo(this.collection, "reset", this.render);
             },
+
             render: function () {
                 var self = this,
                     addParticipant = function ($el, participantResult, index) {
@@ -161,13 +168,16 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
                     delayedAddParticipant = function (timeOutInMillis, $el, participantResult, index) {
                         var dfd = $.Deferred();
                         addParticipant($el, participantResult, index);
-                        wait(timeOutInMillis).then(function () {
+                        Utils.wait(timeOutInMillis).then(function () {
                             dfd.resolve();
                         });
                         return dfd.promise();
                     };
 
                 this.$el.append(this.template());
+                if (Utils.isTouchDevice()) {
+                    this.$("table").removeClass("table-hover");
+                }
 
                 // Configure modal results view
                 this.$(".current-results").on("click", function () {
