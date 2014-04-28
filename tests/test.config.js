@@ -12,7 +12,7 @@ require.config({
 });
 
 require([
-        'specs/model-test.spec.js',
+        //'specs/model-test.spec.js',
         'specs/client-global-functions.spec.js'
     ],
     function () {

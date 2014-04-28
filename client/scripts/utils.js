@@ -28,11 +28,14 @@ define([
                     } else if (userAgentString.indexOf("Android") > -1) {
                         return true;
 
+                    } else if (userAgentString.indexOf("CriOs") > -1) {
+                        return true;
+
                     } else {
                         return false;
                     }
                 }
-                return true;
+                return false;
             },
 
             isTouchDevice: function () {

@@ -19,7 +19,7 @@
         "curry": "~1.2.0",
         "mongodb": "~1.4.0",
         "mongoose": "~3.8.8",
-        "express": "~4.0.0",
+        "express": "~4.1.1",
         "request": "~2.34.0",
         "cheerio": "~0.15.0",
         "moment": "~2.6.0",
@@ -30,7 +30,7 @@
 
         "grunt": "~0.4.4",
         "grunt-cli": "~0.1.13",
-        "grunt-shell": "~0.6.4",
+        "grunt-shell": "~0.7.0",
         "grunt-mocha": "~0.4.10",
         "grunt-mocha-test": "~0.10.0",
         "grunt-mocha-cov": "~0.2.1",

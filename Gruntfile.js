@@ -103,7 +103,7 @@ module.exports = function (grunt) {
                 'Gruntfile.js',
                 'package.json',
                 'bower.json',
-                'server/scripts/**/*.js', '!server/scripts/vendor/**/*.js',
+                'server/scripts/**/*.js', '!server/scripts/fun.js', '!server/scripts/vendor/**/*.js',
                 'client/scripts/**/*.js',
                 'shared/scripts/**/*.js',
                 'tests/app/**/*.js', 'tests/specs/**/*.js', 'tests/*.js', 'tests/*.json'
