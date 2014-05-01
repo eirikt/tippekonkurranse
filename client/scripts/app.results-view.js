@@ -20,11 +20,11 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
                     '      <table style="width:100%">' +
                     '        <tr>' +
                     '          <td style="width:33%;vertical-align:top;">' +
-                    '            <p>Tippeliga:</p>' +
+                    '            <p style="margin-left:.8rem">Tippeliga:</p>' +
                     '            <p><strong><%= currentTippeligaTable %></strong></p>' +
                     '          </td>' +
                     '          <td style="width:33%;vertical-align:top;">' +
-                    '            <p>Adeccoliga:</p>' +
+                    '            <p style="margin-left:.8rem">Adeccoliga:</p>' +
                     '            <p><strong><%= currentAdeccoligaTable %></strong></p>' +
                     '          </td>' +
                     '          <td style="width:33%;vertical-align:top;">' +
@@ -59,14 +59,14 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
                     if (index < 3 || index > 13) {
                         return result +=
                             "<tr>" +
-                            "  <td style='font-weight:bold;'>" + team.no + ".&nbsp;</td>" +
+                            "  <td style='font-weight:bold;text-align:right;'>" + team.no + ".&nbsp;</td>" +
                             "  <td style='font-weight:bold;'>(" + team.matches + ")&nbsp;</td>" +
                             "  <td style='font-weight:bold;'>" + team.name + "</td>" +
                             "</tr>";
                     } else {
                         return result +=
                             "<tr>" +
-                            "  <td style='color:#5c5c5c;font-weight:bold;'>" + team.no + ".&nbsp;</td>" +
+                            "  <td style='color:#5c5c5c;font-weight:bold;text-align:right;'>" + team.no + ".&nbsp;</td>" +
                             "  <td style='color:#5c5c5c;font-weight:bold;'>(" + team.matches + ")&nbsp;</td>" +
                             "  <td style='color:#5c5c5c;font-weight:bold;'>" + team.name + "</td>" +
                             "</tr>";
@@ -81,14 +81,14 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
                     if (index < 3 || index > 13) {
                         return result +=
                             "<tr>" +
-                            "  <td style='font-weight:bold;'>" + team.no + ".&nbsp;</td>" +
+                            "  <td style='font-weight:bold;text-align:right;'>" + team.no + ".&nbsp;</td>" +
                             "  <td style='font-weight:bold;'>(" + team.matches + ")&nbsp;</td>" +
                             "  <td style='font-weight:bold;'>" + team.name + "</td>" +
                             "</tr>";
                     } else {
                         return result +=
                             "<tr>" +
-                            "  <td style='color:#5c5c5c;font-weight:bold;'>" + team.no + ".&nbsp;</td>" +
+                            "  <td style='color:#5c5c5c;font-weight:bold;text-align:right;'>" + team.no + ".&nbsp;</td>" +
                             "  <td style='color:#5c5c5c;font-weight:bold;'>(" + team.matches + ")&nbsp;</td>" +
                             "  <td style='color:#5c5c5c;font-weight:bold;'>" + team.name + "</td>" +
                             "</tr>";

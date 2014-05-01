@@ -11,7 +11,7 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
                     '<small>(<%= previousRating %>)</small>'
             ),
             render: function () {
-                var plusThreshold = 4,
+                var plusThreshold = 3,
                     upwardTendency = this.model.previousRating - this.model.ratingHidden,
                     downwardTendency = this.model.ratingHidden - this.model.previousRating,
                     statusQuo = upwardTendency === 0 && downwardTendency === 0,
@@ -63,7 +63,7 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
                     '      <table>' +
                     '        <tr>' +
                     '          <td>' +
-                    '            <p>Tippeliga:<br/><strong><%= tabell %></strong></p>' +
+                    '            <p style="margin-left:.8rem;">Tippeliga:<br/><strong><%= tabell %></strong></p>' +
                     '          </td>' +
                     '          <td style="vertical-align:top;padding-left:4rem;">' +
                     '            <p>Toppskårer:</p>' +
@@ -92,14 +92,14 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
                     if (index < 3 || index > 13) {
                         return result +=
                             "<tr>" +
-                            "<td style='font-weight:bold;'>" + (index + 1) + ".&nbsp;</td>" +
-                            "<td style='font-weight:bold;'>" + team + "</td>" +
+                            "  <td style='font-weight:bold;text-align:right;'>" + (index + 1) + ".&nbsp;</td>" +
+                            "  <td style='font-weight:bold;'>" + team + "</td>" +
                             "</tr>";
                     } else {
                         return result +=
                             "<tr>" +
-                            "<td style='color:#5c5c5c;font-weight:bold;'>" + (index + 1) + ".&nbsp;</td>" +
-                            "<td style='color:#5c5c5c;font-weight:bold;'>" + team + "</td>" +
+                            "  <td style='color:#5c5c5c;font-weight:bold;text-align:right;'>" + (index + 1) + ".&nbsp;</td>" +
+                            "  <td style='color:#5c5c5c;font-weight:bold;'>" + team + "</td>" +
                             "</tr>";
                     }
                 }, "<table>");
@@ -124,7 +124,7 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
 
             // TODO: use dynamic/common properties names for this
             template: _.template('' +
-                    '<td style="padding-left:2rem;"><span style="font-weight:bold;font-size:larger;"><%= rating %></span></td>' +
+                    '<td style="padding-left:2rem;text-align:right;"><span style="font-weight:bold;font-size:larger;"><%= rating %></span></td>' +
                     '<td><span style="font-weight:bold;font-size:larger;"><%= name %></span></td>' +
                     '<td style="text-align:right;"><span style="font-weight:bold;font-size:larger;"><%= sum %></span></td>' +
                     '<td class="tendency"></td>' +

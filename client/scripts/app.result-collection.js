@@ -10,7 +10,7 @@ define(["underscore", "backbone", "app.models.scoreModel", "app.result"],
 
             /** Set current match round rating number and placing for participants */
             _setRatingAndPlacing: function () {
-                var rating = 0,   // Equal sum gives the same rating
+                var rating = 0, // Equal sum gives the same rating
                     lastSum = 0;
                 this.each(function (participant) {
                         if (participant.get(ScoreModel.sum) > lastSum) {
@@ -49,7 +49,7 @@ define(["underscore", "backbone", "app.models.scoreModel", "app.result"],
                 this.each(function (participant) {
                     if (participant.get(ParticipantResult.participantPreviousSumPropertyName) > previousLastSum) {
                         participant.set(ParticipantResult.participantPreviousRatingPropertyName, (previousRating += 1), { silent: true });
-                        previousLastSum = participant.get(ScoreModel.sum);
+                        previousLastSum = participant.get(ParticipantResult.participantPreviousSumPropertyName);
                     } else {
                         participant.set(ParticipantResult.participantPreviousRatingPropertyName, previousRating, { silent: true });
                     }
@@ -62,7 +62,6 @@ define(["underscore", "backbone", "app.models.scoreModel", "app.result"],
                 for (var participant in response.scores) {
                     if (response.scores.hasOwnProperty(participant)) {
                         var participantResult = new this.model(response.scores[participant]);
-                        //participantResult.set("year", response.year, { silent: true });
                         participantResult.set(ParticipantResult.participantRatingPropertyName, "", { silent: true });
                         participantResult.set("userId", participant, { silent: true });
                         participantResult.set(ParticipantResult.participantNamePropertyName, this.model.printableName(participant), { silent: true });
