@@ -128,7 +128,7 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
                     '  <th style="padding-left:2rem;width:3rem;"></th>' +
                     '  <th style="width:15rem;"></th>' +
                     '  <th style="width:3rem;"></th>' +
-                    '  <th style="width:3rem;"></th>' +
+                    '  <th style="width:5rem;"></th>' +
                     '  <th class="current-results" style="padding-left:3rem;">' +
                     '    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>' +
                     '  </th>' +

@@ -7,35 +7,57 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
             tagName: 'span',
             template: _.template('' +
                     '<span class="tendency-arrow"></span>' +
+                    '<small>' +
+                    '&nbsp;' +
+                    '<%= ratingDiff %>' +
                     '&nbsp;&nbsp;' +
-                    '<small>(<%= previousRating %>)</small>'
+                    '<%= sumDiff %>' +
+                    '</small>'
             ),
             render: function () {
                 var plusThreshold = 3,
                     upwardTendency = this.model.previousRating - this.model.ratingHidden,
                     downwardTendency = this.model.ratingHidden - this.model.previousRating,
-                    statusQuo = upwardTendency === 0 && downwardTendency === 0,
-                    $tendency;
+                    $tendency,
+                    ratingDiff = this.model.previousRating - this.model.ratingHidden,
+                    sumDiff = this.model.sum - this.model.previousSum;
 
-                if (!statusQuo) {
-                    this.$el.append(this.template(this.model));
-                    $tendency = this.$('span.tendency-arrow');
-
-                    if (upwardTendency >= plusThreshold) {
-                        $tendency.addClass('icon-up-plus');
-
-                    } else if (upwardTendency > 0) {
-                        $tendency.addClass('icon-up');
-
-                    } else if (downwardTendency >= plusThreshold) {
-                        $tendency.addClass('icon-down-plus');
-
-                    } else if (downwardTendency > 0) {
-                        $tendency.addClass('icon-down');
+                this.model.ratingDiff = "";
+                if (ratingDiff !== 0) {
+                    if (ratingDiff > 0) {
+                        ratingDiff = "+" + ratingDiff;
                     }
-                    $tendency.removeClass('tendency-arrow')
-                        .parent().attr('title', 'Plasseringen fra  tippeligarunde ' + (this.model.round - 1) + ' i parentes');
+                    this.model.ratingDiff = ratingDiff;
                 }
+
+                this.model.sumDiff = "";
+                if (sumDiff !== 0) {
+                    if (sumDiff > 0) {
+                        sumDiff = "+" + sumDiff;
+                    }
+                    this.model.sumDiff = "(" + sumDiff + "p)";
+                }
+
+                this.$el.append(this.template(this.model));
+                $tendency = this.$('span.tendency-arrow');
+
+                if (upwardTendency >= plusThreshold) {
+                    $tendency.addClass('icon-up-plus');
+
+                } else if (upwardTendency > 0) {
+                    $tendency.addClass('icon-up');
+
+                } else if (downwardTendency >= plusThreshold) {
+                    $tendency.addClass('icon-down-plus');
+
+                } else if (downwardTendency > 0) {
+                    $tendency.addClass('icon-down');
+                }
+                $tendency.removeClass('tendency-arrow');
+                $tendency.parent().attr('title',
+                        'Tendens sammenlignet med tippeligarunde ' + (this.model.round - 1) +
+                        ': endring i plassering, samt poengendring i parentes');
+
                 return this;
             }
         });

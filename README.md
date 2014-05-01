@@ -52,15 +52,16 @@ _Status: In progress_
 * Better touch device UX: uniform finger-friendly buttons
 * Better touch device UX: remove hover striping
 * Better touch device UX: colours and font sizes
+* Bugfix: Previous rating number (+ improved presentation)
 
 _Status: Done_
 
 
 #### v1.1.2 : Bugfix release
 * Tippeliga 2014, round 4 bugfixes
-* Bug: MongoDB won't save new data
-* Bug: Won't update round with 16 ongoing matches (masked by previous bug :-)
-* Bug: Previous rating sometimes dropping out
+* Bugfix: MongoDB won't save new data
+* Bugfix: Won't update round with 16 ongoing matches (masked by previous bug :-)
+* Bugfix: Previous rating sometimes dropping out
 
 _Status: Done_
 
