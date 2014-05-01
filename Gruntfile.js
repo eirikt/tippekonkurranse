@@ -4,20 +4,22 @@ module.exports = function (grunt) {
     // Web server test port
     var port = 8981;
 
+    var clientTestPath = '/tests/test-amd.html';
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
         connect: {
             server: {
                 options: {
-                    port: port,
-                    protocol: 'http',
-                    hostname: '127.0.0.1',
-                    base: '.',
-                    directory: null,
-                    keepalive: false,
-                    debug: true,
-                    livereload: false
+                    port: port//,
+                    //protocol: 'http',
+                    //hostname: '127.0.0.1',
+                    //base: '.',
+                    //directory: null,
+                    //keepalive: false,
+                    //debug: true,
+                    //livereload: false
                 }
             }
         },
@@ -33,7 +35,7 @@ module.exports = function (grunt) {
                     'echo Essential grunt tasks are:',
                     'echo   install-client   installs client resources via Bower',
                     'echo   install-test     installs test resources via Bower',
-                    'echo   test             installs, builds, and executes Mocha tests',
+                    'echo   test             installs, builds, and executes all Mocha tests',
                     'echo   run              starts up local Node.js runtime (blocking command)'
                 ].join('&&')
             },
@@ -57,22 +59,8 @@ module.exports = function (grunt) {
                 options: { stdout: true, stderr: true, failOnError: true },
                 command: 'node ./node_modules/bower/bin/bower install'
             },
-            'install-test': {
-                options: { stdout: true, stderr: true, failOnError: true },
-                command: 'cd tests && node ./../node_modules/bower/bin/bower install'
-            },
-            /*
-             'mocha-phantomjs': {
-             command: 'node ./node_modules/mocha-phantomjs/bin/mocha-phantomjs -R spec http://localhost:8000/testrunner.html',
-             options: {
-             stdout: true,
-             stderr: true
-             }
-             },
-             */
-            //'ci': {
             'mocha-phantomjs': {
-                command: 'node ./node_modules/mocha-phantomjs/bin/mocha-phantomjs -R spec http://localhost:' + port + '/tests/test-amd.html',
+                command: 'node ./node_modules/mocha-phantomjs/bin/mocha-phantomjs -R spec http://localhost:' + port + clientTestPath,
                 options: {
                     stdout: true,
                     stderr: true
@@ -304,18 +292,17 @@ module.exports = function (grunt) {
 
     grunt.registerTask('help', ['shell:help']);
     grunt.registerTask('install:client', ['shell:install-client']);
-    grunt.registerTask('install:test', ['shell:install-test']);
     grunt.registerTask('mongodb', ['shell:createDataDir', 'shell:mongod']);
 
-    //grunt.registerTask('build:client', ['clean', 'copy']); // dev task mode
-    grunt.registerTask('build:client', ['clean', 'copy', 'uglify', 'cssmin']);
+    grunt.registerTask('build:client', ['clean', 'copy']); // dev task mode
+    //grunt.registerTask('build:client', ['clean', 'copy', 'uglify', 'cssmin']);
 
     //grunt.registerTask('test:client', ['mocha', 'mocha_require_phantom']);
     grunt.registerTask('test:client', ['connect', 'shell:mocha-phantomjs']);
 
     grunt.registerTask('test:server', ['mochaTest']);
     grunt.registerTask('coverage:server', ['mochacov:report']);
-    grunt.registerTask('test', ['install:client', 'build:client', 'install:test', 'test:server', 'test:client']);
+    grunt.registerTask('test', ['install:client', 'build:client', 'test:server', 'test:client']);
     grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', 'mochacov:travis']);
 
     grunt.registerTask('deploy:local', ['install:client', 'build:client', 'shell:run']);

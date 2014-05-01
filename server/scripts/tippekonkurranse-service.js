@@ -160,7 +160,7 @@ var env = process.env.NODE_ENV || "development",
     /**
      * Conditionally storing/updating of match round results in MongoDB.
      * This function should be curried, MongoDB callback arguments being the two last ones ...
-     * Exported with underscore prefix as it is exported for specification/testing purposes only ...
+     * This function is exported with underscore prefix as it is exported for specification/testing purposes only ...
      * @private
      */
     _storeTippeligaRound = exports._storeTippeligaRound =
@@ -244,17 +244,17 @@ var env = process.env.NODE_ENV || "development",
             currentStanding = {};
 
         /*
-        if (arg.currentRound <= 1) {
-            return requestion({
-                currentMatchesCount: arg.currentMatchesCount,
-                currentStanding: currentStanding,
-                currentTippeligaTable: arg.currentTippeligaTable,
-                currentTippeligaToppscorer: arg.currentTippeligaToppscorer,
-                currentAdeccoligaTable: arg.currentAdeccoligaTable,
-                currentRemainingCupContenders: arg.currentRemainingCupContenders
-            });
-        }
-        */
+         if (arg.currentRound <= 1) {
+         return requestion({
+         currentMatchesCount: arg.currentMatchesCount,
+         currentStanding: currentStanding,
+         currentTippeligaTable: arg.currentTippeligaTable,
+         currentTippeligaToppscorer: arg.currentTippeligaToppscorer,
+         currentAdeccoligaTable: arg.currentAdeccoligaTable,
+         currentRemainingCupContenders: arg.currentRemainingCupContenders
+         });
+         }
+         */
 
         dbSchema.TippeligaRound.findOne({
                 year: year,
@@ -352,6 +352,7 @@ var env = process.env.NODE_ENV || "development",
         "use strict";
         dbSchema.TippeligaRound.findOne({ year: year, round: round }).exec(
             function (err, tippeligaRound) {
+
                 if (err) {
                     return requestion(undefined, err);
                 }
@@ -360,6 +361,7 @@ var env = process.env.NODE_ENV || "development",
                     tippeligaRound.toppscorer,
                     tippeligaRound.adeccoliga,
                     tippeligaRound.remainingCupContenders,
+
                     tippeligaRound.year,
                     tippeligaRound.round,
                     tippeligaRound.date
@@ -426,9 +428,9 @@ var env = process.env.NODE_ENV || "development",
         function (request, response) {
             "use strict";
             var curriedHandleRequest = curry(_handleRequest)(
-                //RQ.sequence([
-                curry(_dispatchResultsToClientForPresentation)(response)
-                //])
+                RQ.sequence([
+                    curry(_dispatchResultsToClientForPresentation)(response)
+                ])
             );
             curriedHandleRequest(request, response);
         },

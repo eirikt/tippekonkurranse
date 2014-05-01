@@ -2,7 +2,7 @@
 
 A simple [Node][50]-based web application,
 persisting data using [MongoDB][51],
-with server-side function composition using [RQ][52],
+with server-side functional composition using [RQ][52],
 and keeping client-side somewhat tidy with [Backbone][53].
 It is in production [here][1].
 
@@ -40,7 +40,7 @@ _Status: In progress_
 
 
 #### v1.1.4 : _Delivery goal 11.05.2014_
-* Better FaceBook URL presence: see http://stackoverflow.com/questions/6530420/control-the-image-that-facebook-shows-when-i-like-a-url
+* Better FaceBook URL presence: see http://stackoverflow.com/questions/1138460/how-does-facebook-sharer-select-images?lq=1
 * Revisit automatic reloading of web page
 * Simple countdown timer
 
@@ -53,7 +53,7 @@ _Status: In progress_
 * Better touch device UX: remove hover striping
 * Better touch device UX: colours and font sizes
 
-_Status: In progress_
+_Status: Done_
 
 
 #### v1.1.2 : Bugfix release
@@ -170,7 +170,7 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 #### v? : Touch/Mobile
 * Mobile app
 * Touch-friendly version, uniform finger-friendly buttons
-* Touch-device aware => remove striping
+* ~~Touch-device aware => remove striping~~ Done!
 * ~~Small-screen-friendly version ...~~ Seems to be just fine
 
 #### v? : Proper URL
@@ -181,8 +181,9 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 
 #### v? : Some kind of Facebook integration
 * User images
-* Better FaceBook URL presence: see http://stackoverflow.com/questions/6530420/control-the-image-that-facebook-shows-when-i-like-a-url
+* Better FaceBook URL presence: see http://stackoverflow.com/questions/1138460/how-does-facebook-sharer-select-images?lq=1
 * Inline presentation of tippekonkurranse standings ...
+* Create FaceBook custom story? (see https://developers.facebook.com/docs/opengraph)
 
 #### v? : Public and official (hopefully) Tippeliga data service
 * Verify/validate data micro-formats in use

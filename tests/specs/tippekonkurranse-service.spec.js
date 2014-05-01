@@ -1,9 +1,9 @@
 /* global global:false, require:false, describe:false, it:false */
 /* jshint -W030 */
 
-var assert = require("../bower_components/chai/chai.js").assert,
-    expect = require("../bower_components/chai/chai.js").expect,
-    sinon = require('../bower_components/sinon/lib/sinon'),
+var assert = require("../../node_modules/chai/chai.js").assert,
+    expect = require("../../node_modules/chai/chai.js").expect,
+    sinon = require('../../node_modules/sinon/lib/sinon'),
 
     updateScores = require("../../server/scripts/tippekonkurranse-service.js")._updateScores;
 

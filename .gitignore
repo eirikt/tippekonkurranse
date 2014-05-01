@@ -14,11 +14,11 @@ npm-debug.log
 build
 docs
 client/bower_components
-tests/bower_components
 node_modules
 README.html
 howto.txt
-snapshot-round4.PNG
+snapshot-round-4.png
+snapshot-round-5.png
 
 # Temporary local dev stuff, not sure about their future ...
 client/images/podium_resultats.jpeg

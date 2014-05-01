@@ -21,4 +21,5 @@ if (env === "development") {
     dbData.persistRound2();
     dbData.persistRound3();
     dbData.persistRound4();
+    dbData.persistRound5();
 }

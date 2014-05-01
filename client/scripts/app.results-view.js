@@ -14,7 +14,7 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
                     '  <div class="modal-content">' +
                     '    <div class="modal-header">' +
                     '      <button type="button" class="close" style="font-size:xx-large;font-weight:bold;" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-                    '      <h4 class="modal-title" id="currentResultsLabel"><strong>Fotballresultater</strong>&nbsp;&nbsp;|&nbsp;&nbsp;<%= currentDate %></h4>' +
+                    '      <span class="modal-title" style="font-size:large;" id="currentResultsLabel"><strong>Fotballresultater</strong>&nbsp;&nbsp;|&nbsp;&nbsp;<%= currentDate %></span>' +
                     '    </div>' +
                     '    <div class="modal-body">' +
                     '      <table style="width:100%">' +
@@ -43,7 +43,16 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
                 this.listenTo(this.model, "change", this.render);
             },
             render: function () {
-                // TODO: Extract these into small Views ...
+                // TODO: Extract these into small and cute Views ...
+
+                // Pretty date presentation
+                var date = this.model.get("currentDate");
+                if (date) {
+                    this.model.set("currentDate", "Tippeligarunde " + this.model.get("currentRound") + "&nbsp;&nbsp;|&nbsp;&nbsp;" + new Moment(date).format("DD. MMMM YYYY"), { silent: true });
+                } else {
+                    this.model.set("currentDate", new Moment().format("DD. MMMM YYYY"), { silent: true });
+                }
+
                 // Pretty tabell presentation
                 var prettyTabell = this.model.get("currentTippeligaTable");
                 prettyTabell = _.reduce(prettyTabell, function (result, team, index) {
@@ -103,14 +112,6 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
                 //}, "");
                 //this.model.set("currentRemainingCupContenders", cupContenders, { silent: true });
                 this.model.set("currentRemainingCupContenders", "Alle relevante ...", { silent: true });
-
-                // Pretty date presentation
-                var date = this.model.get("currentDate");
-                if (date) {
-                    this.model.set("currentDate", "Tippeligarunde " + this.model.get("currentRound") + "&nbsp;&nbsp;|&nbsp;&nbsp;" + new Moment(date).format("YYYY.MM.DD"), { silent: true });
-                } else {
-                    this.model.set("currentDate", new Moment().format("YYYY.MM.DD"), { silent: true });
-                }
 
                 this.$el.empty().append(this.template(this.model.toJSON()));
                 return this;

@@ -1,10 +1,7 @@
 /* global define:false, describe:false, it:false */
 /* jshint -W030 */
 
-define([
-        'tests/bower_components/chai/chai',
-        '../client/scripts/utils'
-    ],
+define(['chai', '../../build/scripts/utils'],
     function (chai, utils) {
         'use strict';
 
@@ -64,5 +61,5 @@ define([
                 });
             });
         });
-    });
-
+    }
+);
