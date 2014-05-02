@@ -17,6 +17,7 @@ define([
                 return deferred.promise();
             },
 
+            // TODO: reduce cyclic complexity (from 6 to 5)
             isTouchDeviceUserAgentString: function (userAgentString) {
                 if (userAgentString) {
                     if (userAgentString.indexOf("iPad") > -1) {

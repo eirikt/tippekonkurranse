@@ -14,6 +14,7 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
                     '<%= sumDiff %>' +
                     '</small>'
             ),
+            // TODO: reduce cyclic complexity (from 9 to 5)
             render: function () {
                 var plusThreshold = 3,
                     upwardTendency = this.model.previousRating - this.model.ratingHidden,

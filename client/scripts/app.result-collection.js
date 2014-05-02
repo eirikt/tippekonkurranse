@@ -8,6 +8,7 @@ define(["underscore", "backbone", "app.models.scoreModel", "app.result"],
             model: ParticipantResult,
             comparator: ParticipantResult.sortBySum,
 
+            // TODO: reduce cyclic complexity (from 6 to 5)
             /** Set current match round rating number and placing for participants */
             _setRatingAndPlacing: function () {
                 var rating = 0, // Equal sum gives the same rating

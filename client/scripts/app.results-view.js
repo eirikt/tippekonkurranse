@@ -1,6 +1,6 @@
 /* global define:false, wait:false, isTouchDevice:false */
-define(["jquery", "underscore", "backbone", "moment", "app.participant-score-view", "utils"],
-    function ($, _, Backbone, Moment, ParticipantScoreView, Utils) {
+define(["jquery", "underscore", "backbone", "moment", "moment.nb", "app.participant-score-view", "utils"],
+    function ($, _, Backbone, Moment, Moment_nb, ParticipantScoreView, Utils) {
         "use strict";
 
         var CurrentResults = Backbone.Model.extend({
@@ -14,7 +14,7 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
                     '  <div class="modal-content">' +
                     '    <div class="modal-header">' +
                     '      <button type="button" class="close" style="font-size:xx-large;font-weight:bold;" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-                    '      <span class="modal-title" style="font-size:large;" id="currentResultsLabel"><strong>Fotballresultater</strong>&nbsp;&nbsp;|&nbsp;&nbsp;<%= currentDate %></span>' +
+                    '      <span class="modal-title" style="font-size:large;" id="currentResultsLabel"><strong>Gjeldende fotballresultater</strong>&nbsp;&nbsp;|&nbsp;&nbsp;<%= currentDate %></span>' +
                     '    </div>' +
                     '    <div class="modal-body">' +
                     '      <table style="width:100%">' +
@@ -46,11 +46,15 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
                 // TODO: Extract these into small and cute Views ...
 
                 // Pretty date presentation
+                // TODO: consider one-time init of Moment.js language
+                Moment.lang("nb"); // language : norwegian bokmål (nb)
+                var momentJsDateFormat = "Do MMMM YYYY";
+
                 var date = this.model.get("currentDate");
                 if (date) {
-                    this.model.set("currentDate", "Tippeligarunde " + this.model.get("currentRound") + "&nbsp;&nbsp;|&nbsp;&nbsp;" + new Moment(date).format("DD. MMMM YYYY"), { silent: true });
+                    this.model.set("currentDate", "Tippeligarunde " + this.model.get("currentRound") + "&nbsp;&nbsp;|&nbsp;&nbsp;" + new Moment(date).format(momentJsDateFormat), { silent: true });
                 } else {
-                    this.model.set("currentDate", new Moment().format("DD. MMMM YYYY"), { silent: true });
+                    this.model.set("currentDate", new Moment().format(momentJsDateFormat), { silent: true });
                 }
 
                 // Pretty tabell presentation
@@ -163,12 +167,12 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
 
             render: function () {
                 var self = this,
-                    addParticipant = function ($el, participantResult, index) {
+                    addParticipant = function ($el, participantResult) {
                         $el.append(new ParticipantScoreView({ model: participantResult.toJSON() }).render().el);
                     },
-                    delayedAddParticipant = function (timeOutInMillis, $el, participantResult, index) {
+                    delayedAddParticipant = function (timeOutInMillis, $el, participantResult) {
                         var dfd = $.Deferred();
-                        addParticipant($el, participantResult, index);
+                        addParticipant($el, participantResult);
                         Utils.wait(timeOutInMillis).then(function () {
                             dfd.resolve();
                         });
@@ -202,7 +206,7 @@ define(["jquery", "underscore", "backbone", "moment", "app.participant-score-vie
                     // Underscore: Partially apply a function by filling in any number of its arguments, without changing its dynamic this value.
                     // You may pass _ in your list of arguments to specify an argument that should not be pre-filled, but left open to supply at call-time.
                     sortedParticipant = this.collection.at(i);
-                    delayedParticipantFunc = _.partial(delayedParticipantFunc, delayInMillis, $tbody, sortedParticipant, i);
+                    delayedParticipantFunc = _.partial(delayedParticipantFunc, delayInMillis, $tbody, sortedParticipant);
 
                     delayedAddingOfParticipantInTableFuncs.push(delayedParticipantFunc);
                 }

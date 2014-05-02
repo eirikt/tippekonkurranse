@@ -24,8 +24,6 @@ It is in production [here][1].
 
 ## Version history/roadmap
 
-_Status: In progress_
-
 #### v1.2.x
 * More cool graphs and whatnot
 
@@ -52,7 +50,7 @@ _Status: In progress_
 * Better touch device UX: uniform finger-friendly buttons
 * Better touch device UX: remove hover striping
 * Better touch device UX: colours and font sizes
-* Bugfix: Previous rating number (+ improved presentation)
+* Bugfix: Previous rating number (+ improved UX)
 
 _Status: Done_
 

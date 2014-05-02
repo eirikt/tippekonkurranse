@@ -500,6 +500,70 @@ var __ = require("underscore"),
     },
 
 
+    _dataForRound201406 = exports.round201406 = {
+        year: 2014,
+        round: 6,
+        date: "2014-05-01",
+        tippeliga: [
+            { name: "Molde", no: 1, matches: 6 },
+            { name: "Viking", no: 2, matches: 6 },
+            { name: "Strømsgodset", no: 3, matches: 6 },
+            { name: "Rosenborg", no: 4, matches: 6 },
+            { name: "Vålerenga", no: 5, matches: 6 },
+            { name: "Odd", no: 6, matches: 6 },
+            { name: "Stabæk", no: 7, matches: 6 },
+            { name: "Lillestrøm", no: 8, matches: 6 },
+            { name: "Sarpsborg 08", no: 9, matches: 6 },
+            { name: "Start", no: 10, matches: 6 },
+            { name: "Bodø/Glimt", no: 11, matches: 6 },
+            { name: "Haugesund", no: 12, matches: 6 },
+            { name: "Sandnes Ulf", no: 13, matches: 6 },
+            { name: "Sogndal", no: 14, matches: 6 },
+            { name: "Brann", no: 15, matches: 6 },
+            { name: "Aalesund", no: 16, matches: 6 }
+        ],
+        toppscorer: [
+            "Vidar Örn Kjartansson"
+        ],
+        adeccoliga: [
+            { name: "Tromsø", no: 1, matches: 5 },
+            { name: "Mjøndalen", no: 2, matches: 5 },
+            { name: "Hødd", no: 3, matches: 5 },
+            { name: "Sandefjord", no: 4, matches: 5 },
+            { name: "Bærum", no: 5, matches: 5 },
+            { name: "Nest-Sotra", no: 6, matches: 5 },
+            { name: "Tromsdalen", no: 7, matches: 5 },
+            { name: "Kristiansund BK", no: 8, matches: 5 },
+            { name: "Alta", no: 9, matches: 5 },
+            { name: "Fredrikstad", no: 10, matches: 5 },
+            { name: "Strømmen", no: 11, matches: 5 },
+            { name: "Ranheim", no: 12, matches: 5 },
+            { name: "Bryne", no: 13, matches: 5 },
+            { name: "Hønefoss", no: 14, matches: 5 },
+            { name: "HamKam", no: 15, matches: 5 },
+            { name: "Ullensaker/Kisa", no: 16, matches: 5 }
+        ],
+        remainingCupContenders: [
+            "Bodø/Glimt",
+            "Brann",
+            "Haugesund",
+            "Lillestrøm",
+            "Molde",
+            "Odd",
+            "Rosenborg",
+            "Sandnes Ulf",
+            "Sarpsborg 08",
+            "Sogndal",
+            "Stabæk",
+            "Start",
+            "Strømsgodset",
+            "Viking",
+            "Vålerenga",
+            "Aalesund"
+        ]
+    },
+
+
     _getTippeligaTable2013 = exports.getTippeligaTable2013 = function () {
         "use strict";
         return [

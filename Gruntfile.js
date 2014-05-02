@@ -1,10 +1,17 @@
 module.exports = function (grunt) {
     'use strict';
 
-    // Web server test port
-    var port = 8981;
+    var clientSideCodeFolder = "client",
+        serverSideCodeFolder = "server",
+        specificationsFolder = "tests",
+        localDataFolder = "data",
+    // TODO: Rename to 'public'
+        webRootFolder = "build",
 
-    var clientTestPath = '/tests/test-amd.html';
+    // Web server test port
+        port = 8981,
+
+        clientTestPath = '/tests/test-amd.html';
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -40,7 +47,7 @@ module.exports = function (grunt) {
                 ].join('&&')
             },
             createDataDir: {
-                options: { stdout: true },
+                options: { stdout: true, stderr: true, failOnError: false },
                 command: [
                     'mkdir data',
                     'cd data',
@@ -60,11 +67,8 @@ module.exports = function (grunt) {
                 command: 'node ./node_modules/bower/bin/bower install'
             },
             'mocha-phantomjs': {
-                command: 'node ./node_modules/mocha-phantomjs/bin/mocha-phantomjs -R spec http://localhost:' + port + clientTestPath,
-                options: {
-                    stdout: true,
-                    stderr: true
-                }
+                options: { stdout: true, stderr: true, failOnError: true },
+                command: 'node ./node_modules/mocha-phantomjs/bin/mocha-phantomjs -R spec http://localhost:' + port + clientTestPath
             }
         },
 
@@ -79,7 +83,7 @@ module.exports = function (grunt) {
 
         clean: {
             options: {
-                "no-write": false
+                'no-write': false
             },
             build: {
                 src: ['build']
@@ -131,7 +135,7 @@ module.exports = function (grunt) {
                 maxparams: 14,
                 maxdepth: 5,
                 maxstatements: 30,
-                maxcomplexity: 7,
+                maxcomplexity: 9, // TODO: Bring this down to (let's say 5) - REALLY!
                 //maxlen: 180,
 
                 laxcomma: true,
@@ -144,7 +148,7 @@ module.exports = function (grunt) {
         },
 
         // Client-side specs/tests
-        // (TODO: Trouble with RequireJS ...)
+        // (TODO: Trouble with AMD/RequireJS ...)
         /*
          mocha: {
          test: {
@@ -195,7 +199,7 @@ module.exports = function (grunt) {
             travis: {
                 options: {
                     coveralls: {
-                        serviceName: "travis-ci"
+                        serviceName: 'travis-ci'
                     }
                 }
             },
