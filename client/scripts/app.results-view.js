@@ -1,4 +1,5 @@
 /* global define:false, wait:false, isTouchDevice:false */
+/* jshint -W106 */
 define(["jquery", "underscore", "backbone", "moment", "moment.nb", "app.participant-score-view", "utils"],
     function ($, _, Backbone, Moment, Moment_nb, ParticipantScoreView, Utils) {
         "use strict";

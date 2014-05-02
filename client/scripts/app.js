@@ -1,5 +1,4 @@
 /* global define:false, console:false, $:false */
-
 define(['underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'app.result-collection', 'app.results-view', 'utils'],
 
     function (_, Backbone, $, Bootstrap, TippekonkurranseCurrentResultsCollection, TippekonkurranseCurrentResultsView, Utils) {
