@@ -37,7 +37,7 @@ _Status: In progress_
 _Status: In progress_
 
 
-#### v1.1.5 : _Delivery goal 11.05.2014_
+#### v1.1.5 : _Delivery goal 18.05.2014_
 * Revisit automatic reloading of web page
 * Simple countdown timer
 
@@ -46,7 +46,7 @@ _Status: In progress_
 
 #### v1.1.4 : _Delivery goal 05.05.2014_
 * An attempt to make better FaceBook URL presence (must be tested/verified live)
-* Offline capability/Resilient against Tippekonkurranse server dropouts
+* Offline capability / Resilient against Tippekonkurranse server dropouts
 * An attempt for improved response times with some caching
 * Bugfix: Previous rating number (+ improved UX)
 
