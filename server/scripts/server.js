@@ -4,7 +4,8 @@
 var env = process.env.NODE_ENV || "development",
 
 // Module dependencies, external
-    applicationRoot = __dirname,
+    applicationRootAbsolutePath = __dirname,
+    wwwRootRelativePath = "../../build",
     path = require("path"),
     http = require("http"),
     express = require("express"),
@@ -19,16 +20,8 @@ var env = process.env.NODE_ENV || "development",
     port = Number(process.env.PORT || 5000),
     server;
 
-// Seems not to be necessary ...
-// Serving of HTML5 AppCache manifest
-//app.get("/manifest.appcache", function(request, response) {
-//    "use strict";
-//    response.header("Content-Type", "text/cache-manifest; charset=utf-8");
-//    response.end("CACHE MANIFEST");
-//});
-
 // Static resources (AppCache candidate) (files)
-app.use(express.static(path.join(applicationRoot, "../../build")));
+app.use(express.static(path.join(applicationRootAbsolutePath, wwwRootRelativePath)));
 
 // TODO: Move URLs to common function in 'shared'
 
@@ -49,9 +42,6 @@ server.listen(port, function () {
 });
 
 
-// Development tweaks ...
-if (env === "development") {
-    // Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
-    root.overrideTippeligaDataWithYear = 2014;
-    root.overrideTippeligaDataWithRound = 7;
-}
+// Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
+global.overrideTippeligaDataWithYear = 2014;
+global.overrideTippeligaDataWithRound = 7;

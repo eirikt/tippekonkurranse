@@ -192,6 +192,7 @@ var env = process.env.NODE_ENV || "development",
                         console.log(logMsg + " => no need for updating db with new results");
 
                     } else {
+                        // TODO: No need for saving if round is a historic one (this round < latest stored round)
                         method = "UPDATE";
                         logMsg += " already stored with " + dbCount + " teams - current data has " + currentRoundCount + " teams";
                     }
@@ -385,10 +386,10 @@ var env = process.env.NODE_ENV || "development",
             round = request.params.round;
 
         // Override with stored tippeliga data => for statistics/history/development ...
-        if (env === "development") {
+        if ((!year || !round) && env === "development") {
             if (root.overrideTippeligaDataWithYear && root.overrideTippeligaDataWithRound) {
-                year = root.overrideTippeligaDataWithYear;
-                round = root.overrideTippeligaDataWithRound;
+                year = global.overrideTippeligaDataWithYear;
+                round = global.overrideTippeligaDataWithRound;
                 console.warn(utils.logPreamble() + "Overriding current Tippeliga results with stored data from year=" + year + " and round=" + round);
             }
         }
