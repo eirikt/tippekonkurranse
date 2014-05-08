@@ -1,11 +1,32 @@
 /* global define:false, wait:false, isTouchDevice:false */
 /* jshint -W106 */
-define(["jquery", "underscore", "backbone", "moment", "moment.nb", "app.participant-score-view", "utils"],
-    function ($, _, Backbone, Moment, Moment_nb, ParticipantScoreView, Utils) {
+define([
+        "jquery", "underscore", "backbone", "moment", "moment.nb",
+        "app.participant-score-view",
+        "backbone.offline", "utils"
+    ],
+    function ($, _, Backbone, Moment, Moment_nb, ParticipantScoreView, BackboneOffline, Utils) {
         "use strict";
 
         var CurrentResults = Backbone.Model.extend({
-            urlRoot: "/api/results/current"
+            urlRoot: "/api/results/current",
+            fetch: _.partial(BackboneOffline.localStorageFetch, {
+                "FetchableConstructorType": Backbone.Model,
+                "appName": "Tippekonkurranse",
+                "resourceUri": "/api/results/current"//,
+                //"triggerChange": true
+            })//,
+            /*
+             parse: function (response, options) {
+             //this.set(response);
+             //this.trigger("change");
+
+             if (options && options.error){
+             return this.set(response);
+             }
+             return response;
+             }
+             */
         });
 
 
@@ -18,6 +39,9 @@ define(["jquery", "underscore", "backbone", "moment", "moment.nb", "app.particip
                     '      <span class="modal-title" style="font-size:large;" id="currentResultsLabel"><strong>Gjeldende fotballresultater</strong>&nbsp;&nbsp;|&nbsp;&nbsp;<%= currentDate %></span>' +
                     '    </div>' +
                     '    <div class="modal-body">' +
+                    '      <p>' +
+                    '      <span id="offlineResultsNotification" class="hidden noconnection-container" data-appname="Tippekonkurranse" data-uri="/api/results/current" data-urititle="fotballresultater hentet" style="color:red;font-weight:bold;"></span>' +
+                    '      </p>' +
                     '      <table style="width:100%">' +
                     '        <tr>' +
                     '          <td style="width:33%;vertical-align:top;">' +
@@ -40,9 +64,36 @@ define(["jquery", "underscore", "backbone", "moment", "moment.nb", "app.particip
                     '  </div>' +
                     '</div>'
             ),
+
             initialize: function () {
+                //BackboneOffline.norwegianOfflineListener(".noconnection-container");
+                //this.listenTo(this.model, "error", this.renderMissingData);
+                //this.listenTo(this.model, "error", this.render);
                 this.listenTo(this.model, "change", this.render);
             },
+
+            /*
+             renderMissingData: function () {
+             this.$el.empty().append('' +
+             '<div class="modal-dialog">' +
+             '  <div class="modal-content">' +
+             '    <div class="modal-header">' +
+             '      <button type="button" class="close" style="font-size:xx-large;font-weight:bold;" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+             '      <span class="modal-title" style="font-size:large;" id="currentResultsLabel">' +
+             '        <strong>Gjeldende fotballresultater</strong>' +
+             '      </span>' +
+             '    </div>' +
+             '    <div class="modal-body">' +
+             '      <span>' +
+             '        Ingen kontakt med server, og ingen lokale mellomlagrede data - prøv igjen senere :-\\' +
+             '      </span>' +
+             '    </div>' +
+             '  </div>' +
+             '</div>');
+             return this;
+             },
+             */
+
             render: function () {
                 // TODO: Extract these into small and cute Views ...
 
@@ -53,9 +104,16 @@ define(["jquery", "underscore", "backbone", "moment", "moment.nb", "app.particip
 
                 var date = this.model.get("currentDate");
                 if (date) {
-                    this.model.set("currentDate", "Tippeligarunde " + this.model.get("currentRound") + "&nbsp;&nbsp;|&nbsp;&nbsp;" + new Moment(date).format(momentJsDateFormat), { silent: true });
+                    this.model.set("currentDate",
+                            "Tippeligarunde " + this.model.get("currentRound") +
+                            "&nbsp;&nbsp;|&nbsp;&nbsp;" + new Moment(date).format(momentJsDateFormat),
+                        { silent: true }
+                    );
                 } else {
-                    this.model.set("currentDate", new Moment().format(momentJsDateFormat), { silent: true });
+                    this.model.set("currentDate",
+                        new Moment().format(momentJsDateFormat),
+                        { silent: true }
+                    );
                 }
 
                 // Pretty tabell presentation
@@ -132,17 +190,17 @@ define(["jquery", "underscore", "backbone", "moment", "moment.nb", "app.particip
                     '<tr>' +
                     '  <th style="padding-left:2rem;width:3rem;"></th>' +
                     '  <th style="width:15rem;"></th>' +
-                    '  <th style="width:3rem;"></th>' +
                     '  <th style="width:5rem;"></th>' +
+                    '  <th style="width:7rem;"></th>' +
                     '  <th class="current-results" style="padding-left:3rem;">' +
                     '    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>' +
                     '  </th>' +
-                    '  <th style="text-align:center;color:darkgray;width:9rem;">Tabell</th>' +
-                    '  <th style="text-align:center;color:darkgray;width:9rem;">Pall</th>' +
-                    '  <th style="text-align:center;color:darkgray;width:10rem;">Nedrykk</th>' +
-                    '  <th style="text-align:center;color:darkgray;width:10rem;">Toppsk.</th>' +
-                    '  <th style="text-align:center;color:darkgray;width:10rem;">Opprykk</th>' +
-                    '  <th style="text-align:center;color:darkgray;width:10rem;">Cup</th>' +
+                    '  <th style="text-align:center;color:darkgray;width:8rem;">Tabell</th>' +
+                    '  <th style="text-align:center;color:darkgray;width:8rem;">Pall</th>' +
+                    '  <th style="text-align:center;color:darkgray;width:9rem;">Nedrykk</th>' +
+                    '  <th style="text-align:center;color:darkgray;width:9rem;">Toppsk.</th>' +
+                    '  <th style="text-align:center;color:darkgray;width:9rem;">Opprykk</th>' +
+                    '  <th style="text-align:center;color:darkgray;width:9rem;">Cup</th>' +
                     '</tr>' +
                     '</thead>' +
 

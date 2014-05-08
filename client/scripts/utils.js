@@ -4,9 +4,7 @@
 // Global helper functions
 ///////////////////////////////////////////////////////////////////////////////
 
-define([
-        "jquery"
-    ],
+define(["jquery"],
     function ($) {
         "use strict";
 
@@ -40,8 +38,7 @@ define([
             },
 
             isTouchDevice: function () {
-                var userAgent = navigator.userAgent;
-                return this.isTouchDeviceUserAgentString(userAgent);
+                return this.isTouchDeviceUserAgentString(navigator.userAgent);
             }
         };
     }

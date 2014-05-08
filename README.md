@@ -37,12 +37,20 @@ _Status: In progress_
 _Status: In progress_
 
 
-#### v1.1.4 : _Delivery goal 11.05.2014_
-* Better FaceBook URL presence: see http://stackoverflow.com/questions/1138460/how-does-facebook-sharer-select-images?lq=1
+#### v1.1.5 : _Delivery goal 11.05.2014_
 * Revisit automatic reloading of web page
 * Simple countdown timer
 
 _Status: In progress_
+
+
+#### v1.1.4 : _Delivery goal 05.05.2014_
+* An attempt to make better FaceBook URL presence (must be tested/verified live)
+* Offline capability/Resilient against Tippekonkurranse server dropouts
+* An attempt for improved response times with some caching
+* Bugfix: Previous rating number (+ improved UX)
+
+_Status: Done_
 
 
 #### v1.1.3 : _Delivery goal 28.04.2014_
@@ -50,7 +58,6 @@ _Status: In progress_
 * Better touch device UX: uniform finger-friendly buttons
 * Better touch device UX: remove hover striping
 * Better touch device UX: colours and font sizes
-* Bugfix: Previous rating number (+ improved UX)
 
 _Status: Done_
 
@@ -174,9 +181,6 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 
 #### v? : Proper URL
 * [Heroku/Custom domains][31]
-
-#### v? : Offline support
-* Create offline-capable solution just for the heck of it
 
 #### v? : Some kind of Facebook integration
 * User images

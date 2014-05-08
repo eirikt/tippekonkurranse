@@ -564,7 +564,73 @@ var __ = require("underscore"),
     },
 
 
-    _getTippeligaTable2013 = exports.getTippeligaTable2013 = function () {
+    _dataForRound201407 = exports.round201407 = {
+        year: 2014,
+        round: 7,
+        date: "2014-05-05",
+        tippeliga: [
+            { name: "Molde", no: 1, matches: 7 },
+            { name: "Strømsgodset", no: 2, matches: 7 },
+            { name: "Viking", no: 3, matches: 7 },
+            { name: "Vålerenga", no: 4, matches: 7},
+            { name: "Rosenborg", no: 5, matches: 7 },
+            { name: "Lillestrøm", no: 6, matches: 7 },
+            { name: "Sarpsborg 08", no: 7, matches: 7 },
+            { name: "Odd", no: 8, matches: 7 },
+            { name: "Stabæk", no: 9, matches: 7 },
+            { name: "Start", no: 10, matches: 7 },
+            { name: "Aalesund", no: 11, matches: 7 },
+            { name: "Bodø/Glimt", no: 12, matches: 7 },
+            { name: "Haugesund", no: 13, matches: 7 },
+            { name: "Brann", no: 14, matches: 7 },
+            { name: "Sandnes Ulf", no: 15, matches: 7 },
+            { name: "Sogndal", no: 16, matches: 7 }
+        ],
+        toppscorer: [
+            "Vidar Örn Kjartansson"
+        ],
+        adeccoliga: [
+            { name: "Tromsø", no: 1, matches: 5 },
+            { name: "Mjøndalen", no: 2, matches: 6 },
+            { name: "Sandefjord", no: 3, matches: 6 },
+            { name: "Nest-Sotra", no: 4, matches: 6 },
+            { name: "Hødd", no: 5, matches: 6 },
+            { name: "Kristiansund BK", no: 6, matches: 6 },
+            { name: "Alta", no: 7, matches: 6 },
+            { name: "Bærum", no: 8, matches: 6 },
+            { name: "Tromsdalen", no: 9, matches: 6},
+            { name: "Bryne", no: 10, matches: 6 },
+            { name: "Fredrikstad", no: 11, matches: 6 },
+            { name: "Strømmen", no: 12, matches: 6 },
+            { name: "Ranheim", no: 13, matches: 6 },
+            { name: "Hønefoss", no: 14, matches: 6},
+            { name: "Ullensaker/Kisa", no: 15, matches: 6 },
+            { name: "HamKam", no: 16, matches: 6 }
+        ],
+        remainingCupContenders: [
+            "Bodø/Glimt",
+            "Brann",
+            "Haugesund",
+            "Lillestrøm",
+            "Molde",
+            "Odd",
+            "Rosenborg",
+            "Sandnes Ulf",
+            "Sarpsborg 08",
+            "Sogndal",
+            "Stabæk",
+            "Start",
+            "Strømsgodset",
+            "Viking",
+            "Vålerenga",
+            "Aalesund"
+        ]
+    },
+
+
+
+
+_getTippeligaTable2013 = exports.getTippeligaTable2013 = function () {
         "use strict";
         return [
             { name: "Strømsgodset", no: 1, matches: 30 },

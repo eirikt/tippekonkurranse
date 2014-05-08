@@ -1,6 +1,7 @@
 module.exports = function (grunt) {
     'use strict';
 
+    // TODO: Consider declaring folder names ...
     var clientSideCodeFolder = "client",
         serverSideCodeFolder = "server",
         specificationsFolder = "tests",
@@ -98,7 +99,7 @@ module.exports = function (grunt) {
                 'server/scripts/**/*.js', '!server/scripts/fun.js', '!server/scripts/vendor/**/*.js',
                 'client/scripts/**/*.js',
                 'shared/scripts/**/*.js',
-                'tests/app/**/*.js', 'tests/specs/**/*.js', 'tests/*.js', 'tests/*.json'
+                'tests/**/*.js'
             ],
             options: {
                 //reporter: 'jslint',
@@ -135,7 +136,7 @@ module.exports = function (grunt) {
                 maxparams: 14,
                 maxdepth: 5,
                 maxstatements: 30,
-                maxcomplexity: 9, // TODO: Bring this down to (let's say 5) - REALLY!
+                maxcomplexity: 12, // TODO: Bring this down to (let's say 5) - REALLY!
                 //maxlen: 180,
 
                 laxcomma: true,
@@ -260,7 +261,8 @@ module.exports = function (grunt) {
                     'client/scripts/*.js',
                     'shared/scripts/*.js',
                     'client/styles/*.css',
-                    'client/index.html'
+                    'client/index.html',
+                    'client/manifest.appcache'
                 ],
                 tasks: ['copy']
             },

@@ -19,12 +19,23 @@ var env = process.env.NODE_ENV || "development",
     port = Number(process.env.PORT || 5000),
     server;
 
-// Static resources
+// Seems not to be necessary ...
+// Serving of HTML5 AppCache manifest
+//app.get("/manifest.appcache", function(request, response) {
+//    "use strict";
+//    response.header("Content-Type", "text/cache-manifest; charset=utf-8");
+//    response.end("CACHE MANIFEST");
+//});
+
+// Static resources (AppCache candidate) (files)
 app.use(express.static(path.join(applicationRoot, "../../build")));
 
-// Dynamic resources (RESTful service API)
 // TODO: Move URLs to common function in 'shared'
+
+// Static resources (AppCache candidate) (RESTful service API)
 app.get("/api/predictions/:userId", tippekonkurranseService.handlePredictionsRequest);
+
+// Dynamic resources (RESTful service API)
 app.get("/api/results/:year/:round", tippekonkurranseService.handleResultsRequest);
 app.get("/api/results/current", tippekonkurranseService.handleResultsRequest);
 app.get("/api/scores/:year/:round", tippekonkurranseService.handleScoresRequest);
@@ -41,6 +52,6 @@ server.listen(port, function () {
 // Development tweaks ...
 if (env === "development") {
     // Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
-    root.overrideTippeligaDataWithYear = null;
-    root.overrideTippeligaDataWithRound = null;
+    root.overrideTippeligaDataWithYear = 2014;
+    root.overrideTippeligaDataWithRound = 7;
 }

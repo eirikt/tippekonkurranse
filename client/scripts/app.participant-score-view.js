@@ -7,21 +7,14 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
             tagName: 'span',
             template: _.template('' +
                     '<span class="tendency-arrow"></span>' +
-                    '<small>' +
-                    '&nbsp;' +
-                    '<%= ratingDiff %>' +
-                    '&nbsp;&nbsp;' +
-                    '<%= sumDiff %>' +
-                    '</small>'
+                    '<small>&nbsp;<%= ratingDiff %></small>'
             ),
-            // TODO: reduce cyclic complexity (from 9 to 5)
             render: function () {
                 var plusThreshold = 3,
                     upwardTendency = this.model.previousRating - this.model.ratingHidden,
                     downwardTendency = this.model.ratingHidden - this.model.previousRating,
                     $tendency,
-                    ratingDiff = this.model.previousRating - this.model.ratingHidden,
-                    sumDiff = this.model.sum - this.model.previousSum;
+                    ratingDiff = this.model.previousRating - this.model.ratingHidden;
 
                 this.model.ratingDiff = "";
                 if (ratingDiff !== 0) {
@@ -29,14 +22,6 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
                         ratingDiff = "+" + ratingDiff;
                     }
                     this.model.ratingDiff = ratingDiff;
-                }
-
-                this.model.sumDiff = "";
-                if (sumDiff !== 0) {
-                    if (sumDiff > 0) {
-                        sumDiff = "+" + sumDiff;
-                    }
-                    this.model.sumDiff = "(" + sumDiff + "p)";
                 }
 
                 this.$el.append(this.template(this.model));
@@ -55,10 +40,25 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
                     $tendency.addClass('icon-down');
                 }
                 $tendency.removeClass('tendency-arrow');
-                $tendency.parent().attr('title',
-                        'Tendens sammenlignet med tippeligarunde ' + (this.model.round - 1) +
-                        ': endring i plassering, samt poengendring i parentes');
 
+                return this;
+            }
+        });
+
+
+        var SumTendencyView = Backbone.View.extend({
+            tagName: 'span',
+            template: _.template('<small><%= sumDiff %></small>'),
+            render: function () {
+                var sumDiff = this.model.sum - this.model.previousSum;
+                this.model.sumDiff = "";
+                if (sumDiff !== 0) {
+                    if (sumDiff > 0) {
+                        sumDiff = "+" + sumDiff;
+                    }
+                    this.model.sumDiff = "(" + sumDiff + "p)";
+                }
+                this.$el.append(this.template(this.model));
                 return this;
             }
         });
@@ -149,8 +149,13 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
             template: _.template('' +
                     '<td style="padding-left:2rem;text-align:right;"><span style="font-weight:bold;font-size:larger;"><%= rating %></span></td>' +
                     '<td><span style="font-weight:bold;font-size:larger;"><%= name %></span></td>' +
-                    '<td style="text-align:right;"><span style="font-weight:bold;font-size:larger;"><%= sum %></span></td>' +
-                    '<td class="tendency"></td>' +
+                    '<td class="rating-tendency"></td>' +
+                    '<td>' +
+                    '  <span style="white-space:nowrap;">' +
+                    '    <span style="font-weight:bold;font-size:larger;margin-right:.3rem;"><%= sum %></span>' +
+                    '    <span class="sum-tendency"></span>' +
+                    '  </span>' +
+                    '</td>' +
                     '<td class="prediction" style="padding-left:3rem;">' +
                     '  <button type="button" class="btn btn-sm btn-primary" data-id="<%= userId %>" data-toggle="modal" data-target="#predictionsTable"><%= name %>s tips</button>' +
                     '</td>' +
@@ -179,8 +184,11 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
 
                 this.$el.append(this.template(this.model));
 
-                // Add tendency marker
-                this.$(".tendency").append(new RatingTendencyView({ model: this.model }).render().el);
+                // Add rating tendency marker
+                this.$(".rating-tendency").append(new RatingTendencyView({ model: this.model }).render().el);
+
+                // Add sum tendency marker
+                this.$(".sum-tendency").append(new SumTendencyView({ model: this.model }).render().el);
 
                 // Configure modal predictions view
                 this.$(".prediction").on("click", function () {

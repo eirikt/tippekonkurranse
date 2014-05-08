@@ -1,6 +1,6 @@
 /* global define: false */
-define(["underscore", "backbone", "app.models.scoreModel", "app.result"],
-    function (_, Backbone, ScoreModel, ParticipantResult) {
+define(["underscore", "backbone", "app.models.scoreModel", "app.result", "backbone.offline"],
+    function (_, Backbone, ScoreModel, ParticipantResult, BackboneOffline) {
         "use strict";
 
         return Backbone.Collection.extend({
@@ -59,7 +59,21 @@ define(["underscore", "backbone", "app.models.scoreModel", "app.result"],
                 this.sort();
             },
 
+            fetch: _.partial(BackboneOffline.localStorageFetch, {
+                "FetchableConstructorType": Backbone.Collection,
+                "appName": "Tippekonkurranse",
+                "resourceUri": "/api/scores/current"//,
+                //"triggerChange": false
+            }),
+
             parse: function (response) {
+                if (response) {
+                    console.log('app-result-collection.parse() OK');
+                } else {
+                    // TODO: Why this second unnecessary invocation? Fix this!
+                    console.warn('app-result-collection.parse() :: No response parameter available, bypassing ...');
+                    return;
+                }
                 for (var participant in response.scores) {
                     if (response.scores.hasOwnProperty(participant)) {
                         var participantResult = new this.model(response.scores[participant]);
