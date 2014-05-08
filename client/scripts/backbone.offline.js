@@ -13,43 +13,36 @@ define(["underscore", "jquery", "backbone", "moment"],
          * @param elementSelector
          */
         var offlineListener = function (appNameDataElementName, appUriDataElementName, appUriTitleDataElementName, culture, elementSelector) {
-            var self = this;
+            var self = this,
+                elementSelectors = _.isArray(elementSelector) ? elementSelector : [elementSelector];
 
-            Backbone.Events.on("onserverconnection", function (uri) {
-                $(elementSelector).addClass("hidden").empty();
-            });
+            _.each(elementSelectors, function (elementSelector) {
+                Backbone.Events.on("onserverconnection", function () {
+                    $(elementSelector).addClass("hidden").empty();
+                });
+                Backbone.Events.on("onnoserverconnection", function () {
+                    _.each($(elementSelector), function (el) {
+                        var appName = el.dataset[appNameDataElementName],
+                            appUri = el.dataset[appUriDataElementName],
+                            appUriName = el.dataset[appUriTitleDataElementName],
+                            momentJsCulture = culture || "en",
+                            msg = null;
 
-            Backbone.Events.on("onnoserverconnection", function (uri) {
-                $.each($(elementSelector), function (index, el) {
-                    var appName = el.dataset[appNameDataElementName],
-                        appUri = el.dataset[appUriDataElementName],
-                        appUriName = el.dataset[appUriTitleDataElementName],
-                        momentJsCulture = culture || "en",
-                        msg = null;
+                        if (culture === "nb") {
+                            msg = "[" +
+                                "NB! Ingen kontakt med server, bruker " + appUriName + " " +
+                                "<em>" +
+                                self.getLocalStorageResourceAge(appName, appUri, momentJsCulture) +
+                                "</em>" +
+                                " så lenge ..." +
+                                "]";
 
-                    if (culture === "nb") {
-                        //if (uri === "/api/scores/current") {
-                        msg = "[" +
-                            "NB! Ingen kontakt med server, bruker " + appUriName + " " +
-                            "<em>" +
-                            self.getLocalStorageResourceAge(appName, appUri, momentJsCulture) +
-                            "</em>" +
-                            " så lenge ..." +
-                            "]";
-                        $(el).removeClass("hidden").empty().append(msg);
+                            $(el).removeClass("hidden").empty().append(msg);
 
-                        //} else if (uri === "/api/results/current") {
-                        //    //msg = "TODO: ...";
-                        //    //$(el).removeClass("hidden").empty().append(msg);
-                        //    console.warn("Element '" + elementSelector + "' with 'data-uri' parameter='" + uri + "' is missing");
-
-                        //} else {
-                        //    console.warn("No element '" + elementSelector + "' with 'data-uri' parameter='" + uri + "'");
-                        //}
-                    } else {
-                        console.warn("Culture '" + momentJsCulture + "' not yet implemented");
-                    }
-                    //$(el).removeClass("hidden").empty().append(msg);
+                        } else {
+                            console.warn("Culture '" + momentJsCulture + "' not yet implemented");
+                        }
+                    });
                 });
             });
         };
@@ -72,9 +65,7 @@ define(["underscore", "jquery", "backbone", "moment"],
                     opts = $.extend({
                         FetchableConstructorType: Backbone.Model,
                         appName: null,
-                        resourceUri: null//,
-                        //// TODO: Rename to triggerChangeOnParse
-                        //triggerChange: false
+                        resourceUri: null
                     }, options),
                     currentScoreResourceKey = opts.appName + opts.resourceUri,
                     resourceTimestampCacheKey = opts.appName + opts.resourceUri + ":timestamp",
@@ -96,7 +87,7 @@ define(["underscore", "jquery", "backbone", "moment"],
                         window.localStorage.setItem(resourceTimestampCacheKey, Date.now());
                         console.log("Resource '" + opts.resourceUri + "' stored in localStorage (client-side persistent cache) ...");
                     }
-                    Backbone.Events.trigger("onserverconnection"/*, opts.resourceUri*/);
+                    Backbone.Events.trigger("onserverconnection");
                 });
                 xhr.fail(function () {
                     if (window.localStorage) {
@@ -106,29 +97,15 @@ define(["underscore", "jquery", "backbone", "moment"],
                             cachedItem = window.localStorage.getItem(currentScoreResourceKey);
 
                         if (cachedItem) {
-                            //self.parse(JSON.parse(cachedItem), { error: true });
-                            /*if (!*/
+                            // Then run Backbone fetch success routine
                             self.set(self.parse(JSON.parse(cachedItem), options));
-                            /*) {
 
-                             }
-                             */
-                            //self.parse(JSON.parse(cachedItem));
                             console.warn("Resource '" + opts.resourceUri + "' not available - using cached version (from " + prettyCacheAge + ") ...");
                         } else {
                             console.warn("Resource '" + opts.resourceUri + "' not available - not even in cache ...");
-                            //opts.triggerChange = true;
                         }
-
-                        //if (opts.triggerChange) {
-                        //    if (isBackboneModel) {
-                        //        self.trigger("change");
-                        //    } else if (isBackboneCollection) {
-                        //        self.trigger("reset");
-                        //    }
-                        //}
                     }
-                    Backbone.Events.trigger("onnoserverconnection"/*, opts.resourceUri*/);
+                    Backbone.Events.trigger("onnoserverconnection");
                 });
             },
 

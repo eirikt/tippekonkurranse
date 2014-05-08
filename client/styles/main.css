@@ -55,7 +55,7 @@ h2, .h2 {
 }
 
 #currentResultsTable .modal-content {
-    width: 610px;
+    width: 625px;
     margin-top: 75px;
     background-image: linear-gradient(to bottom right, #ffffff 0%, #f96e00 50%);
 }
