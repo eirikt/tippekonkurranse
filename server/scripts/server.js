@@ -44,4 +44,4 @@ server.listen(port, function () {
 
 // Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
 global.overrideTippeligaDataWithYear = 2014;
-global.overrideTippeligaDataWithRound = 7;
+global.overrideTippeligaDataWithRound = null;

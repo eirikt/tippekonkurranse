@@ -74,7 +74,7 @@ define([
                         '    </div>' +
                         '    <div class="modal-body">' +
                         '      <p>' +
-                        '      <span id="offlineCurrentResultsNotification" class="hidden" data-appname="Tippekonkurranse" data-uri="/api/results/current" data-urititle="fotballresultater hentet" style="color:#d20000;font-weight:bold;"></span>' +
+                        '      <span id="offlineCurrentResultsNotification" class="hidden" data-appname="Tippekonkurranse" data-uri="/api/results/current" data-urititle="Disse fotballresultatene er hentet" style="color:#d20000;font-weight:bold;"></span>' +
                         '      </p>' +
                         '      <table style="width:100%">' +
                         '        <tr>' +
@@ -100,7 +100,7 @@ define([
                 ),
 
                 initialize: function () {
-                    this.listenTo(this.model, "change", this.render);
+                    this.listenTo(this.model, "change error", this.render);
                 },
 
                 render: function () {

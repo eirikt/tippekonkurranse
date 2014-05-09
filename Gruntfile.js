@@ -256,7 +256,7 @@ module.exports = function (grunt) {
         },
 
         watch: {
-            clientCode: {
+            clientcode: {
                 files: [
                     'client/scripts/*.js',
                     'shared/scripts/*.js',

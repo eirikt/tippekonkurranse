@@ -1,11 +1,12 @@
 CACHE MANIFEST
-# v1.1.4
+# v1.1.4.2
 
 CACHE:
 favicon.ico
 
 bower_components/bootstrap/dist/css/bootstrap.min.css
 bower_components/font-awesome/css/font-awesome.min.css
+bower_components/toastr/toastr.min.css
 styles/animations.css
 styles/main.css
 
@@ -20,6 +21,7 @@ bower_components/jquery/dist/jquery.min.js
 bower_components/moment/min/moment.min.js
 bower_components/moment/lang/nb.js
 bower_components/bootstrap/dist/js/bootstrap.min.js
+bower_components/toastr/toastr.min.js
 scripts/app.config.js
 scripts/app.js
 scripts/backbone.offline.js
@@ -31,6 +33,7 @@ scripts/app.results-view.js
 scripts/app.participant-score-view.js
 
 bower_components/jquery/dist/jquery.min.map
+bower_components/toastr/toastr.min.js.map
 
 # Client-side persistent resource caching
 api/predictions/einar

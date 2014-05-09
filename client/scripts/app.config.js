@@ -7,6 +7,7 @@ require.config({
         'backbone': '../bower_components/backbone/backbone',
         'moment': '../bower_components/moment/min/moment.min',
         'moment.nb': '../bower_components/moment/lang/nb',
+        'toastr': '../bower_components/toastr/toastr.min',
 
         // Shared lib files must be copied in during build step ('grunt run')
         'app.models.scoreModel': './app.models'

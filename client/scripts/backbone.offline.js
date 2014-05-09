@@ -1,6 +1,6 @@
 /* global define:false */
-define(["underscore", "jquery", "backbone", "moment"],
-    function (_, $, Backbone, Moment) {
+define(["underscore", "jquery", "backbone", "moment", "toastr"],
+    function (_, $, Backbone, Moment, toastr) {
         "use strict";
 
         /**
@@ -14,28 +14,48 @@ define(["underscore", "jquery", "backbone", "moment"],
          */
         var offlineListener = function (appNameDataElementName, appUriDataElementName, appUriTitleDataElementName, culture, elementSelector) {
             var self = this,
-                elementSelectors = _.isArray(elementSelector) ? elementSelector : [elementSelector];
+                elementSelectors = _.isArray(elementSelector) ? elementSelector : [elementSelector],
+                momentJsCulture = culture || "en";
+
+            Backbone.Events.on("onserverconnection", function (originUri) {
+                toastr.clear();
+            });
+
+            Backbone.Events.on("onnoserverconnection", function (originUri) {
+                console.warn("No server connection event ('onnoserverconnection') received from URI '" + originUri + "'");
+
+                // toastr demo: Display a warning toast, with no title
+                if (culture === "nb") {
+                    toastr.error('Oops, ingen kontakt med server for øyeblikket - ordner seg sikkert snart ...');
+                } else {
+                    console.warn("Culture '" + momentJsCulture + "' not yet implemented");
+                }
+            });
 
             _.each(elementSelectors, function (elementSelector) {
-                Backbone.Events.on("onserverconnection", function () {
+                Backbone.Events.on("onserverconnection", function (originUri) {
                     $(elementSelector).addClass("hidden").empty();
                 });
-                Backbone.Events.on("onnoserverconnection", function () {
+
+                Backbone.Events.on("onnoserverconnection", function (originUri) {
                     _.each($(elementSelector), function (el) {
                         var appName = el.dataset[appNameDataElementName],
                             appUri = el.dataset[appUriDataElementName],
                             appUriName = el.dataset[appUriTitleDataElementName],
-                            momentJsCulture = culture || "en",
+                            ageString = self.getLocalStorageResourceAge(appName, appUri, momentJsCulture),
                             msg = null;
 
                         if (culture === "nb") {
-                            msg = "[" +
-                                "NB! Ingen kontakt med server, bruker " + appUriName + " " +
-                                "<em>" +
-                                self.getLocalStorageResourceAge(appName, appUri, momentJsCulture) +
-                                "</em>" +
-                                " så lenge ..." +
-                                "]";
+                            if (ageString) {
+                                msg = "(" +
+                                    "NB! " + appUriName + " " +
+                                    "<em>" +
+                                    self.getLocalStorageResourceAge(appName, appUri, momentJsCulture) +
+                                    "</em>" +
+                                    ")";
+                            } else {
+                                msg = "<em>(NB! Ingen kontakt med server, og ingen mellomlagrede data tilgjengelig ...</em>)";
+                            }
 
                             $(el).removeClass("hidden").empty().append(msg);
 
@@ -87,7 +107,7 @@ define(["underscore", "jquery", "backbone", "moment"],
                         window.localStorage.setItem(resourceTimestampCacheKey, Date.now());
                         console.log("Resource '" + opts.resourceUri + "' stored in localStorage (client-side persistent cache) ...");
                     }
-                    Backbone.Events.trigger("onserverconnection");
+                    Backbone.Events.trigger("onserverconnection", opts.resourceUri);
                 });
                 xhr.fail(function () {
                     if (window.localStorage) {
@@ -105,7 +125,7 @@ define(["underscore", "jquery", "backbone", "moment"],
                             console.warn("Resource '" + opts.resourceUri + "' not available - not even in cache ...");
                         }
                     }
-                    Backbone.Events.trigger("onnoserverconnection");
+                    Backbone.Events.trigger("onnoserverconnection", opts.resourceUri);
                 });
             },
 

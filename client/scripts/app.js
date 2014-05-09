@@ -1,13 +1,17 @@
 /* global define:false, console:false, $:false */
 define([
-        'underscore', 'backbone', 'jquery', 'jquery.bootstrap',
+        'underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'toastr',
         'backbone.offline', 'utils',
         'app.result-collection', 'app.results-view'],
 
-    //window.year = 2014,
-
-    function (_, Backbone, $, Bootstrap, BackboneOffline, Please, TippekonkurranseCurrentResultsCollection, TippekonkurranseCurrentResultsView) {
+    function (_, Backbone, $, Bootstrap, toastr, BackboneOffline, Please, TippekonkurranseCurrentResultsCollection, TippekonkurranseCurrentResultsView) {
         "use strict";
+
+        // Toastr.js config (=> http://codeseven.github.io/toastr/demo.html)
+        toastr.options = {
+            "positionClass": "toast-top-full-width",
+            "timeOut": 4500
+        };
 
         var HeaderView = Backbone.View.extend({
             template: _.template('' +
@@ -15,7 +19,7 @@ define([
                     '  <span style="padding-left:2rem;">Tippekonkurranse <%= year %></span>' +
                     '  <span style="font-size:2rem;color:#808080;">&nbsp;&nbsp;|&nbsp;&nbsp;runde&nbsp;<%= round %></span>' +
                     '  <span style="font-size:2rem;color:#d3d3d3;">av 30</span>' +
-                    '  <span id="offlineScoresNotification" class="hidden" data-appname="Tippekonkurranse" data-uri="/api/scores/current" data-urititle="stillingen beregnet" style="margin-left:.5rem;font-size:2rem;color:#ef8d15;"></span>' +
+                    '  <span id="offlineScoresNotification" class="hidden" data-appname="Tippekonkurranse" data-uri="/api/scores/current" data-urititle="Denne stillingen er beregnet" style="margin-left:.5rem;font-size:1.5rem;font-weight:bold;color:#ef8d15;"></span>' +
                     '</h1>'
             ),
             initialize: function () {
@@ -30,7 +34,7 @@ define([
             }
         });
 
-        /** Application starting point (when DOM is ready ...) */
+        // Application starting point (when DOM is ready ...)
         $(document).ready(function () {
             console.log("DOM ready! Starting ...");
 

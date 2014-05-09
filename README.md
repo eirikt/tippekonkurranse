@@ -38,6 +38,7 @@ _Status: In progress_
 
 
 #### v1.1.5 : _Delivery goal 18.05.2014_
+* Improved notifications with toastr
 * Revisit automatic reloading of web page
 * Simple countdown timer
 
