@@ -148,44 +148,6 @@ module.exports = function (grunt) {
             }
         },
 
-        // Client-side specs/tests
-        // (TODO: Trouble with AMD/RequireJS ...)
-        /*
-         mocha: {
-         test: {
-         src: [
-         //'tests/test.html'
-         'tests/test-amd.html'
-         ]
-         },
-         options: {
-         run: false,
-         log: true,
-         logErrors: true,
-
-         //reporter: 'XUnit'
-         //reporter: 'List'
-         reporter: 'Spec'
-         }
-         },
-         */
-
-        // Client-side specs/tests
-        // (TODO: Another plugin tailored for AMD/RequireJS and PhantomJS)
-        /*
-         mocha_require_phantom: {
-         options: {
-         //base: 'D:\\workspace\\Tippekonkurranse\\tests',
-         //base: 'D:\\workspace\\Tippekonkurranse\\tests',
-         main: 'test.config.js',
-         requireLib: 'bower_components/requirejs/require.js',
-         files: ['specs/model-test.spec.js']
-         },
-         target: {
-         }
-         },
-         */
-
         // Server-side/Node.js specs/tests
         mochaTest: {
             test: {
@@ -290,9 +252,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.loadNpmTasks('grunt-shell');
-    //grunt.loadNpmTasks('grunt-mocha');
     grunt.loadNpmTasks('grunt-mocha-test');
-    //grunt.loadNpmTasks('grunt-mocha-require-phantom');
     grunt.loadNpmTasks('grunt-mocha-cov');
     grunt.loadNpmTasks('grunt-jsdoc');
 
@@ -300,10 +260,9 @@ module.exports = function (grunt) {
     grunt.registerTask('install:client', ['shell:install-client']);
     grunt.registerTask('mongodb', ['shell:createDataDir', 'shell:mongod']);
 
-    grunt.registerTask('build:client', ['clean', 'copy']); // dev task mode
-    //grunt.registerTask('build:client', ['clean', 'copy', 'uglify', 'cssmin']);
+    //grunt.registerTask('build:client', ['clean', 'copy']); // dev task mode
+    grunt.registerTask('build:client', ['clean', 'copy', 'uglify', 'cssmin']);
 
-    //grunt.registerTask('test:client', ['mocha', 'mocha_require_phantom']);
     grunt.registerTask('test:client', ['connect', 'shell:mocha-phantomjs']);
 
     grunt.registerTask('test:server', ['mochaTest']);
