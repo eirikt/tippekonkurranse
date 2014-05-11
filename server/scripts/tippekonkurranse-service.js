@@ -429,26 +429,24 @@ var env = process.env.NODE_ENV || "development",
     _handleResultsRequest = exports.handleResultsRequest =
         function (request, response) {
             "use strict";
-            var curriedHandleRequest =
-                curry(_handleRequest)(
-                    RQ.sequence([
-                        curry(_dispatchResultsToClientForPresentation)(response)
-                    ])
-                );
+            var curriedHandleRequest = curry(_handleRequest)(
+                RQ.sequence([
+                    curry(_dispatchResultsToClientForPresentation)(response)
+                ])
+            );
             curriedHandleRequest(request, response);
         },
 
     _handleScoresRequest = exports.handleScoresRequest =
         function (request, response) {
             "use strict";
-            var curriedHandleRequest =
-                curry(_handleRequest)(
-                    RQ.sequence([
-                        _getTippekonkurranseScores,
-                        _addPreviousMatchRoundSumToEachParticipant,
-                        curry(_dispatchScoresToClientForPresentation)(response),
-                        _storeTippeligaRoundMatchData
-                    ])
-                );
+            var curriedHandleRequest = curry(_handleRequest)(
+                RQ.sequence([
+                    _getTippekonkurranseScores,
+                    _addPreviousMatchRoundSumToEachParticipant,
+                    curry(_dispatchScoresToClientForPresentation)(response),
+                    _storeTippeligaRoundMatchData
+                ])
+            );
             curriedHandleRequest(request, response);
         };

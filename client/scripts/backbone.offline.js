@@ -26,7 +26,7 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
 
                 // toastr demo: Display a warning toast, with no title
                 if (culture === "nb") {
-                    toastr.error('Oops, ingen kontakt med server for øyeblikket - ordner seg sikkert snart ...');
+                    toastr.error('Oops, ingen kontakt med server for øyeblikket - det ordner seg sikkert snart ...');
                 } else {
                     console.warn("Culture '" + momentJsCulture + "' not yet implemented");
                 }
@@ -54,7 +54,7 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
                                     "</em>" +
                                     ")";
                             } else {
-                                msg = "<em>(NB! Ingen kontakt med server, og ingen mellomlagrede data tilgjengelig ...</em>)";
+                                msg = "<em>(NB! Ingen kontakt med server, og ingen mellomlagrede data tilgjengelig heller ...</em>)";
                             }
 
                             $(el).removeClass("hidden").empty().append(msg);

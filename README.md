@@ -16,7 +16,7 @@ It is in production [here][1].
 
 ## Scope
 * Screen-scraping norwegian soccer result web pages
-* Simple calculations
+* Some prediction calculations
 * Simple multi-device-friendly presentation
 * Deployment to [Heroku][30]
 
@@ -33,14 +33,14 @@ _Status: In progress_
 #### v1.2 : _Delivery goal 01.06.2014_
 * Some simple presentation of historic data
 * Multiple draggable windows (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
+* Revisit automatic reloading of web page
+* Simple countdown timer
 
 _Status: In progress_
 
 
 #### v1.1.5 : _Delivery goal 18.05.2014_
 * Improved notifications with toastr
-* Revisit automatic reloading of web page
-* Simple countdown timer
 
 _Status: In progress_
 
@@ -188,6 +188,9 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 * Better FaceBook URL presence: see http://stackoverflow.com/questions/1138460/how-does-facebook-sharer-select-images?lq=1
 * Inline presentation of tippekonkurranse standings ...
 * Create FaceBook custom story? (see https://developers.facebook.com/docs/opengraph)
+
+#### v? : Better Apple presence
+* Bookmark images
 
 #### v? : Public and official (hopefully) Tippeliga data service
 * Verify/validate data micro-formats in use

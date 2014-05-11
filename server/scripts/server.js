@@ -38,10 +38,13 @@ app.get("/api/scores/current", tippekonkurranseService.handleScoresRequest);
 server = http.createServer(app);
 server.listen(port, function () {
     "use strict";
-    console.log(utils.logPreamble() + "Tippekonkurranse, Node.js Express server (%s) listening on port %d", env, port);
+    console.log(utils.logPreamble() + "Tippekonkurranse, Node.js Express (%s) server listening on port %d", env, port);
 });
 
 
-// Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
-global.overrideTippeligaDataWithYear = 2014;
-global.overrideTippeligaDataWithRound = null;
+// Development tweaks ...
+if (env === "development") {
+    // Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
+    root.overrideTippeligaDataWithYear = 2014;
+    root.overrideTippeligaDataWithRound = 7;
+}
