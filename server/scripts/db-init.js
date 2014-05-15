@@ -15,7 +15,7 @@ mongoose = require("mongoose"),
 // Connect to database via Mongoose
 mongoose.connect(dbUrl);
 
-if (env === "development") {
+//if (env === "development") {
     // Baseline data
     dbData.persistRound1();
     dbData.persistRound2();
@@ -26,4 +26,5 @@ if (env === "development") {
     dbData.persistRound7();
     dbData.persistRound8();
     //dbData.persistRound9();
-}
+    //dbData.persistRound10();
+//}
