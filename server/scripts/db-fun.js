@@ -53,7 +53,7 @@ var dbSchema = require("./db-schema.js"),
                 for (var attr in soccerResultService.round201402) {
                     round2[attr] = soccerResultService.round201402[attr];
                 }
-                round2.save(function (err, round1) {
+                round2.save(function (err, round2) {
                     console.log(utils.logPreamble() + "Tippeliga 2014 round #2 saved... OK");
                 });
             }
@@ -74,7 +74,7 @@ var dbSchema = require("./db-schema.js"),
                 for (var attr in soccerResultService.round201403) {
                     round3[attr] = soccerResultService.round201403[attr];
                 }
-                round3.save(function (err, round1) {
+                round3.save(function (err, round3) {
                     console.log(utils.logPreamble() + "Tippeliga 2014 round #3 saved... OK");
                 });
             }
@@ -95,7 +95,7 @@ var dbSchema = require("./db-schema.js"),
                 for (var attr in soccerResultService.round201404) {
                     round4[attr] = soccerResultService.round201404[attr];
                 }
-                round4.save(function (err, round1) {
+                round4.save(function (err, round4) {
                     console.log(utils.logPreamble() + "Tippeliga 2014 round #4 saved... OK");
                 });
             }
@@ -116,7 +116,7 @@ var dbSchema = require("./db-schema.js"),
                 for (var attr in soccerResultService.round201405) {
                     round4[attr] = soccerResultService.round201405[attr];
                 }
-                round4.save(function (err, round1) {
+                round4.save(function (err, round5) {
                     console.log(utils.logPreamble() + "Tippeliga 2014 round #5 saved... OK");
                 });
             }
@@ -137,7 +137,7 @@ var dbSchema = require("./db-schema.js"),
                 for (var attr in soccerResultService.round201406) {
                     round4[attr] = soccerResultService.round201406[attr];
                 }
-                round4.save(function (err, round1) {
+                round4.save(function (err, round6) {
                     console.log(utils.logPreamble() + "Tippeliga 2014 round #6 saved... OK");
                 });
             }
@@ -158,8 +158,50 @@ var dbSchema = require("./db-schema.js"),
                 for (var attr in soccerResultService.round201407) {
                     round4[attr] = soccerResultService.round201407[attr];
                 }
-                round4.save(function (err, round1) {
+                round4.save(function (err, round7) {
                     console.log(utils.logPreamble() + "Tippeliga 2014 round #7 saved... OK");
+                });
+            }
+        });
+    },
+
+    persistRound8 = exports.persistRound8 = function () {
+        "use strict";
+        dbSchema.TippeligaRound.count({ year: 2014, round: 8 }, function (err, count) {
+            if (count > 0) {
+                console.log(utils.logPreamble() + "Tippeliga 2014 round #8 already exists in db");
+                if (count > 1) {
+                    console.warn(utils.logPreamble() + "Tippeliga 2014 round #8 has more than one document in db!");
+                    throw new Error("Tippeliga 2014 round #8 has more than one document in db!");
+                }
+            } else {
+                var round4 = new dbSchema.TippeligaRound();
+                for (var attr in soccerResultService.round201408) {
+                    round4[attr] = soccerResultService.round201408[attr];
+                }
+                round4.save(function (err, round8) {
+                    console.log(utils.logPreamble() + "Tippeliga 2014 round #8 saved... OK");
+                });
+            }
+        });
+    },
+
+    persistRound9 = exports.persistRound9 = function () {
+        "use strict";
+        dbSchema.TippeligaRound.count({ year: 2014, round: 9 }, function (err, count) {
+            if (count > 0) {
+                console.log(utils.logPreamble() + "Tippeliga 2014 round #9 already exists in db");
+                if (count > 1) {
+                    console.warn(utils.logPreamble() + "Tippeliga 2014 round #9 has more than one document in db!");
+                    throw new Error("Tippeliga 2014 round #9 has more than one document in db!");
+                }
+            } else {
+                var round4 = new dbSchema.TippeligaRound();
+                for (var attr in soccerResultService.round201409) {
+                    round4[attr] = soccerResultService.round201409[attr];
+                }
+                round4.save(function (err, round9) {
+                    console.log(utils.logPreamble() + "Tippeliga 2014 round #9 saved... OK");
                 });
             }
         });

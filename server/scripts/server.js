@@ -5,7 +5,8 @@ var env = process.env.NODE_ENV || "development",
 
 // Module dependencies, external
     applicationRootAbsolutePath = __dirname,
-    wwwRootRelativePath = "../../build",
+    productionWebRootRelativePath = "../../build",
+    developmentWebRootRelativePath = "../../client",
     path = require("path"),
     http = require("http"),
     express = require("express"),
@@ -21,7 +22,11 @@ var env = process.env.NODE_ENV || "development",
     server;
 
 // Static resources (AppCache candidate) (files)
-app.use(express.static(path.join(applicationRootAbsolutePath, wwwRootRelativePath)));
+if (env === "development") {
+    app.use(express.static(path.join(applicationRootAbsolutePath, developmentWebRootRelativePath)));
+} else {
+    app.use(express.static(path.join(applicationRootAbsolutePath, productionWebRootRelativePath)));
+}
 
 // TODO: Move URLs to common function in 'shared'
 
@@ -38,7 +43,7 @@ app.get("/api/scores/current", tippekonkurranseService.handleScoresRequest);
 server = http.createServer(app);
 server.listen(port, function () {
     "use strict";
-    console.log(utils.logPreamble() + "Tippekonkurranse, Node.js Express (%s) server listening on port %d", env, port);
+    console.log(utils.logPreamble() + "Tippekonkurranse, Node.js Express server listening on port %d in %s mode", port, env);
 });
 
 

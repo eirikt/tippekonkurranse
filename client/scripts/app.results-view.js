@@ -41,25 +41,80 @@ define([
             }),
 
             PrettyTabellView = Backbone.View.extend({
+                // TODO: tagName does not seem to work!?
+                //tagName: "table",
+                defaultFormat: "0+0",
+                initialize: function () {
+                    this.format = _.toArray(arguments)[0].format || this.defaultFormat;
+                    if (this.model instanceof Backbone.Model) {
+                        this.model = this.model.toJSON();
+                    }
+                },
+                getNormalTableRow: function (team) {
+                    return '' +
+                        '<tr>' +
+                        '  <td style="color:#5c5c5c;font-weight:bold;text-align:right;">' + team.no + '.&nbsp;</td>' +
+                        '  <td style="color:#5c5c5c;font-weight:bold;">(' + team.matches + ')&nbsp;</td>' +
+                        '  <td style="color:#5c5c5c;font-weight:bold;">' + team.name + '</td>' +
+                        '</tr>';
+                },
+                getEmphasizedTableRow: function (team) {
+                    return '' +
+                        '<tr>' +
+                        '  <td style="font-weight:bold;text-align:right;">' + team.no + '.&nbsp;</td>' +
+                        '  <td style="font-weight:bold;">(' + team.matches + ')&nbsp;</td>' +
+                        '  <td style="font-weight:bold;">' + team.name + '</td>' +
+                        '</tr>';
+                },
                 render: function () {
-                    this.el = _.reduce(this.model, function (result, team, index) {
-                        if (index < 3 || index > 13) {
-                            return result +=
-                                "<tr>" +
-                                "  <td style='font-weight:bold;text-align:right;'>" + team.no + ".&nbsp;</td>" +
-                                "  <td style='font-weight:bold;'>(" + team.matches + ")&nbsp;</td>" +
-                                "  <td style='font-weight:bold;'>" + team.name + "</td>" +
-                                "</tr>";
-                        } else {
-                            return result +=
-                                "<tr>" +
-                                "  <td style='color:#5c5c5c;font-weight:bold;text-align:right;'>" + team.no + ".&nbsp;</td>" +
-                                "  <td style='color:#5c5c5c;font-weight:bold;'>(" + team.matches + ")&nbsp;</td>" +
-                                "  <td style='color:#5c5c5c;font-weight:bold;'>" + team.name + "</td>" +
-                                "</tr>";
+                    var self = this,
+                        teamEmphasizeArray = this.format.split("+", 2),
+                        numberOfTeamsToEmphasizeAtStart = teamEmphasizeArray[0],
+                        numberOfTeamsToEmphasizeAtEnd = teamEmphasizeArray[1];
+                    this.$el.empty();
+                    _.each(this.model, function (team, index) {
+                        switch (index) {
+                            case 0:
+                                if (numberOfTeamsToEmphasizeAtStart > 0) {
+                                    self.$el.append(self.getEmphasizedTableRow(team));
+                                } else {
+                                    self.$el.append(self.getNormalTableRow(team));
+                                }
+                                break;
+                            case 1:
+                                if (numberOfTeamsToEmphasizeAtStart > 1) {
+                                    self.$el.append(self.getEmphasizedTableRow(team));
+                                } else {
+                                    self.$el.append(self.getNormalTableRow(team));
+                                }
+                                break;
+                            case 2:
+                                if (numberOfTeamsToEmphasizeAtStart > 2) {
+                                    self.$el.append(self.getEmphasizedTableRow(team));
+                                } else {
+                                    self.$el.append(self.getNormalTableRow(team));
+                                }
+                                break;
+                            case 14:
+                                if (numberOfTeamsToEmphasizeAtEnd > 1) {
+                                    self.$el.append(self.getEmphasizedTableRow(team));
+                                } else {
+                                    self.$el.append(self.getNormalTableRow(team));
+                                }
+                                break;
+                            case 15:
+                                if (numberOfTeamsToEmphasizeAtEnd > 0) {
+                                    self.$el.append(self.getEmphasizedTableRow(team));
+                                } else {
+                                    self.$el.append(self.getNormalTableRow(team));
+                                }
+                                break;
+                            default:
+                                self.$el.append(self.getNormalTableRow(team));
+                                break;
                         }
-                    }, "<table>");
-                    this.el += "</table>";
+                    });
+                    this.$el.wrapInner("<table/>");
                     return this;
                 }
             }),
@@ -98,11 +153,9 @@ define([
                         '  </div>' +
                         '</div>'
                 ),
-
                 initialize: function () {
                     this.listenTo(this.model, "change error", this.render);
                 },
-
                 render: function () {
                     // Always clone model before manipulating it/altering state
                     this.model = _.clone(this.model);
@@ -118,12 +171,18 @@ define([
                     this.model.set("currentDate", prettyDateView.render().el, { silent: true });
 
                     // Pretty tabell presentation
-                    var prettyTabellView = new PrettyTabellView({ model: this.model.get("currentTippeligaTable") });
-                    this.model.set("currentTippeligaTable", prettyTabellView.render().el, { silent: true });
+                    var prettyTabellView = new PrettyTabellView({
+                        model: this.model.get("currentTippeligaTable"),
+                        format: "3+2"
+                    });
+                    this.model.set("currentTippeligaTable", prettyTabellView.render().$el.html(), { silent: true });
 
                     // Pretty tabell presentation
-                    prettyTabellView = new PrettyTabellView({ model: this.model.get("currentAdeccoligaTable") });
-                    this.model.set("currentAdeccoligaTable", prettyTabellView.render().el, { silent: true });
+                    prettyTabellView = new PrettyTabellView({
+                        model: this.model.get("currentAdeccoligaTable"),
+                        format: "2+0"
+                    });
+                    this.model.set("currentAdeccoligaTable", prettyTabellView.render().$el.html(), { silent: true });
 
                     // Pretty toppskårer presentation
                     var cupContenders = this.model.get("currentTippeligaToppscorer");
@@ -142,10 +201,10 @@ define([
                     this.model.set("currentRemainingCupContenders", "Alle relevante ...", { silent: true });
 
                     this.$el.empty().append(this.template(this.model.toJSON()));
+
                     return this;
                 }
-            })
-            ;
+            });
 
 
         return Backbone.View.extend({

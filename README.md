@@ -16,7 +16,7 @@ It is in production [here][1].
 
 ## Scope
 * Screen-scraping norwegian soccer result web pages
-* Some prediction calculations
+* Simple calculations
 * Simple multi-device-friendly presentation
 * Deployment to [Heroku][30]
 
@@ -189,8 +189,8 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 * Inline presentation of tippekonkurranse standings ...
 * Create FaceBook custom story? (see https://developers.facebook.com/docs/opengraph)
 
-#### v? : Better Apple presence
-* Bookmark images
+#### v? : Better Apple/iOS presense
+* Bookmarking thumbnails
 
 #### v? : Public and official (hopefully) Tippeliga data service
 * Verify/validate data micro-formats in use

@@ -1,4 +1,4 @@
-/* global require: false */
+/* global require:false */
 require.config({
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',
@@ -9,9 +9,8 @@ require.config({
         'moment.nb': '../bower_components/moment/lang/nb',
         'toastr': '../bower_components/toastr/toastr.min',
 
-        // Shared lib files must be copied in during build step ('grunt run')
+        // Shared lib files must be copied in during build step ('copy')
         'app.models.scoreModel': './app.models'
-        //'app.models.scoreModel': '../../shared/scripts/app.models' // Dev setting
     },
     shim: {
         'jquery': {
@@ -29,5 +28,4 @@ require.config({
 });
 
 // Load and start
-require(['app'], function () {
-});
+require(['app']);

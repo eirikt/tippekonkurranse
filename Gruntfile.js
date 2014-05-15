@@ -31,6 +31,14 @@ module.exports = function (grunt) {
                 }
             }
         },
+        env: {
+            dev: {
+                NODE_ENV: 'development'
+            },
+            prod: {
+                NODE_ENV: 'production'
+            }
+        },
         shell: {
             help: {
                 options: { stdout: true, stderr: true, failOnError: true },
@@ -78,6 +86,11 @@ module.exports = function (grunt) {
                 files: [
                     { expand: true, cwd: 'client', src: ['**'], dest: 'build' },
                     { expand: true, cwd: 'shared', src: ['**'], dest: 'build' }
+                ]
+            },
+            shared: {
+                files: [
+                    { expand: true, cwd: 'shared', src: ['**'], dest: 'client' }
                 ]
             }
         },
@@ -251,6 +264,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
+    grunt.loadNpmTasks('grunt-env');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-mocha-cov');
@@ -260,17 +274,16 @@ module.exports = function (grunt) {
     grunt.registerTask('install:client', ['shell:install-client']);
     grunt.registerTask('mongodb', ['shell:createDataDir', 'shell:mongod']);
 
-    //grunt.registerTask('build:client', ['clean', 'copy']); // dev task mode
-    grunt.registerTask('build:client', ['clean', 'copy', 'uglify', 'cssmin']);
+    grunt.registerTask('build:client', ['clean', 'copy:all', 'uglify', 'cssmin']);
+    grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', 'mochacov:travis']);
 
     grunt.registerTask('test:client', ['connect', 'shell:mocha-phantomjs']);
-
     grunt.registerTask('test:server', ['mochaTest']);
     grunt.registerTask('coverage:server', ['mochacov:report']);
     grunt.registerTask('test', ['install:client', 'build:client', 'test:server', 'test:client']);
-    grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', 'mochacov:travis']);
 
-    grunt.registerTask('deploy:local', ['install:client', 'build:client', 'shell:run']);
+    grunt.registerTask('deploy:development', ['env:dev', 'install:client', 'copy:shared', 'shell:run']);
+    grunt.registerTask('deploy:local', ['env:prod', 'install:client', 'build:client', 'shell:run']);
     grunt.registerTask('deploy:production', ['install:client', 'build:client']);
     grunt.registerTask('deploy:heroku', ['deploy:production']);
 
@@ -295,7 +308,7 @@ module.exports = function (grunt) {
     //grunt.registerTask('heroku:development', 'clean less mincss');
     grunt.registerTask('heroku:production', ['deploy:heroku']);
 
-    grunt.registerTask('run', ['deploy:local']);
+    grunt.registerTask('run', ['deploy:development']);
 
     grunt.registerTask('default', ['help']);
 };
