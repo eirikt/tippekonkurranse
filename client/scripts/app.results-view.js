@@ -43,7 +43,10 @@ define([
             PrettyTabellView = Backbone.View.extend({
                 // TODO: tagName does not seem to work!?
                 //tagName: "table",
+
+                numberOfRowsInTable: 15,
                 defaultFormat: "0+0",
+
                 initialize: function () {
                     this.format = _.toArray(arguments)[0].format || this.defaultFormat;
                     if (this.model instanceof Backbone.Model) {
@@ -69,49 +72,17 @@ define([
                 render: function () {
                     var self = this,
                         teamEmphasizeArray = this.format.split("+", 2),
-                        numberOfTeamsToEmphasizeAtStart = teamEmphasizeArray[0],
-                        numberOfTeamsToEmphasizeAtEnd = teamEmphasizeArray[1];
+                        numberOfTeamsToEmphasizeAtStart = parseInt(teamEmphasizeArray[0], 10),
+                        numberOfTeamsToEmphasizeAtEnd = parseInt(teamEmphasizeArray[1], 10);
+
                     this.$el.empty();
                     _.each(this.model, function (team, index) {
-                        switch (index) {
-                            case 0:
-                                if (numberOfTeamsToEmphasizeAtStart > 0) {
-                                    self.$el.append(self.getEmphasizedTableRow(team));
-                                } else {
-                                    self.$el.append(self.getNormalTableRow(team));
-                                }
-                                break;
-                            case 1:
-                                if (numberOfTeamsToEmphasizeAtStart > 1) {
-                                    self.$el.append(self.getEmphasizedTableRow(team));
-                                } else {
-                                    self.$el.append(self.getNormalTableRow(team));
-                                }
-                                break;
-                            case 2:
-                                if (numberOfTeamsToEmphasizeAtStart > 2) {
-                                    self.$el.append(self.getEmphasizedTableRow(team));
-                                } else {
-                                    self.$el.append(self.getNormalTableRow(team));
-                                }
-                                break;
-                            case 14:
-                                if (numberOfTeamsToEmphasizeAtEnd > 1) {
-                                    self.$el.append(self.getEmphasizedTableRow(team));
-                                } else {
-                                    self.$el.append(self.getNormalTableRow(team));
-                                }
-                                break;
-                            case 15:
-                                if (numberOfTeamsToEmphasizeAtEnd > 0) {
-                                    self.$el.append(self.getEmphasizedTableRow(team));
-                                } else {
-                                    self.$el.append(self.getNormalTableRow(team));
-                                }
-                                break;
-                            default:
-                                self.$el.append(self.getNormalTableRow(team));
-                                break;
+                        if (numberOfTeamsToEmphasizeAtStart > index) {
+                            self.$el.append(self.getEmphasizedTableRow(team));
+                        } else if (numberOfTeamsToEmphasizeAtEnd > self.numberOfRowsInTable - index) {
+                            self.$el.append(self.getEmphasizedTableRow(team));
+                        } else {
+                            self.$el.append(self.getNormalTableRow(team));
                         }
                     });
                     this.$el.wrapInner("<table/>");
@@ -251,19 +222,19 @@ define([
 
             render: function () {
                 var self = this,
-                    addParticipant = function ($el, participantResult) {
-                        $el.append(new ParticipantScoreView({ model: participantResult.toJSON() }).render().el);
+                    addParticipant = function ($el, participantScore) {
+                        $el.append(new ParticipantScoreView({ model: participantScore.toJSON() }).render().el);
                     },
-                    delayedAddParticipant = function (timeOutInMillis, $el, participantResult) {
+                    delayedAddParticipant = function (timeOutInMillis, $el, participantScore) {
                         var dfd = $.Deferred();
-                        addParticipant($el, participantResult);
+                        addParticipant($el, participantScore);
                         Utils.wait(timeOutInMillis).then(function () {
                             dfd.resolve();
                         });
                         return dfd.promise();
                     };
 
-                this.$el.append(this.template());
+                this.$el.empty().append(this.template());
                 if (Utils.isTouchDevice()) {
                     this.$("table").removeClass("table-hover");
                 }
@@ -276,7 +247,7 @@ define([
 
                 // Render all participant scores sequentially, one by one
                 var delayedAddingOfParticipantInTableFuncs = [],
-                    delayInMillis = 100,
+                    delayInMillis = 175,
                     $tbody = this.$("tbody"),
                     i,
                     sortedParticipant,

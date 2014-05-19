@@ -76,27 +76,22 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
              *
              * TODO: Document options properties ...
              * @param [options] {Object}
-             * @param FetchableConstructorType Either og Backbone.Collection or Backbone.Model
              * @param appName The application name, just for localStorage keys
-             * @param resourceUri The resource URI, just for localStorage keys
              */
             localStorageFetch: function (options) {
                 var self = this,
-                    opts = $.extend({
-                        FetchableConstructorType: Backbone.Model,
-                        appName: null,
-                        resourceUri: null
-                    }, options),
-                    currentScoreResourceKey = opts.appName + opts.resourceUri,
-                    resourceTimestampCacheKey = opts.appName + opts.resourceUri + ":timestamp",
-                    isBackboneModel = opts.FetchableConstructorType === Backbone.Model,
-                    isBackboneCollection = opts.FetchableConstructorType === Backbone.Collection,
+                    opts = $.extend({ appName: null }, options),
+                    url = self.url(),
+                    currentScoreResourceKey = opts.appName + url,
+                    resourceTimestampCacheKey = opts.appName + url + ":timestamp",
+                    isBackboneModel = this instanceof Backbone.Model,
+                    isBackboneCollection = this instanceof Backbone.Collection,
                     xhr = null;
 
                 if (isBackboneModel) {
-                    xhr = opts.FetchableConstructorType.prototype.fetch.apply(self);
+                    xhr = Backbone.Model.prototype.fetch.call(this);
                 } else if (isBackboneCollection) {
-                    xhr = opts.FetchableConstructorType.prototype.fetch.apply(self, { reset: true });
+                    xhr = Backbone.Collection.prototype.fetch.call(this, { reset: true });
                 } else {
                     throw new Error("Constructor function " + opts.FetchableConstructorType + " is not supported");
                 }
@@ -105,9 +100,9 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
                     if (window.localStorage) {
                         window.localStorage.setItem(currentScoreResourceKey, JSON.stringify(data));
                         window.localStorage.setItem(resourceTimestampCacheKey, Date.now());
-                        console.log("Resource '" + opts.resourceUri + "' stored in localStorage (client-side persistent cache) ...");
+                        console.log("Resource '" + url + "' stored in localStorage (client-side persistent cache) ...");
                     }
-                    Backbone.Events.trigger("onserverconnection", opts.resourceUri);
+                    Backbone.Events.trigger("onserverconnection", url);
                 });
                 xhr.fail(function () {
                     if (window.localStorage) {
@@ -120,12 +115,12 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
                             // Then run Backbone fetch success routine
                             self.set(self.parse(JSON.parse(cachedItem), options));
 
-                            console.warn("Resource '" + opts.resourceUri + "' not available - using cached version (from " + prettyCacheAge + ") ...");
+                            console.warn("Resource '" + url + "' not available - using cached version (from " + prettyCacheAge + ") ...");
                         } else {
-                            console.warn("Resource '" + opts.resourceUri + "' not available - not even in cache ...");
+                            console.warn("Resource '" + url + "' not available - not even in cache ...");
                         }
                     }
-                    Backbone.Events.trigger("onnoserverconnection", opts.resourceUri);
+                    Backbone.Events.trigger("onnoserverconnection", url);
                 });
             },
 

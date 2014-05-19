@@ -214,6 +214,11 @@ var env = process.env.NODE_ENV || "development",
 // TODO: spec/test this one!
     _getTippekonkurranseScores = function (requestion, arg) {
         "use strict";
+
+        if (!arg || arg.length < 1) {
+            throw new Error("Missing result data, check data parameters/origin status!");
+        }
+
         var currentTippeligaTable = arg[0],
             currentTippeligaToppscorer = arg[1],
             currentAdeccoligaTable = arg[2],
@@ -244,19 +249,6 @@ var env = process.env.NODE_ENV || "development",
         "use strict";
         var year = new Date().getFullYear(),
             currentStanding = {};
-
-        /*
-         if (arg.currentRound <= 1) {
-         return requestion({
-         currentMatchesCount: arg.currentMatchesCount,
-         currentStanding: currentStanding,
-         currentTippeligaTable: arg.currentTippeligaTable,
-         currentTippeligaToppscorer: arg.currentTippeligaToppscorer,
-         currentAdeccoligaTable: arg.currentAdeccoligaTable,
-         currentRemainingCupContenders: arg.currentRemainingCupContenders
-         });
-         }
-         */
 
         dbSchema.TippeligaRound.findOne({
                 year: year,
@@ -293,7 +285,7 @@ var env = process.env.NODE_ENV || "development",
 // TODO: spec/test this one!
     _dispatchScoresToClientForPresentation = function (response, requestion, arg) {
         "use strict";
-        response.send(JSON.stringify(arg.currentStanding));
+        response.json(arg.currentStanding);
         return requestion({
             // TODO: Move property names to common function in 'shared'
             currentMatchesCount: arg.currentMatchesCount,
@@ -316,8 +308,15 @@ var env = process.env.NODE_ENV || "development",
             currentRound: arg[5],
             currentDate: arg[6]
         };
-        response.send(JSON.stringify(res));
-        return requestion();
+        response.json(res);
+        return requestion({
+            // TODO: Move property names to common function in 'shared'
+            //currentMatchesCount: arg.currentMatchesCount,
+            currentTippeligaTable: arg[0],
+            currentTippeligaToppscorer: arg[1],
+            currentAdeccoligaTable: arg[2],
+            currentRemainingCupContenders: arg[3]
+        });
     },
 
 
@@ -357,6 +356,9 @@ var env = process.env.NODE_ENV || "development",
 
                 if (err) {
                     return requestion(undefined, err);
+                }
+                if (!tippeligaRound) {
+                    return requestion([]);
                 }
                 return requestion([
                     tippeligaRound.tippeliga,
@@ -421,26 +423,37 @@ var env = process.env.NODE_ENV || "development",
     _handlePredictionsRequest = exports.handlePredictionsRequest =
         function (request, response) {
             "use strict";
-            var userId = request.params.userId,
+            var year = parseInt(request.params.year, 10),
+                userId = request.params.userId,
+                predictions = null;
+
+            // TODO:
+            //predictions = predictions[year][userId];
+            if (year === 2014) {
                 predictions = predictions2014[userId];
-            response.send(200, JSON.stringify(predictions));
+                response.json(200, predictions);
+            } else {
+                response.json(404);
+            }
         },
 
     _handleResultsRequest = exports.handleResultsRequest =
         function (request, response) {
             "use strict";
-            var curriedHandleRequest = curry(_handleRequest)(
+            var resultsRequest = curry(_handleRequest)(
                 RQ.sequence([
-                    curry(_dispatchResultsToClientForPresentation)(response)
+                    curry(_dispatchResultsToClientForPresentation)(response),
+                    _storeTippeligaRoundMatchData
                 ])
             );
-            curriedHandleRequest(request, response);
+
+            resultsRequest(request, response);
         },
 
     _handleScoresRequest = exports.handleScoresRequest =
         function (request, response) {
             "use strict";
-            var curriedHandleRequest = curry(_handleRequest)(
+            var scoresRequest = curry(_handleRequest)(
                 RQ.sequence([
                     _getTippekonkurranseScores,
                     _addPreviousMatchRoundSumToEachParticipant,
@@ -448,5 +461,6 @@ var env = process.env.NODE_ENV || "development",
                     _storeTippeligaRoundMatchData
                 ])
             );
-            curriedHandleRequest(request, response);
+
+            scoresRequest(request, response);
         };

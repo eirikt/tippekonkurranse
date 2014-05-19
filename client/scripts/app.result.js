@@ -30,8 +30,19 @@ define(["underscore", "backbone", "app.models.scoreModel"],
             },
 
             /** Ascending sum */
-            sortBySum: function (model) {
-                return "" + model.get(ScoreModel.sum) + model.get(participantScore.participantNamePropertyName);
+            sortBySum: function (model, otherModel) {
+                var modelSum = model.get(ScoreModel.sum),
+                    otherModelSum = otherModel.get(ScoreModel.sum),
+                    modelName = model.get(participantScore.participantNamePropertyName),
+                    otherModelName = otherModel.get(participantScore.participantNamePropertyName);
+
+                if (modelSum > otherModelSum) {
+                    return 1;
+                }
+                if (modelSum < otherModelSum) {
+                    return -1;
+                }
+                return modelName > otherModelName;
             },
 
             /** Ascending previous sum */

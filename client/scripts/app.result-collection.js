@@ -4,11 +4,27 @@ define(["underscore", "backbone", "app.models.scoreModel", "app.result", "backbo
         "use strict";
 
         return Backbone.Collection.extend({
-            url: "/api/scores/current",
+            defaultBaseUri: "/api/scores",
+            defaultResource: "current",
+
             model: ParticipantResult,
             comparator: ParticipantResult.sortBySum,
+            // TODO
+            //model: ParticipantScore,
+            //comparator: ParticipantScore.sortBySum,
 
-            // TODO: reduce cyclic complexity (from 6 to 5)
+            year: null,
+            round: null,
+
+            initialize: function (options) {
+                if (options && options.year) {
+                    this.year = options.year;
+                }
+                if (options && options.round) {
+                    this.round = options.round;
+                }
+            },
+
             /** Set current match round rating number and placing for participants */
             _setRatingAndPlacing: function () {
                 var rating = 0, // Equal sum gives the same rating
@@ -59,28 +75,32 @@ define(["underscore", "backbone", "app.models.scoreModel", "app.result", "backbo
                 this.sort();
             },
 
-            fetch: _.partial(BackboneOffline.localStorageFetch, {
-                "FetchableConstructorType": Backbone.Collection,
-                "appName": "Tippekonkurranse",
-                "resourceUri": "/api/scores/current"
-            }),
+            url: function () {
+                if (this.year && this.round) {
+                    return [this.defaultBaseUri, this.year, this.round].join("/");
+                }
+                return [this.defaultBaseUri, this.defaultResource].join("/");
+            },
+
+            fetch: function () {
+                return BackboneOffline.localStorageFetch.call(this, { appName: "Tippekonkurranse" });
+            },
 
             parse: function (response) {
                 for (var participant in response.scores) {
                     if (response.scores.hasOwnProperty(participant)) {
-                        var participantResult = new this.model(response.scores[participant]);
-                        participantResult.set(ParticipantResult.participantRatingPropertyName, "", { silent: true });
-                        participantResult.set("userId", participant, { silent: true });
-                        participantResult.set(ParticipantResult.participantNamePropertyName, this.model.printableName(participant), { silent: true });
-                        participantResult.set(ParticipantResult.participantYearPropertyName, response.metadata.year, { silent: true });
-                        participantResult.set(ParticipantResult.participantRoundPropertyName, response.metadata.round, { silent: true });
+                        var participantScore = new this.model(response.scores[participant]);
+                        participantScore.set(ParticipantResult.participantRatingPropertyName, "", { silent: true });
+                        participantScore.set("userId", participant, { silent: true });
+                        participantScore.set(ParticipantResult.participantNamePropertyName, this.model.printableName(participant), { silent: true });
+                        participantScore.set(ParticipantResult.participantYearPropertyName, response.metadata.year, { silent: true });
+                        participantScore.set(ParticipantResult.participantRoundPropertyName, response.metadata.round, { silent: true });
 
-                        this.add(participantResult, { silent: true });
+                        this.add(participantScore, { silent: true });
                     }
                 }
                 this._setRatingAndPlacing();
                 this._setPreviousRatingAndPlacing();
-                this.trigger("reset");
             }
         });
     }

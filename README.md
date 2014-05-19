@@ -4,7 +4,7 @@ A simple [Node][50]-based web application,
 persisting data using [MongoDB][51],
 with server-side functional composition using [RQ][52],
 and keeping client-side somewhat tidy with [Backbone][53].
-It is in production [here][1].
+In production [here][1].
 
 [![Build Status](https://travis-ci.org/eirikt/tippekonkurranse.png?branch=master)](https://travis-ci.org/eirikt/tippekonkurranse)
 &nbsp;&nbsp;&nbsp;
@@ -35,18 +35,21 @@ _Status: In progress_
 * Multiple draggable windows (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
 * Revisit automatic reloading of web page
 * Simple countdown timer
+* More improved Facebook URL presence (large version)
 
 _Status: In progress_
 
 
 #### v1.1.5 : _Delivery goal 18.05.2014_
 * Improved notifications with toastr
+* Client-side routing established
+* Bugfix: Sorting of participant scores
 
-_Status: In progress_
+_Status: Done_
 
 
 #### v1.1.4 : _Delivery goal 05.05.2014_
-* An attempt to make better FaceBook URL presence (must be tested/verified live)
+* An attempt to make better Facebook URL presence ~~(must be tested/verified live)~~ yep, looks better
 * Offline capability / Resilient against Tippekonkurranse server dropouts
 * An attempt for improved response times with some caching
 * Bugfix: Previous rating number (+ improved UX)
@@ -185,9 +188,9 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 
 #### v? : Some kind of Facebook integration
 * User images
-* Better FaceBook URL presence: see http://stackoverflow.com/questions/1138460/how-does-facebook-sharer-select-images?lq=1
+* Better Facebook URL presence: see http://stackoverflow.com/questions/1138460/how-does-facebook-sharer-select-images?lq=1
 * Inline presentation of tippekonkurranse standings ...
-* Create FaceBook custom story? (see https://developers.facebook.com/docs/opengraph)
+* Create Facebook custom story? (see https://developers.facebook.com/docs/opengraph)
 
 #### v? : Better Apple/iOS presense
 * Bookmarking thumbnails
@@ -203,6 +206,9 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 #### v? : Public web app
 * Establish multi-tenant 'Tippeligakonkurranse' groups with full web-based user- and group administration
 
+#### v? : Misc improvements
+* Real SPA instead of the HTTP refresh
+* ~~Compress the wire with gzip~~ (Obsolete by AppCache usage really)
 
 
 ## License

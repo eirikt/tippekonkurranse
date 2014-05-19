@@ -20,7 +20,7 @@ define([
                     this.listenTo(this.collection, "reset", this.render);
                 },
                 render: function () {
-                    this.$el.append(this.template({
+                    this.$el.empty().append(this.template({
                             year: this.collection.at(0).get("year"),
                             round: this.collection.at(0).get("round")
                         }
@@ -31,30 +31,71 @@ define([
             onDomReady = function () {
                 console.log("DOM ready! Starting ...");
 
-                Please.wait(1650).then(function () {
-                    $("#intro").hide("slow", function () {
-                        var results = new TippekonkurranseCurrentResultsCollection(),
-                            headerView = new HeaderView({
-                                el: "header",
-                                collection: results
-                            }),
-                            resultsView = new TippekonkurranseCurrentResultsView({
-                                el: "#content",
-                                collection: results
+                // TODO: Move to file 'app.router.js'
+                var AppRouter = Backbone.Router.extend({
+                        routes: {
+                            "scores/:year/:round": "showHistoricScores",
+                            // Default
+                            '*actions': 'defaultAction'
+                        },
+                        showHistoricScores: function (year, round) {
+                            //console.log("showHistoricScores(" + year + ", " + round + ") ...");
+                            $("#content").hide("slow", function () {
+                                var results = new TippekonkurranseCurrentResultsCollection({ year: year, round: round }),
+                                    headerView = new HeaderView({
+                                        el: "header",
+                                        collection: results
+                                    }),
+                                    resultsView = new TippekonkurranseCurrentResultsView({
+                                        el: "#content",
+                                        collection: results
+                                    });
+
+                                $("header").removeClass("hidden");
+                                $("footer").removeClass("hidden");
+                                $("#intro").remove();
+
+                                results.fetch();
+
+                                $("#content").show();
                             });
+                        },
+                        defaultAction: function () {
+                            //console.log("defaultAction() ...");
+                            Please.wait(1650).then(function () {
+                                $("#intro").hide("slow", function () {
+                                    var results = new TippekonkurranseCurrentResultsCollection(),
+                                        headerView = new HeaderView({
+                                            el: "header",
+                                            collection: results
+                                        }),
+                                        resultsView = new TippekonkurranseCurrentResultsView({
+                                            el: "#content",
+                                            collection: results
+                                        });
 
-                        $("header").removeClass("hidden");
-                        $("footer").removeClass("hidden");
-                        $("#intro").remove();
+                                    $("header").removeClass("hidden");
+                                    $("footer").removeClass("hidden");
+                                    $("#intro").remove();
 
-                        results.fetch();
-                    });
+                                    results.fetch();
+                                });
+                            });
+                        }
+                    }),
+                    appRouter = new AppRouter();
+
+                Backbone.history.start({
+                    pushState: false,
+                    hashChange: true,
+                    root: "/"
                 });
 
                 BackboneOffline.listenToConnectivityDropouts([
                     "#offlineScoresNotification",
                     "#offlineCurrentResultsNotification"
                 ]);
+
             };
 
         // Toastr.js config (=> http://codeseven.github.io/toastr/demo.html)

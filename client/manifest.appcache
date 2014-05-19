@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# v1.1.4.5
+# v1.1.5
 
 CACHE:
 favicon.ico
@@ -36,19 +36,19 @@ bower_components/jquery/dist/jquery.min.map
 bower_components/toastr/toastr.min.js.map
 
 # Client-side persistent resource caching
-api/predictions/einar
-api/predictions/eirik
-api/predictions/geir
-api/predictions/hansbernhard
-api/predictions/jantore
-api/predictions/oddgeir
-api/predictions/oddvar
-api/predictions/oleerik
-api/predictions/rikard
-api/predictions/sveintore
-api/predictions/steinar
-api/predictions/tore
-api/predictions/trond
+api/predictions/2014/einar
+api/predictions/2014/eirik
+api/predictions/2014/geir
+api/predictions/2014/hansbernhard
+api/predictions/2014/jantore
+api/predictions/2014/oddgeir
+api/predictions/2014/oddvar
+api/predictions/2014/oleerik
+api/predictions/2014/rikard
+api/predictions/2014/sveintore
+api/predictions/2014/steinar
+api/predictions/2014/tore
+api/predictions/2014/trond
 
 NETWORK:
 *

@@ -5,7 +5,7 @@ module.exports = function (grunt) {
     var clientSideCodeFolder = "client",
         serverSideCodeFolder = "server",
         specificationsFolder = "tests",
-        localDataFolder = "data",
+        localDatabaseFolder = "data",
     // TODO: Rename to 'public'
         webRootFolder = "build",
 
@@ -149,7 +149,7 @@ module.exports = function (grunt) {
                 maxparams: 14,
                 maxdepth: 5,
                 maxstatements: 30,
-                maxcomplexity: 12, // TODO: Bring this down to (let's say 5) - REALLY!
+                maxcomplexity: 7, // TODO: Bring this down to... let's say 5 - YES, REALLY!
                 //maxlen: 180,
 
                 laxcomma: true,
