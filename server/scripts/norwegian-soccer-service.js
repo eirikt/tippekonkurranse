@@ -756,6 +756,70 @@ var __ = require("underscore"),
     },
 
 
+    _dataForRound2014010 = exports.round2014010 = {
+        year: 2014,
+        round: 10,
+        date: "2014-05-20",
+        tippeliga: [
+            { name: "Molde", no: 1, matches: 10 },
+            { name: "Strømsgodset", no: 2, matches: 10 },
+            { name: "Stabæk", no: 3, matches: 10 },
+            { name: "Viking", no: 4, matches: 10 },
+            { name: "Odd", no: 5, matches: 10 },
+            { name: "Vålerenga", no: 6, matches: 10 },
+            { name: "Rosenborg", no: 7, matches: 10 },
+            { name: "Lillestrøm", no: 8, matches: 10 },
+            { name: "Bodø/Glimt", no: 9, matches: 10 },
+            { name: "Sarpsborg 08", no: 10, matches: 10 },
+            { name: "Sogndal", no: 11, matches: 10 },
+            { name: "Start", no: 12, matches: 10 },
+            { name: "Brann", no: 13, matches: 10 },
+            { name: "Aalesund", no: 14, matches: 10 },
+            { name: "Sandnes Ulf", no: 15, matches: 10 },
+            { name: "Haugesund", no: 16, matches: 10 }
+        ],
+        toppscorer: [
+            "Vidar Örn Kjartansson"
+        ],
+        adeccoliga: [
+            { name: "Sandefjord", no: 1, matches: 9 },
+            { name: "Tromsø", no: 2, matches: 9 },
+            { name: "Mjøndalen", no: 3, matches: 9 },
+            { name: "Bærum", no: 4, matches: 9 },
+            { name: "Nest-Sotra", no: 5, matches: 9 },
+            { name: "Ranheim", no: 6, matches: 9 },
+            { name: "Kristiansund BK", no: 7, matches: 9 },
+            { name: "Hødd", no: 8, matches: 9 },
+            { name: "Strømmen", no: 9, matches: 9 },
+            { name: "Tromsdalen", no: 10, matches: 9 },
+            { name: "Alta", no: 11, matches: 9 },
+            { name: "Fredrikstad", no: 12, matches: 9 },
+            { name: "Bryne", no: 13, matches: 9 },
+            { name: "Hønefoss", no: 14, matches: 9 },
+            { name: "Ullensaker/Kisa", no: 15, matches: 9 },
+            { name: "HamKam", no: 16, matches: 9 }
+        ],
+        remainingCupContenders: [
+            "Bodø/Glimt",
+            "Brann",
+            "Haugesund",
+            "Lillestrøm",
+            "Molde",
+            "Odd",
+            "Rosenborg",
+            "Sandnes Ulf",
+            "Sarpsborg 08",
+            "Sogndal",
+            "Stabæk",
+            "Start",
+            "Strømsgodset",
+            "Viking",
+            "Vålerenga",
+            "Aalesund"
+        ]
+    },
+
+
     _getTippeligaTable2013 = exports.getTippeligaTable2013 = function () {
         "use strict";
         return [

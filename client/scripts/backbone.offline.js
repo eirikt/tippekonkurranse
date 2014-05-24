@@ -22,7 +22,7 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
             });
 
             Backbone.Events.on("onnoserverconnection", function (originUri) {
-                console.warn("No server connection event ('onnoserverconnection') received from URI '" + originUri + "'");
+                console.warn("Missing server connection event ('onnoserverconnection') received from URI '" + originUri + "'");
 
                 // toastr demo: Display a warning toast, with no title
                 if (culture === "nb") {
@@ -70,61 +70,6 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
         return {
 
             /**
-             * Drop-in replacement for Backbone fetch function,
-             * using localStorage as intermediary storage for retrieved resources,
-             * making the model or collection resilient against server connectivity dropouts ...
-             *
-             * TODO: Document options properties ...
-             * @param [options] {Object}
-             * @param appName The application name, just for localStorage keys
-             */
-            localStorageFetch: function (options) {
-                var self = this,
-                    opts = $.extend({ appName: null }, options),
-                    url = self.url(),
-                    currentScoreResourceKey = opts.appName + url,
-                    resourceTimestampCacheKey = opts.appName + url + ":timestamp",
-                    isBackboneModel = this instanceof Backbone.Model,
-                    isBackboneCollection = this instanceof Backbone.Collection,
-                    xhr = null;
-
-                if (isBackboneModel) {
-                    xhr = Backbone.Model.prototype.fetch.call(this);
-                } else if (isBackboneCollection) {
-                    xhr = Backbone.Collection.prototype.fetch.call(this, { reset: true });
-                } else {
-                    throw new Error("Constructor function " + opts.FetchableConstructorType + " is not supported");
-                }
-
-                xhr.done(function (data) {
-                    if (window.localStorage) {
-                        window.localStorage.setItem(currentScoreResourceKey, JSON.stringify(data));
-                        window.localStorage.setItem(resourceTimestampCacheKey, Date.now());
-                        console.log("Resource '" + url + "' stored in localStorage (client-side persistent cache) ...");
-                    }
-                    Backbone.Events.trigger("onserverconnection", url);
-                });
-                xhr.fail(function () {
-                    if (window.localStorage) {
-                        Moment.lang("en"); // Reset Moment.js culture (just to be sure, log messages in english ...)
-                        var cacheAge = new Date(JSON.parse(window.localStorage.getItem(resourceTimestampCacheKey))),
-                            prettyCacheAge = new Moment(cacheAge).fromNow(),
-                            cachedItem = window.localStorage.getItem(currentScoreResourceKey);
-
-                        if (cachedItem) {
-                            // Then run Backbone fetch success routine
-                            self.set(self.parse(JSON.parse(cachedItem), options));
-
-                            console.warn("Resource '" + url + "' not available - using cached version (from " + prettyCacheAge + ") ...");
-                        } else {
-                            console.warn("Resource '" + url + "' not available - not even in cache ...");
-                        }
-                    }
-                    Backbone.Events.trigger("onnoserverconnection", url);
-                });
-            },
-
-            /**
              * TODO: Document ...
              *
              * @param appName
@@ -161,6 +106,62 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
                     prettyTimestamp = new Moment(timestamp).fromNow();
                 }
                 return prettyTimestamp;
+            },
+
+            /**
+             * Drop-in replacement for Backbone fetch function,
+             * using localStorage as intermediary storage for retrieved resources,
+             * making the model or collection resilient against server connectivity dropouts ...
+             */
+            localStorageFetch: function () {
+                var self = this,
+                    url = self.url(),
+                    currentScoreResourceKey = self.name() + url,
+                    resourceTimestampCacheKey = self.name() + url + ":timestamp",
+                    isBackboneModel = this instanceof Backbone.Model,
+                    isBackboneCollection = this instanceof Backbone.Collection,
+                    xhr = null;
+
+                if (isBackboneModel) {
+                    xhr = Backbone.Model.prototype.fetch.call(this);
+                } else if (isBackboneCollection) {
+                    xhr = Backbone.Collection.prototype.fetch.call(this, { reset: true });
+                } else {
+                    throw new Error("Only Backbone.Model and Backbone.Collection constructor functions are supported");
+                }
+
+                xhr.done(function (data) {
+                    if (window.localStorage) {
+                        window.localStorage.setItem(currentScoreResourceKey, JSON.stringify(data));
+                        window.localStorage.setItem(resourceTimestampCacheKey, Date.now());
+                        console.log("Resource '" + url + "' stored in localStorage (client-side persistent cache) ...");
+                    }
+                    Backbone.Events.trigger("onserverconnection", url);
+                });
+                xhr.fail(function () {
+                    if (window.localStorage) {
+                        Moment.lang("en"); // Reset Moment.js culture (just to be sure, log messages in english ...)
+                        var cacheAge = new Date(JSON.parse(window.localStorage.getItem(resourceTimestampCacheKey))),
+                            prettyCacheAge = new Moment(cacheAge).fromNow(),
+                            cachedItem = window.localStorage.getItem(currentScoreResourceKey);
+
+                        if (cachedItem) {
+                            // Then complete the Backbone fetch success routine
+                            if (isBackboneModel) {
+                                self.set(self.parse(JSON.parse(cachedItem)));
+                            } else if (isBackboneCollection) {
+                                self.reset(self.parse(JSON.parse(cachedItem)));
+                            } else {
+                                throw new Error("Only Backbone.Model and Backbone.Collection constructor functions are supported");
+                            }
+                            console.warn("Resource '" + url + "' not available - using cached version (from " + prettyCacheAge + ") ...");
+
+                        } else {
+                            console.warn("Resource '" + url + "' not available - not even in cache ...");
+                        }
+                    }
+                    Backbone.Events.trigger("onnoserverconnection", url);
+                });
             },
 
             /**

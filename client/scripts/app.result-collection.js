@@ -1,11 +1,11 @@
 /* global define: false */
-define(["underscore", "backbone", "app.models.scoreModel", "app.result", "backbone.offline"],
-    function (_, Backbone, ScoreModel, ParticipantResult, BackboneOffline) {
+define(["underscore", "backbone", "app.models", "app.result", "backbone.offline"],
+    function (_, Backbone, App, ParticipantResult, BackboneOffline) {
         "use strict";
 
         return Backbone.Collection.extend({
-            defaultBaseUri: "/api/scores",
-            defaultResource: "current",
+            defaultBaseUri: App.resource.scores.baseUri,
+            defaultResource: App.resource.uri.element.current,
 
             model: ParticipantResult,
             comparator: ParticipantResult.sortBySum,
@@ -30,29 +30,29 @@ define(["underscore", "backbone", "app.models.scoreModel", "app.result", "backbo
                 var rating = 0, // Equal sum gives the same rating
                     lastSum = 0;
                 this.each(function (participant) {
-                        if (participant.get(ScoreModel.sum) > lastSum) {
+                        if (participant.get(App.scoreModel.sumPropertyName) > lastSum) {
                             rating += 1;
                         }
                         // Just add some trophy icons instead of podium-place 1, 2, and 3
                         // TODO: Move rating property logic to some (very small) RatingView
                         switch (rating) {
                             case 1:
-                                participant.set(ParticipantResult.participantRatingPropertyName, "<span class='icon-trophy-gold'></span>", { silent: true });
+                                participant.set(ParticipantResult.ratingPropertyName, "<span class='icon-trophy-gold'></span>", { silent: true });
                                 break;
                             case 2:
-                                participant.set(ParticipantResult.participantRatingPropertyName, "<span class='icon-trophy-silver'></span>", { silent: true });
+                                participant.set(ParticipantResult.ratingPropertyName, "<span class='icon-trophy-silver'></span>", { silent: true });
                                 break;
                             case 3:
-                                participant.set(ParticipantResult.participantRatingPropertyName, "<span class='icon-trophy-bronze'></span>", { silent: true });
+                                participant.set(ParticipantResult.ratingPropertyName, "<span class='icon-trophy-bronze'></span>", { silent: true });
                                 break;
                             default:
-                                if (participant.get(ScoreModel.sum) > lastSum) {
-                                    participant.set(ParticipantResult.participantRatingPropertyName, rating + ".", { silent: true });
+                                if (participant.get(App.scoreModel.sumPropertyName) > lastSum) {
+                                    participant.set(ParticipantResult.ratingPropertyName, rating + ".", { silent: true });
                                 }
                                 break;
                         }
-                        lastSum = participant.get(ScoreModel.sum);
-                        participant.set(ParticipantResult.participantHiddenRatingPropertyName, rating, { silent: true });
+                        lastSum = participant.get(App.scoreModel.sumPropertyName);
+                        participant.set(ParticipantResult.hiddenRatingPropertyName, rating, { silent: true });
                     }
                 );
             },
@@ -64,11 +64,11 @@ define(["underscore", "backbone", "app.models.scoreModel", "app.result", "backbo
                 this.comparator = ParticipantResult.sortByPreviousSum;
                 this.sort();
                 this.each(function (participant) {
-                    if (participant.get(ParticipantResult.participantPreviousSumPropertyName) > previousLastSum) {
-                        participant.set(ParticipantResult.participantPreviousRatingPropertyName, (previousRating += 1), { silent: true });
-                        previousLastSum = participant.get(ParticipantResult.participantPreviousSumPropertyName);
+                    if (participant.get(ParticipantResult.previousSumPropertyName) > previousLastSum) {
+                        participant.set(ParticipantResult.previousRatingPropertyName, (previousRating += 1), { silent: true });
+                        previousLastSum = participant.get(ParticipantResult.previousSumPropertyName);
                     } else {
-                        participant.set(ParticipantResult.participantPreviousRatingPropertyName, previousRating, { silent: true });
+                        participant.set(ParticipantResult.previousRatingPropertyName, previousRating, { silent: true });
                     }
                 });
                 this.comparator = ParticipantResult.sortBySum;
@@ -82,25 +82,29 @@ define(["underscore", "backbone", "app.models.scoreModel", "app.result", "backbo
                 return [this.defaultBaseUri, this.defaultResource].join("/");
             },
 
-            fetch: function () {
-                return BackboneOffline.localStorageFetch.call(this, { appName: "Tippekonkurranse" });
+            name: function () {
+                return App.appName;
             },
 
-            parse: function (response) {
+            fetch: BackboneOffline.localStorageFetch,
+
+            parse: function (response, options) {
                 for (var participant in response.scores) {
                     if (response.scores.hasOwnProperty(participant)) {
                         var participantScore = new this.model(response.scores[participant]);
-                        participantScore.set(ParticipantResult.participantRatingPropertyName, "", { silent: true });
+                        participantScore.set(ParticipantResult.ratingPropertyName, "", { silent: true });
                         participantScore.set("userId", participant, { silent: true });
-                        participantScore.set(ParticipantResult.participantNamePropertyName, this.model.printableName(participant), { silent: true });
-                        participantScore.set(ParticipantResult.participantYearPropertyName, response.metadata.year, { silent: true });
-                        participantScore.set(ParticipantResult.participantRoundPropertyName, response.metadata.round, { silent: true });
+                        participantScore.set(ParticipantResult.namePropertyName, this.model.printableName(participant), { silent: true });
+                        participantScore.set(ParticipantResult.yearPropertyName, response.metadata.year, { silent: true });
+                        participantScore.set(ParticipantResult.roundPropertyName, response.metadata.round, { silent: true });
 
                         this.add(participantScore, { silent: true });
                     }
                 }
                 this._setRatingAndPlacing();
                 this._setPreviousRatingAndPlacing();
+
+                return this.models;
             }
         });
     }

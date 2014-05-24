@@ -1,4 +1,4 @@
-/* global require:false */
+/* global require:false, appName:false, resource:false, scoreModel:false */
 require.config({
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',
@@ -10,7 +10,7 @@ require.config({
         'toastr': '../bower_components/toastr/toastr.min',
 
         // Shared lib files must be copied in during build step ('copy')
-        'app.models.scoreModel': './app.models'
+        'app.models': './app.models'
     },
     shim: {
         'jquery': {
@@ -20,9 +20,18 @@ require.config({
             deps: ['jquery'],
             exports: 'Bootstrap'
         },
-        'app.models.scoreModel': {
+        'app.models': {
             deps: ['underscore'],
-            exports: 'scoreModel'
+            init: function () {
+                'use strict';
+                return {
+                    appName: appName,
+                    name: appName,
+
+                    resource: resource,
+                    scoreModel: scoreModel
+                };
+            }
         }
     }
 });

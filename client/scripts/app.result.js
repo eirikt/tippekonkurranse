@@ -1,17 +1,17 @@
 /* global define: false */
-define(["underscore", "backbone", "app.models.scoreModel"],
-    function (_, Backbone, ScoreModel) {
+define(["underscore", "backbone", "app.models"],
+    function (_, Backbone, App) {
         "use strict";
 
         var participantScore = Backbone.Model.extend({
         }, {
-            participantYearPropertyName: "year",
-            participantRoundPropertyName: "round",
-            participantNamePropertyName: "name",
-            participantRatingPropertyName: "rating",
-            participantHiddenRatingPropertyName: "ratingHidden",
-            participantPreviousSumPropertyName: "previousSum",
-            participantPreviousRatingPropertyName: "previousRating",
+            yearPropertyName: "year",
+            roundPropertyName: "round",
+            namePropertyName: "name",
+            ratingPropertyName: "rating",
+            hiddenRatingPropertyName: "ratingHidden",
+            previousSumPropertyName: "previousSum",
+            previousRatingPropertyName: "previousRating",
 
             printableName: function (userId) {
                 if (userId === "jantore") {
@@ -31,10 +31,10 @@ define(["underscore", "backbone", "app.models.scoreModel"],
 
             /** Ascending sum */
             sortBySum: function (model, otherModel) {
-                var modelSum = model.get(ScoreModel.sum),
-                    otherModelSum = otherModel.get(ScoreModel.sum),
-                    modelName = model.get(participantScore.participantNamePropertyName),
-                    otherModelName = otherModel.get(participantScore.participantNamePropertyName);
+                var modelSum = model.get(App.scoreModel.sumPropertyName),
+                    otherModelSum = otherModel.get(App.scoreModel.sumPropertyName),
+                    modelName = model.get(participantScore.namePropertyName),
+                    otherModelName = otherModel.get(participantScore.namePropertyName);
 
                 if (modelSum > otherModelSum) {
                     return 1;
@@ -47,7 +47,7 @@ define(["underscore", "backbone", "app.models.scoreModel"],
 
             /** Ascending previous sum */
             sortByPreviousSum: function (model) {
-                return model.get(participantScore.participantPreviousSumPropertyName);
+                return model.get(participantScore.previousSumPropertyName);
             }
         });
 

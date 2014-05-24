@@ -1,6 +1,6 @@
 /* global define:false */
-define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result"],
-    function ($, _, Backbone, ScoreModel, ParticipantResult) {
+define(["jquery", "underscore", "backbone", "app.models", "app.result", "utils"],
+    function ($, _, Backbone, App, ParticipantResult, Utils) {
         "use strict";
 
         var RatingTendencyView = Backbone.View.extend({
@@ -67,7 +67,7 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
 
         var PredictionsModel = Backbone.Model.extend({
             url: function () {
-                return "/api/predictions/" + this.get("year") + "/" + this.get("userId");
+                return [App.resource.predictions.baseUri, this.get("year"), this.get("userId")].join("/");
             }
         });
 
@@ -84,15 +84,15 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
                     '      <table>' +
                     '        <tr>' +
                     '          <td>' +
-                    '            <p style="margin-left:.8rem;">Tippeliga:<br/><strong><%= tabell %></strong></p>' +
+                    '            <p style="margin-left:.8rem;">Tippeliga:<br/><strong><%= ' + App.scoreModel.tabellPropertyName + ' %></strong></p>' +
                     '          </td>' +
                     '          <td style="vertical-align:top;padding-left:4rem;">' +
                     '            <p>Toppskårer:</p>' +
-                    '            <p><strong><%= toppscorer %></strong></p>' +
+                    '            <p><strong><%= ' + App.scoreModel.toppscorerPropertyName + ' %></strong></p>' +
                     '            <p style="margin-top:4rem;">Opprykk:</p>' +
-                    '            <p><strong><%= opprykk %></strong></p>' +
+                    '            <p><strong><%= ' + App.scoreModel.opprykkPropertyName + ' %></strong></p>' +
                     '            <p style="margin-top:4rem;">Cupmester:</p>' +
-                    '            <p><strong><%= cup %></strong></p>' +
+                    '            <p><strong><%= ' + App.scoreModel.cupPropertyName + ' %></strong></p>' +
                     '          </td>' +
                     '        </tr>' +
                     '      </table>' +
@@ -108,31 +108,18 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
                 this.model.set("userId", ParticipantResult.printableName(this.model.get("userId")), { silent: true });
 
                 // Pretty tabell presentation
-                var prettyTabell = this.model.get("tabell");
-                prettyTabell = _.reduce(prettyTabell, function (result, team, index) {
-                    if (index < 3 || index > 13) {
-                        return result +=
-                            "<tr>" +
-                            "  <td style='font-weight:bold;text-align:right;'>" + (index + 1) + ".&nbsp;</td>" +
-                            "  <td style='font-weight:bold;'>" + team + "</td>" +
-                            "</tr>";
-                    } else {
-                        return result +=
-                            "<tr>" +
-                            "  <td style='color:#5c5c5c;font-weight:bold;text-align:right;'>" + (index + 1) + ".&nbsp;</td>" +
-                            "  <td style='color:#5c5c5c;font-weight:bold;'>" + team + "</td>" +
-                            "</tr>";
-                    }
-                }, "<table>");
-                prettyTabell += "</table>";
-                this.model.set("tabell", prettyTabell, { silent: true });
+                var prettyTabellView = new Utils.PrettyTabellView({
+                    model: this.model.get(App.scoreModel.tabellPropertyName),
+                    emphasizeFormat: "3+2"
+                });
+                this.model.set(App.scoreModel.tabellPropertyName, prettyTabellView.render().$el.html(), { silent: true });
 
                 // Pretty opprykk presentation
-                var prettyOpprykk = this.model.get("opprykk");
+                var prettyOpprykk = this.model.get(App.scoreModel.opprykkPropertyName);
                 prettyOpprykk = _.reduce(prettyOpprykk, function (result, team, index) {
                     return index > 0 ? result += " og " + team : result += team;
                 }, "");
-                this.model.set("opprykk", ParticipantResult.printableName(prettyOpprykk), { silent: true });
+                this.model.set(App.scoreModel.opprykkPropertyName, ParticipantResult.printableName(prettyOpprykk), { silent: true });
 
                 this.$el.empty().append(this.template(this.model.toJSON()));
                 return this;
@@ -145,24 +132,24 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
 
             // TODO: use dynamic/common properties names for this
             template: _.template('' +
-                    '<td style="padding-left:2rem;text-align:right;"><span style="font-weight:bold;font-size:larger;"><%= rating %></span></td>' +
-                    '<td><span style="font-weight:bold;font-size:larger;"><%= name %></span></td>' +
+                    '<td style="padding-left:2rem;text-align:right;"><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantResult.ratingPropertyName + ' %></span></td>' +
+                    '<td><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantResult.namePropertyName + ' %></span></td>' +
                     '<td class="rating-tendency"></td>' +
                     '<td>' +
                     '  <span style="white-space:nowrap;">' +
-                    '    <span style="font-weight:bold;font-size:larger;margin-right:.3rem;"><%= sum %></span>' +
+                    '    <span style="font-weight:bold;font-size:larger;margin-right:.3rem;"><%= ' + App.scoreModel.sumPropertyName + ' %></span>' +
                     '    <span class="sum-tendency"></span>' +
                     '  </span>' +
                     '</td>' +
                     '<td class="prediction" style="padding-left:3rem;">' +
-                    '  <button type="button" class="btn btn-sm btn-primary" data-id="<%= userId %>" data-toggle="modal" data-target="#predictionsTable"><%= name %>s tips</button>' +
+                    '  <button type="button" class="btn btn-sm btn-primary" data-id="<%= userId %>" data-toggle="modal" data-target="#predictionsTable"><%= ' + ParticipantResult.namePropertyName + ' %>s tips</button>' +
                     '</td>' +
-                    '<td style="color:darkgray;text-align:center;"><%= tabell %></td>' +
-                    '<td style="color:darkgray;text-align:center;"><%= pall %></td>' +
-                    '<td style="color:darkgray;text-align:center;"><%= nedrykk %></td>' +
-                    '<td style="color:darkgray;text-align:center;"><%= toppscorer %></td>' +
-                    '<td style="color:darkgray;text-align:center;"><%= opprykk %></td>' +
-                    '<td style="color:darkgray;text-align:center;"><%= cup %></td>'
+                    '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.tabellPropertyName + ' %></td>' +
+                    '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.pallPropertyName + ' %></td>' +
+                    '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.nedrykkPropertyName + ' %></td>' +
+                    '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.toppscorerPropertyName + ' %></td>' +
+                    '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.opprykkPropertyName + ' %></td>' +
+                    '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.cupPropertyName + ' %></td>'
             ),
 
             predictionsModel: null,
@@ -194,9 +181,8 @@ define(["jquery", "underscore", "backbone", "app.models.scoreModel", "app.result
                 });
 
                 // Smoothly fades in content (default jQuery functionality) (OK)
-                var $div = $('<div>').hide();
-                this.$el.find('td').wrapInner($div);
-                this.$el.find('div').fadeIn('slow');
+                this.$el.find("td").wrapInner($("<div>"));
+                this.$el.find("div").fadeIn("slow");
 
                 // TODO: with CSS3 animations please ...
                 // See: http://easings.net/nb

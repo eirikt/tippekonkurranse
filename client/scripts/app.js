@@ -5,7 +5,7 @@ define([
         'app.result-collection', 'app.results-view'],
 
     function (_, Backbone, $, Bootstrap, toastr, BackboneOffline, Please, TippekonkurranseCurrentResultsCollection, TippekonkurranseCurrentResultsView) {
-        "use strict";
+        'use strict';
 
         var HeaderView = Backbone.View.extend({
                 template: _.template('' +
@@ -17,66 +17,69 @@ define([
                         '</h1>'
                 ),
                 initialize: function () {
-                    this.listenTo(this.collection, "reset", this.render);
+                    this.listenTo(this.collection, 'reset', this.render);
                 },
                 render: function () {
                     this.$el.empty().append(this.template({
-                            year: this.collection.at(0).get("year"),
-                            round: this.collection.at(0).get("round")
+                            year: this.collection.at(0).get('year'),
+                            round: this.collection.at(0).get('round')
                         }
                     ));
                 }
             }),
 
             onDomReady = function () {
-                console.log("DOM ready! Starting ...");
+                console.log('DOM ready! Starting ...');
 
                 // TODO: Move to file 'app.router.js'
                 var AppRouter = Backbone.Router.extend({
                         routes: {
-                            "scores/:year/:round": "showHistoricScores",
+                            'scores/:year/:round': 'showHistoricScores',
                             // Default
                             '*actions': 'defaultAction'
                         },
                         showHistoricScores: function (year, round) {
                             //console.log("showHistoricScores(" + year + ", " + round + ") ...");
-                            $("#content").hide("slow", function () {
-                                var results = new TippekonkurranseCurrentResultsCollection({ year: year, round: round }),
+                            $('#content').hide('slow', function () {
+                                var results = new TippekonkurranseCurrentResultsCollection({
+                                        year: year,
+                                        round: round
+                                    }),
                                     headerView = new HeaderView({
-                                        el: "header",
+                                        el: 'header',
                                         collection: results
                                     }),
                                     resultsView = new TippekonkurranseCurrentResultsView({
-                                        el: "#content",
+                                        el: '#content',
                                         collection: results
                                     });
 
-                                $("header").removeClass("hidden");
-                                $("footer").removeClass("hidden");
-                                $("#intro").remove();
+                                $('header').removeClass('hidden');
+                                $('footer').removeClass('hidden');
+                                $('#intro').remove();
+
+                                $('#content').show();
 
                                 results.fetch();
-
-                                $("#content").show();
                             });
                         },
                         defaultAction: function () {
                             //console.log("defaultAction() ...");
                             Please.wait(1650).then(function () {
-                                $("#intro").hide("slow", function () {
+                                $('#intro').hide('slow', function () {
                                     var results = new TippekonkurranseCurrentResultsCollection(),
                                         headerView = new HeaderView({
-                                            el: "header",
+                                            el: 'header',
                                             collection: results
                                         }),
                                         resultsView = new TippekonkurranseCurrentResultsView({
-                                            el: "#content",
+                                            el: '#content',
                                             collection: results
                                         });
 
-                                    $("header").removeClass("hidden");
-                                    $("footer").removeClass("hidden");
-                                    $("#intro").remove();
+                                    $('header').removeClass('hidden');
+                                    $('footer').removeClass('hidden');
+                                    $('#intro').remove();
 
                                     results.fetch();
                                 });
@@ -88,19 +91,18 @@ define([
                 Backbone.history.start({
                     pushState: false,
                     hashChange: true,
-                    root: "/"
+                    root: '/'
                 });
 
                 BackboneOffline.listenToConnectivityDropouts([
-                    "#offlineScoresNotification",
-                    "#offlineCurrentResultsNotification"
+                    '#offlineScoresNotification',
+                    '#offlineCurrentResultsNotification'
                 ]);
-
             };
 
         // Toastr.js config (=> http://codeseven.github.io/toastr/demo.html)
         toastr.options = {
-            "positionClass": "toast-top-full-width",
+            "positionClass": 'toast-top-full-width',
             "timeOut": 6000
         };
 

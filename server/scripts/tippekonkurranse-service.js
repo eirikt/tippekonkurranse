@@ -16,7 +16,7 @@ var env = process.env.NODE_ENV || "development",
     norwegianSoccerLeagueService = require("./norwegian-soccer-service.js"),
     utils = require("./utils.js"),
     go = utils.rqGo,
-    sharedModels = require("./../../shared/scripts/app.models.js"),
+    appModels = require("./../../shared/scripts/app.models.js"),
 
 
 ////////////////////////////////////////
@@ -60,7 +60,8 @@ var env = process.env.NODE_ENV || "development",
 // TODO: spec/test/document this one?
     _getGroupScore = function (fromPlace, predictedTeamPlacing, actualTeamPlacing, currentGroupScore) {
         "use strict";
-        if (predictedTeamPlacing === fromPlace && (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === (fromPlace + 1))) {
+        if ((predictedTeamPlacing === fromPlace) &&
+            (predictedTeamPlacing === actualTeamPlacing || actualTeamPlacing === (fromPlace + 1))) {
             return -1;
         }
         if (predictedTeamPlacing === (fromPlace + 1)) {
@@ -151,7 +152,7 @@ var env = process.env.NODE_ENV || "development",
                     sum = tabellScore + pallScore + nedrykkScore + toppscorerScore + opprykkScore + cupScore;
                 }
                 currentStanding[participant] =
-                    sharedModels.scoreModel.properties(sum, tabellScore, pallScore, nedrykkScore, toppscorerScore, opprykkScore, cupScore);
+                    appModels.scoreModel.createObjectWith(tabellScore, pallScore, nedrykkScore, toppscorerScore, opprykkScore, cupScore, sum);
             }
             return currentStanding;
         },

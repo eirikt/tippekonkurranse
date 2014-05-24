@@ -2,19 +2,18 @@
 /* jshint -W106 */
 define([
         "jquery", "underscore", "backbone", "moment", "moment.nb",
-        "app.participant-score-view",
+        "app.models", "app.participant-score-view",
         "backbone.offline", "utils"
     ],
-    function ($, _, Backbone, Moment, Moment_nb, ParticipantScoreView, BackboneOffline, Utils) {
+    function ($, _, Backbone, Moment, Moment_nb, App, ParticipantScoreView, BackboneOffline, Utils) {
         "use strict";
 
         var CurrentResults = Backbone.Model.extend({
-                urlRoot: "/api/results/current",
-                fetch: _.partial(BackboneOffline.localStorageFetch, {
-                    "FetchableConstructorType": Backbone.Model,
-                    "appName": "Tippekonkurranse",
-                    "resourceUri": "/api/results/current"
-                })
+                urlRoot: [App.resource.results.baseUri, App.resource.uri.element.current].join("/"),
+                name: function () {
+                    return App.name;
+                },
+                fetch: BackboneOffline.localStorageFetch
             }),
 
             PrettyDateView = Backbone.View.extend({
@@ -40,56 +39,6 @@ define([
                 }
             }),
 
-            PrettyTabellView = Backbone.View.extend({
-                // TODO: tagName does not seem to work!?
-                //tagName: "table",
-
-                numberOfRowsInTable: 15,
-                defaultFormat: "0+0",
-
-                initialize: function () {
-                    this.format = _.toArray(arguments)[0].format || this.defaultFormat;
-                    if (this.model instanceof Backbone.Model) {
-                        this.model = this.model.toJSON();
-                    }
-                },
-                getNormalTableRow: function (team) {
-                    return '' +
-                        '<tr>' +
-                        '  <td style="color:#5c5c5c;font-weight:bold;text-align:right;">' + team.no + '.&nbsp;</td>' +
-                        '  <td style="color:#5c5c5c;font-weight:bold;">(' + team.matches + ')&nbsp;</td>' +
-                        '  <td style="color:#5c5c5c;font-weight:bold;">' + team.name + '</td>' +
-                        '</tr>';
-                },
-                getEmphasizedTableRow: function (team) {
-                    return '' +
-                        '<tr>' +
-                        '  <td style="font-weight:bold;text-align:right;">' + team.no + '.&nbsp;</td>' +
-                        '  <td style="font-weight:bold;">(' + team.matches + ')&nbsp;</td>' +
-                        '  <td style="font-weight:bold;">' + team.name + '</td>' +
-                        '</tr>';
-                },
-                render: function () {
-                    var self = this,
-                        teamEmphasizeArray = this.format.split("+", 2),
-                        numberOfTeamsToEmphasizeAtStart = parseInt(teamEmphasizeArray[0], 10),
-                        numberOfTeamsToEmphasizeAtEnd = parseInt(teamEmphasizeArray[1], 10);
-
-                    this.$el.empty();
-                    _.each(this.model, function (team, index) {
-                        if (numberOfTeamsToEmphasizeAtStart > index) {
-                            self.$el.append(self.getEmphasizedTableRow(team));
-                        } else if (numberOfTeamsToEmphasizeAtEnd > self.numberOfRowsInTable - index) {
-                            self.$el.append(self.getEmphasizedTableRow(team));
-                        } else {
-                            self.$el.append(self.getNormalTableRow(team));
-                        }
-                    });
-                    this.$el.wrapInner("<table/>");
-                    return this;
-                }
-            }),
-
             ModalCurrentResultsView = Backbone.View.extend({
                 template: _.template('' +
                         '<div class="modal-dialog">' +
@@ -100,7 +49,7 @@ define([
                         '    </div>' +
                         '    <div class="modal-body">' +
                         '      <p>' +
-                        '      <span id="offlineCurrentResultsNotification" class="hidden" data-appname="Tippekonkurranse" data-uri="/api/results/current" data-urititle="Disse fotballresultatene er hentet" style="color:#d20000;font-weight:bold;"></span>' +
+                        '        <span id="offlineCurrentResultsNotification" class="hidden" data-appname="<%= appName %>" data-uri="<%= uri %>" data-urititle="Disse fotballresultatene er hentet" style="color:#d20000;font-weight:bold;"></span>' +
                         '      </p>' +
                         '      <table style="width:100%">' +
                         '        <tr>' +
@@ -125,11 +74,16 @@ define([
                         '</div>'
                 ),
                 initialize: function () {
-                    this.listenTo(this.model, "change error", this.render);
+                    //this.listenTo(this.model, "change error", this.render);
+                    this.listenTo(this.model, "change", this.render);
                 },
                 render: function () {
                     // Always clone model before manipulating it/altering state
                     this.model = _.clone(this.model);
+
+                    // Meta-data for offline
+                    this.model.set("appName", this.model.name(), { silent: true });
+                    this.model.set("uri", this.model.urlRoot, { silent: true });
 
                     // Pretty date presentation
                     var prettyDateView = new PrettyDateView({
@@ -142,16 +96,16 @@ define([
                     this.model.set("currentDate", prettyDateView.render().el, { silent: true });
 
                     // Pretty tabell presentation
-                    var prettyTabellView = new PrettyTabellView({
+                    var prettyTabellView = new Utils.PrettyTabellView({
                         model: this.model.get("currentTippeligaTable"),
-                        format: "3+2"
+                        emphasizeFormat: "3+2"
                     });
                     this.model.set("currentTippeligaTable", prettyTabellView.render().$el.html(), { silent: true });
 
                     // Pretty tabell presentation
-                    prettyTabellView = new PrettyTabellView({
+                    prettyTabellView = new Utils.PrettyTabellView({
                         model: this.model.get("currentAdeccoligaTable"),
-                        format: "2+0"
+                        emphasizeFormat: "2+0"
                     });
                     this.model.set("currentAdeccoligaTable", prettyTabellView.render().$el.html(), { silent: true });
 
