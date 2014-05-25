@@ -195,6 +195,7 @@ module.exports = function (grunt) {
         uglify: {
             myUglifyTask: {
                 files: {
+                    // Minified version not available via Bower ...
                     'build/bower_components/requirejs/require.js': 'build/bower_components/requirejs/require.js',
                     'build/bower_components/backbone/backbone.js': 'build/bower_components/backbone/backbone.js',
                     'build/bower_components/underscore/underscore.js': 'build/bower_components/underscore/underscore.js',
@@ -207,6 +208,7 @@ module.exports = function (grunt) {
                     'build/scripts/app.result.js': 'build/scripts/app.result.js',
                     'build/scripts/app.result-collection.js': 'build/scripts/app.result-collection.js',
                     'build/scripts/app.results-view.js': 'build/scripts/app.results-view.js',
+                    'build/scripts/backbone-fetch-local-copy.js': 'build/scripts/backbone-fetch-local-copy.js',
                     'build/scripts/utils.js': 'build/scripts/utils.js'
                 }
             }

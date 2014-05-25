@@ -3,20 +3,18 @@
 define([
         "jquery", "underscore", "backbone", "moment", "moment.nb",
         "app.models", "app.participant-score-view",
-        "backbone.offline", "utils"
+        "backbone.fetch-local-copy", "utils"
     ],
-    function ($, _, Backbone, Moment, Moment_nb, App, ParticipantScoreView, BackboneOffline, Utils) {
+    function ($, _, Backbone, Moment, Moment_nb, App, ParticipantScoreView, BackboneFetchLocalCopy, Utils) {
         "use strict";
 
         var CurrentResults = Backbone.Model.extend({
-                urlRoot: [App.resource.results.baseUri, App.resource.uri.element.current].join("/"),
-                name: function () {
-                    return App.name;
-                },
-                fetch: BackboneOffline.localStorageFetch
-            }),
+            urlRoot: [App.resource.results.baseUri, App.resource.uri.element.current].join("/")
+        });
+        _.extend(CurrentResults.prototype, App.namedObject);
+        _.extend(CurrentResults.prototype, BackboneFetchLocalCopy);
 
-            PrettyDateView = Backbone.View.extend({
+        var PrettyDateView = Backbone.View.extend({
                 initialize: function () {
                     this.momentJsculture = this.model.culture || "en";
                     this.momentJsDateFormat = this.model.format || "Do MMMM YYYY";
@@ -26,15 +24,15 @@ define([
                     }
                 },
                 render: function () {
-                    if (this.model.date) {
-                        if (this.model.preamble) {
-                            this.el = this.model.preamble + new Moment(this.model.date).format(this.momentJsDateFormat);
-                        } else {
-                            this.el = new Moment(this.model.date).format(this.momentJsDateFormat);
-                        }
-                    } else {
-                        this.el = new Moment().format(this.momentJsDateFormat);
-                    }
+                    //if (this.model.date) {
+                    //    if (this.model.preamble) {
+                    //        this.el = this.model.preamble + new Moment(this.model.date).format(this.momentJsDateFormat);
+                    //    } else {
+                    //        this.el = new Moment(this.model.date).format(this.momentJsDateFormat);
+                    //    }
+                    //} else {
+                    this.el = new Moment().format(this.momentJsDateFormat);
+                    //}
                     return this;
                 }
             }),
@@ -74,8 +72,7 @@ define([
                         '</div>'
                 ),
                 initialize: function () {
-                    //this.listenTo(this.model, "change error", this.render);
-                    this.listenTo(this.model, "change", this.render);
+                    this.listenTo(this.model, "change error", this.render);
                 },
                 render: function () {
                     // Always clone model before manipulating it/altering state
@@ -88,7 +85,7 @@ define([
                     // Pretty date presentation
                     var prettyDateView = new PrettyDateView({
                         model: {
-                            preamble: "Tippeligarunde " + this.model.get("currentRound") + "&nbsp;&nbsp;|&nbsp;&nbsp;",
+                            //preamble: "Tippeligarunde " + this.model.get("currentRound") + "&nbsp;&nbsp;|&nbsp;&nbsp;",
                             date: this.model.get("currentDate"),
                             culture: "nb"
                         }
@@ -195,7 +192,7 @@ define([
 
                 // Configure modal results view
                 this.$(".current-results").on("click", function () {
-                    self.currentResults.set("currentDate", null, { silent: true });
+                    //self.currentResults.set("currentDate", null, { silent: true });
                     self.currentResults.fetch({ reset: true });
                 });
 

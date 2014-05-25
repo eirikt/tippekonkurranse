@@ -27,6 +27,11 @@ require.config({
                 return {
                     appName: appName,
                     name: appName,
+                    namedObject: {
+                        name: function () {
+                            return appName;
+                        }
+                    },
 
                     resource: resource,
                     scoreModel: scoreModel

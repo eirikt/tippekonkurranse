@@ -4,15 +4,41 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
         "use strict";
 
         /**
-         * TODO: Document ...
+         * Mechanism for notifying users of server connection dropouts via UI.
+         * <h3>Usage example</h3>
+         * Establish/configure the server connection listener, e.g.
+         * <pre>
+         * listenToServerConnectionDropouts: _.partial(_serverConnectionListener, "appname", "uri", "urititle", "nb")
+         * </pre>
+         * NB! This is the default configuration, already included.
          *
-         * @param appNameDataElementName
-         * @param appUriDataElementName
-         * @param appUriTitleDataElementName
-         * @param culture
-         * @param elementSelector
+         * Now, this will make it possible to add HTML elements inside your app which will show up whenever server connection drops out, e.g.:
+         * <pre>
+         * <span id="offlineNotification" class="hidden" data-appname="<%= appName %>" data-uri="<%= uri %>" data-urititle="Using data from" />
+         * </pre>
+         *
+         * Remember to inject the element into the listener, e.g. by AMD:
+         * <pre>
+         * define(['backbone.fetch-local-copy'], function (BackboneFetchLocalCopy) {
+         *   BackboneFetchLocalCopy.listenToServerConnectionDropouts([
+         *     '#offlineNotification'
+         *   ]);
+         * })
+         * </pre>
+         *
+         *
+         * Also, remember to configure toastr, e.g.:
+         * <pre>
+         * // Toastr.js config (=> http://codeseven.github.io/toastr/demo.html)
+         * toastr.options = {
+         *   "positionClass": 'toast-top-full-width',
+         *   "timeOut": 6000
+         * }
+         * </pre>
+         *
+         * @private
          */
-        var offlineListener = function (appNameDataElementName, appUriDataElementName, appUriTitleDataElementName, culture, elementSelector) {
+        var _serverConnectionListener = function (appNameDataElementName, appUriDataElementName, appUriTitleDataElementName, culture, elementSelector) {
             var self = this,
                 elementSelectors = _.isArray(elementSelector) ? elementSelector : [elementSelector],
                 momentJsCulture = culture || "en";
@@ -42,7 +68,7 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
                         var appName = el.dataset[appNameDataElementName],
                             appUri = el.dataset[appUriDataElementName],
                             appUriName = el.dataset[appUriTitleDataElementName],
-                            ageString = self.getLocalStorageResourceAge(appName, appUri, momentJsCulture),
+                            ageString = self.getResourceAge(appName, appUri, momentJsCulture),
                             msg = null;
 
                         if (culture === "nb") {
@@ -50,7 +76,7 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
                                 msg = "(" +
                                     "NB! " + appUriName + " " +
                                     "<em>" +
-                                    self.getLocalStorageResourceAge(appName, appUri, momentJsCulture) +
+                                    self.getResourceAge(appName, appUri, momentJsCulture) +
                                     "</em>" +
                                     ")";
                             } else {
@@ -67,35 +93,46 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
             });
         };
 
+        /**
+         * <p>
+         * Mix-in for using localStorage as intermediary storage for retrieved resources,
+         * making the model or collection resilient against server connectivity dropouts
+         * as you then will be using the latest version the browsers have at hand ...
+         * </p>
+         * <p>
+         * Works for both Backbone models and Backbone collections.
+         * </p>
+         * <p>
+         * NB! Read-only, no mechanisms for pushing altered state back to the server.
+         * </p>
+         */
         return {
 
-            /**
-             * TODO: Document ...
-             *
-             * @param appName
-             * @param resourceUri
-             * @returns {Number|null}
-             */
-            getLocalStorageResourceTimestamp: function (appName, resourceUri) {
-                var timestampCacheKey = appName + resourceUri + ":timestamp",
-                    timestamp = null;
-                if (window.localStorage) {
-                    timestamp = window.localStorage.getItem(timestampCacheKey);
+            /** @returns {Number|null} the UNIX-timestamp associated with the given resource (belonging to the given app name) */
+            getResourceTimestamp: function (appName, resourceUri) {
+                if (!window.localStorage) {
+                    return null;
                 }
-                return window.parseInt(timestamp, 10);
+                var timestampCacheKey = appName + resourceUri + ":timestamp",
+                    timestamp = window.localStorage.getItem(timestampCacheKey);
+                if (timestamp) {
+                    return window.parseInt(timestamp, 10);
+                } else {
+                    return null;
+                }
             },
 
             /**
-             * TODO: Document ...
+             * Gets the pretty timestamp string describing the age of the given resource (belonging to the given app name).
              *
-             * @param appName
-             * @param resourceUri
-             * @param {String} [culture] Moment.js culture
+             * @param {String} appName The app name
+             * @param {String} resourceUri The resource URI
+             * @param {String} [culture] The culture in Moment.js format, the default is 'en' (english)
              * @see http://momentjs.com/docs/#/i18n/
-             * @returns {String|null}
+             * @returns {String|null} The pretty timestamp string, otherwise <code>null</code> if the resource not exists in local storage
              */
-            getLocalStorageResourceAge: function (appName, resourceUri, culture) {
-                var timestamp = this.getLocalStorageResourceTimestamp(appName, resourceUri),
+            getResourceAge: function (appName, resourceUri, culture) {
+                var timestamp = this.getResourceTimestamp(appName, resourceUri),
                     prettyTimestamp = null;
                 if (timestamp) {
                     if (culture) {
@@ -111,9 +148,10 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
             /**
              * Drop-in replacement for Backbone fetch function,
              * using localStorage as intermediary storage for retrieved resources,
-             * making the model or collection resilient against server connectivity dropouts ...
+             * making the model or collection resilient against server connectivity dropouts
+             * as you then will be using the latest version the browsers have at hand ...
              */
-            localStorageFetch: function () {
+            fetch: function () {
                 var self = this,
                     url = self.url(),
                     currentScoreResourceKey = self.name() + url,
@@ -164,10 +202,8 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
                 });
             },
 
-            /**
-             * TODO: Document ...
-             */
-            listenToConnectivityDropouts: _.partial(offlineListener, "appname", "uri", "urititle", "nb")
+            /** Default configuration of the server connection listener. */
+            listenToServerConnectionDropouts: _.partial(_serverConnectionListener, "appname", "uri", "urititle", "nb")
         };
     }
 );

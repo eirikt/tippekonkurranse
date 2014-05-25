@@ -1,9 +1,9 @@
 /* global define: false */
-define(["underscore", "backbone", "app.models", "app.result", "backbone.offline"],
-    function (_, Backbone, App, ParticipantResult, BackboneOffline) {
+define(["underscore", "backbone", "app.models", "app.result", "backbone.fetch-local-copy"],
+    function (_, Backbone, App, ParticipantResult, BackboneFetchLocalCopy) {
         "use strict";
 
-        return Backbone.Collection.extend({
+        var ResultCollection = Backbone.Collection.extend({
             defaultBaseUri: App.resource.scores.baseUri,
             defaultResource: App.resource.uri.element.current,
 
@@ -82,12 +82,6 @@ define(["underscore", "backbone", "app.models", "app.result", "backbone.offline"
                 return [this.defaultBaseUri, this.defaultResource].join("/");
             },
 
-            name: function () {
-                return App.appName;
-            },
-
-            fetch: BackboneOffline.localStorageFetch,
-
             parse: function (response, options) {
                 for (var participant in response.scores) {
                     if (response.scores.hasOwnProperty(participant)) {
@@ -107,5 +101,10 @@ define(["underscore", "backbone", "app.models", "app.result", "backbone.offline"
                 return this.models;
             }
         });
+
+        _.extend(ResultCollection.prototype, App.namedObject);
+        _.extend(ResultCollection.prototype, BackboneFetchLocalCopy);
+
+        return ResultCollection;
     }
 );

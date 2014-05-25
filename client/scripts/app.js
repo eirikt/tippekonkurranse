@@ -1,10 +1,10 @@
 /* global define:false, console:false, $:false */
 define([
         'underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'toastr',
-        'backbone.offline', 'utils',
+        'backbone.fetch-local-copy', 'utils',
         'app.result-collection', 'app.results-view'],
 
-    function (_, Backbone, $, Bootstrap, toastr, BackboneOffline, Please, TippekonkurranseCurrentResultsCollection, TippekonkurranseCurrentResultsView) {
+    function (_, Backbone, $, Bootstrap, toastr, BackboneFetchLocalCopy, Please, TippekonkurranseCurrentResultsCollection, TippekonkurranseCurrentResultsView) {
         'use strict';
 
         var HeaderView = Backbone.View.extend({
@@ -94,7 +94,7 @@ define([
                     root: '/'
                 });
 
-                BackboneOffline.listenToConnectivityDropouts([
+                BackboneFetchLocalCopy.listenToServerConnectionDropouts([
                     '#offlineScoresNotification',
                     '#offlineCurrentResultsNotification'
                 ]);
