@@ -2,10 +2,10 @@
 /* jshint -W106 */
 define([
         "jquery", "underscore", "backbone", "moment", "moment.nb",
-        "app.models", "app.participant-score-view",
+        "app.models", "app.participant-score-view", "app.soccer-table-views",
         "backbone.fetch-local-copy", "utils"
     ],
-    function ($, _, Backbone, Moment, Moment_nb, App, ParticipantScoreView, BackboneFetchLocalCopy, Utils) {
+    function ($, _, Backbone, Moment, Moment_nb, App, ParticipantScoreView, SoccerTableViews, BackboneFetchLocalCopy, Utils) {
         "use strict";
 
         var CurrentResults = Backbone.Model.extend({
@@ -93,14 +93,14 @@ define([
                     this.model.set("currentDate", prettyDateView.render().el, { silent: true });
 
                     // Pretty tabell presentation
-                    var prettyTabellView = new Utils.PrettyTabellView({
+                    var prettyTabellView = new SoccerTableViews.SimpleTableView({
                         model: this.model.get("currentTippeligaTable"),
                         emphasizeFormat: "3+2"
                     });
                     this.model.set("currentTippeligaTable", prettyTabellView.render().$el.html(), { silent: true });
 
                     // Pretty tabell presentation
-                    prettyTabellView = new Utils.PrettyTabellView({
+                    prettyTabellView = new SoccerTableViews.SimpleTableView({
                         model: this.model.get("currentAdeccoligaTable"),
                         emphasizeFormat: "2+0"
                     });

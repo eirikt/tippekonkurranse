@@ -208,6 +208,7 @@ module.exports = function (grunt) {
                     'build/scripts/app.result.js': 'build/scripts/app.result.js',
                     'build/scripts/app.result-collection.js': 'build/scripts/app.result-collection.js',
                     'build/scripts/app.results-view.js': 'build/scripts/app.results-view.js',
+                    'build/scripts/app.soccer-table-views.js': 'build/scripts/scripts/app.soccer-table-views.js',
                     'build/scripts/backbone-fetch-local-copy.js': 'build/scripts/backbone-fetch-local-copy.js',
                     'build/scripts/utils.js': 'build/scripts/utils.js'
                 }

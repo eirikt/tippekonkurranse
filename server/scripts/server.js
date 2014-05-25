@@ -29,8 +29,6 @@ if (env === "development") {
     server.use(express.static(path.join(applicationRootAbsolutePath, productionWebRootRelativePath)));
 }
 
-// TODO: Move URLs to common function in 'shared'
-
 // Static resources (AppCache candidates) (RESTful service API) (Only JSON content type supported so far)
 server.get(app.resource.predictions.uri, tippekonkurranseService.handlePredictionsRequest);
 

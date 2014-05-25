@@ -1,6 +1,6 @@
 /* global define:false */
-define(["jquery", "underscore", "backbone", "app.models", "app.result", "utils"],
-    function ($, _, Backbone, App, ParticipantResult, Utils) {
+define(["jquery", "underscore", "backbone", "app.models", "app.result", "app.soccer-table-views", "utils"],
+    function ($, _, Backbone, App, ParticipantResult, SoccerTableViews, Utils) {
         "use strict";
 
         var RatingTendencyView = Backbone.View.extend({
@@ -108,7 +108,7 @@ define(["jquery", "underscore", "backbone", "app.models", "app.result", "utils"]
                 this.model.set("userId", ParticipantResult.printableName(this.model.get("userId")), { silent: true });
 
                 // Pretty tabell presentation
-                var prettyTabellView = new Utils.PrettyTabellView({
+                var prettyTabellView = new SoccerTableViews.SimpleTableView({
                     model: this.model.get(App.scoreModel.tabellPropertyName),
                     emphasizeFormat: "3+2"
                 });
