@@ -7,7 +7,7 @@ var expect = require('../../node_modules/chai/chai').expect//,
 //sinonSpy = require('../../node_modules/sinon/pkg/sinon').spy
 */
 
-define(["chai", "../../build/scripts/utils"],
+define(["chai", "../../../build/scripts/utils"],
     function (Chai, Utils) {
         "use strict";
 

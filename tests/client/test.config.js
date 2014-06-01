@@ -10,7 +10,7 @@ require.config({
         toastr: 'build/bower_components/toastr/toastr.min',
 
         chai: 'node_modules/chai/chai',
-        sinon: 'node_modules/sinon/pkg/sinon',
+        sinon: 'node_modules/sinon/lib/sinon',
 
         // Adding shared app libs as well ...
         'app.models': 'build/scripts/app.models',

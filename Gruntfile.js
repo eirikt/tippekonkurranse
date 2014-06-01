@@ -1,18 +1,12 @@
+/* jshint -W071, -W106 */
+
 module.exports = function (grunt) {
     'use strict';
 
-    // TODO: Consider declaring folder names ...
-    var clientSideCodeFolder = "client",
-        serverSideCodeFolder = "server",
-        specificationsFolder = "tests",
-        localDatabaseFolder = "data",
-    // TODO: Rename to 'public'
-        webRootFolder = "build",
-
     // Web server test port
-        port = 8981,
+    var port = 8981,
 
-        clientTestPath = '/tests/test-amd.html';
+        clientTestPath = '/tests/client/test-amd.html';
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -169,10 +163,11 @@ module.exports = function (grunt) {
                 options: {
                     reporter: 'spec'
                 },
-                src: ['tests/specs/tippekonkurranse-service.spec.js']
+                src: ['tests/server/specs/tippekonkurranse-service.spec.js']
             }
         },
 
+        // Server-side/Node.js test coverage
         mochacov: {
             travis: {
                 options: {
@@ -191,11 +186,19 @@ module.exports = function (grunt) {
             },
             options: {
                 files: [
-                    'tests/specs/tippekonkurranse-service.spec.js',
-                    'tests/specs/test.spec.js',
-                    'tests/specs/client-global-functions.spec.js',
-                    'tests/specs/app.scores-collection.spec.js'
+                    'tests/server/specs/tippekonkurranse-service.spec.js'
                 ]
+            }
+        },
+
+        // Client-side test coverage
+        // TODO: Not working as of now ...
+        blanket_mocha: {
+            all: [ 'tests/client/test.html' ],
+            //all: [ 'tests/client/test-amd.html' ]
+
+            options: {
+                threshold: 10
             }
         },
 
@@ -278,6 +281,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-mocha-cov');
+    grunt.loadNpmTasks('grunt-blanket-mocha');
     grunt.loadNpmTasks('grunt-jsdoc');
 
     grunt.registerTask('help', ['shell:help']);
@@ -285,6 +289,7 @@ module.exports = function (grunt) {
     grunt.registerTask('mongodb', ['shell:createDataDir', 'shell:mongod']);
 
     grunt.registerTask('build:client', ['clean', 'copy:all', 'uglify', 'cssmin']);
+    //grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', 'blanket_mocha', 'mochacov:travis']);
     grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', 'mochacov:travis']);
 
     grunt.registerTask('test:client', ['connect', 'shell:mocha-phantomjs']);

@@ -1,0 +1,28 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Tippekonkurranse client-side tests</title>
+    <link rel="stylesheet" href="../../node_modules/grunt-mocha/node_modules/mocha/mocha.css" media="screen">
+</head>
+<body>
+
+<!-- Relative path to tests folder -->
+<script type="text/javascript" src="../../node_modules/grunt-mocha/node_modules/mocha/mocha.js"></script>
+
+<!-- Mocha config -->
+<script type="text/javascript">
+    mocha.setup('bdd');
+</script>
+
+<script>
+    if (window.PHANTOMJS) {
+        blanket.options("reporter", "../node_modules/grunt-blanket-mocha/support/grunt-reporter.js");
+    }
+</script>
+
+<div id="mocha"></div>
+
+<script data-main="test.config.js" src="../../build/bower_components/requirejs/require.js"></script>
+
+</body>
+</html>

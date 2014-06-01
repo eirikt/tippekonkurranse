@@ -1,12 +1,12 @@
 /* global global:false, require:false, describe:false, it:false */
 /* jshint -W030 */
 
-var chai = require("../../node_modules/chai/chai.js"),
+var chai = require("../../../node_modules/chai/chai.js"),
     assert = chai.assert,
     expect = chai.expect,
-    sinon = require('../../node_modules/sinon/lib/sinon'),
+    sinon = require('../../../node_modules/sinon/lib/sinon'),
 
-    updateScores = require("../../server/scripts/tippekonkurranse-service.js")._updateScores;
+    updateScores = require("../../../server/scripts/tippekonkurranse-service.js")._updateScores;
 
 
 describe("Tippekonkurranse service", function () {
