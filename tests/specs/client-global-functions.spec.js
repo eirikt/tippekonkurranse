@@ -1,14 +1,20 @@
 /* global define:false, describe:false, it:false */
 /* jshint -W030 */
 
-define(['chai', '../../build/scripts/utils'],
-    function (chai, utils) {
-        'use strict';
+/* For WebStorm ...
+var expect = require('../../node_modules/chai/chai').expect//,
+    //sinon = require('../../node_modules/sinon/pkg/sinon')
+//sinonSpy = require('../../node_modules/sinon/pkg/sinon').spy
+*/
 
-        var expect = chai.expect,
+define(["chai", "../../build/scripts/utils"],
+    function (Chai, Utils) {
+        "use strict";
 
-            isTouchDeviceUserAgentString = utils.isTouchDeviceUserAgentString,
-            isTouchDevice = utils.isTouchDevice;
+        var expect = Chai.expect,
+
+            isTouchDeviceUserAgentString = Utils.isTouchDeviceUserAgentString,
+            isTouchDevice = Utils.isTouchDevice;
 
         describe("global function isTouchDeviceUserAgentString", function () {
 

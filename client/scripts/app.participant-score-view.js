@@ -1,7 +1,8 @@
 /* global define:false */
-define(["jquery", "underscore", "backbone", "app.models", "app.result", "app.soccer-table-views", "utils"],
-    function ($, _, Backbone, App, ParticipantResult, SoccerTableViews, Utils) {
-        "use strict";
+
+define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soccer-table-views'],
+    function ($, _, Backbone, App, ParticipantScore, SoccerTableViews) {
+        'use strict';
 
         var RatingTendencyView = Backbone.View.extend({
             tagName: 'span',
@@ -9,18 +10,21 @@ define(["jquery", "underscore", "backbone", "app.models", "app.result", "app.soc
                     '<span class="tendency-arrow"></span>' +
                     '<small>&nbsp;<%= ratingDiff %></small>'
             ),
-            // TODO: reduce cyclic complexity (from 7 to 5)
+            // TODO: reduce cyclic complexity (from 8 to 5)
             render: function () {
+                if (!this.model[ParticipantScore.previousRatingNumberPropertyName]) {
+                    return this;
+                }
                 var plusThreshold = 3,
-                    upwardTendency = this.model.previousRating - this.model.ratingHidden,
-                    downwardTendency = this.model.ratingHidden - this.model.previousRating,
-                    $tendency,
-                    ratingDiff = this.model.previousRating - this.model.ratingHidden;
+                    upwardTendency = this.model[ParticipantScore.previousRatingNumberPropertyName] - this.model[ParticipantScore.ratingNumberPropertyName],
+                    downwardTendency = this.model[ParticipantScore.ratingNumberPropertyName] - this.model[ParticipantScore.previousRatingNumberPropertyName],
+                    ratingDiff = upwardTendency,
+                    $tendency;
 
-                this.model.ratingDiff = "";
+                this.model.ratingDiff = '';
                 if (ratingDiff !== 0) {
                     if (ratingDiff > 0) {
-                        ratingDiff = "+" + ratingDiff;
+                        ratingDiff = '+' + ratingDiff;
                     }
                     this.model.ratingDiff = ratingDiff;
                 }
@@ -51,13 +55,16 @@ define(["jquery", "underscore", "backbone", "app.models", "app.result", "app.soc
             tagName: 'span',
             template: _.template('<small><%= sumDiff %></small>'),
             render: function () {
+                if (!this.model.previousSum) {
+                    return this;
+                }
                 var sumDiff = this.model.sum - this.model.previousSum;
-                this.model.sumDiff = "";
+                this.model.sumDiff = '';
                 if (sumDiff !== 0) {
                     if (sumDiff > 0) {
-                        sumDiff = "+" + sumDiff;
+                        sumDiff = '+' + sumDiff;
                     }
-                    this.model.sumDiff = "(" + sumDiff + "p)";
+                    this.model.sumDiff = '(' + sumDiff + 'p)';
                 }
                 this.$el.append(this.template(this.model));
                 return this;
@@ -67,7 +74,7 @@ define(["jquery", "underscore", "backbone", "app.models", "app.result", "app.soc
 
         var PredictionsModel = Backbone.Model.extend({
             url: function () {
-                return [App.resource.predictions.baseUri, this.get("year"), this.get("userId")].join("/");
+                return [App.resource.predictions.baseUri, this.get('year'), this.get('userId')].join('/');
             }
         });
 
@@ -101,25 +108,25 @@ define(["jquery", "underscore", "backbone", "app.models", "app.result", "app.soc
                     '</div>'
             ),
             initialize: function () {
-                this.listenTo(this.model, "change", this.render);
+                this.listenTo(this.model, 'change', this.render);
             },
             render: function () {
                 // Pretty user name presentation
-                this.model.set("userId", ParticipantResult.printableName(this.model.get("userId")), { silent: true });
+                this.model.set('userId', ParticipantScore.printableName(this.model.get('userId')), { silent: true });
 
                 // Pretty tabell presentation
                 var prettyTabellView = new SoccerTableViews.SimpleTableView({
                     model: this.model.get(App.scoreModel.tabellPropertyName),
-                    emphasizeFormat: "3+2"
+                    emphasizeFormat: '3+2'
                 });
                 this.model.set(App.scoreModel.tabellPropertyName, prettyTabellView.render().$el.html(), { silent: true });
 
                 // Pretty opprykk presentation
                 var prettyOpprykk = this.model.get(App.scoreModel.opprykkPropertyName);
                 prettyOpprykk = _.reduce(prettyOpprykk, function (result, team, index) {
-                    return index > 0 ? result += " og " + team : result += team;
-                }, "");
-                this.model.set(App.scoreModel.opprykkPropertyName, ParticipantResult.printableName(prettyOpprykk), { silent: true });
+                    return index > 0 ? result += ' og ' + team : result += team;
+                }, '');
+                this.model.set(App.scoreModel.opprykkPropertyName, ParticipantScore.printableName(prettyOpprykk), { silent: true });
 
                 this.$el.empty().append(this.template(this.model.toJSON()));
                 return this;
@@ -132,8 +139,8 @@ define(["jquery", "underscore", "backbone", "app.models", "app.result", "app.soc
 
             // TODO: use dynamic/common properties names for this
             template: _.template('' +
-                    '<td style="padding-left:2rem;text-align:right;"><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantResult.ratingPropertyName + ' %></span></td>' +
-                    '<td><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantResult.namePropertyName + ' %></span></td>' +
+                    '<td style="padding-left:2rem;text-align:right;"><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantScore.ratingPropertyName + ' %></span></td>' +
+                    '<td><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantScore.namePropertyName + ' %></span></td>' +
                     '<td class="rating-tendency"></td>' +
                     '<td>' +
                     '  <span style="white-space:nowrap;">' +
@@ -142,7 +149,7 @@ define(["jquery", "underscore", "backbone", "app.models", "app.result", "app.soc
                     '  </span>' +
                     '</td>' +
                     '<td class="prediction" style="padding-left:3rem;">' +
-                    '  <button type="button" class="btn btn-sm btn-primary" data-id="<%= userId %>" data-toggle="modal" data-target="#predictionsTable"><%= ' + ParticipantResult.namePropertyName + ' %>s tips</button>' +
+                    '  <button type="button" class="btn btn-sm btn-primary" data-id="<%= userId %>" data-toggle="modal" data-target="#predictionsTable"><%= ' + ParticipantScore.namePropertyName + ' %>s tips</button>' +
                     '</td>' +
                     '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.tabellPropertyName + ' %></td>' +
                     '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.pallPropertyName + ' %></td>' +
@@ -159,7 +166,7 @@ define(["jquery", "underscore", "backbone", "app.models", "app.result", "app.soc
             initialize: function () {
                 this.predictionsModel = new PredictionsModel({ userId: this.model.userId, year: this.model.year });
                 this.modalPredictionsView = new ModalPredictionsTableView({
-                    el: $("#predictionsTable"),
+                    el: $('#predictionsTable'),
                     model: this.predictionsModel
                 });
             },
@@ -170,24 +177,24 @@ define(["jquery", "underscore", "backbone", "app.models", "app.result", "app.soc
                 this.$el.append(this.template(this.model));
 
                 // Add rating tendency marker
-                this.$(".rating-tendency").append(new RatingTendencyView({ model: this.model }).render().el);
+                this.$('.rating-tendency').append(new RatingTendencyView({ model: this.model }).render().el);
 
                 // Add sum tendency marker
-                this.$(".sum-tendency").append(new SumTendencyView({ model: this.model }).render().el);
+                this.$('.sum-tendency').append(new SumTendencyView({ model: this.model }).render().el);
 
                 // Configure modal predictions view
-                this.$(".prediction").on("click", function () {
+                this.$('.prediction').on('click', function () {
                     self.predictionsModel.fetch({ reset: true });
                 });
 
                 // Smoothly fades in content (default jQuery functionality) (OK)
-                this.$el.find("td").wrapInner($("<div>"));
-                this.$el.find("div").fadeIn("slow");
+                this.$el.find('td').wrapInner($('<div>'));
+                this.$el.find('div').fadeIn('slow');
 
                 // TODO: with CSS3 animations please ...
                 // See: http://easings.net/nb
-                //this.$el.find("td").wrapInner("<div class='hidden'></div>");
-                //this.$el.find("div").removeClass("hidden").addClass("my-slide-in-effect");
+                //this.$el.find('td').wrapInner('<div class="hidden"></div>');
+                //this.$el.find('div').removeClass('hidden').addClass('my-slide-in-effect');
 
                 return this;
             }

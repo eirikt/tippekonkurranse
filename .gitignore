@@ -11,22 +11,13 @@ data
 npm-debug.log
 
 # Ignore derived/generated/transient project files/resources
+client/scripts/app.models.js
+client/bower_components
+node_modules
 build
 docs
-client/bower_components
-client/scripts/app.models.js
-node_modules
-README.html
 howto.txt
-snapshot-round-4.png
-snapshot-round-5.png
-snapshot-round-6.png
-snapshot-round-7.png
-snapshot-round-8.png
-snapshot-round-9.png
-snapshot-round-10.png
-snapshot-round-11.png
-snapshot-round-12.png
+README.html
 
 # Temporary local dev stuff, not sure about their future ...
 client/fonts

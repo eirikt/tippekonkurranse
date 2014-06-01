@@ -820,6 +820,106 @@ var __ = require("underscore"),
     },
 
 
+    _dataForRound2014011 = exports.round2014011 = {
+        year: 2014,
+        round: 11,
+        date: "2014-05-25",
+        tippeliga: [
+            /*
+             1.	Molde	11	8	2	1	23	8	+15	26
+             2.	Strømsgodset	11	6	3	2	21	13	+8	21
+             3.	Odd	11	6	2	3	14	12	+2	20
+             4.	Vålerenga	11	5	4	2	21	14	+7	19
+             5.	Lillestrøm	11	5	3	3	19	11	+8	18
+             6.	Stabæk	11	6	0	5	18	20	-2	18
+             7.	Rosenborg	11	4	5	2	19	15	+4	17
+             8.	Viking	11	4	5	2	15	11	+4	17
+             9.	Bodø/Glimt	11	5	2	4	19	19	0	17
+             10.	Sogndal	11	4	2	5	15	19	-4	14
+             11.	Sarpsborg 08	11	3	4	4	15	18	-3	13
+             12.	Start	11	2	3	6	13	19	-6	9
+             13.	Aalesund	11	1	5	5	9	14	-5	8
+             14.	Brann	11	2	2	7	13	22	-9	8
+             15.	Haugesund	11	1	4	6	10	18	-8	7
+             16.	Sandnes Ulf	11	1	4	6	9	20	-11	7
+             */
+            { name: "Molde", no: 1, matches: 10 },
+            { name: "Strømsgodset", no: 2, matches: 10 },
+            { name: "Stabæk", no: 3, matches: 10 },
+            { name: "Viking", no: 4, matches: 10 },
+            { name: "Odd", no: 5, matches: 10 },
+            { name: "Vålerenga", no: 6, matches: 10 },
+            { name: "Rosenborg", no: 7, matches: 10 },
+            { name: "Lillestrøm", no: 8, matches: 10 },
+            { name: "Bodø/Glimt", no: 9, matches: 10 },
+            { name: "Sarpsborg 08", no: 10, matches: 10 },
+            { name: "Sogndal", no: 11, matches: 10 },
+            { name: "Start", no: 12, matches: 10 },
+            { name: "Brann", no: 13, matches: 10 },
+            { name: "Aalesund", no: 14, matches: 10 },
+            { name: "Sandnes Ulf", no: 15, matches: 10 },
+            { name: "Haugesund", no: 16, matches: 10 }
+        ],
+        toppscorer: [
+            "Vidar Örn Kjartansson"
+        ],
+        adeccoliga: [
+            /*
+             1.	Sandefjord	11	8	2	1	21	9	+12	26
+             2.	Tromsø	11	7	3	1	21	8	+13	24
+             3.	Mjøndalen	11	6	4	1	21	11	+10	22
+             4.	Ranheim	11	6	2	3	16	9	+7	20
+             5.	Nest-Sotra	11	6	1	4	20	16	+4	19
+             6.	Alta	11	5	2	4	14	12	+2	17
+             7.	Kristiansund BK	11	5	2	4	18	18	0	17
+             8.	Fredrikstad	11	5	2	4	10	10	0	17
+             9.	Hødd	11	4	4	3	15	13	+2	16
+             10.	Bærum	11	5	1	5	17	22	-5	16
+             11.	Strømmen	11	3	3	5	16	21	-5	12
+             12.	Tromsdalen	11	3	3	5	11	17	-6	12
+             13.	Bryne	11	3	2	6	14	18	-4	11
+             14.	Hønefoss	11	2	2	7	12	20	-8	8
+             15.	Ullensaker/Kisa	11	1	2	8	8	19	-11	5
+             16.	HamKam	11	1	1	9	6	17	-11	4
+             */
+            { name: "Sandefjord", no: 1, matches: 9 },
+            { name: "Tromsø", no: 2, matches: 9 },
+            { name: "Mjøndalen", no: 3, matches: 9 },
+            { name: "Bærum", no: 4, matches: 9 },
+            { name: "Nest-Sotra", no: 5, matches: 9 },
+            { name: "Ranheim", no: 6, matches: 9 },
+            { name: "Kristiansund BK", no: 7, matches: 9 },
+            { name: "Hødd", no: 8, matches: 9 },
+            { name: "Strømmen", no: 9, matches: 9 },
+            { name: "Tromsdalen", no: 10, matches: 9 },
+            { name: "Alta", no: 11, matches: 9 },
+            { name: "Fredrikstad", no: 12, matches: 9 },
+            { name: "Bryne", no: 13, matches: 9 },
+            { name: "Hønefoss", no: 14, matches: 9 },
+            { name: "Ullensaker/Kisa", no: 15, matches: 9 },
+            { name: "HamKam", no: 16, matches: 9 }
+        ],
+        remainingCupContenders: [
+            "Bodø/Glimt",
+            "Brann",
+            "Haugesund",
+            "Lillestrøm",
+            "Molde",
+            "Odd",
+            "Rosenborg",
+            "Sandnes Ulf",
+            "Sarpsborg 08",
+            "Sogndal",
+            "Stabæk",
+            "Start",
+            "Strømsgodset",
+            "Viking",
+            "Vålerenga",
+            "Aalesund"
+        ]
+    },
+
+
     _getTippeligaTable2013 = exports.getTippeligaTable2013 = function () {
         "use strict";
         return [

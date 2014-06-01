@@ -1,10 +1,11 @@
 /* global define:false, console:false, $:false */
+
 define([
         'underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'toastr',
         'backbone.fetch-local-copy', 'utils',
         'app.result-collection', 'app.results-view'],
 
-    function (_, Backbone, $, Bootstrap, toastr, BackboneFetchLocalCopy, Please, TippekonkurranseCurrentResultsCollection, TippekonkurranseCurrentResultsView) {
+    function (_, Backbone, $, Bootstrap, toastr, BackboneFetchLocalCopy, Please, TippekonkurranseCurrentScoresCollection, TippekonkurranseCurrentScoresView) {
         'use strict';
 
         var HeaderView = Backbone.View.extend({
@@ -41,7 +42,7 @@ define([
                         showHistoricScores: function (year, round) {
                             //console.log("showHistoricScores(" + year + ", " + round + ") ...");
                             $('#content').hide('slow', function () {
-                                var results = new TippekonkurranseCurrentResultsCollection({
+                                var results = new TippekonkurranseCurrentScoresCollection({
                                         year: year,
                                         round: round
                                     }),
@@ -49,7 +50,7 @@ define([
                                         el: 'header',
                                         collection: results
                                     }),
-                                    resultsView = new TippekonkurranseCurrentResultsView({
+                                    resultsView = new TippekonkurranseCurrentScoresView({
                                         el: '#content',
                                         collection: results
                                     });
@@ -67,12 +68,12 @@ define([
                             //console.log("defaultAction() ...");
                             Please.wait(1650).then(function () {
                                 $('#intro').hide('slow', function () {
-                                    var results = new TippekonkurranseCurrentResultsCollection(),
+                                    var results = new TippekonkurranseCurrentScoresCollection(),
                                         headerView = new HeaderView({
                                             el: 'header',
                                             collection: results
                                         }),
-                                        resultsView = new TippekonkurranseCurrentResultsView({
+                                        resultsView = new TippekonkurranseCurrentScoresView({
                                             el: '#content',
                                             collection: results
                                         });

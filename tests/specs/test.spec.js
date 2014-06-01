@@ -1,16 +1,21 @@
 /* global define:false, describe:false, it:false */
 /* jshint -W030 */
 
-// A trivial global function to test ...
+/* For WebStorm ...
+var expect = require('../../node_modules/chai/chai').expect,
+    sinon = require('../../node_modules/sinon/lib/sinon');
+*/
+
+// Meta tests ...
 var hello = function () {
     "use strict";
     return "Hello world!";
 };
 
-define(['chai', 'sinon'], function (chai, sinon) {
+define(["chai", "sinon"], function (Chai, Sinon) {
         "use strict";
 
-        var expect = chai.expect;
+        var expect = Chai.expect;
 
         describe("Trying out the test libraries", function () {
 
@@ -20,21 +25,29 @@ define(['chai', 'sinon'], function (chai, sinon) {
             });
 
             describe("Chai", function () {
-                it("should use 'expect' to check equality", function () {
+                it("should use 'expect' to check e.g. truthiness and equality", function () {
+                    expect(true).to.be.OK;
+                    expect(true).to.be.true;
+                    expect(1 === 1).to.be.true;
                     expect(hello()).to.equal("Hello world!");
+                    expect(
+                        (function () {
+                            return 1;
+                        }())
+                    ).to.equal(1);
                 });
             });
 
             describe("Sinon.JS", function () {
                 it("should exist", function () {
-                    expect(sinon).to.exist;
+                    expect(Sinon).to.exist;
                 });
             });
 
             describe("Sinon.JS", function () {
                 it("should report spy being called", function () {
                     expect(hello).to.exist;
-                    var helloSpy = sinon.spy(window, "hello");
+                    var helloSpy = Sinon.spy(window, "hello");
                     expect(helloSpy).to.exist;
 
                     expect(helloSpy.called).to.be.false;

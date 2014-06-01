@@ -1,5 +1,6 @@
 /* global define:false, wait:false, isTouchDevice:false */
 /* jshint -W106 */
+
 define([
         "jquery", "underscore", "backbone", "moment", "moment.nb",
         "app.models", "app.participant-score-view", "app.soccer-table-views",

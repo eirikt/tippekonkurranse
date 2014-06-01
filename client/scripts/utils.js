@@ -4,15 +4,13 @@
 // Global helper functions
 ///////////////////////////////////////////////////////////////////////////////
 
-define(["jquery", "underscore", "backbone"],
+define(["jquery"],
     function ($) {
         "use strict";
 
         return {
-            wait: function (ms) {
-                var deferred = $.Deferred();
-                setTimeout(deferred.resolve, ms);
-                return deferred.promise();
+            capitalize: function (str) {
+                return str.charAt(0).toUpperCase() + str.slice(1);
             },
 
             // TODO: reduce cyclic complexity (from 6 to 5)
@@ -39,6 +37,12 @@ define(["jquery", "underscore", "backbone"],
 
             isTouchDevice: function () {
                 return this.isTouchDeviceUserAgentString(navigator.userAgent);
+            },
+
+            wait: function (ms) {
+                var deferred = $.Deferred();
+                setTimeout(deferred.resolve, ms);
+                return deferred.promise();
             }
         };
     }

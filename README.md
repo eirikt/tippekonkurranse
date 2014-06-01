@@ -30,7 +30,7 @@ In production [here][1].
 _Status: In progress_
 
 
-#### v1.2 : _Delivery goal 01.06.2014_
+#### v1.2 : _Delivery goal 20.06.2014_
 * Some simple presentation of historic data
 * Multiple draggable windows (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
 * Revisit automatic reloading of web page
@@ -43,7 +43,8 @@ _Status: In progress_
 #### v1.1.5 : _Delivery goal 18.05.2014_
 * Improved notifications with toastr
 * Client-side routing established
-* Bugfix: Sorting of participant scores
+* Altered participant rating, skipping non-used rating numbers 
+* Bugfix: Sorting of participants
 
 _Status: Done_
 

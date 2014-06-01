@@ -1,8 +1,9 @@
 /* global global:false, require:false, describe:false, it:false */
 /* jshint -W030 */
 
-var assert = require("../../node_modules/chai/chai.js").assert,
-    expect = require("../../node_modules/chai/chai.js").expect,
+var chai = require("../../node_modules/chai/chai.js"),
+    assert = chai.assert,
+    expect = chai.expect,
     sinon = require('../../node_modules/sinon/lib/sinon'),
 
     updateScores = require("../../server/scripts/tippekonkurranse-service.js")._updateScores;
@@ -44,7 +45,7 @@ describe("Tippekonkurranse service", function () {
             expect(updateScores(userPredictions, null, null, null, null)).not.to.be.empty;
             expect(JSON.stringify(updateScores(userPredictions))).to.equal(
                 JSON.stringify({
-                    john: { sum: 0, tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0 }
+                    john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, sum: 0 }
                 })
             );
         });
@@ -59,7 +60,7 @@ describe("Tippekonkurranse service", function () {
             expect(updateScores(userPredictions, null, null, null, null)).not.to.be.empty;
             expect(JSON.stringify(updateScores(userPredictions))).to.equal(
                 JSON.stringify({
-                    john: { sum: 0, tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0 }
+                    john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, sum: 0 }
                 })
             );
         });
@@ -76,7 +77,7 @@ describe("Tippekonkurranse service", function () {
             expect(updateScores(userPredictions, null, null, null, null)).not.to.be.empty;
             expect(JSON.stringify(updateScores(userPredictions))).to.equal(
                 JSON.stringify({
-                    john: { sum: 0, tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0 }
+                    john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, sum: 0 }
                 })
             );
         });
@@ -96,7 +97,7 @@ describe("Tippekonkurranse service", function () {
             expect(updateScores(userPredictions, null, null, null, null)).not.to.be.empty;
             expect(JSON.stringify(updateScores(userPredictions))).to.equal(
                 JSON.stringify({
-                    john: { sum: 0, tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0 }
+                    john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, sum: 0 }
                 })
             );
         });
@@ -445,7 +446,7 @@ describe("Tippekonkurranse service", function () {
 
             expect(JSON.stringify(updateScores(userPredictions, null, null, actualOpprykkTable, null))).to.equal(
                 JSON.stringify({
-                    john: { sum: 0, tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0 }
+                    john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, sum: 0 }
                 })
             );
         });
@@ -474,12 +475,12 @@ describe("Tippekonkurranse service", function () {
 
             expect(JSON.stringify(updateScores(userPredictions, null, null, actualOpprykkTable1, null))).to.equal(
                 JSON.stringify({
-                    john: { sum: -1, tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: -1, cup: 0 }
+                    john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: -1, cup: 0, sum: -1 }
                 })
             );
             expect(JSON.stringify(updateScores(userPredictions, null, null, actualOpprykkTable2, null))).to.equal(
                 JSON.stringify({
-                    john: { sum: -1, tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: -1, cup: 0 }
+                    john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: -1, cup: 0, sum: -1 }
                 })
             );
         });
@@ -508,12 +509,12 @@ describe("Tippekonkurranse service", function () {
 
             expect(JSON.stringify(updateScores(userPredictions, null, null, actualOpprykkTable1, null))).to.equal(
                 JSON.stringify({
-                    john: { sum: 0, tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0 }
+                    john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, sum: 0 }
                 })
             );
             expect(JSON.stringify(updateScores(userPredictions, null, null, actualOpprykkTable2, null))).to.equal(
                 JSON.stringify({
-                    john: { sum: 0, tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0 }
+                    john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, sum: 0 }
                 })
             );
         });

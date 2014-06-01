@@ -153,12 +153,18 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
              */
             fetch: function () {
                 var self = this,
-                    url = self.url(),
-                    currentScoreResourceKey = self.name() + url,
-                    resourceTimestampCacheKey = self.name() + url + ":timestamp",
+                    url = _.result(self, "url"),
+                    name, currentScoreResourceKey, resourceTimestampCacheKey,
                     isBackboneModel = this instanceof Backbone.Model,
                     isBackboneCollection = this instanceof Backbone.Collection,
                     xhr = null;
+
+                if (!self.name) {
+                    throw new TypeError("Backbone object with 'backbone.fetch-local-copy' mixed in must have a 'name' function");
+                }
+                name = _.result(self, "name");
+                currentScoreResourceKey = self.name() + url;
+                resourceTimestampCacheKey = self.name() + url + ":timestamp";
 
                 if (isBackboneModel) {
                     xhr = Backbone.Model.prototype.fetch.call(this);

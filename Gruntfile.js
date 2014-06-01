@@ -17,6 +17,15 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
+        env: {
+            dev: {
+                NODE_ENV: 'development'
+            },
+            prod: {
+                NODE_ENV: 'production'
+            }
+        },
+
         connect: {
             server: {
                 options: {
@@ -31,14 +40,7 @@ module.exports = function (grunt) {
                 }
             }
         },
-        env: {
-            dev: {
-                NODE_ENV: 'development'
-            },
-            prod: {
-                NODE_ENV: 'production'
-            }
-        },
+
         shell: {
             help: {
                 options: { stdout: true, stderr: true, failOnError: true },
@@ -149,7 +151,7 @@ module.exports = function (grunt) {
                 maxparams: 14,
                 maxdepth: 5,
                 maxstatements: 30,
-                maxcomplexity: 7, // TODO: Bring this down to... let's say 5 - YES, REALLY!
+                maxcomplexity: 8, // TODO: Bring this down to... let's say 5 - YES, REALLY!
                 //maxlen: 180,
 
                 laxcomma: true,
@@ -188,14 +190,19 @@ module.exports = function (grunt) {
                 }
             },
             options: {
-                files: 'tests/specs/tippekonkurranse-service.spec.js'
+                files: [
+                    'tests/specs/tippekonkurranse-service.spec.js',
+                    'tests/specs/test.spec.js',
+                    'tests/specs/client-global-functions.spec.js',
+                    'tests/specs/app.scores-collection.spec.js'
+                ]
             }
         },
 
         uglify: {
             myUglifyTask: {
                 files: {
-                    // Minified version not available via Bower ...
+                    // Minified versions not available via Bower ...
                     'build/bower_components/requirejs/require.js': 'build/bower_components/requirejs/require.js',
                     'build/bower_components/backbone/backbone.js': 'build/bower_components/backbone/backbone.js',
                     'build/bower_components/underscore/underscore.js': 'build/bower_components/underscore/underscore.js',
@@ -208,8 +215,8 @@ module.exports = function (grunt) {
                     'build/scripts/app.result.js': 'build/scripts/app.result.js',
                     'build/scripts/app.result-collection.js': 'build/scripts/app.result-collection.js',
                     'build/scripts/app.results-view.js': 'build/scripts/app.results-view.js',
-                    'build/scripts/app.soccer-table-views.js': 'build/scripts/scripts/app.soccer-table-views.js',
-                    'build/scripts/backbone-fetch-local-copy.js': 'build/scripts/backbone-fetch-local-copy.js',
+                    'build/scripts/app.soccer-table-views.js': 'build/scripts/app.soccer-table-views.js',
+                    'build/scripts/backbone.fetch-local-copy.js': 'build/scripts/backbone.fetch-local-copy.js',
                     'build/scripts/utils.js': 'build/scripts/utils.js'
                 }
             }
