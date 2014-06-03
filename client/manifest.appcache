@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# v1.1.5.4
+# v1.1.5.5
 
 CACHE:
 favicon.ico
@@ -22,6 +22,8 @@ bower_components/moment/min/moment.min.js
 bower_components/moment/lang/nb.js
 bower_components/bootstrap/dist/js/bootstrap.min.js
 bower_components/toastr/toastr.min.js
+scripts/fun.js
+scripts/comparators.js
 scripts/app.config.js
 scripts/app.js
 scripts/backbone.fetch-local-copy.js

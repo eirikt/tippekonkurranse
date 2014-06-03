@@ -11,6 +11,8 @@ data
 npm-debug.log
 
 # Ignore derived/generated/transient project files/resources
+client/scripts/fun.js
+client/scripts/comparators.js
 client/scripts/app.models.js
 client/bower_components
 node_modules

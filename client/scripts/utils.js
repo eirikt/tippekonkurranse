@@ -4,11 +4,12 @@
 // Global helper functions
 ///////////////////////////////////////////////////////////////////////////////
 
-define(["jquery"],
-    function ($) {
+define(["jquery", "underscore"],
+    function ($, _) {
         "use strict";
 
         return {
+
             capitalize: function (str) {
                 return str.charAt(0).toUpperCase() + str.slice(1);
             },

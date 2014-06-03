@@ -1,80 +1,89 @@
-/* global exports:false */
+/* global define:false */
 
-var __ = require('underscore'),
+(function (name, definition) {
+    'use strict';
+    if (typeof module !== 'undefined') {
+        module.exports = definition();
+    }
+    else if (typeof define === 'function' && typeof define.amd === 'object') {
+        define(definition);
+    }
+    else {
+        this[name] = definition();
+    }
+}('app', function () {
+    'use strict';
 
-    appName = 'Tippekonkurranse',
+    var _appName = 'Tippekonkurranse',
 
-    resource = {
-        uri: {
-            element: {
-                current: "current"
+        _resource = {
+            uri: {
+                element: {
+                    current: 'current'
+                }
+            },
+            predictions: {
+                baseUri: '/api/predictions',
+                uri: '/api/predictions/:year/:userId'
+            },
+            results: {
+                baseUri: '/api/results',
+                uri: '/api/results/:year/:round'
+            },
+            scores: {
+                baseUri: '/api/scores',
+                uri: '/api/scores/:year/:round'
             }
         },
-        predictions: {
-            baseUri: "/api/predictions",
-            uri: '/api/predictions/:year/:userId'
-        },
-        results: {
-            baseUri: "/api/results",
-            uri: '/api/results/:year/:round'
-        },
-        scores: {
-            baseUri: "/api/scores",
-            uri: '/api/scores/:year/:round'
-        }
-    },
 
-    scoreModel = {
-        tabellPropertyName: 'tabell',
-        pallPropertyName: 'pall',
-        nedrykkPropertyName: 'nedrykk',
-        toppscorerPropertyName: 'toppscorer',
-        opprykkPropertyName: 'opprykk',
-        cupPropertyName: 'cup',
-        sumPropertyName: 'sum',
+        _scoreModel = {
+            tabellPropertyName: 'tabell',
+            pallPropertyName: 'pall',
+            nedrykkPropertyName: 'nedrykk',
+            toppscorerPropertyName: 'toppscorer',
+            opprykkPropertyName: 'opprykk',
+            cupPropertyName: 'cup',
+            sumPropertyName: 'sum',
 
-        /**
-         * Creates and populates the ScoreModel with the given properties,
-         */
-        createObjectWith: function () {
-            "use strict";
-            var scoreModelPropertyNamesArray = [
-                    scoreModel.tabellPropertyName,
-                    scoreModel.pallPropertyName,
-                    scoreModel.nedrykkPropertyName,
-                    scoreModel.toppscorerPropertyName,
-                    scoreModel.opprykkPropertyName,
-                    scoreModel.cupPropertyName,
-                    scoreModel.sumPropertyName
-                ],
-                args,
-                model = {};
+            // Creates and populates the ScoreModel with the given properties
+            createObjectWith: function () {
+                var scoreModelPropertyNamesArray = [
+                        _scoreModel.tabellPropertyName,
+                        _scoreModel.pallPropertyName,
+                        _scoreModel.nedrykkPropertyName,
+                        _scoreModel.toppscorerPropertyName,
+                        _scoreModel.opprykkPropertyName,
+                        _scoreModel.cupPropertyName,
+                        _scoreModel.sumPropertyName
+                    ],
+                    args,
+                    model = {};
 
-            if (arguments.length > 0) {
-                args = __.toArray(arguments);
-            } else {
-                args = scoreModelPropertyNamesArray.map(function () {
-                    return 0;
+                if (arguments.length > 0) {
+                    // _.toArray() this is ...
+                    args = Array.prototype.slice.call(arguments);
+                } else {
+                    args = scoreModelPropertyNamesArray.map(function () {
+                        return 0;
+                    });
+                }
+
+                scoreModelPropertyNamesArray.forEach(function (propName, index) {
+                    model[propName] = args[index];
                 });
+
+                return model;
             }
+        };
 
-            scoreModelPropertyNamesArray.forEach(function (propName, index) {
-                model[propName] = args[index];
-            });
-
-            return model;
-        }
+    // This is the code you would normally have inside define() or add to module.exports
+    return {
+        nameable: {
+            name: function () {
+                return _appName;
+            }
+        },
+        resource: _resource,
+        scoreModel: _scoreModel
     };
-
-
-// For client-side: use RequireJS shims
-// => http://stackoverflow.com/questions/18650066/can-we-export-multiple-non-amd-functions-from-a-module-in-requirejs
-
-// For server-side/Node.js: CommonJS support
-if (typeof exports !== 'undefined') {
-    exports.appName = appName;
-    exports.name = appName;
-
-    exports.resource = resource;
-    exports.scoreModel = scoreModel;
-}
+}));

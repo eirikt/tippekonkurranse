@@ -12,7 +12,7 @@ define([
         var CurrentResults = Backbone.Model.extend({
             urlRoot: [App.resource.results.baseUri, App.resource.uri.element.current].join("/")
         });
-        _.extend(CurrentResults.prototype, App.namedObject);
+        _.extend(CurrentResults.prototype, App.nameable);
         _.extend(CurrentResults.prototype, BackboneFetchLocalCopy);
 
         var PrettyDateView = Backbone.View.extend({

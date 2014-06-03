@@ -2,9 +2,9 @@
 /* jshint -W030 */
 
 /* For WebStorm ...
-var expect = require('../../node_modules/chai/chai').expect,
-    sinon = require('../../node_modules/sinon/lib/sinon');
-*/
+ var expect = require('../../node_modules/chai/chai').expect,
+ sinon = require('../../node_modules/sinon/lib/sinon');
+ */
 
 // Meta tests ...
 var hello = function () {
@@ -12,7 +12,8 @@ var hello = function () {
     return "Hello world!";
 };
 
-define(["chai", "sinon"], function (Chai, Sinon) {
+define(["chai", "sinon"],
+    function (Chai, Sinon) {
         "use strict";
 
         var expect = Chai.expect;

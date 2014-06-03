@@ -1,4 +1,4 @@
-/* global mocha:false, define:false, appName:false, resource:false, scoreModel:false */
+/* global mocha:false */
 
 require.config({
     baseUrl: '/',
@@ -12,52 +12,20 @@ require.config({
         chai: 'node_modules/chai/chai',
         sinon: 'node_modules/sinon/lib/sinon',
 
-        // Adding shared app libs as well ...
+        // Shared util libs
+        'fun': 'build/scripts/fun',
+        'comparators': 'build/scripts/comparators',
+
+        // Shared app libs
         'app.models': 'build/scripts/app.models',
 
-        // Adding app libs as well ...
-        'app.result': 'build/scripts/app.result',
-        'app.result-collection': 'build/scripts/app.result-collection',
+        // Client-side only util libs
+        'utils': 'build/scripts/utils',
         'backbone.fetch-local-copy': 'build/scripts/backbone.fetch-local-copy',
-        'utils': 'build/scripts/utils'
-    },
-    shim: {
-        //    'jquery': {
-        //        exports: '$'
-        //    },
-        //    'underscore': {
-        //        exports: '_'
-        //    },
-        //    'backbone': {
-        //        exports: 'Backbone'
-        //    },
 
-        //    'chai': {
-        //        exports: 'Chai'
-        //    },
-        'sinon': {
-            exports: 'sinon'
-        },
-
-        // My 'dual CommonJS/AMD' libs attempt must be shimmed
-        'app.models': {
-            deps: ['underscore'],
-            init: function () {
-                'use strict';
-                return {
-                    //        appName: appName,
-                    name: appName,
-                    //        namedObject: {
-                    //            name: function () {
-                    //                return appName;
-                    //            }
-                    //        },
-
-                    resource: resource,
-                    scoreModel: scoreModel
-                };
-            }
-        }
+        // Client-side only app libs
+        'app.result': 'build/scripts/app.result',
+        'app.result-collection': 'build/scripts/app.result-collection'
     }
 });
 

@@ -163,7 +163,10 @@ module.exports = function (grunt) {
                 options: {
                     reporter: 'spec'
                 },
-                src: ['tests/server/specs/tippekonkurranse-service.spec.js']
+                src: [
+                    'tests/server/specs/comparators.spec.js',
+                    'tests/server/specs/tippekonkurranse-service.spec.js'
+                ]
             }
         },
 
@@ -186,6 +189,7 @@ module.exports = function (grunt) {
             },
             options: {
                 files: [
+                    'tests/server/specs/comparators.spec.js',
                     'tests/server/specs/tippekonkurranse-service.spec.js'
                 ]
             }
@@ -210,6 +214,8 @@ module.exports = function (grunt) {
                     'build/bower_components/backbone/backbone.js': 'build/bower_components/backbone/backbone.js',
                     'build/bower_components/underscore/underscore.js': 'build/bower_components/underscore/underscore.js',
 
+                    'build/scripts/fun.js': 'build/scripts/fun.js',
+                    'build/scripts/comparators.js': 'build/scripts/comparators.js',
                     'build/scripts/app.models.js': 'build/scripts/app.models.js',
 
                     'build/scripts/app.config.js': 'build/scripts/app.config.js',
@@ -289,7 +295,7 @@ module.exports = function (grunt) {
     grunt.registerTask('mongodb', ['shell:createDataDir', 'shell:mongod']);
 
     grunt.registerTask('build:client', ['clean', 'copy:all', 'uglify', 'cssmin']);
-    //grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', 'blanket_mocha', 'mochacov:travis']);
+    // TODO: grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', 'blanket_mocha', 'mochacov:travis']);
     grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', 'mochacov:travis']);
 
     grunt.registerTask('test:client', ['connect', 'shell:mocha-phantomjs']);

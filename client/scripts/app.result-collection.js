@@ -1,22 +1,32 @@
-/* global define: false */
+/* global define:false */
 /* jshint -W106 */
 
-define(["underscore", "backbone", "app.models", "app.result", "backbone.fetch-local-copy"],
-    function (_, Backbone, App, ParticipantScore, BackboneFetchLocalCopy) {
+define(["underscore", "backbone", "comparators", "app.models", "app.result", "backbone.fetch-local-copy"],
+    function (_, Backbone, Comparators, App, ParticipantScore, BackboneFetchLocalCopy) {
         "use strict";
 
-        var ResultCollection = Backbone.Collection.extend({
+        var ParticipantScoreCollection = Backbone.Collection.extend({
 
             defaultBaseUri: App.resource.scores.baseUri,
             defaultResource: App.resource.uri.element.current,
 
             model: ParticipantScore,
-            comparator: ParticipantScore.sortBySum,
+
+            // Ascending sum comparator
+            sortBySum: _.partial(Comparators.ascendingBackboneComparator,
+                [App.scoreModel.sumPropertyName, ParticipantScore.namePropertyName]),
+
+            // Ascending previous sum comparator
+            sortByPreviousSum: _.partial(Comparators.ascendingBackboneComparator,
+                [ParticipantScore.previousSumPropertyName, ParticipantScore.namePropertyName]),
 
             year: null,
             round: null,
 
             initialize: function (options) {
+                // Default comparator
+                this.comparator = this.sortBySum;
+
                 if (options && options.year) {
                     this.year = options.year;
                 }
@@ -27,7 +37,7 @@ define(["underscore", "backbone", "app.models", "app.result", "backbone.fetch-lo
 
             /** Set previous match round rating number for participants (tendency tracking) */
             _setPreviousRating: function () {
-                this.comparator = ParticipantScore.sortByPreviousSum;
+                this.comparator = this.sortByPreviousSum;
                 this.sort();
 
                 var previousRating = 1,
@@ -41,7 +51,7 @@ define(["underscore", "backbone", "app.models", "app.result", "backbone.fetch-lo
                     participant.set(ParticipantScore.previousRatingNumberPropertyName, previousRating, { silent: true });
                 });
 
-                this.comparator = ParticipantScore.sortBySum;
+                this.comparator = this.sortBySum;
                 this.sort();
             },
 
@@ -106,9 +116,9 @@ define(["underscore", "backbone", "app.models", "app.result", "backbone.fetch-lo
             }
         });
 
-        _.extend(ResultCollection.prototype, App.namedObject);
-        _.extend(ResultCollection.prototype, BackboneFetchLocalCopy);
+        _.extend(ParticipantScoreCollection.prototype, App.nameable);
+        _.extend(ParticipantScoreCollection.prototype, BackboneFetchLocalCopy);
 
-        return ResultCollection;
+        return ParticipantScoreCollection;
     }
 );

@@ -1,11 +1,11 @@
 /* global define:false, console:false, $:false */
 
 define([
-        'underscore', 'backbone', 'jquery', 'jquery.bootstrap', 'toastr',
+        'jquery', 'underscore', 'backbone', 'jquery.bootstrap', 'toastr',
         'backbone.fetch-local-copy', 'utils',
         'app.result-collection', 'app.results-view'],
 
-    function (_, Backbone, $, Bootstrap, toastr, BackboneFetchLocalCopy, Please, TippekonkurranseCurrentScoresCollection, TippekonkurranseCurrentScoresView) {
+    function ($, _, Backbone, Bootstrap, toastr, BackboneFetchLocalCopy, Please, TippekonkurranseCurrentScoresCollection, TippekonkurranseCurrentScoresView) {
         'use strict';
 
         var HeaderView = Backbone.View.extend({

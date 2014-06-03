@@ -1,6 +1,6 @@
 /* global define:false */
-define(["underscore", "jquery", "backbone", "moment", "toastr"],
-    function (_, $, Backbone, Moment, toastr) {
+define(["jquery", "underscore", "backbone", "moment", "toastr"],
+    function ($, _, Backbone, Moment, toastr) {
         "use strict";
 
         /**
@@ -163,8 +163,8 @@ define(["underscore", "jquery", "backbone", "moment", "toastr"],
                     throw new TypeError("Backbone object with 'backbone.fetch-local-copy' mixed in must have a 'name' function");
                 }
                 name = _.result(self, "name");
-                currentScoreResourceKey = self.name() + url;
-                resourceTimestampCacheKey = self.name() + url + ":timestamp";
+                currentScoreResourceKey = name + url;
+                resourceTimestampCacheKey = name + url + ":timestamp";
 
                 if (isBackboneModel) {
                     xhr = Backbone.Model.prototype.fetch.call(this);

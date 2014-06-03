@@ -1,8 +1,7 @@
-/* global global:false, require:false, describe:false, it:false */
+/* global  describe:false, it:false */
 /* jshint -W030 */
 
 var chai = require("../../../node_modules/chai/chai.js"),
-    assert = chai.assert,
     expect = chai.expect,
     sinon = require('../../../node_modules/sinon/lib/sinon'),
 
