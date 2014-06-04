@@ -112,7 +112,7 @@ define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soc
             },
             render: function () {
                 // Pretty user name presentation
-                this.model.set('userId', ParticipantScore.printableName(this.model.get('userId')), { silent: true });
+                this.model.set('userId', this.model.get('userId').unSnakify().titleCase(), { silent: true });
 
                 // Pretty tabell presentation
                 var prettyTabellView = new SoccerTableViews.SimpleTableView({
@@ -126,7 +126,7 @@ define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soc
                 prettyOpprykk = _.reduce(prettyOpprykk, function (result, team, index) {
                     return index > 0 ? result += ' og ' + team : result += team;
                 }, '');
-                this.model.set(App.scoreModel.opprykkPropertyName, ParticipantScore.printableName(prettyOpprykk), { silent: true });
+                this.model.set(App.scoreModel.opprykkPropertyName, prettyOpprykk, { silent: true });
 
                 this.$el.empty().append(this.template(this.model.toJSON()));
                 return this;

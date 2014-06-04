@@ -157,12 +157,10 @@ var __ = require("underscore"),
     _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders = function (requestion, arg) {
         "use strict";
         // For the cup title, just manually remove the teams when they consecutively screw up, one after the other ...
-        // Only tippeliga teams relevant for 2014 predictions ...
         return requestion([
             "Bodø/Glimt",
             "Brann",
             "Molde",
-            "Rosenborg",
             "Stabæk",
             "Vålerenga"
         ]);

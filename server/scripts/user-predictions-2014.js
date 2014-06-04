@@ -1,4 +1,6 @@
 /* global exports:false */
+/* jshint -W106 */
+
 var _pred2014 = exports.predictions2014 = {
     einar: {
         tabell: [
@@ -69,7 +71,7 @@ var _pred2014 = exports.predictions2014 = {
         toppscorer: ["Björn Bergmann Sigurdarson"],
         cup: ["Rosenborg"]
     },
-    hansbernhard: {
+    hans_bernhard: {
         tabell: [
             "Vålerenga",
             "Molde",
@@ -92,7 +94,7 @@ var _pred2014 = exports.predictions2014 = {
         toppscorer: ["Frode Johnsen"],
         cup: ["Vålerenga"]
     },
-    jantore: {
+    jan_tore: {
         tabell: [
             "Rosenborg",
             "Strømsgodset",
@@ -161,7 +163,7 @@ var _pred2014 = exports.predictions2014 = {
         toppscorer: ["Marvin Ogunjimi"],
         cup: ["Bodø/Glimt"]
     },
-    oleerik: {
+    ole_erik: {
         tabell: [
             "Molde",
             "Rosenborg",
@@ -207,7 +209,7 @@ var _pred2014 = exports.predictions2014 = {
         toppscorer: ["Fredrik Guldbrandsen"],
         cup: ["Molde"]
     },
-    sveintore: {
+    svein_tore: {
         tabell: [
             "Molde",
             "Rosenborg",

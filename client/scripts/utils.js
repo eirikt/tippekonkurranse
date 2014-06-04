@@ -1,32 +1,25 @@
 /* global define:false */
+/* jshint -W121 */
 
-///////////////////////////////////////////////////////////////////////////////
-// Global helper functions
-///////////////////////////////////////////////////////////////////////////////
-
-define(["jquery", "underscore"],
-    function ($, _) {
-        "use strict";
+define(['jquery', 'string-extensions'],
+    function ($, StringExtensions) {
+        'use strict';
 
         return {
-
-            capitalize: function (str) {
-                return str.charAt(0).toUpperCase() + str.slice(1);
-            },
 
             // TODO: reduce cyclic complexity (from 6 to 5)
             isTouchDeviceUserAgentString: function (userAgentString) {
                 if (userAgentString) {
-                    if (userAgentString.indexOf("iPad") > -1) {
+                    if (userAgentString.contains('iPad')) {
                         return true;
 
-                    } else if (userAgentString.indexOf("iPhone") > -1) {
+                    } else if (userAgentString.contains('iPhone')) {
                         return true;
 
-                    } else if (userAgentString.indexOf("Android") > -1) {
+                    } else if (userAgentString.contains('Android')) {
                         return true;
 
-                    } else if (userAgentString.indexOf("CriOs") > -1) {
+                    } else if (userAgentString.contains('CriOs')) {
                         return true;
 
                     } else {

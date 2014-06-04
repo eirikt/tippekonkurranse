@@ -1,11 +1,6 @@
 /* global define:false, describe:false, it:false */
 /* jshint -W030 */
 
-/* For WebStorm ...
- var expect = require('../../node_modules/chai/chai').expect,
- sinon = require('../../node_modules/sinon/lib/sinon');
- */
-
 // Meta tests ...
 var hello = function () {
     "use strict";

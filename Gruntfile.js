@@ -1,4 +1,4 @@
-/* jshint -W071, -W106 */
+/* jshint -W106 */
 
 module.exports = function (grunt) {
     'use strict';
@@ -148,12 +148,7 @@ module.exports = function (grunt) {
                 maxcomplexity: 8, // TODO: Bring this down to... let's say 5 - YES, REALLY!
                 //maxlen: 180,
 
-                laxcomma: true,
-
-                globals: {
-                    require: false,
-                    define: false
-                }
+                laxcomma: true
             }
         },
 
@@ -164,6 +159,7 @@ module.exports = function (grunt) {
                     reporter: 'spec'
                 },
                 src: [
+                    'tests/server/specs/string-extensions.spec.js',
                     'tests/server/specs/comparators.spec.js',
                     'tests/server/specs/tippekonkurranse-service.spec.js'
                 ]
@@ -189,6 +185,7 @@ module.exports = function (grunt) {
             },
             options: {
                 files: [
+                    'tests/server/specs/string-extensions.spec.js',
                     'tests/server/specs/comparators.spec.js',
                     'tests/server/specs/tippekonkurranse-service.spec.js'
                 ]

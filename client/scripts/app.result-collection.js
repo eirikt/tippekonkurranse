@@ -1,8 +1,8 @@
 /* global define:false */
 /* jshint -W106 */
 
-define(["underscore", "backbone", "comparators", "app.models", "app.result", "backbone.fetch-local-copy"],
-    function (_, Backbone, Comparators, App, ParticipantScore, BackboneFetchLocalCopy) {
+define(["jquery", "underscore", "backbone", "comparators", "app.models", "app.result", "backbone.fetch-local-copy"],
+    function ($, _, Backbone, Comparators, App, ParticipantScore, BackboneFetchLocalCopy) {
         "use strict";
 
         var ParticipantScoreCollection = Backbone.Collection.extend({
@@ -13,12 +13,16 @@ define(["underscore", "backbone", "comparators", "app.models", "app.result", "ba
             model: ParticipantScore,
 
             // Ascending sum comparator
-            sortBySum: _.partial(Comparators.ascendingBackboneComparator,
-                [App.scoreModel.sumPropertyName, ParticipantScore.namePropertyName]),
+            sortBySum: Comparators.ascendingBackboneComparator([
+                App.scoreModel.sumPropertyName,
+                ParticipantScore.namePropertyName
+            ]),
 
             // Ascending previous sum comparator
-            sortByPreviousSum: _.partial(Comparators.ascendingBackboneComparator,
-                [ParticipantScore.previousSumPropertyName, ParticipantScore.namePropertyName]),
+            sortByPreviousSum: Comparators.ascendingBackboneComparator([
+                ParticipantScore.previousSumPropertyName,
+                ParticipantScore.namePropertyName
+            ]),
 
             year: null,
             round: null,
@@ -100,7 +104,7 @@ define(["underscore", "backbone", "comparators", "app.models", "app.result", "ba
                     if (response.scores.hasOwnProperty(participant)) {
                         var participantScore = new this.model(response.scores[participant]);
                         participantScore.set(ParticipantScore.userIdPropertyName, participant, { silent: true });
-                        participantScore.set(ParticipantScore.namePropertyName, this.model.printableName(participant), { silent: true });
+                        participantScore.set(ParticipantScore.namePropertyName, participant.unSnakify().titleCase(), { silent: true });
                         participantScore.set(ParticipantScore.yearPropertyName, response.metadata.year, { silent: true });
                         participantScore.set(ParticipantScore.roundPropertyName, response.metadata.round, { silent: true });
 

@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# v1.1.5.5
+# v1.1.6
 
 CACHE:
 favicon.ico
@@ -23,6 +23,7 @@ bower_components/moment/lang/nb.js
 bower_components/bootstrap/dist/js/bootstrap.min.js
 bower_components/toastr/toastr.min.js
 scripts/fun.js
+scripts/string-extensions.js
 scripts/comparators.js
 scripts/app.config.js
 scripts/app.js
@@ -42,13 +43,13 @@ bower_components/toastr/toastr.min.js.map
 api/predictions/2014/einar
 api/predictions/2014/eirik
 api/predictions/2014/geir
-api/predictions/2014/hansbernhard
-api/predictions/2014/jantore
+api/predictions/2014/hans_bernhard
+api/predictions/2014/jan_tore
 api/predictions/2014/oddgeir
 api/predictions/2014/oddvar
-api/predictions/2014/oleerik
+api/predictions/2014/ole_erik
 api/predictions/2014/rikard
-api/predictions/2014/sveintore
+api/predictions/2014/svein_tore
 api/predictions/2014/steinar
 api/predictions/2014/tore
 api/predictions/2014/trond

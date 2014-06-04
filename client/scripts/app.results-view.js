@@ -108,20 +108,19 @@ define([
                     this.model.set("currentAdeccoligaTable", prettyTabellView.render().$el.html(), { silent: true });
 
                     // Pretty toppskårer presentation
-                    var cupContenders = this.model.get("currentTippeligaToppscorer");
-                    cupContenders = _.reduce(cupContenders, function (result, toppscorer, index) {
+                    var toppscorer = this.model.get("currentTippeligaToppscorer");
+                    toppscorer = _.reduce(toppscorer, function (result, toppscorer, index) {
                         return result += toppscorer + "<br/>";
                     }, "");
-                    this.model.set("currentTippeligaToppscorer", cupContenders, { silent: true });
+                    this.model.set("currentTippeligaToppscorer", toppscorer, { silent: true });
 
                     // Pretty cup presentation
-                    //var cupContenders = this.model.get("currentRemainingCupContenders");
-                    //cupContenders = _.reduce(cupContenders, function (result, team, index) {
-                    //    //return index > 0 ? result += " og " + team : result += team;
-                    //    //return result += team + "<br/>";
-                    //}, "");
-                    //this.model.set("currentRemainingCupContenders", cupContenders, { silent: true });
-                    this.model.set("currentRemainingCupContenders", "Alle relevante ...", { silent: true });
+                    var cupContenders = this.model.get("currentRemainingCupContenders");
+                    cupContenders = _.reduce(cupContenders, function (result, team, index) {
+                        //return index > 0 ? result += " og " + team : result += team;
+                        return result += team + "<br/>";
+                    }, "");
+                    this.model.set("currentRemainingCupContenders", cupContenders, { silent: true });
 
                     this.$el.empty().append(this.template(this.model.toJSON()));
 

@@ -13,14 +13,15 @@ require.config({
         sinon: 'node_modules/sinon/lib/sinon',
 
         // Shared util libs
-        'fun': 'build/scripts/fun',
-        'comparators': 'build/scripts/comparators',
+        fun: 'build/scripts/fun',
+        'string-extensions': 'build/scripts/string-extensions',
+        comparators: 'build/scripts/comparators',
 
         // Shared app libs
         'app.models': 'build/scripts/app.models',
 
         // Client-side only util libs
-        'utils': 'build/scripts/utils',
+        utils: 'build/scripts/utils',
         'backbone.fetch-local-copy': 'build/scripts/backbone.fetch-local-copy',
 
         // Client-side only app libs
@@ -31,7 +32,9 @@ require.config({
 
 require([
         'specs/test.spec.js',
-        'specs/client-global-functions.spec.js',
+        'specs/string-extensions.amd.spec.js',
+        'specs/comparators.amd.spec.js',
+        'specs/utils.spec.js',
         'specs/app.scores-collection.spec.js'
     ],
     function () {

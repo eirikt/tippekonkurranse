@@ -1,6 +1,6 @@
 # Tippekonkurranse
 
-A simple [Node][50]-based web application,
+A simple idiomatic full-stack JavaScript-based web application,
 persisting data using [MongoDB][51],
 with server-side functional composition using [RQ][52],
 and keeping client-side somewhat tidy with [Backbone][53].
@@ -40,11 +40,17 @@ _Status: In progress_
 _Status: In progress_
 
 
+#### v1.1.6 : _Delivery goal 06.06.2014_
+* Altered participant rating, skipping non-used rating numbers 
+* Bugfix: Sorting of participants
+* Moving towards real full-stack JavaScript solution with shared server/client logic
+
+_Status: Done_
+
+
 #### v1.1.5 : _Delivery goal 18.05.2014_
 * Improved notifications with toastr
 * Client-side routing established
-* Altered participant rating, skipping non-used rating numbers 
-* Bugfix: Sorting of participants
 
 _Status: Done_
 

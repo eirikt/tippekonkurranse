@@ -237,10 +237,10 @@ define([
                         "geir": {
                             "tabell": 68, "pall": 0, "nedrykk": 0, "toppscorer": 0, "opprykk": 0, "cup": -1, "sum": 67, "previousSum": 79
                         },
-                        "hansbernhard": {
+                        "hans_bernhard": {
                             "tabell": 84, "pall": -1, "nedrykk": 0, "toppscorer": 0, "opprykk": 0, "cup": -1, "sum": 82, "previousSum": 101
                         },
-                        "jantore": {
+                        "jan_tore": {
                             "tabell": 70, "pall": 0, "nedrykk": 0, "toppscorer": 0, "opprykk": 0, "cup": -1, "sum": 69, "previousSum": 85
                         },
                         "oddgeir": {
@@ -249,13 +249,13 @@ define([
                         "oddvar": {
                             "tabell": 66, "pall": 0, "nedrykk": 0, "toppscorer": 0, "opprykk": 0, "cup": -1, "sum": 65, "previousSum": 89
                         },
-                        "oleerik": {
+                        "ole_erik": {
                             "tabell": 74, "pall": 0, "nedrykk": 0, "toppscorer": 0, "opprykk": 0, "cup": -1, "sum": 73, "previousSum": 91
                         },
                         "rikard": {
                             "tabell": 70, "pall": 0, "nedrykk": 0, "toppscorer": 0, "opprykk": 0, "cup": -1, "sum": 69, "previousSum": 77
                         },
-                        "sveintore": {
+                        "svein_tore": {
                             "tabell": 72, "pall": 0, "nedrykk": 0, "toppscorer": 0, "opprykk": 0, "cup": -1, "sum": 71, "previousSum": 81
                         },
                         "steinar": {
