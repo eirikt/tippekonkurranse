@@ -104,7 +104,7 @@ define(["jquery", "underscore", "backbone", "comparators", "app.models", "app.re
                     if (response.scores.hasOwnProperty(participant)) {
                         var participantScore = new this.model(response.scores[participant]);
                         participantScore.set(ParticipantScore.userIdPropertyName, participant, { silent: true });
-                        participantScore.set(ParticipantScore.namePropertyName, participant.unSnakify().titleCase(), { silent: true });
+                        participantScore.set(ParticipantScore.namePropertyName, participant.unSnakify().toTitleCase(), { silent: true });
                         participantScore.set(ParticipantScore.yearPropertyName, response.metadata.year, { silent: true });
                         participantScore.set(ParticipantScore.roundPropertyName, response.metadata.round, { silent: true });
 

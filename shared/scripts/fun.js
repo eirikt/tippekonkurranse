@@ -1,5 +1,5 @@
 /* global define:false */
-/* jshint -W121 */
+/* jshint -W014, -W121 */
 
 // Boilerplate for CommonJS and AMD support (no RequireJS shimming required)
 // => https://blog.codecentric.de/en/2014/02/cross-platform-javascript/

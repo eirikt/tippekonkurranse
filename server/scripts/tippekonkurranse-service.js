@@ -10,12 +10,13 @@ var env = process.env.NODE_ENV || "development",
     curry = require("curry"),
 
 // Module dependencies, local
+    utils = require("./utils.js"),
     RQ = require("./vendor/rq.js").RQ,
+    go = utils.rqGo,
+
     dbSchema = require("./db-schema.js"),
     predictions2014 = require("./user-predictions-2014.js").predictions2014,
     norwegianSoccerLeagueService = require("./norwegian-soccer-service.js"),
-    utils = require("./utils.js"),
-    go = utils.rqGo,
     appModels = require("./../../shared/scripts/app.models.js"),
 
 
@@ -187,6 +188,8 @@ var env = process.env.NODE_ENV || "development",
                     logMsg += " is not yet stored";
 
                 } else {
+                    // TODO: Revisit! Ogsp, hvis Adeccoliga spiller runder mens Tippeliga ikke gjør det så blir ikke runden oppdatert ...
+
                     dbCount = dbMatchesCount[round].length;
                     if (currentRoundCount < dbCount) {
                         logMsg += " already stored with " + dbCount + " teams - current data has " + currentRoundCount + " teams";
@@ -298,6 +301,7 @@ var env = process.env.NODE_ENV || "development",
     },
 
 
+// TODO: spec/test this one!
     _dispatchResultsToClientForPresentation = function (response, requestion, arg) {
         "use strict";
         var res = {

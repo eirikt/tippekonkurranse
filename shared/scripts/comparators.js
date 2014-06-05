@@ -15,7 +15,6 @@
             /**
              * The standard way of accessing object properties.
              * @return The property with the given <code>propertyName</code> in the given object
-             * @private
              */
             _propertyGetter = function (propertyName, object) {
                 return object[propertyName];
@@ -24,7 +23,6 @@
             /**
              * Backbone.js' way of accessing model properties.
              * @return The property with the given <code>propertyName</code> in the given Backbone Model object
-             * @private
              */
             _backbonePropertyGetter = function (propertyName, modelObject) {
                 return modelObject.get(propertyName);
@@ -32,13 +30,14 @@
 
             /**
              * @return Comparator equal (being 0)
-             * @private
              */
             _alwaysEqualComparator = function (object, otherObject) {
                 return 0;
             },
 
-        // TODO: JSDoc
+            /**
+             *
+             */
             _chainableAscendingComparator = function (propertyGetter, nextComparator, propertyName, object, otherObject) {
                 var modelProperty = propertyGetter(propertyName, object),
                     otherModelProperty = propertyGetter(propertyName, otherObject);
@@ -55,15 +54,15 @@
         // TODO: JSDoc
             _ascendingComparator = function (propertyGetter, propertyNameArray, object, otherObject) {
                 var propArray = F.isArray(propertyNameArray) ? propertyNameArray : [propertyNameArray],
-                    prop, i, propPartial;
+                    prop, i, ascendingComparator;
 
                 prop = propArray[propArray.length - 1];
-                propPartial = _chainableAscendingComparator(propertyGetter, _alwaysEqualComparator, prop);
+                ascendingComparator = _chainableAscendingComparator(propertyGetter, _alwaysEqualComparator, prop);
                 for (i = propArray.length - 2; i >= 0; i -= 1) {
                     prop = propArray[i];
-                    propPartial = _chainableAscendingComparator(propertyGetter, propPartial, prop);
+                    ascendingComparator = _chainableAscendingComparator(propertyGetter, ascendingComparator, prop);
                 }
-                return propPartial(object, otherObject);
+                return ascendingComparator(object, otherObject);
             }.autoCurry();
 
         return {
@@ -71,6 +70,7 @@
             backbonePropertyGetter: _backbonePropertyGetter,
 
             alwaysEqualComparator: _alwaysEqualComparator,
+
             chainableAscendingComparator: _chainableAscendingComparator,
             ascendingComparator: _ascendingComparator,
             ascendingBackboneComparator: _ascendingComparator(_backbonePropertyGetter)

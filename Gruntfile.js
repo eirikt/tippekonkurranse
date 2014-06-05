@@ -1,4 +1,4 @@
-/* jshint -W106 */
+/* jshint -W071, -W106 */
 
 module.exports = function (grunt) {
     'use strict';
@@ -46,7 +46,6 @@ module.exports = function (grunt) {
                     'echo.',
                     'echo Essential grunt tasks are:',
                     'echo   install-client   installs client resources via Bower',
-                    'echo   install-test     installs test resources via Bower',
                     'echo   test             installs, builds, and executes all Mocha tests',
                     'echo   run              starts up local Node.js runtime (blocking command)'
                 ].join('&&')
@@ -106,7 +105,7 @@ module.exports = function (grunt) {
                 'package.json',
                 'bower.json',
                 'server/scripts/**/*.js', '!server/scripts/fun.js', '!server/scripts/vendor/**/*.js',
-                'client/scripts/**/*.js',
+                'client/scripts/**/*.js', '!client/scripts/app.models.js', '!client/scripts/comparators.js', '!client/scripts/fun.js', '!client/scripts/string-extensions.js',
                 'shared/scripts/**/*.js',
                 'tests/**/*.js'
             ],

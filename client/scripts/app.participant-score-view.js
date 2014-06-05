@@ -112,7 +112,7 @@ define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soc
             },
             render: function () {
                 // Pretty user name presentation
-                this.model.set('userId', this.model.get('userId').unSnakify().titleCase(), { silent: true });
+                this.model.set('userId', this.model.get('userId').unSnakify().toTitleCase(), { silent: true });
 
                 // Pretty tabell presentation
                 var prettyTabellView = new SoccerTableViews.SimpleTableView({

@@ -160,7 +160,7 @@ define(["jquery", "underscore", "backbone", "moment", "toastr"],
                     xhr = null;
 
                 if (!self.name) {
-                    throw new TypeError("Backbone object with 'backbone.fetch-local-copy' mixed in must have a 'name' function");
+                    throw new TypeError("Backbone object with 'backbone.fetch-local-copy' mixed in must have a 'name' property/function");
                 }
                 name = _.result(self, "name");
                 currentScoreResourceKey = name + url;

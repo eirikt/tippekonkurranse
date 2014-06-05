@@ -39,26 +39,26 @@ define(["chai", "underscore", "backbone", "../../../shared/scripts/comparators"]
                 });
             });
 
-            describe("titleCase string extension", function () {
+            describe("toTitleCase string extension", function () {
                 it("should exist as a string method", function () {
-                    expect(String.prototype.titleCase).to.exist;
-                    expect(_.isFunction(String.prototype.titleCase)).to.be.true;
+                    expect(String.prototype.toTitleCase).to.exist;
+                    expect(_.isFunction(String.prototype.toTitleCase)).to.be.true;
 
-                    expect('aString'.titleCase).to.exist;
-                    expect(_.isFunction('aString'.titleCase)).to.be.true;
+                    expect('aString'.toTitleCase).to.exist;
+                    expect(_.isFunction('aString'.toTitleCase)).to.be.true;
                 });
 
                 it("should leave title-cased strings alone", function () {
-                    expect("Johnny Boy".titleCase()).to.equal("Johnny Boy");
+                    expect("Johnny Boy".toTitleCase()).to.equal("Johnny Boy");
                 });
 
                 it("should title-case string", function () {
-                    expect("Johnny boy".titleCase()).to.equal("Johnny Boy");
+                    expect("Johnny boy".toTitleCase()).to.equal("Johnny Boy");
                 });
 
                 it("should title-case long strings", function () {
-                    expect("johnny boy goes home".titleCase()).to.equal("Johnny Boy Goes Home");
-                    expect("johnny Boy goes Home".titleCase()).to.equal("Johnny Boy Goes Home");
+                    expect("johnny boy goes home".toTitleCase()).to.equal("Johnny Boy Goes Home");
+                    expect("johnny Boy goes Home".toTitleCase()).to.equal("Johnny Boy Goes Home");
                 });
             });
         });
