@@ -35,9 +35,7 @@
                 return 0;
             },
 
-            /**
-             *
-             */
+        // TODO: JSDoc
             _chainableAscendingComparator = function (propertyGetter, nextComparator, propertyName, object, otherObject) {
                 var modelProperty = propertyGetter(propertyName, object),
                     otherModelProperty = propertyGetter(propertyName, otherObject);

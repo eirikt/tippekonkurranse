@@ -1,7 +1,7 @@
 /* global define:false, console:false, $:false */
 
 define([
-        'jquery', 'underscore', 'backbone', 'jquery.bootstrap', 'toastr',
+        'jquery', 'underscore', 'backbone', 'bootstrap', 'toastr',
         'backbone.fetch-local-copy', 'utils',
         'app.result-collection', 'app.results-view'],
 
