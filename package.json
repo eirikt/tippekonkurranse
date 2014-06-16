@@ -1,6 +1,6 @@
 {
     "name": "Tippekonkurranse",
-    "version": "v1.1.6",
+    "version": "1.2.0",
     "description": "A simple Node-based screen-scrapin' web application hosted on Heroku",
     "author": "Eirik Torske <eirik.torske@gmail.com>",
     "license": "MIT",
@@ -36,7 +36,7 @@
         "grunt-cli": "~0.1.13",
         "grunt-shell": "~0.7.0",
         "grunt-mocha": "~0.4.10",
-        "grunt-mocha-test": "~0.10.0",
+        "grunt-mocha-test": "~0.11.0",
         "grunt-mocha-cov": "~0.2.1",
         "grunt-blanket-mocha": "~0.4.0",
         "grunt-jsdoc": "~0.5.1",

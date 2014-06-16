@@ -1,10 +1,19 @@
 /* global define:false */
 /* jshint -W106 */
 
-define(["jquery", "underscore", "backbone", "comparators", "app.models", "app.result", "backbone.fetch-local-copy"],
+define([
+        "jquery", "underscore", "backbone",
+        "comparators",
+        "app.models", "app.result", "backbone.fetch-local-copy"
+    ],
     function ($, _, Backbone, Comparators, App, ParticipantScore, BackboneFetchLocalCopy) {
         "use strict";
 
+        /**
+         * Ranking scheme is 'standard competition ranking ("1224" ranking)'.
+         * => Equal sum/rating gives the same rank.
+         * @see http://en.wikipedia.org/wiki/Ranking
+         */
         var ParticipantScoreCollection = Backbone.Collection.extend({
 
             defaultBaseUri: App.resource.scores.baseUri,
@@ -12,15 +21,15 @@ define(["jquery", "underscore", "backbone", "comparators", "app.models", "app.re
 
             model: ParticipantScore,
 
-            // Ascending sum comparator
-            sortBySum: Comparators.ascendingBackboneComparator([
-                App.scoreModel.sumPropertyName,
+            // Ascending rating comparator
+            sortByRatingThenName: Comparators.multiAscendingBackbone([
+                App.scoreModel.ratingPropertyName,
                 ParticipantScore.namePropertyName
             ]),
 
-            // Ascending previous sum comparator
-            sortByPreviousSum: Comparators.ascendingBackboneComparator([
-                ParticipantScore.previousSumPropertyName,
+            // Ascending previous round rating comparator
+            sortByPreviousRatingThenName: Comparators.multiAscendingBackbone([
+                App.scoreModel.previousRatingPropertyName,
                 ParticipantScore.namePropertyName
             ]),
 
@@ -29,7 +38,7 @@ define(["jquery", "underscore", "backbone", "comparators", "app.models", "app.re
 
             initialize: function (options) {
                 // Default comparator
-                this.comparator = this.sortBySum;
+                this.comparator = this.sortByRatingThenName;
 
                 if (options && options.year) {
                     this.year = options.year;
@@ -39,56 +48,55 @@ define(["jquery", "underscore", "backbone", "comparators", "app.models", "app.re
                 }
             },
 
-            /** Set previous match round rating number for participants (tendency tracking) */
-            _setPreviousRating: function () {
-                this.comparator = this.sortByPreviousSum;
+            /** Set previous match round rank for participants (tendency tracking) */
+            _setPreviousRank: function () {
+                this.comparator = this.sortByPreviousRatingThenName;
                 this.sort();
 
-                var previousRating = 1,
-                    previousLastSum = 0;
+                var previousRank = -1,
+                    lastPreviousRating = -1;
                 this.each(function (participant, index) {
-                    var previousSum = participant.get(ParticipantScore.previousSumPropertyName);
-                    if (previousSum > previousLastSum) {
-                        previousLastSum = previousSum;
-                        previousRating = (index + 1);
+                    var previousRating = participant.get(App.scoreModel.previousRatingPropertyName);
+                    if (previousRating > lastPreviousRating) {
+                        lastPreviousRating = previousRating;
+                        previousRank = (index + 1);
                     }
-                    participant.set(ParticipantScore.previousRatingNumberPropertyName, previousRating, { silent: true });
+                    participant.set(ParticipantScore.previousRankPropertyName, previousRank, { silent: true });
                 });
 
-                this.comparator = this.sortBySum;
+                this.comparator = this.sortByRatingThenName;
                 this.sort();
             },
 
-            /** Set current match round rating for participants */
-            _setRating: function () {
-                var rating = 1, // Equal sum gives the same rating
-                    lastSum = 0;
+            /** Set current match round rank (presentation) for participants */
+            _setRank: function () {
+                var rank = -1,
+                    lastRating = -1;
                 this.each(function (participant, index) {
-                    participant.set(ParticipantScore.ratingPropertyName, "", { silent: true });
-
-                    var participantSum = participant.get(App.scoreModel.sumPropertyName);
-                    if (participantSum > lastSum) {
-                        lastSum = participantSum;
-                        rating = (index + 1);
+                    participant.set(ParticipantScore.rankPresentationPropertyName, "", { silent: true });
+                    var participantRating = participant.get(App.scoreModel.ratingPropertyName);
+                    if (participantRating > lastRating) {
+                        lastRating = participantRating;
+                        rank = (index + 1);
 
                         // Just add some trophy icons instead of podium-place 1, 2, and 3
-                        // TODO: Move rating property logic to a (very small) RatingView
-                        switch (rating) {
+                        // TODO: Move rank attribute logic to a (very small) RatingView
+                        switch (rank) {
                             case 1:
-                                participant.set(ParticipantScore.ratingPropertyName, "<span class='icon-trophy-gold'></span>", { silent: true });
+                                participant.set(ParticipantScore.rankPresentationPropertyName, "<span class='icon-trophy-gold'></span>", { silent: true });
                                 break;
                             case 2:
-                                participant.set(ParticipantScore.ratingPropertyName, "<span class='icon-trophy-silver'></span>", { silent: true });
+                                participant.set(ParticipantScore.rankPresentationPropertyName, "<span class='icon-trophy-silver'></span>", { silent: true });
                                 break;
                             case 3:
-                                participant.set(ParticipantScore.ratingPropertyName, "<span class='icon-trophy-bronze'></span>", { silent: true });
+                                participant.set(ParticipantScore.rankPresentationPropertyName, "<span class='icon-trophy-bronze'></span>", { silent: true });
                                 break;
                             default:
-                                participant.set(ParticipantScore.ratingPropertyName, rating + ".", { silent: true });
+                                participant.set(ParticipantScore.rankPresentationPropertyName, rank + ".", { silent: true });
                                 break;
                         }
                     }
-                    participant.set(ParticipantScore.ratingNumberPropertyName, rating, { silent: true });
+                    participant.set(ParticipantScore.rankPropertyName, rank, { silent: true });
                 });
             },
 
@@ -112,9 +120,9 @@ define(["jquery", "underscore", "backbone", "comparators", "app.models", "app.re
                     }
                 }
                 if (response.metadata.round > 1) {
-                    this._setPreviousRating();
+                    this._setPreviousRank();
                 }
-                this._setRating();
+                this._setRank();
 
                 return this.models;
             }

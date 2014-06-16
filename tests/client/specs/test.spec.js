@@ -1,7 +1,7 @@
 /* global define:false, describe:false, it:false */
 /* jshint -W030 */
 
-// Meta tests ...
+// "SUT"
 var hello = function () {
     "use strict";
     return "Hello world!";

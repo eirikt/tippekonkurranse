@@ -6,7 +6,7 @@ define([
         "app.models", "app.participant-score-view", "app.soccer-table-views",
         "backbone.fetch-local-copy", "utils"
     ],
-    function ($, _, Backbone, Moment, Moment_nb, App, ParticipantScoreView, SoccerTableViews, BackboneFetchLocalCopy, Utils) {
+    function ($, _, Backbone, Moment, Moment_nb, App, ParticipantScoreView, SoccerTableViews, BackboneFetchLocalCopy, Client) {
         "use strict";
 
         var CurrentResults = Backbone.Model.extend({
@@ -132,14 +132,19 @@ define([
         return Backbone.View.extend({
 
             template: _.template('' +
-                    '<table class="table table-condenced table-striped table-hover">' +
+                    '<table class="table table-condenced table-striped table-hover table-bordered">' +
                     '<thead>' +
                     '<tr>' +
                     '  <th style="padding-left:2rem;width:3rem;"></th>' +
-                    '  <th style="width:15rem;"></th>' +
+                    '  <th style="width:12rem;"></th>' +
                     '  <th style="width:5rem;"></th>' +
-                    '  <th style="width:7rem;"></th>' +
-                    '  <th class="current-results" style="padding-left:3rem;">' +
+                    //'  <th class="rating-history" colspan="2">' +
+                    //'    <a href="/#/ratinghistory/2014" type="button" class="btn btn-sm btn-success">' +
+                    //'      <span style="margin-right:1rem;" class="icon-bar-chart"></span>Trend' +
+                    //'    </a>' +
+                    //'  </th>' +
+                    '  <th style="width:8rem;"></th>' +
+                    '  <th class="current-results">' +
                     '    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>' +
                     '  </th>' +
                     '  <th style="text-align:center;color:darkgray;width:8rem;">Tabell</th>' +
@@ -157,6 +162,12 @@ define([
                     '</table>'
             ),
 
+            events: {
+                "click .current-results": function () {
+                    this.currentResults.fetch({ reset: true });
+                }
+            },
+
             currentResults: null,
 
             modalCurrentResultsView: null,
@@ -172,56 +183,55 @@ define([
             },
 
             render: function () {
-                var self = this,
+                var //self = this,
+                //numberOfParticipantsRendered = 0,
                     addParticipant = function ($el, participantScore) {
                         $el.append(new ParticipantScoreView({ model: participantScore.toJSON() }).render().el);
                     },
                     delayedAddParticipant = function (timeOutInMillis, $el, participantScore) {
                         var dfd = $.Deferred();
                         addParticipant($el, participantScore);
-                        Utils.wait(timeOutInMillis).then(function () {
+                        Client.wait(timeOutInMillis).then(function () {
                             dfd.resolve();
+                            //numberOfParticipantsRendered += 1;
+                            //if (numberOfParticipantsRendered >= self.collection.length) {
+                            //    console.log("RENDERED");
+                            //    self.trigger("rendered");
+                            //}
                         });
                         return dfd.promise();
                     };
 
                 this.$el.empty().append(this.template());
-                if (Utils.isTouchDevice()) {
+                if (Client.isTouchDevice()) {
                     this.$("table").removeClass("table-hover");
                 }
 
-                // Configure modal results view
-                this.$(".current-results").on("click", function () {
-                    //self.currentResults.set("currentDate", null, { silent: true });
-                    self.currentResults.fetch({ reset: true });
-                });
-
                 // Render all participant scores sequentially, one by one
-                var delayedAddingOfParticipantInTableFuncs = [],
+                var addingOfParticipantFns = [],
                     delayInMillis = 175,
                     $tbody = this.$("tbody"),
                     i,
                     sortedParticipant,
-                    delayedParticipantFunc,
-                    delayedAddingOfParticipantInTableFunc;
+                    delayedParticipantFn,
+                    delayedAddingOfParticipantInTableFn;
 
                 for (i = 0; i < this.collection.length; i += 1) {
                     // Underscore: Bind a function to an object, meaning that whenever the function is called, the value of this will be the object
-                    delayedParticipantFunc = _.bind(delayedAddParticipant, this);
+                    delayedParticipantFn = _.bind(delayedAddParticipant, this);
 
                     // Underscore: Partially apply a function by filling in any number of its arguments, without changing its dynamic this value.
                     // You may pass _ in your list of arguments to specify an argument that should not be pre-filled, but left open to supply at call-time.
                     sortedParticipant = this.collection.at(i);
-                    delayedParticipantFunc = _.partial(delayedParticipantFunc, delayInMillis, $tbody, sortedParticipant);
+                    delayedParticipantFn = _.partial(delayedParticipantFn, delayInMillis, $tbody, sortedParticipant);
 
-                    delayedAddingOfParticipantInTableFuncs.push(delayedParticipantFunc);
+                    addingOfParticipantFns.push(delayedParticipantFn);
                 }
 
                 // Execute all these deferred functions sequentially
-                delayedAddingOfParticipantInTableFunc = delayedAddingOfParticipantInTableFuncs[0]();
-                for (i = 0; i < delayedAddingOfParticipantInTableFuncs.length; i += 1) {
-                    delayedAddingOfParticipantInTableFunc =
-                        delayedAddingOfParticipantInTableFunc.then(delayedAddingOfParticipantInTableFuncs[i + 1]);
+                delayedAddingOfParticipantInTableFn = addingOfParticipantFns[0]();
+                for (i = 0; i < addingOfParticipantFns.length; i += 1) {
+                    delayedAddingOfParticipantInTableFn = delayedAddingOfParticipantInTableFn.then(addingOfParticipantFns[i + 1]);
                 }
 
                 return this;

@@ -33,10 +33,11 @@ if (env === "development") {
 server.get(app.resource.predictions.uri, tippekonkurranseService.handlePredictionsRequest);
 
 // Semi-static resources (RESTful service API) (Only JSON content type supported so far)
-// (NOT AppCache candidates as the data is changing during the round)
-// (When the round is completed, the content become static from there and onwards)
+// (NOT AppCache candidates as the data is changing during the year/round)
+// (But when the year/round is completed, the content become static from there and onwards)
 server.get(app.resource.results.uri, tippekonkurranseService.handleResultsRequest);
 server.get(app.resource.scores.uri, tippekonkurranseService.handleScoresRequest);
+server.get(app.resource.ratingHistory.uri, tippekonkurranseService.handleRatingHistoryRequest);
 
 // Dynamic resources (RESTful service API) (Only JSON content type supported so far)
 server.get([app.resource.results.baseUri, app.resource.uri.element.current].join("/"), tippekonkurranseService.handleResultsRequest);
@@ -53,5 +54,5 @@ server.listen(port, function () {
 if (env === "development") {
     // Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
     root.overrideTippeligaDataWithYear = 2014;
-    root.overrideTippeligaDataWithRound = null;
+    //root.overrideTippeligaDataWithRound = 12;
 }

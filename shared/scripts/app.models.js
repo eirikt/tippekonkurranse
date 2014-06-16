@@ -1,4 +1,8 @@
 /* global define:false */
+
+// Boilerplate for CommonJS and AMD support (no RequireJS shimming required)
+// => https://blog.codecentric.de/en/2014/02/cross-platform-javascript/
+// => http://www.2ality.com/2011/11/module-gap.html
 ({ define: typeof define === 'function' ? define : function (A, F) {
     'use strict';
     module.exports = F.apply(null, A.map(require));
@@ -9,7 +13,7 @@
 
         var _appName = 'Tippekonkurranse',
 
-            _resource = {
+            _resources = {
                 uri: {
                     element: {
                         current: 'current'
@@ -26,9 +30,16 @@
                 scores: {
                     baseUri: '/api/scores',
                     uri: '/api/scores/:year/:round'
+                },
+                ratingHistory: {
+                    baseUri: '/api/ratinghistory',
+                    uri: '/api/ratinghistory/:year'
                 }
             },
 
+        // TODO: Are we missing the 'tippeligaStandingsModel'/'tippeligaRankingsModel'?
+
+        // TODO: Consider renaming it to 'ratingModel'/'scoresAndRatingModel'
             _scoreModel = {
                 tabellPropertyName: 'tabell',
                 pallPropertyName: 'pall',
@@ -36,7 +47,8 @@
                 toppscorerPropertyName: 'toppscorer',
                 opprykkPropertyName: 'opprykk',
                 cupPropertyName: 'cup',
-                sumPropertyName: 'sum',
+                ratingPropertyName: 'rating',
+                previousRatingPropertyName: 'previousRating',
 
                 // Creates and populates the ScoreModel with the given properties
                 createObjectWith: function () {
@@ -47,7 +59,8 @@
                             _scoreModel.toppscorerPropertyName,
                             _scoreModel.opprykkPropertyName,
                             _scoreModel.cupPropertyName,
-                            _scoreModel.sumPropertyName
+                            _scoreModel.ratingPropertyName,
+                            _scoreModel.previousRatingPropertyName
                         ],
                         args,
                         model = {};
@@ -76,7 +89,9 @@
                     return _appName;
                 }
             },
-            resource: _resource,
+            name: _appName,
+            resource: _resources,
+            resources: _resources,
             scoreModel: _scoreModel
         };
     }

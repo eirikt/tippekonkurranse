@@ -2,7 +2,7 @@
 /* jshint -W121 */
 
 define(['jquery', 'string-extensions'],
-    function ($, StringExtensions) {
+    function ($) {
         'use strict';
 
         return {

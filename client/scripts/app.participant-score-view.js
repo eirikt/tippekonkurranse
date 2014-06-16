@@ -4,44 +4,44 @@ define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soc
     function ($, _, Backbone, App, ParticipantScore, SoccerTableViews) {
         'use strict';
 
-        var RatingTendencyView = Backbone.View.extend({
+        var RankTrendView = Backbone.View.extend({
             tagName: 'span',
             template: _.template('' +
                     '<span class="tendency-arrow"></span>' +
-                    '<small>&nbsp;<%= ratingDiff %></small>'
+                    '<small>&nbsp;<%= rankDiff %></small>'
             ),
             // TODO: reduce cyclic complexity (from 8 to 5)
             render: function () {
-                if (!this.model[ParticipantScore.previousRatingNumberPropertyName]) {
+                if (!this.model[ParticipantScore.previousRankPropertyName]) {
                     return this;
                 }
                 var plusThreshold = 3,
-                    upwardTendency = this.model[ParticipantScore.previousRatingNumberPropertyName] - this.model[ParticipantScore.ratingNumberPropertyName],
-                    downwardTendency = this.model[ParticipantScore.ratingNumberPropertyName] - this.model[ParticipantScore.previousRatingNumberPropertyName],
-                    ratingDiff = upwardTendency,
+                    upwardTrend = this.model[ParticipantScore.previousRankPropertyName] - this.model[ParticipantScore.rankPropertyName],
+                    downwardTrend = this.model[ParticipantScore.rankPropertyName] - this.model[ParticipantScore.previousRankPropertyName],
+                    rankDiff = upwardTrend,
                     $tendency;
 
-                this.model.ratingDiff = '';
-                if (ratingDiff !== 0) {
-                    if (ratingDiff > 0) {
-                        ratingDiff = '+' + ratingDiff;
+                this.model.rankDiff = '';
+                if (rankDiff !== 0) {
+                    if (rankDiff > 0) {
+                        rankDiff = '+' + rankDiff;
                     }
-                    this.model.ratingDiff = ratingDiff;
+                    this.model.rankDiff = rankDiff;
                 }
 
                 this.$el.append(this.template(this.model));
                 $tendency = this.$('span.tendency-arrow');
 
-                if (upwardTendency >= plusThreshold) {
+                if (upwardTrend >= plusThreshold) {
                     $tendency.addClass('icon-up-plus');
 
-                } else if (upwardTendency > 0) {
+                } else if (upwardTrend > 0) {
                     $tendency.addClass('icon-up');
 
-                } else if (downwardTendency >= plusThreshold) {
+                } else if (downwardTrend >= plusThreshold) {
                     $tendency.addClass('icon-down-plus');
 
-                } else if (downwardTendency > 0) {
+                } else if (downwardTrend > 0) {
                     $tendency.addClass('icon-down');
                 }
                 $tendency.removeClass('tendency-arrow');
@@ -51,20 +51,20 @@ define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soc
         });
 
 
-        var SumTendencyView = Backbone.View.extend({
+        var RatingTrendView = Backbone.View.extend({
             tagName: 'span',
-            template: _.template('<small><%= sumDiff %></small>'),
+            template: _.template('<small><%= ratingDiff %></small>'),
             render: function () {
-                if (!this.model.previousSum) {
+                if (!this.model[App.scoreModel.previousRatingPropertyName]) {
                     return this;
                 }
-                var sumDiff = this.model.sum - this.model.previousSum;
-                this.model.sumDiff = '';
-                if (sumDiff !== 0) {
-                    if (sumDiff > 0) {
-                        sumDiff = '+' + sumDiff;
+                var ratingDiff = this.model[App.scoreModel.ratingPropertyName] - this.model[App.scoreModel.previousRatingPropertyName];
+                this.model.ratingDiff = '';
+                if (ratingDiff !== 0) {
+                    if (ratingDiff > 0) {
+                        ratingDiff = '+' + ratingDiff;
                     }
-                    this.model.sumDiff = '(' + sumDiff + 'p)';
+                    this.model.ratingDiff = '(' + ratingDiff + 'p)';
                 }
                 this.$el.append(this.template(this.model));
                 return this;
@@ -74,7 +74,7 @@ define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soc
 
         var PredictionsModel = Backbone.Model.extend({
             url: function () {
-                return [App.resource.predictions.baseUri, this.get('year'), this.get('userId')].join('/');
+                return [App.resource.predictions.baseUri, this.get(ParticipantScore.yearPropertyName), this.get(ParticipantScore.userIdPropertyName)].join('/');
             }
         });
 
@@ -85,7 +85,7 @@ define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soc
                     '  <div class="modal-content">' +
                     '    <div class="modal-header">' +
                     '      <button type="button" class="close" style="font-size:xx-large;font-weight:bold;" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-                    '      <h4 class="modal-title" id="predictionsLabel"><strong><%= userId %>s tippetips <%= year %></strong></h4>' +
+                    '      <h4 class="modal-title" id="predictionsLabel"><strong><%= ' + ParticipantScore.userIdPropertyName + ' %>s tippetips <%= ' + ParticipantScore.yearIdPropertyName + ' %></strong></h4>' +
                     '    </div>' +
                     '    <div class="modal-body">' +
                     '      <table>' +
@@ -112,7 +112,7 @@ define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soc
             },
             render: function () {
                 // Pretty user name presentation
-                this.model.set('userId', this.model.get('userId').unSnakify().toTitleCase(), { silent: true });
+                this.model.set(ParticipantScore.userIdPropertyName, this.model.get(ParticipantScore.userIdPropertyName).unSnakify().toTitleCase(), { silent: true });
 
                 // Pretty tabell presentation
                 var prettyTabellView = new SoccerTableViews.SimpleTableView({
@@ -137,19 +137,20 @@ define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soc
         return Backbone.View.extend({
             tagName: 'tr',
 
-            // TODO: use dynamic/common properties names for this
             template: _.template('' +
-                    '<td style="padding-left:2rem;text-align:right;"><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantScore.ratingPropertyName + ' %></span></td>' +
+                    '<td style="padding-left:2rem;text-align:right;"><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantScore.rankPresentationPropertyName + ' %></span></td>' +
                     '<td><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantScore.namePropertyName + ' %></span></td>' +
-                    '<td class="rating-tendency"></td>' +
+                    //'<td></td>' +
+                    //'<td style="width:2rem;"></td>' +
+                    '<td class="rank-tendency" style="width:4rem;"></td>' +
                     '<td>' +
                     '  <span style="white-space:nowrap;">' +
-                    '    <span style="font-weight:bold;font-size:larger;margin-right:.3rem;"><%= ' + App.scoreModel.sumPropertyName + ' %></span>' +
-                    '    <span class="sum-tendency"></span>' +
+                    '    <span style="font-weight:bold;font-size:larger;margin-right:.3rem;"><%= ' + App.scoreModel.ratingPropertyName + ' %></span>' +
+                    '    <span class="rating-tendency"></span>' +
                     '  </span>' +
                     '</td>' +
-                    '<td class="prediction" style="padding-left:3rem;">' +
-                    '  <button type="button" class="btn btn-sm btn-primary" data-id="<%= userId %>" data-toggle="modal" data-target="#predictionsTable"><%= ' + ParticipantScore.namePropertyName + ' %>s tips</button>' +
+                    '<td class="prediction">' +
+                    '  <button type="button" class="btn btn-sm btn-primary" data-id="<%= ' + ParticipantScore.userIdPropertyName + ' %>" data-toggle="modal" data-target="#predictionsTable"><%= ' + ParticipantScore.namePropertyName + ' %>s tips</button>' +
                     '</td>' +
                     '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.tabellPropertyName + ' %></td>' +
                     '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.pallPropertyName + ' %></td>' +
@@ -158,6 +159,18 @@ define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soc
                     '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.opprykkPropertyName + ' %></td>' +
                     '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.cupPropertyName + ' %></td>'
             ),
+
+            //events: {
+            //    "click .current-results": function () {
+            //        //self.currentResults.set("currentDate", null, { silent: true });
+            //        this.currentResults.fetch({ reset: true });
+            //    }
+            //},
+            events: {
+                "click .prediction": function () {
+                    this.predictionsModel.fetch({ reset: true });
+                }
+            },
 
             predictionsModel: null,
 
@@ -177,15 +190,15 @@ define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soc
                 this.$el.append(this.template(this.model));
 
                 // Add rating tendency marker
-                this.$('.rating-tendency').append(new RatingTendencyView({ model: this.model }).render().el);
+                this.$('.rank-tendency').append(new RankTrendView({ model: this.model }).render().el);
 
                 // Add sum tendency marker
-                this.$('.sum-tendency').append(new SumTendencyView({ model: this.model }).render().el);
+                this.$('.rating-tendency').append(new RatingTrendView({ model: this.model }).render().el);
 
                 // Configure modal predictions view
-                this.$('.prediction').on('click', function () {
-                    self.predictionsModel.fetch({ reset: true });
-                });
+                //this.$('.prediction').on('click', function () {
+                //    self.predictionsModel.fetch({ reset: true });
+                //});
 
                 // Smoothly fades in content (default jQuery functionality) (OK)
                 this.$el.find('td').wrapInner($('<div>'));

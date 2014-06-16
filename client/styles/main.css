@@ -3,22 +3,10 @@
  */
 @import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700,300,300italic);
 
-/* Not suited for offline/AppCache usage
+/* Not suited for offline/AppCache usage ...
 @font-face {
     font-family: 'Open Sans Condensed';
     src: url('../fonts/OpenSans-CondLight.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-*/
-
-/* Does not work ...
-@font-face {
-    font-family: 'OpenSansCondensed';
-    src: url('../fonts/gen/opensans-condlight-webfont.eot');
-    src: url('../fonts/gen/opensans-condlight-webfont.eot?iefix') format('eot'),
-    url('../fonts/gen/opensans-condlight-webfont.woff') format('woff'),
-    url('../fonts/gen/opensans-condlight-webfont.ttf') format('truetype'),
     font-weight: normal;
     font-style: normal;
 }
@@ -37,6 +25,10 @@ body {
 hr {
     border: 0;
     border-top: 1px solid #eeeeee;
+}
+
+a:hover, a:visited, a:link, a:active {
+    text-decoration: none;
 }
 
 /**
@@ -74,6 +66,12 @@ h2, .h2 {
     padding-bottom: .5rem;
 }
 
+/*
+#jqplot {
+    height: 500px;
+}
+*/
+
 /* TODO: ...
 .my-transform {
     transform: scale(1.5);
@@ -89,43 +87,6 @@ h2, .h2 {
 */
 
 /**
- *  Module           : Debug
- *  Portable/reusable: Yes
- *  Dependencies     : -
- *  Resources        : -
- ******************************************************************************/
-/*
-div {
-    border: 1px;
-    border-style: dotted;
-}
-
-header {
-    border: 1px dashed;
-}
-
-section {
-    border: 1px dashed;
-}
-
-article {
-    border: 1px dashed;
-}
-
-footer {
-    border: 1px dashed;
-}
-
-nav {
-    border: 1px dashed;
-}
-
-img {
-    border: dashed;
-}
-*/
-
-/**
  *  Module           : Font Awesome icons
  *  Portable/reusable: Yes
  *  Dependencies     : "bootstrap.css", "font-awesome.css"
@@ -137,6 +98,11 @@ img {
 .icon-check::before {
     font-family: FontAwesome, sans-serif;
     content: "\f00c";
+}
+
+.icon-bar-chart::before {
+    font-family: FontAwesome, sans-serif;
+    content: "\f080";
 }
 
 .icon-up-plus::before {
@@ -184,3 +150,40 @@ img {
     content: "\f091";
     color: #cd7f32;
 }
+
+/**
+ *  Module           : Debug
+ *  Portable/reusable: Yes
+ *  Dependencies     : -
+ *  Resources        : -
+ ******************************************************************************/
+/*
+div {
+    border: 1px;
+    border-style: dotted;
+}
+
+header {
+    border: 1px dashed;
+}
+
+section {
+    border: 1px dashed;
+}
+
+article {
+    border: 1px dashed;
+}
+
+footer {
+    border: 1px dashed;
+}
+
+nav {
+    border: 1px dashed;
+}
+
+img {
+    border: dashed;
+}
+*/

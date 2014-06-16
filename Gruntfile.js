@@ -3,10 +3,9 @@
 module.exports = function (grunt) {
     'use strict';
 
-    // Web server test port
+    // Test setup
     var port = 8981,
-
-        clientTestPath = '/tests/client/test-amd.html';
+        clientTestPath = '/tests/client/test.amd.html';
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -46,6 +45,7 @@ module.exports = function (grunt) {
                     'echo.',
                     'echo Essential grunt tasks are:',
                     'echo   install-client   installs client resources via Bower',
+                    'echo   mongodb          starts a MongoDB instance using a local data folder (blocking command)',
                     'echo   test             installs, builds, and executes all Mocha tests',
                     'echo   run              starts up local Node.js runtime (blocking command)'
                 ].join('&&')
@@ -144,7 +144,7 @@ module.exports = function (grunt) {
                 maxparams: 14,
                 maxdepth: 5,
                 maxstatements: 30,
-                maxcomplexity: 8, // TODO: Bring this down to... let's say 5 - YES, REALLY!
+                maxcomplexity: 20, // TODO: Bring this down to... let's say 5 - YES, REALLY!
                 //maxlen: 180,
 
                 laxcomma: true
@@ -212,14 +212,19 @@ module.exports = function (grunt) {
 
                     'build/scripts/fun.js': 'build/scripts/fun.js',
                     'build/scripts/comparators.js': 'build/scripts/comparators.js',
+
                     'build/scripts/app.models.js': 'build/scripts/app.models.js',
 
                     'build/scripts/app.config.js': 'build/scripts/app.config.js',
+                    'build/scripts/app.header-view.js': 'build/scripts/app.header-view.js',
                     'build/scripts/app.js': 'build/scripts/app.js',
                     'build/scripts/app.participant-score-view.js': 'build/scripts/app.participant-score-view.js',
+                    'build/scripts/app.rating-history-collection.js': 'build/scripts/app.rating-history-collection.js',
+                    'build/scripts/app.rating-history-view.js': 'build/scripts/app.rating-history-view.js',
                     'build/scripts/app.result.js': 'build/scripts/app.result.js',
                     'build/scripts/app.result-collection.js': 'build/scripts/app.result-collection.js',
                     'build/scripts/app.results-view.js': 'build/scripts/app.results-view.js',
+                    'build/scripts/app.router.js': 'build/scripts/app.router.js',
                     'build/scripts/app.soccer-table-views.js': 'build/scripts/app.soccer-table-views.js',
                     'build/scripts/backbone.fetch-local-copy.js': 'build/scripts/backbone.fetch-local-copy.js',
                     'build/scripts/utils.js': 'build/scripts/utils.js'
@@ -248,7 +253,8 @@ module.exports = function (grunt) {
         watch: {
             clientcode: {
                 files: [
-                    'client/scripts/*.js',
+                    // Ignore the copied in files (shared JavaScript app libs)
+                    'client/scripts/*.js', '!client/scripts/app.models.js', '!client/scripts/comparators.js', '!client/scripts/fun.js', '!client/scripts/string-extensions.js',
                     'shared/scripts/*.js',
                     'client/styles/*.css',
                     'client/index.html',

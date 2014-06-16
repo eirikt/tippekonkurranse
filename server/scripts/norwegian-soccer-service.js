@@ -695,22 +695,23 @@ var __ = require("underscore"),
         round: 9,
         date: "2014-05-16",
         tippeliga: [
+
             { name: "Molde", no: 1, matches: 9 },
             { name: "Strømsgodset", no: 2, matches: 9 },
             { name: "Viking", no: 3, matches: 9 },
-            { name: "Rosenborg", no: 4, matches: 9 },
-            { name: "Vålerenga", no: 5, matches: 9 },
-            { name: "Lillestrøm", no: 6, matches: 9 },
-            { name: "Stabæk", no: 7, matches: 9 },
-            { name: "Sarpsborg 08", no: 8, matches: 9 },
-            { name: "Odd", no: 9, matches: 9 },
-            { name: "Bodø/Glimt", no: 10, matches: 9 },
+            { name: "Vålerenga", no: 4, matches: 9 },
+            { name: "Rosenborg", no: 5, matches: 9 },
+            { name: "Stabæk", no: 6, matches: 9 },
+            { name: "Lillestrøm", no: 7, matches: 9 },
+            { name: "Odd", no: 8, matches: 9 },
+            { name: "Bodø/Glimt", no: 9, matches: 9 },
+            { name: "Sarpsborg 08", no: 10, matches: 9 },
             { name: "Start", no: 11, matches: 9 },
-            { name: "Brann", no: 12, matches: 9 },
-            { name: "Sogndal", no: 13, matches: 9 },
+            { name: "Sogndal", no: 12, matches: 9 },
+            { name: "Brann", no: 13, matches: 9 },
             { name: "Aalesund", no: 14, matches: 9 },
-            { name: "Haugesund", no: 15, matches: 9 },
-            { name: "Sandnes Ulf", no: 16, matches: 9 }
+            { name: "Sandnes Ulf", no: 15, matches: 9 },
+            { name: "Haugesund", no: 16, matches: 9 }
         ],
         toppscorer: [
             "Vidar Örn Kjartansson"
@@ -864,20 +865,62 @@ var __ = require("underscore"),
         remainingCupContenders: [
             "Bodø/Glimt",
             "Brann",
-            "Haugesund",
-            "Lillestrøm",
             "Molde",
-            "Odd",
-            "Rosenborg",
-            "Sandnes Ulf",
-            "Sarpsborg 08",
-            "Sogndal",
             "Stabæk",
-            "Start",
-            "Strømsgodset",
-            "Viking",
-            "Vålerenga",
-            "Aalesund"
+            "Vålerenga"
+        ]
+    },
+
+
+    _dataForRound2014012 = exports.round2014012 = {
+        year: 2014,
+        round: 12,
+        date: "2014-06-09",
+        tippeliga: [
+            { name: "Molde", no: 1, matches: 12 },
+            { name: "Strømsgodset", no: 2, matches: 12 },
+            { name: "Vålerenga", no: 3, matches: 12 },
+            { name: "Odd", no: 4, matches: 12 },
+            { name: "Rosenborg", no: 5, matches: 12 },
+            { name: "Lillestrøm", no: 6, matches: 12 },
+            { name: "Viking", no: 7, matches: 12 },
+            { name: "Stabæk", no: 8, matches: 12 },
+            { name: "Bodø/Glimt", no: 9, matches: 12 },
+            { name: "Sogndal", no: 10, matches: 12 },
+            { name: "Sarpsborg 08", no: 11, matches: 12 },
+            { name: "Start", no: 12, matches: 12 },
+            { name: "Sandnes Ulf", no: 13, matches: 12 },
+            { name: "Aalesund", no: 14, matches: 12 },
+            { name: "Brann", no: 15, matches: 12 },
+            { name: "Haugesund", no: 16, matches: 12 }
+        ],
+        toppscorer: [
+            "Vidar Örn Kjartansson"
+        ],
+        adeccoliga: [
+            { name: "Sandefjord", no: 1, matches: 13 },
+            { name: "Tromsø", no: 2, matches: 13 },
+            { name: "Ranheim", no: 3, matches: 13 },
+            { name: "Kristiansund BK", no: 4, matches: 13 },
+            { name: "Mjøndalen", no: 5, matches: 13 },
+            { name: "Nest-Sotra", no: 6, matches: 13 },
+            { name: "Fredrikstad", no: 7, matches: 13 },
+            { name: "Alta", no: 8, matches: 13 },
+            { name: "Bærum", no: 9, matches: 13 },
+            { name: "Hødd", no: 10, matches: 13 },
+            { name: "Strømmen", no: 11, matches: 13 },
+            { name: "Tromsdalen", no: 12, matches: 13 },
+            { name: "Bryne", no: 13, matches: 13 },
+            { name: "Hønefoss", no: 14, matches: 13 },
+            { name: "Ullensaker/Kisa", no: 15, matches: 13 },
+            { name: "HamKam", no: 16, matches: 13 }
+        ],
+        remainingCupContenders: [
+            "Bodø/Glimt",
+            "Brann",
+            "Molde",
+            "Stabæk",
+            "Vålerenga"
         ]
     },
 

@@ -26,7 +26,6 @@ define(["jquery", "underscore", "backbone", "moment", "toastr"],
          * })
          * </pre>
          *
-         *
          * Also, remember to configure toastr, e.g.:
          * <pre>
          * // Toastr.js config (=> http://codeseven.github.io/toastr/demo.html)

@@ -80,19 +80,19 @@ describe("Comparators", function () {
 
 
     describe("ascendingBackboneComparator", function () {
-        var ascendingBackboneComparator = Comparators.ascendingBackboneComparator;
+        var multiAscendingBackbone = Comparators.multiAscendingBackbone;
 
         it("should exist and be a function", function () {
-            expect(ascendingBackboneComparator).to.exist;
-            expect(__.isFunction(ascendingBackboneComparator)).to.be.true;
+            expect(multiAscendingBackbone).to.exist;
+            expect(__.isFunction(multiAscendingBackbone)).to.be.true;
         });
 
         it("should be somewhat robust", function () {
-            var myUndefinedPropertyNamesComparator = __.partial(ascendingBackboneComparator, undefined),
-                myNullAsPropertyNamesComparator = __.partial(ascendingBackboneComparator, null),
-                myEmptyPropertyNamesComparator = __.partial(ascendingBackboneComparator, []),
-                myIllegalType1PropertyNamesComparator = __.partial(ascendingBackboneComparator, 3.14),
-                myIllegalType2PropertyNamesComparator = __.partial(ascendingBackboneComparator, [3.14, new Date()]),
+            var myUndefinedPropertyNamesComparator = __.partial(multiAscendingBackbone, undefined),
+                myNullAsPropertyNamesComparator = __.partial(multiAscendingBackbone, null),
+                myEmptyPropertyNamesComparator = __.partial(multiAscendingBackbone, []),
+                myIllegalType1PropertyNamesComparator = __.partial(multiAscendingBackbone, 3.14),
+                myIllegalType2PropertyNamesComparator = __.partial(multiAscendingBackbone, [3.14, new Date()]),
 
                 model1 = { "myId": "1", "myNumberProperty": 1 },
                 model2 = { "myId": "2", "myNumberProperty": 2 },
@@ -126,7 +126,7 @@ describe("Comparators", function () {
         });
 
         it("should sort models by single number property value, non-array argument", function () {
-            var myNonArrayComparator = __.partial(ascendingBackboneComparator, "myNumberProperty"),
+            var myNonArrayComparator = __.partial(multiAscendingBackbone, "myNumberProperty"),
 
                 model1 = new Backbone.Model({
                     "myId": "1",
@@ -148,7 +148,7 @@ describe("Comparators", function () {
         });
 
         it("should sort models by single number property value", function () {
-            var myComparator = __.partial(ascendingBackboneComparator, ["myNumberProperty"]),
+            var myComparator = __.partial(multiAscendingBackbone, ["myNumberProperty"]),
 
                 model1 = new Backbone.Model({
                     "myId": "1",
@@ -170,7 +170,7 @@ describe("Comparators", function () {
         });
 
         it("should sort models", function () {
-            var myComparator = __.partial(ascendingBackboneComparator,
+            var myComparator = __.partial(multiAscendingBackbone,
                     ["myNumberPr_operty", "myDateProperty", "myStringProperty", "mySecondNumberProperty"]),
 
                 model1 = { myId: "1", myNumberProperty: 100, mySecondNumberProperty: -100, myStringProperty: "A", myDateProperty: new Date(2014, 6, 1) },

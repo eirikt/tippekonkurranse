@@ -35,22 +35,51 @@
                 return 0;
             },
 
-        // TODO: JSDoc
+            /**
+             * Curry-friendly ascending comparator functions.
+             *
+             * @param propertyGetter {Function} Function for obtaining properties from the objects being compared
+             * @param nextComparator {Function} The (next) comparator function to call if this comparator cannot decide the object order
+             * @param propertyName {String} The name of the property to compare
+             * @param object {Object} object to be compared
+             * @param otherObject {Object} object to be coompared against
+             */
             _chainableAscendingComparator = function (propertyGetter, nextComparator, propertyName, object, otherObject) {
-                var modelProperty = propertyGetter(propertyName, object),
-                    otherModelProperty = propertyGetter(propertyName, otherObject);
+                var objectProperty = propertyGetter(propertyName, object),
+                    otherObjectProperty = propertyGetter(propertyName, otherObject);
 
-                if (modelProperty > otherModelProperty) {
+                if (objectProperty > otherObjectProperty) {
                     return 1;
                 }
-                if (modelProperty < otherModelProperty) {
+                if (objectProperty < otherObjectProperty) {
                     return -1;
                 }
                 return nextComparator(object, otherObject);
             }.autoCurry(),
 
-        // TODO: JSDoc
-            _ascendingComparator = function (propertyGetter, propertyNameArray, object, otherObject) {
+        // ...
+            _ascendingComparator = function (propertyGetter, object, otherObject) {
+                var objectProperty = propertyGetter(object),
+                    otherObjectProperty = propertyGetter(otherObject);
+
+                if (objectProperty > otherObjectProperty) {
+                    return 1;
+                }
+                if (objectProperty < otherObjectProperty) {
+                    return -1;
+                }
+                return 0;
+            },
+
+            /**
+             * Multi-property ascending comparator function.
+             *
+             * @param propertyGetter {Function} Function for obtaining properties from the objects being compared
+             * @param propertyNameArray {[String]} Ordered names of the properties to compare
+             * @param object {Object} object to be compared
+             * @param otherObject {Object} object to be coompared against
+             */
+            _multiAscendingComparator = function (propertyGetter, propertyNameArray, object, otherObject) {
                 var propArray = F.isArray(propertyNameArray) ? propertyNameArray : [propertyNameArray],
                     prop, i, ascendingComparator;
 
@@ -70,8 +99,10 @@
             alwaysEqualComparator: _alwaysEqualComparator,
 
             chainableAscendingComparator: _chainableAscendingComparator,
-            ascendingComparator: _ascendingComparator,
-            ascendingBackboneComparator: _ascendingComparator(_backbonePropertyGetter)
+
+            ascending: _ascendingComparator,
+            multiAscending: _multiAscendingComparator,
+            multiAscendingBackbone: _multiAscendingComparator(_backbonePropertyGetter)
         };
     }
 );

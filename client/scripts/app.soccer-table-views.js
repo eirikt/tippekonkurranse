@@ -1,12 +1,13 @@
 /* global define:false */
+
 define(["jquery", "underscore", "backbone"],
     function ($, _, Backbone) {
         "use strict";
 
         /**
-         * TODO: document ...
+         * TODO: Document!
          *
-         * Crappy
+         * Kind of crappy function ...
          *
          * Expecting model with: ...
          *

@@ -1,7 +1,7 @@
 /* global define:false, describe:false, it:false */
 /* jshint -W030 */
 
-define(["chai", "underscore", "backbone", "../../../shared/scripts/comparators"],
+define(["chai", "underscore", "backbone", "../../../shared/scripts/string-extensions"],
     function (Chai, _) {
         "use strict";
 

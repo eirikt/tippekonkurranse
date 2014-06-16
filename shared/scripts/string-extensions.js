@@ -40,6 +40,9 @@
             _toSnakeCase = function (str) {
                 throw new Error('Not implemented');
             },
+            _unSnakify = function (str) {
+                return str.replace(/_/g, ' ');
+            },
             _toSentenceCase = function (str) {
                 throw new Error('Not implemented');
             };
@@ -93,7 +96,7 @@
 
         //if (typeof String.prototype.unSnakify !== 'function') {
         String.prototype.unSnakify = function () {
-            return this.replace(/_/g, ' ');
+            return _unSnakify(this);
         };
         //}
 
@@ -122,5 +125,19 @@
         //if (typeof String.prototype.humanize !== 'function') {
         String.prototype.humanize = String.prototype.toSentenceCase;
         //}
+
+        return {
+            trim: _trim,
+            startsWith: _startsWith,
+            endsWith: _endsWith,
+            contains: _contains,
+            capitalize: _capitalize,
+            toTitleCase: _toTitleCase,
+            toCamelCase: _toCamelCase,
+            toSnakeCase: _toSnakeCase,
+            snakify: _toSnakeCase,
+            unSnakify: _unSnakify,
+            toSentenceCase: _toSentenceCase
+        };
     }
 );

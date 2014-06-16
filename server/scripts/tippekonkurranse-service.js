@@ -107,7 +107,7 @@ var env = process.env.NODE_ENV || "development",
                     opprykkScore = 0,
                     toppscorerScore = 0,
                     cupScore = 0,
-                    sum = 0,
+                    sum = 0, rating = 0,
 
                     participantObj = predictions2014[participant];
 
@@ -134,7 +134,7 @@ var env = process.env.NODE_ENV || "development",
                         }
                     });
 
-                    // Opprykk
+                    // Opprykk;
                     __.each(participantObj.opprykk, function (teamName, index) {
                         var predictedTeamPlacing = index + 1,
                             actualTeamPlacing = indexedAdeccoligaTable[teamName].no;
@@ -151,9 +151,10 @@ var env = process.env.NODE_ENV || "development",
 
                     // Sum
                     sum = tabellScore + pallScore + nedrykkScore + toppscorerScore + opprykkScore + cupScore;
+                    rating = sum;
                 }
                 currentStanding[participant] =
-                    appModels.scoreModel.createObjectWith(tabellScore, pallScore, nedrykkScore, toppscorerScore, opprykkScore, cupScore, sum);
+                    appModels.scoreModel.createObjectWith(tabellScore, pallScore, nedrykkScore, toppscorerScore, opprykkScore, cupScore, rating);
             }
             return currentStanding;
         },
@@ -188,7 +189,8 @@ var env = process.env.NODE_ENV || "development",
                     logMsg += " is not yet stored";
 
                 } else {
-                    // TODO: Revisit! Ogsp, hvis Adeccoliga spiller runder mens Tippeliga ikke gjør det så blir ikke runden oppdatert ...
+                    // TODO: Revisit logic, seems a bit strange!
+                    // Også, hvis Adeccoliga spiller runder mens Tippeliga ikke gjør det så blir ikke runden oppdatert ...
 
                     dbCount = dbMatchesCount[round].length;
                     if (currentRoundCount < dbCount) {
@@ -219,10 +221,6 @@ var env = process.env.NODE_ENV || "development",
     _getTippekonkurranseScores = function (requestion, arg) {
         "use strict";
 
-        if (!arg || arg.length < 1) {
-            throw new Error("Missing result data, check data parameters/origin status!");
-        }
-
         var currentTippeligaTable = arg[0],
             currentTippeligaToppscorer = arg[1],
             currentAdeccoligaTable = arg[2],
@@ -231,10 +229,16 @@ var env = process.env.NODE_ENV || "development",
             currentMatchesCount = __.groupBy(currentTippeligaTable, "matches"),
             allMatchRoundsPresentInCurrentTippeligaTable = __.keys(currentMatchesCount),
             currentRound = Math.max.apply(null, allMatchRoundsPresentInCurrentTippeligaTable),
+            scores;
 
+        if (arg && arg.length > 0) {
             scores = _updateScores(
                 predictions2014,
                 currentTippeligaTable, currentTippeligaToppscorer, currentAdeccoligaTable, currentRemainingCupContenders);
+
+            //} else {
+            //throw new Error("Missing result data, check data parameters/origin status!");
+        }
 
         return requestion({
             currentMatchesCount: currentMatchesCount,
@@ -265,7 +269,7 @@ var env = process.env.NODE_ENV || "development",
                         previousTippeligaRound.tippeliga, previousTippeligaRound.toppscorer, previousTippeligaRound.adeccoliga, previousTippeligaRound.remainingCupContenders);
                     for (var participant in arg.scores) {
                         if (arg.scores.hasOwnProperty(participant)) {
-                            arg.scores[participant].previousSum = previousRoundScores[participant].sum;
+                            arg.scores[participant][appModels.scoreModel.previousRatingPropertyName] = previousRoundScores[participant][appModels.scoreModel.ratingPropertyName]
                         }
                     }
                 }
@@ -380,14 +384,7 @@ var env = process.env.NODE_ENV || "development",
     },
 
 
-    /**
-     * ...
-     * @param handleTippeligaData
-     * @param request
-     * @param response
-     * @private
-     */
-    _handleRequest = function (handleTippeligaData, request, response) {
+    _retrieveTippeligaDataAndThenDispatchToHandler = function (handleTippeligaData, request, response) {
         "use strict";
         var year = request.params.year,
             round = request.params.round;
@@ -421,6 +418,13 @@ var env = process.env.NODE_ENV || "development",
     },
 
 
+    _handleRequest = function (handleTippeligaData, request, response) {
+        "use strict";
+        return _retrieveTippeligaDataAndThenDispatchToHandler(handleTippeligaData, request, response);
+    },
+// /Private functions
+
+
 ////////////////////////////////////////
 // Public functions
 ////////////////////////////////////////
@@ -428,6 +432,7 @@ var env = process.env.NODE_ENV || "development",
     _handlePredictionsRequest = exports.handlePredictionsRequest =
         function (request, response) {
             "use strict";
+
             var year = parseInt(request.params.year, 10),
                 userId = request.params.userId,
                 predictions = null;
@@ -442,9 +447,11 @@ var env = process.env.NODE_ENV || "development",
             }
         },
 
+
     _handleResultsRequest = exports.handleResultsRequest =
         function (request, response) {
             "use strict";
+
             var resultsRequest = curry(_handleRequest)(
                 RQ.sequence([
                     curry(_dispatchResultsToClientForPresentation)(response),
@@ -455,9 +462,11 @@ var env = process.env.NODE_ENV || "development",
             resultsRequest(request, response);
         },
 
+
     _handleScoresRequest = exports.handleScoresRequest =
         function (request, response) {
             "use strict";
+
             var scoresRequest = curry(_handleRequest)(
                 RQ.sequence([
                     _getTippekonkurranseScores,
@@ -468,4 +477,49 @@ var env = process.env.NODE_ENV || "development",
             );
 
             scoresRequest(request, response);
+        },
+
+
+    _handleRatingHistoryRequest = exports.handleRatingHistoryRequest =
+        function (request, response) {
+            "use strict";
+
+            /*
+             _handleRequest(
+             RQ.sequence([
+             _getTippekonkurranseScores,
+             curry(_dispatchScoresToClientForPresentation)(response)
+             ]),
+             request
+             );
+             */
+
+            var rankingTendencyForEirik = {
+                    userId: "eirik",
+                    ratings: [1, 10, 5, 9, 13, 11, 6, 3, 1, 1, 2, 4]
+                },
+                rankingTendencyForOddvar = {
+                    userId: "oddvar",
+                    ratings: [3, 4, 5, 3, 3, 4, 7, 8, 8, 8, 6, 6]
+                },
+                rankingTendencyForJanTore = {
+                    userId: "jan_tore",
+                    ratings: [33, 44, 55, 33, 33, 44, 76, 82, 83, 85, 64, 23]
+                },
+                rankingTendencyForHansBernhard = {
+                    userId: "hans_bernhard",
+                    ratings: [8, 23, 25, 34, 39, 41, 77, 88, 88, 89, 62, 64]
+                },
+
+                ratings = [
+                    rankingTendencyForHansBernhard,
+                    rankingTendencyForEirik,
+                    rankingTendencyForOddvar,
+                    rankingTendencyForJanTore
+                ];
+
+            // As of now ...
+            console.log(JSON.stringify(ratings));
+            response.json(ratings);
         };
+

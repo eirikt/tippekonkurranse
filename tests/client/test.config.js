@@ -1,32 +1,57 @@
 /* global mocha:false */
-
 require.config({
-    baseUrl: '/',
+    baseUrl: '.',
+    nodeRequire: require,
     paths: {
-        jquery: 'build/bower_components/jquery/dist/jquery.min',
-        underscore: 'build/bower_components/underscore/underscore',
-        backbone: 'build/bower_components/backbone/backbone',
-        moment: 'build/bower_components/moment/min/moment.min',
-        toastr: 'build/bower_components/toastr/toastr.min',
+        jquery: '../../build/bower_components/jquery/dist/jquery',
+        underscore: '../../build/bower_components/underscore/underscore',
+        backbone: '../../build/bower_components/backbone/backbone',
+        moment: '../../build/bower_components/moment/moment',
+        'moment.nb': '../../build/bower_components/moment/lang/nb',
+        toastr: '../../build/bower_components/toastr/toastr',
 
-        chai: 'node_modules/chai/chai',
-        sinon: 'node_modules/sinon/lib/sinon',
+        chai: '../../node_modules/chai/chai',
+        sinon: '../../node_modules/sinon/pkg/sinon',
+        //fakeServer: '../../node_modules/sinon/pkg/sinon/util/fake_server',
 
         // Shared util libs
-        fun: 'build/scripts/fun',
-        'string-extensions': 'build/scripts/string-extensions',
-        comparators: 'build/scripts/comparators',
+        fun: '../../build/scripts/fun',
+        'string-extensions': '../../build/scripts/string-extensions',
+        comparators: '../../build/scripts/comparators',
 
         // Shared app libs
-        'app.models': 'build/scripts/app.models',
+        'app.models': '../../build/scripts/app.models',
 
-        // Client-side only util libs
-        utils: 'build/scripts/utils',
-        'backbone.fetch-local-copy': 'build/scripts/backbone.fetch-local-copy',
+        // Client-side-only util libs
+        utils: '../../build/scripts/utils',
+        'backbone.fetch-local-copy': '../../build/scripts/backbone.fetch-local-copy',
 
-        // Client-side only app libs
-        'app.result': 'build/scripts/app.result',
-        'app.result-collection': 'build/scripts/app.result-collection'
+        // Client-side-only app libs (Router)
+        'app.router': '../../build/scripts/app.router',
+
+        // Client-side-only app libs (Models)
+        'app.result': '../../build/scripts/app.result',
+
+        // Client-side-only app libs (Collections)
+        'app.result-collection': '../../build/scripts/app.result-collection',
+        'app.rating-history-collection': '../../build/scripts/app.rating-history-collection',
+
+        // Client-side-only app libs (Views)
+        'app.header-view': '../../build/scripts/app.header-view',
+        'app.participant-score-view': '../../build/scripts/app.participant-score-view',
+        'app.rating-history-view': '../../build/scripts/app.rating-history-view',
+        'app.results-view': '../../build/scripts/app.results-view',
+        'app.soccer-table-views': '../../build/scripts/app.soccer-table-views'
+    },
+    shim: {
+        'sinon': {
+            deps: [],
+            exports: 'sinon'
+        }//,
+        //'fakeServer': {
+        //    deps: ['sinon'],
+        //    exports: 'fakeServer'
+        //}
     }
 });
 
@@ -34,8 +59,12 @@ require([
         'specs/test.spec.js',
         'specs/string-extensions.amd.spec.js',
         'specs/comparators.amd.spec.js',
+
         'specs/utils.spec.js',
-        'specs/app.scores-collection.spec.js'
+
+        'specs/app.scores-collection.spec.js',
+        'specs/app.rating-history-collection.spec.js',
+        'specs/app.rating-view.spec.js'
     ],
     function () {
         'use strict';

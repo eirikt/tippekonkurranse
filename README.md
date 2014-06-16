@@ -43,7 +43,6 @@ _Status: In progress_
 #### v1.1.6 : _Delivery goal 06.06.2014_
 * Altered participant rating, skipping non-used rating numbers 
 * Bugfix: Sorting of participants
-* Moving towards real full-stack JavaScript solution with shared server/client logic
 
 _Status: Done_
 

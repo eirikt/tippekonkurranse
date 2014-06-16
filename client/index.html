@@ -14,6 +14,7 @@
     <meta name="description" content="Tippekonkurranse 2014"/>
     <meta name="author" content="Tippegjengen"/>
 
+    <meta property="og:url" content="http://tippekonkurranse.herokuapp.com"/>
     <meta property="og:title" content="Tippekonkurranse 2014"/>
     <meta property="og:description" content="Now that there is the Tec-9, a crappy spray gun from South Miami. This gun is advertised as the most popular gun in American crime. Do you believe that shit? It actually says that in the little book that comes with it: the most popular gun in American crime. Like they're actually proud of that shit."/>
     <meta property="og:image" content="http://tippekonkurranse.herokuapp.com/images/facsimile.png"/>
@@ -25,10 +26,11 @@
     <link rel="stylesheet" type="text/css" href="bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="bower_components/toastr/toastr.min.css">
+    <link rel="stylesheet" type="text/css" href="bower_components/jqplot-bower/dist/jquery.jqplot.min.css"/>
+
     <link rel="stylesheet" type="text/css" href="styles/animations.css">
     <link rel="stylesheet" type="text/css" href="styles/main.css">
 </head>
-
 <body>
 
 <!--[if lt IE 10]>
@@ -47,6 +49,8 @@
 <div class="modal fade" id="predictionsTable" tabindex="-1" role="dialog" aria-labelledby="predictionsLabel" aria-hidden="true"></div>
 
 <header class="hidden"></header>
+
+<div id="jqplot"></div>
 
 <div id="content">
     <section id="intro" class="rw-wrapper">
@@ -77,7 +81,7 @@
     </span>
     <span style="margin-right:1rem;float:right !important;}">
         <span style="font-size:large;">(</span>
-        <a href="https://github.com/eirikt/tippekonkurranse/blob/master/README.md" target="_new">v1.1.6.1</a>
+        <a href="https://github.com/eirikt/tippekonkurranse/blob/master/README.md" target="_new">v1.2-SNAPSHOT</a>
         <span style="font-size:large;">)</span>
     </span>
 </footer>

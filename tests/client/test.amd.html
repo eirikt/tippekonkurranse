@@ -1,0 +1,22 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Tippekonkurranse client-side specifications (a.k.a. tests)</title>
+    <link rel="stylesheet" href="../../node_modules/grunt-mocha/node_modules/mocha/mocha.css" media="screen">
+</head>
+<body>
+
+<script src="../../node_modules/grunt-mocha/node_modules/mocha/mocha.js"></script>
+
+<script type="text/javascript">
+    mocha.setup('bdd');
+</script>
+
+<div id="content" style="padding-top:5rem;"></div>
+
+<div id="mocha"></div>
+
+<script src="../../build/bower_components/requirejs/require.js" data-main="test.config.js"></script>
+
+</body>
+</html>

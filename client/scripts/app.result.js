@@ -11,10 +11,11 @@ define(["jquery", "underscore", "backbone"],
             namePropertyName: "name",
             yearPropertyName: "year",
             roundPropertyName: "round",
-            ratingPropertyName: "rating",
-            ratingNumberPropertyName: "ratingNumber",
-            previousSumPropertyName: "previousSum",
-            previousRatingNumberPropertyName: "previousRatingNumber"
+
+            rankPropertyName: "rank",
+            previousRankPropertyName: "previousRank",
+
+            rankPresentationPropertyName: "rankPresentation"
         });
     }
 );
