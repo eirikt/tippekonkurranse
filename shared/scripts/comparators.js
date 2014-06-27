@@ -28,6 +28,14 @@
                 return modelObject.get(propertyName);
             },
 
+            _aritmethicComparator = function (val, otherVal) {
+                return val - otherVal;
+            },
+
+            _propertyArithmeticComparator = function (propertyName, object, otherObject) {
+                return object[propertyName] - otherObject[propertyName];
+            },
+
             /**
              * @return Comparator equal (being 0)
              */
@@ -56,19 +64,15 @@
                 }
                 return nextComparator(object, otherObject);
             }.autoCurry(),
+        // TODO: Pursue?
+        //_chainableAscendingComparator = function (propertyGetter, nextComparator, propertyName, object, otherObject) {
+        //    var compareVal = propertyGetter(propertyName, object) - propertyGetter(propertyName, otherObject);
+        //    return (compareVal === 0) ? nextComparator(object, otherObject) : compareVal;
+        //}.autoCurry(),
 
-        // ...
+        // TODO: Test with dates and strings (and arrays?)
             _ascendingComparator = function (propertyGetter, object, otherObject) {
-                var objectProperty = propertyGetter(object),
-                    otherObjectProperty = propertyGetter(otherObject);
-
-                if (objectProperty > otherObjectProperty) {
-                    return 1;
-                }
-                if (objectProperty < otherObjectProperty) {
-                    return -1;
-                }
-                return 0;
+                return propertyGetter(object) - propertyGetter(otherObject);
             },
 
             /**
@@ -96,6 +100,8 @@
             propertyGetter: _propertyGetter,
             backbonePropertyGetter: _backbonePropertyGetter,
 
+            aritmethicComparator: _aritmethicComparator,
+            propertyArithmeticComparator: _propertyArithmeticComparator,
             alwaysEqualComparator: _alwaysEqualComparator,
 
             chainableAscendingComparator: _chainableAscendingComparator,

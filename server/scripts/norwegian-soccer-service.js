@@ -925,6 +925,77 @@ var __ = require("underscore"),
     },
 
 
+    _dataForRound2014013 = exports.round2014013 = {
+        year: 2014,
+        round: 13,
+        date: "2014-06-12",
+        tippeliga: [
+            { name: "Molde", no: 1, matches: 13 },
+            { name: "Strømsgodset", no: 2, matches: 13 },
+            { name: "Odd", no: 3, matches: 13 },
+            { name: "Rosenborg", no: 4, matches: 13 },
+            { name: "Vålerenga", no: 5, matches: 13 },
+            { name: "Lillestrøm", no: 6, matches: 13 },
+            { name: "Viking", no: 7, matches: 13 },
+            { name: "Bodø/Glimt", no: 8, matches: 13 },
+            { name: "Sogndal", no: 9, matches: 13 },
+            { name: "Stabæk", no: 10, matches: 13 },
+            { name: "Sarpsborg 08", no: 11, matches: 13 },
+            { name: "Start", no: 12, matches: 13 },
+            { name: "Aalesund", no: 13, matches: 13 },
+            { name: "Haugesund", no: 14, matches: 13 },
+            { name: "Sandnes Ulf", no: 15, matches: 13 },
+            { name: "Brann", no: 16, matches: 13 }
+        ],
+        toppscorer: [
+            "Vidar Örn Kjartansson"
+        ],
+        adeccoliga: [
+            /*
+             1.	Tromsø	15	9	4	2	28	12	+16	31
+             2.	Sandefjord	14	9	4	1	25	10	+15	31
+             3.	Ranheim	14	9	2	3	24	9	+15	29
+             4.	Kristiansund BK	14	7	3	4	23	21	+2	24
+             5.	Mjøndalen	14	6	5	3	23	16	+7	23
+             6.	Fredrikstad	14	7	2	5	18	11	+7	23
+             7.	Nest-Sotra	14	7	1	6	24	21	+3	22
+             8.	Bærum	14	7	1	6	21	29	-8	22
+             9.	Alta	14	5	4	5	15	15	0	19
+             10.	Strømmen	14	5	3	6	26	24	+2	18
+             11.	Bryne	15	5	3	7	22	26	-4	18
+             12.	Hødd	14	4	5	5	17	18	-1	17
+             13.	Tromsdalen	14	4	3	7	16	25	-9	15
+             14.	Hønefoss	14	3	2	9	16	31	-15	11
+             15.	Ullensaker/Kisa	14	2	3	9	10	22	-12	9
+             16.	HamKam	14	1	1	12	6	24	-18	4
+             */
+            { name: "Sandefjord", no: 1, matches: 13 },
+            { name: "Tromsø", no: 2, matches: 13 },
+            { name: "Ranheim", no: 3, matches: 13 },
+            { name: "Kristiansund BK", no: 4, matches: 13 },
+            { name: "Mjøndalen", no: 5, matches: 13 },
+            { name: "Nest-Sotra", no: 6, matches: 13 },
+            { name: "Fredrikstad", no: 7, matches: 13 },
+            { name: "Alta", no: 8, matches: 13 },
+            { name: "Bærum", no: 9, matches: 13 },
+            { name: "Hødd", no: 10, matches: 13 },
+            { name: "Strømmen", no: 11, matches: 13 },
+            { name: "Tromsdalen", no: 12, matches: 13 },
+            { name: "Bryne", no: 13, matches: 13 },
+            { name: "Hønefoss", no: 14, matches: 13 },
+            { name: "Ullensaker/Kisa", no: 15, matches: 13 },
+            { name: "HamKam", no: 16, matches: 13 }
+        ],
+        remainingCupContenders: [
+            "Bodø/Glimt",
+            "Brann",
+            "Molde",
+            "Stabæk",
+            "Vålerenga"
+        ]
+    },
+
+
     _getTippeligaTable2013 = exports.getTippeligaTable2013 = function () {
         "use strict";
         return [

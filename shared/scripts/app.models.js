@@ -69,6 +69,7 @@
                         // _.toArray() this is ...
                         args = Array.prototype.slice.call(arguments);
                     } else {
+                        // Default 0 for all properties
                         args = scoreModelPropertyNamesArray.map(function () {
                             return 0;
                         });

@@ -13,7 +13,7 @@ define([
             routes: {
                 'scores/current': 'showCurrentScores',
                 'scores/:year/:round': 'showScores',
-                'rankingshistory/:year': 'showRankingsHistory',
+                'ratinghistory/:year': 'showRatingHistory',
 
                 // Default
                 '*actions': 'defaultAction'
@@ -59,7 +59,7 @@ define([
             },
 
 
-            showRankingsHistory: function (year) {
+            showRatingHistory: function (year) {
                 //console.log('showRankingsHistory(' + year + ') ...');
                 var results = new HistoricScoresCollection({
                         year: year
@@ -68,7 +68,7 @@ define([
                         el: 'header',
                         collection: results
                     }),
-                    historicScoresView = new RatingHistoryView({
+                    ratingHistoryView = new RatingHistoryView({
                         el: '#jqplot',
                         collection: results
                     });

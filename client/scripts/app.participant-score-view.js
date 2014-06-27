@@ -140,9 +140,8 @@ define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soc
             template: _.template('' +
                     '<td style="padding-left:2rem;text-align:right;"><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantScore.rankPresentationPropertyName + ' %></span></td>' +
                     '<td><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantScore.namePropertyName + ' %></span></td>' +
-                    //'<td></td>' +
-                    //'<td style="width:2rem;"></td>' +
-                    '<td class="rank-tendency" style="width:4rem;"></td>' +
+                    '<td style="width:4rem;"></td>' +
+                    '<td class="rank-tendency"></td>' +
                     '<td>' +
                     '  <span style="white-space:nowrap;">' +
                     '    <span style="font-weight:bold;font-size:larger;margin-right:.3rem;"><%= ' + App.scoreModel.ratingPropertyName + ' %></span>' +

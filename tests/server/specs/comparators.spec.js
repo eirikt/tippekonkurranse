@@ -171,7 +171,7 @@ describe("Comparators", function () {
 
         it("should sort models", function () {
             var myComparator = __.partial(multiAscendingBackbone,
-                    ["myNumberPr_operty", "myDateProperty", "myStringProperty", "mySecondNumberProperty"]),
+                    ["myNumberProperty", "myDateProperty", "myStringProperty", "mySecondNumberProperty"]),
 
                 model1 = { myId: "1", myNumberProperty: 100, mySecondNumberProperty: -100, myStringProperty: "A", myDateProperty: new Date(2014, 6, 1) },
                 model2 = { myId: "2", myNumberProperty: 100, mySecondNumberProperty: -90, myStringProperty: "B", myDateProperty: new Date(2014, 6, 1) },

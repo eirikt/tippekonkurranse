@@ -57,11 +57,13 @@ define([
                     lastPreviousRating = -1;
                 this.each(function (participant, index) {
                     var previousRating = participant.get(App.scoreModel.previousRatingPropertyName);
-                    if (previousRating > lastPreviousRating) {
-                        lastPreviousRating = previousRating;
-                        previousRank = (index + 1);
+                    if (previousRating) {
+                        if (previousRating > lastPreviousRating) {
+                            lastPreviousRating = previousRating;
+                            previousRank = (index + 1);
+                        }
+                        participant.set(ParticipantScore.previousRankPropertyName, previousRank, { silent: true });
                     }
-                    participant.set(ParticipantScore.previousRankPropertyName, previousRank, { silent: true });
                 });
 
                 this.comparator = this.sortByRatingThenName;

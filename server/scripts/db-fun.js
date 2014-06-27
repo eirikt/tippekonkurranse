@@ -268,4 +268,25 @@ var dbSchema = require("./db-schema.js"),
                 });
             }
         });
+    },
+
+    persistRound13 = exports.persistRound13 = function () {
+        "use strict";
+        dbSchema.TippeligaRound.count({ year: 2014, round: 13 }, function (err, count) {
+            if (count > 0) {
+                console.log(utils.logPreamble() + "Tippeliga 2014 round #13 already exists in db");
+                if (count > 1) {
+                    console.warn(utils.logPreamble() + "Tippeliga 2014 round #13 has more than one document in db!");
+                    throw new Error("Tippeliga 2014 round #13 has more than one document in db!");
+                }
+            } else {
+                var round13 = new dbSchema.TippeligaRound();
+                for (var attr in soccerResultService.round2014013) {
+                    round13[attr] = soccerResultService.round2014013[attr];
+                }
+                round13.save(function (err, round13) {
+                    console.log(utils.logPreamble() + "Tippeliga 2014 round #13 saved... OK");
+                });
+            }
+        });
     };

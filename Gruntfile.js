@@ -77,13 +77,13 @@ module.exports = function (grunt) {
         },
 
         copy: {
-            all: {
+            "to-build": {
                 files: [
                     { expand: true, cwd: 'client', src: ['**'], dest: 'build' },
                     { expand: true, cwd: 'shared', src: ['**'], dest: 'build' }
                 ]
             },
-            shared: {
+            "to-client": {
                 files: [
                     { expand: true, cwd: 'shared', src: ['**'], dest: 'client' }
                 ]
@@ -207,8 +207,8 @@ module.exports = function (grunt) {
                 files: {
                     // Minified versions not available via Bower ...
                     'build/bower_components/requirejs/require.js': 'build/bower_components/requirejs/require.js',
-                    'build/bower_components/backbone/backbone.js': 'build/bower_components/backbone/backbone.js',
                     'build/bower_components/underscore/underscore.js': 'build/bower_components/underscore/underscore.js',
+                    'build/bower_components/backbone/backbone.js': 'build/bower_components/backbone/backbone.js',
 
                     'build/scripts/fun.js': 'build/scripts/fun.js',
                     'build/scripts/comparators.js': 'build/scripts/comparators.js',
@@ -296,7 +296,7 @@ module.exports = function (grunt) {
     grunt.registerTask('install:client', ['shell:install-client']);
     grunt.registerTask('mongodb', ['shell:createDataDir', 'shell:mongod']);
 
-    grunt.registerTask('build:client', ['clean', 'copy:all', 'uglify', 'cssmin']);
+    grunt.registerTask('build:client', ['clean', 'copy:to-client', 'copy:to-build'/*, 'uglify', 'cssmin'*/]);
     // TODO: grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', 'blanket_mocha', 'mochacov:travis']);
     grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', 'mochacov:travis']);
 
@@ -305,7 +305,7 @@ module.exports = function (grunt) {
     grunt.registerTask('coverage:server', ['mochacov:report']);
     grunt.registerTask('test', ['install:client', 'build:client', 'test:server', 'test:client']);
 
-    grunt.registerTask('deploy:development', ['env:dev', 'install:client', 'copy:shared', 'shell:run']);
+    grunt.registerTask('deploy:development', ['env:dev', 'install:client', 'copy:to-client', 'shell:run']);
     grunt.registerTask('deploy:local', ['env:prod', 'install:client', 'build:client', 'shell:run']);
     grunt.registerTask('deploy:production', ['install:client', 'build:client']);
     grunt.registerTask('deploy:heroku', ['deploy:production']);
