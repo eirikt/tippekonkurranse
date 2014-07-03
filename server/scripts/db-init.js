@@ -12,6 +12,7 @@ var env = process.env.NODE_ENV || "development",
 // MongoDB URLs
     dbUrl = process.env.MONGOLAB_URI || "mongodb://localhost/tippekonkurranse",
 
+// TODO: Better control via 'db = mongoose.createConnection()'
     MONGO = {
         //username: "username",
         //password: "pa55W0rd!",
@@ -64,4 +65,4 @@ dbData.persistRound9();
 dbData.persistRound10();
 dbData.persistRound11();
 dbData.persistRound12();
-//dbData.persistRound13();
+dbData.persistRound13();

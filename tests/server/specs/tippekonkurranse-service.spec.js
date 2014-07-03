@@ -1,14 +1,22 @@
 /* global  describe:false, it:false */
 /* jshint -W030 */
 
-var expect = require("../../../node_modules/chai/chai.js").expect,
+var __ = require("../../../node_modules/underscore/underscore.js"),
+    curry = require("../../../node_modules/curry/curry"),
+
+    expect = require("../../../node_modules/chai/chai.js").expect,
     sinon = require('../../../node_modules/sinon/lib/sinon'),
 
-    dbSchema = require("../../../server/scripts/db-schema.js"),
+    go = require("../../../server/scripts/utils.js").rqGo,
 
-    //_addTippekonkurranseScores = require("../../../server/scripts/tippekonkurranse-service.js").__addTippekonkurranseScores,
-    _addTippekonkurranseScores = require("../../../server/scripts/tippekonkurranse-service.js")._addTippekonkurranseScores;
-    //handleRatingHistoryRequest = require("../../../server/scripts/tippekonkurranse-service.js").handleRatingHistoryRequest;
+    tippeligaTableIndex = require("../../../server/scripts/tippekonkurranse.js").tippeligaTableIndex,
+    adeccoligaTableIndex = require("../../../server/scripts/tippekonkurranse.js").adeccoligaTableIndex,
+    scoresIndex = require("../../../server/scripts/tippekonkurranse.js").scoresIndex,
+    addTippekonkurranseScoresRequestion = require("../../../server/scripts/tippekonkurranse.js").addTippekonkurranseScoresRequestion,
+
+    addTippekonkurranseScores2014 = __.partial(addTippekonkurranseScoresRequestion, require("../../../server/scripts/user-predictions-2014.js").predictions2014),
+
+    sortByPropertyRequestion = require("../../../server/scripts/tippekonkurranse.js").sortByPropertyRequestion;
 
 
 describe("Tippekonkurranse service", function () {
@@ -24,31 +32,79 @@ describe("Tippekonkurranse service", function () {
     });
 
 
-    /* TODO: Re-specify/rewrite ASAP
-    describe("_addTippekonkurranseScores requestion", function () {
+    describe("addTippekonkurranseScores requestion", function () {
 
         describe("Border cases", function () {
+
             it("should get hold on private functions within Node.js file", function () {
-                expect(_addTippekonkurranseScores).to.exist;
+                expect(addTippekonkurranseScores2014).to.exist;
             });
 
-            it("should do nothing and return empty object if no args are provided", function () {
-                expect(_addTippekonkurranseScores()).to.be.empty;
+            it("should throw error if no requestion argument is provided", function () {
+                expect(addTippekonkurranseScores2014).to.throw(Error, "Requestion argument is missing - check your RQ.js setup");
             });
 
-            it("should do nothing and return empty object if empty prediction object is provided only", function () {
-                expect(_addTippekonkurranseScores({})).to.be.empty;
+            it("should throw error if no argument array is provided", function () {
+                var addTippekonkurranseScores = __.partial(addTippekonkurranseScores2014, function () {
+                });
+                expect(addTippekonkurranseScores).to.throw(Error, "Requestion argument array is missing - check your RQ.js functions and setup");
+            });
+
+            it("should throw error if no user predictions are provided", function () {
+                var userPredictions = null,
+                    requestion = go,
+                    args = [],
+                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);//,
+                //addTippekonkurranseScores = __.partial(addTippekonkurranseScores2014, requestion, args);
+                try {
+                    addTippekonkurranseScores(requestion, args);
+                    throw new Error("Should have thrown error");
+                } catch (e) {
+                    expect(e.message).to.be.equal("User predictions argument are missing - cannot calculate Tippekonkurranse scores");
+                }
+                // TODO: Do something like this instead ...
+                //var addTippekonkurranseScores = __.bind(addTippekonkurranseScores, [{}, function () {}, {}]);
+                //expect(addTippekonkurranseScores).to.throw(Error, "More than 2 arguments present - this requestion must be curried with predictions object before use");
+                //});
+            });
+
+            it("should return empty score object if empty user prediction object is provided", function () {
+                var userPredictions = {},
+                    requestion = go,
+                    args = [],
+                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
+
+                expect(addTippekonkurranseScores(requestion, args)).to.exist;
+                expect(addTippekonkurranseScores(requestion, args)).to.be.an.object;
+                expect(addTippekonkurranseScores(requestion, args)).to.not.be.an.empty.object;
+                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(9);
+
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.exist;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.be.an.object;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores).to.be.an.empty.object;
             });
 
             it("should return zero-only score object if null user prediction object is provided", function () {
                 var userPredictions = {
-                    john: null
-                };
-                expect(_addTippekonkurranseScores(userPredictions)).to.be.ok;
-                expect(_addTippekonkurranseScores(userPredictions)).not.to.be.empty;
-                expect(_addTippekonkurranseScores(userPredictions, null, null, null, null)).to.be.ok;
-                expect(_addTippekonkurranseScores(userPredictions, null, null, null, null)).not.to.be.empty;
-                expect(JSON.stringify(_addTippekonkurranseScores(userPredictions))).to.equal(
+                        john: null
+                    },
+                    requestion = go,
+                    args = [],
+                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
+
+                expect(addTippekonkurranseScores(requestion, args)).to.exist;
+                expect(addTippekonkurranseScores(requestion, args)).to.be.an.object;
+                expect(addTippekonkurranseScores(requestion, args)).to.not.be.an.empty.object;
+                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(9);
+
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.exist;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.be.an.object;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores).not.to.be.an.empty.object;
+
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
+                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.be.equal(
                     JSON.stringify({
                         john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, rating: 0 }
                     })
@@ -57,13 +113,24 @@ describe("Tippekonkurranse service", function () {
 
             it("should return zero-only score object if empty user prediction object is provided", function () {
                 var userPredictions = {
-                    john: {}
-                };
-                expect(_addTippekonkurranseScores(userPredictions)).to.be.ok;
-                expect(_addTippekonkurranseScores(userPredictions)).not.to.be.empty;
-                expect(_addTippekonkurranseScores(userPredictions, null, null, null, null)).to.be.ok;
-                expect(_addTippekonkurranseScores(userPredictions, null, null, null, null)).not.to.be.empty;
-                expect(JSON.stringify(_addTippekonkurranseScores(userPredictions))).to.equal(
+                        john: {}
+                    },
+                    requestion = go,
+                    args = [],
+                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
+
+                expect(addTippekonkurranseScores(requestion, args)).to.exist;
+                expect(addTippekonkurranseScores(requestion, args)).to.be.an.object;
+                expect(addTippekonkurranseScores(requestion, args)).to.not.be.an.empty.object;
+                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(9);
+
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.exist;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.be.an.object;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores).not.to.be.an.empty.object;
+
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
+                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.be.equal(
                     JSON.stringify({
                         john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, rating: 0 }
                     })
@@ -72,15 +139,26 @@ describe("Tippekonkurranse service", function () {
 
             it("should return zero-only score object if non-complete user prediction object is provided", function () {
                 var userPredictions = {
-                    john: {
-                        tabell: null
-                    }
-                };
-                expect(_addTippekonkurranseScores(userPredictions)).to.be.ok;
-                expect(_addTippekonkurranseScores(userPredictions)).not.to.be.empty;
-                expect(_addTippekonkurranseScores(userPredictions, null, null, null, null)).to.be.ok;
-                expect(_addTippekonkurranseScores(userPredictions, null, null, null, null)).not.to.be.empty;
-                expect(JSON.stringify(_addTippekonkurranseScores(userPredictions))).to.equal(
+                        john: {
+                            tabell: null
+                        }
+                    },
+                    requestion = go,
+                    args = [],
+                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
+
+                expect(addTippekonkurranseScores(requestion, args)).to.exist;
+                expect(addTippekonkurranseScores(requestion, args)).to.be.an.object;
+                expect(addTippekonkurranseScores(requestion, args)).to.not.be.an.empty.object;
+                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(9);
+
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.exist;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.be.an.object;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores).not.to.be.an.empty.object;
+
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
+                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.be.equal(
                     JSON.stringify({
                         john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, rating: 0 }
                     })
@@ -89,18 +167,29 @@ describe("Tippekonkurranse service", function () {
 
             it("should return zero-only score object if non-complete user prediction object is provided", function () {
                 var userPredictions = {
-                    john: {
-                        tabell: [],
-                        toppscorer: undefined,
-                        opprykk: null,
-                        cup: []
-                    }
-                };
-                expect(_addTippekonkurranseScores(userPredictions)).to.be.ok;
-                expect(_addTippekonkurranseScores(userPredictions)).not.to.be.empty;
-                expect(_addTippekonkurranseScores(userPredictions, null, null, null, null)).to.be.ok;
-                expect(_addTippekonkurranseScores(userPredictions, null, null, null, null)).not.to.be.empty;
-                expect(JSON.stringify(_addTippekonkurranseScores(userPredictions))).to.equal(
+                        john: {
+                            tabell: [],
+                            toppscorer: undefined,
+                            opprykk: null,
+                            cup: []
+                        }
+                    },
+                    requestion = go,
+                    args = [],
+                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
+
+                expect(addTippekonkurranseScores(requestion, args)).to.exist;
+                expect(addTippekonkurranseScores(requestion, args)).to.be.an.object;
+                expect(addTippekonkurranseScores(requestion, args)).to.not.be.an.empty.object;
+                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(9);
+
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.exist;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.be.an.object;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores).not.to.be.an.empty.object;
+
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
+                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.be.equal(
                     JSON.stringify({
                         john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, rating: 0 }
                     })
@@ -110,6 +199,7 @@ describe("Tippekonkurranse service", function () {
 
 
         describe("'Tabell' penalty point calculations", function () {
+
             it("should have 0 as minimum penalty points", function () {
                 var userPredictions = {
                         john: {
@@ -151,9 +241,17 @@ describe("Tippekonkurranse service", function () {
                         { name: "Tromsø", no: 15, matches: 30 },
                         { name: "Hønefoss", no: 16, matches: 30 }
                     ],
-                    perfectPrediction = _addTippekonkurranseScores(userPredictions, actualTable, null, null, null);
+                    requestion = go,
+                    args = [],
+                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions),
+                    impeccablePrediction;
 
-                expect(perfectPrediction.john.tabell).to.equal(0);
+                args[tippeligaTableIndex] = actualTable;
+                impeccablePrediction = addTippekonkurranseScores(requestion, args)[scoresIndex];
+
+                expect(impeccablePrediction.scores.john.tabell).to.equal(0);
+                expect(impeccablePrediction.scores.john.nedrykk).to.equal(-1);
+                expect(impeccablePrediction.scores.john.pall).to.equal(-4);
             });
 
             it("should give 1 penalty point for each table placing deviation", function () {
@@ -215,7 +313,6 @@ describe("Tippekonkurranse service", function () {
                         { name: "Tromsø", no: 15, matches: 30 },
                         { name: "Hønefoss", no: 16, matches: 30 }
                     ],
-
                     actualTable32penaltyPoints = [
                         { name: "Strømsgodset", no: 1, matches: 30 },
                         { name: "Rosenborg", no: 2, matches: 30 },
@@ -234,13 +331,18 @@ describe("Tippekonkurranse service", function () {
                         { name: "Tromsø", no: 15, matches: 30 },
                         { name: "Hønefoss", no: 16, matches: 30 }
                     ],
-                    predictionGiving2PenaltyPoints = _addTippekonkurranseScores(userPredictions, actualTable2penaltyPoints, null, null, null),
-                    predictionGiving10PenaltyPoints = _addTippekonkurranseScores(userPredictions, actualTable10penaltyPoints, null, null, null),
-                    predictionGiving32PenaltyPoints = _addTippekonkurranseScores(userPredictions, actualTable32penaltyPoints, null, null, null);
+                    requestion = go,
+                    args = [],
+                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
 
-                expect(predictionGiving2PenaltyPoints.john.tabell).to.equal(2);
-                expect(predictionGiving10PenaltyPoints.john.tabell).to.equal(10);
-                expect(predictionGiving32PenaltyPoints.john.tabell).to.equal(32);
+                args[tippeligaTableIndex] = actualTable2penaltyPoints;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.tabell).to.equal(2);
+
+                args[tippeligaTableIndex] = actualTable10penaltyPoints;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.tabell).to.equal(10);
+
+                args[tippeligaTableIndex] = actualTable32penaltyPoints;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.tabell).to.equal(32);
             });
 
             it("should have 116 as maximum score, shouldn't it?", function () {
@@ -284,9 +386,12 @@ describe("Tippekonkurranse service", function () {
                         { name: "Tromsø", no: 15, matches: 30 },
                         { name: "Hønefoss", no: 16, matches: 30 }
                     ],
-                    perfectPrediction = _addTippekonkurranseScores(userPredictions, actualTable, null, null, null);
+                    requestion = go,
+                    args = [],
+                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
 
-                expect(perfectPrediction.john.tabell).to.equal(116);
+                args[tippeligaTableIndex] = actualTable;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.tabell).to.equal(116);
             });
         });
 
@@ -354,11 +459,15 @@ describe("Tippekonkurranse service", function () {
                         { name: "TeamB", no: 15, matches: 30 },
                         { name: "TeamA", no: 16, matches: 30 }
                     ],
-                    thumbsUpNedrykkPrediction1 = _addTippekonkurranseScores(userPredictions, actualNedrykkTable1, null, null, null),
-                    thumbsUpNedrykkPrediction2 = _addTippekonkurranseScores(userPredictions, actualNedrykkTable2, null, null, null);
+                    requestion = go,
+                    args = [],
+                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
 
-                expect(thumbsUpNedrykkPrediction1.john.nedrykk).to.equal(-1);
-                expect(thumbsUpNedrykkPrediction2.john.nedrykk).to.equal(-1);
+                args[tippeligaTableIndex] = actualNedrykkTable1;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.nedrykk).to.equal(-1);
+
+                args[tippeligaTableIndex] = actualNedrykkTable2;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.nedrykk).to.equal(-1);
             });
 
             it("should give nothing if only one team exist in prediction, whatever order ", function () {
@@ -423,17 +532,21 @@ describe("Tippekonkurranse service", function () {
                         { name: "Sarpsborg 08", no: 15, matches: 30 },
                         { name: "TeamB", no: 16, matches: 30 }
                     ],
-                    closeButNoSigarPrediction1 = _addTippekonkurranseScores(userPredictions, actualNedrykkTable1, null, null, null),
-                    closeButNoSigarPrediction2 = _addTippekonkurranseScores(userPredictions, actualNedrykkTable2, null, null, null);
+                    requestion = go,
+                    args = [],
+                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
 
-                expect(closeButNoSigarPrediction1.john.nedrykk).to.equal(0);
-                expect(closeButNoSigarPrediction2.john.nedrykk).to.equal(0);
+                args[tippeligaTableIndex] = actualNedrykkTable1;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.nedrykk).to.equal(0);
+
+                args[tippeligaTableIndex] = actualNedrykkTable2;
+                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.nedrykk).to.equal(0);
             });
         });
 
 
         describe("'Opprykk' penalty point calculations", function () {
-            it("should give no bonus points if retrieved table data is missing 'no' property", function () {
+            it("should throw error if retrieved table data is missing 'no' property", function () {
                 var userPredictions = {
                         john: {
                             tabell: null,
@@ -447,13 +560,23 @@ describe("Tippekonkurranse service", function () {
                         { name: "TeamB" },
                         { name: "Some other team" },
                         { name: "And one more team" }
-                    ];
+                    ],
+                    requestion = go,
+                    args = [],
+                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
 
-                expect(JSON.stringify(_addTippekonkurranseScores(userPredictions, null, null, actualOpprykkTable, null))).to.equal(
-                    JSON.stringify({
-                        john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, rating: 0 }
-                    })
-                );
+                args[tippeligaTableIndex] = actualOpprykkTable;
+
+                try {
+                    addTippekonkurranseScores(requestion, args);
+                    throw new Error("Should have thrown error");
+                } catch (e) {
+                    expect(e.message).to.be.equal("Illegal data format ('no' property is missing) - cannot calculate Tippekonkurranse scores");
+                }
+                // TODO: Do something like this instead ...
+                //var addTippekonkurranseScores = __.bind(addTippekonkurranseScores, [{}, function () {}, {}]);
+                //expect(addTippekonkurranseScores).to.throw(Error, "More than 2 arguments present - this requestion must be curried with predictions object before use");
+                //});
             });
 
             it("should give -1 if both teams exist in prediction, whatever order ", function () {
@@ -476,14 +599,20 @@ describe("Tippekonkurranse service", function () {
                         { name: "TeamA", no: 2, matches: 3 },
                         { name: "Some other team", no: 3, matches: 3 },
                         { name: "And one more team", no: 4, matches: 3 }
-                    ];
+                    ],
+                    requestion = go,
+                    args = [],
+                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
 
-                expect(JSON.stringify(_addTippekonkurranseScores(userPredictions, null, null, actualOpprykkTable1, null))).to.equal(
+                args[adeccoligaTableIndex] = actualOpprykkTable1;
+                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.equal(
                     JSON.stringify({
                         john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: -1, cup: 0, rating: -1 }
                     })
                 );
-                expect(JSON.stringify(_addTippekonkurranseScores(userPredictions, null, null, actualOpprykkTable2, null))).to.equal(
+
+                args[tippeligaTableIndex] = actualOpprykkTable2;
+                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.equal(
                     JSON.stringify({
                         john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: -1, cup: 0, rating: -1 }
                     })
@@ -510,14 +639,22 @@ describe("Tippekonkurranse service", function () {
                         { name: "TeamB", no: 2, matches: 3 },
                         { name: "TeamA", no: 3, matches: 3 },
                         { name: "And one more team", no: 4, matches: 3 }
-                    ];
+                    ],
+                    requestion = go,
+                    args = [],
+                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
 
-                expect(JSON.stringify(_addTippekonkurranseScores(userPredictions, null, null, actualOpprykkTable1, null))).to.equal(
+                args[adeccoligaTableIndex] = actualOpprykkTable1;
+
+                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.equal(
                     JSON.stringify({
                         john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, rating: 0 }
                     })
                 );
-                expect(JSON.stringify(_addTippekonkurranseScores(userPredictions, null, null, actualOpprykkTable2, null))).to.equal(
+
+                args[tippeligaTableIndex] = actualOpprykkTable2;
+
+                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.equal(
                     JSON.stringify({
                         john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, rating: 0 }
                     })
@@ -525,5 +662,87 @@ describe("Tippekonkurranse service", function () {
             });
         });
     });
-     */
+
+
+    describe("sortByPropertyRequestion", function () {
+        describe("Border cases", function () {
+            var bypassRequestion = go;
+
+            it("should get hold on private functions within Node.js file", function () {
+                expect(sortByPropertyRequestion).to.exist;
+            });
+
+            it("should throw error if no requestion argument is provided", function () {
+                var sortByMyPropertyRequestion = __.partial(sortByPropertyRequestion, "myProperty");
+                expect(sortByMyPropertyRequestion).to.throw(Error, "Requestion argument is missing - check your RQ.js setup");
+            });
+
+            it("should throw error if no argument array is provided", function () {
+                var sortByMyPropertyRequestion = __.partial(sortByPropertyRequestion, "myProperty", bypassRequestion);
+                expect(sortByMyPropertyRequestion).to.throw(Error, "Requestion argument array is missing - check your RQ.js functions and setup");
+            });
+
+            it("should sort arguments array by numbers", function () {
+                var args = [
+                    [
+                        ["A"],
+                        [3]
+                    ],
+                    [
+                        ["B"],
+                        [-1]
+                    ],
+                    [
+                        ["C"],
+                        [1]
+                    ]
+                ];
+                expect(sortByPropertyRequestion(1, bypassRequestion, args)).to.be.deep.equal([
+                    [
+                        ["B"],
+                        [-1]
+                    ],
+                    [
+                        ["C"],
+                        [1]
+                    ],
+                    [
+                        ["A"],
+                        [3]
+                    ]
+                ]);
+            });
+
+            it("should sort arguments array by number strings as well", function () {
+                var args = [
+                    [
+                        ["B"],
+                        [-1]
+                    ],
+                    [
+                        ["A"],
+                        [3]
+                    ],
+                    [
+                        ["C"],
+                        [1]
+                    ]
+                ];
+                expect(sortByPropertyRequestion("0", bypassRequestion, args)).to.be.deep.equal([
+                    [
+                        ["B"],
+                        [-1]
+                    ],
+                    [
+                        ["A"],
+                        [3]
+                    ],
+                    [
+                        ["C"],
+                        [1]
+                    ]
+                ]);
+            });
+        });
+    });
 });

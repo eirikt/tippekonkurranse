@@ -13,7 +13,8 @@
 
         var
             /**
-             * The standard way of accessing object properties.
+             * JavaScript's default way of accessing object properties.
+             * @private
              * @return The property with the given <code>propertyName</code> in the given object
              */
             _propertyGetter = function (propertyName, object) {
@@ -22,21 +23,43 @@
 
             /**
              * Backbone.js' way of accessing model properties.
+             * @private
              * @return The property with the given <code>propertyName</code> in the given Backbone Model object
              */
-            _backbonePropertyGetter = function (propertyName, modelObject) {
-                return modelObject.get(propertyName);
-            },
-
-            _aritmethicComparator = function (val, otherVal) {
-                return val - otherVal;
-            },
-
-            _propertyArithmeticComparator = function (propertyName, object, otherObject) {
-                return object[propertyName] - otherObject[propertyName];
+            _backbonePropertyGetter = function (propertyName, backboneModelObject) {
+                return backboneModelObject.get(propertyName);
             },
 
             /**
+             * Arithmetic comparators works for Numbers and Dates.
+             * In addition to the comparator (x<0<y) function, it returns the distance between the two arguments.
+             * @private
+             */
+            _arithmeticAscendingValueComparator = function (value, otherValue) {
+                return value - otherValue;
+            },
+
+            /**
+             * Arithmetic comparators works for Numbers and Dates.
+             * In addition to the comparator (x<0<y) function, it returns the distance between the two arguments.
+             */
+            _arithmeticAscendingComparator = function (comparableValueGetter, object, otherObject) {
+                return _arithmeticAscendingValueComparator(comparableValueGetter(object), comparableValueGetter(otherObject));
+            }.autoCurry(),
+
+            /**
+             * Arithmetic comparators works for Numbers and Dates.
+             * In addition to the comparator (x<0<y) function, it returns the distance between the two arguments.
+             */
+            _propertyArithmeticAscendingComparator = function (propertyGetter, propertyName, object, otherObject) {
+                if (typeof propertyName === 'function') {
+                    propertyName = propertyName.call(this);
+                }
+                return _arithmeticAscendingValueComparator(propertyGetter(propertyName, object), propertyGetter(propertyName, otherObject));
+            }.autoCurry(),
+
+            /**
+             * @private
              * @return Comparator equal (being 0)
              */
             _alwaysEqualComparator = function (object, otherObject) {
@@ -44,13 +67,14 @@
             },
 
             /**
-             * Curry-friendly ascending comparator functions.
+             * Curry-friendly ascending comparator function.
              *
              * @param propertyGetter {Function} Function for obtaining properties from the objects being compared
              * @param nextComparator {Function} The (next) comparator function to call if this comparator cannot decide the object order
-             * @param propertyName {String} The name of the property to compare
+             * @param propertyName {String} The name of the property to be compared
              * @param object {Object} object to be compared
-             * @param otherObject {Object} object to be coompared against
+             * @param otherObject {Object} object to be compared against
+             * @private
              */
             _chainableAscendingComparator = function (propertyGetter, nextComparator, propertyName, object, otherObject) {
                 var objectProperty = propertyGetter(propertyName, object),
@@ -64,24 +88,14 @@
                 }
                 return nextComparator(object, otherObject);
             }.autoCurry(),
-        // TODO: Pursue?
-        //_chainableAscendingComparator = function (propertyGetter, nextComparator, propertyName, object, otherObject) {
-        //    var compareVal = propertyGetter(propertyName, object) - propertyGetter(propertyName, otherObject);
-        //    return (compareVal === 0) ? nextComparator(object, otherObject) : compareVal;
-        //}.autoCurry(),
-
-        // TODO: Test with dates and strings (and arrays?)
-            _ascendingComparator = function (propertyGetter, object, otherObject) {
-                return propertyGetter(object) - propertyGetter(otherObject);
-            },
 
             /**
              * Multi-property ascending comparator function.
              *
              * @param propertyGetter {Function} Function for obtaining properties from the objects being compared
-             * @param propertyNameArray {[String]} Ordered names of the properties to compare
+             * @param propertyNameArray {[String]} Ordered names of the object properties to be compared
              * @param object {Object} object to be compared
-             * @param otherObject {Object} object to be coompared against
+             * @param otherObject {Object} object to be compared against
              */
             _multiAscendingComparator = function (propertyGetter, propertyNameArray, object, otherObject) {
                 var propArray = F.isArray(propertyNameArray) ? propertyNameArray : [propertyNameArray],
@@ -97,18 +111,20 @@
             }.autoCurry();
 
         return {
-            propertyGetter: _propertyGetter,
-            backbonePropertyGetter: _backbonePropertyGetter,
+            // "Private" functions exported for specification/testing purposes.
+            _propertyGetter: _propertyGetter,
+            _backbonePropertyGetter: _backbonePropertyGetter,
+            _arithmeticAscendingValue: _arithmeticAscendingValueComparator,
+            _alwaysEqual: _alwaysEqualComparator,
+            _chainableAscending: _chainableAscendingComparator,
 
-            aritmethicComparator: _aritmethicComparator,
-            propertyArithmeticComparator: _propertyArithmeticComparator,
-            alwaysEqualComparator: _alwaysEqualComparator,
+            arithmeticAscending: _arithmeticAscendingComparator,
 
-            chainableAscendingComparator: _chainableAscendingComparator,
+            propertyArithmeticAscending: _propertyArithmeticAscendingComparator(_propertyGetter),
+            backbonePropertyArithmeticAscending: _propertyArithmeticAscendingComparator(_backbonePropertyGetter),
 
-            ascending: _ascendingComparator,
-            multiAscending: _multiAscendingComparator,
-            multiAscendingBackbone: _multiAscendingComparator(_backbonePropertyGetter)
+            multiAscending: _multiAscendingComparator(_propertyGetter),
+            backboneMultiAscending: _multiAscendingComparator(_backbonePropertyGetter)
         };
     }
 );

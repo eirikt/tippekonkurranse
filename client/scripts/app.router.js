@@ -3,17 +3,18 @@
 define([
         'jquery', 'underscore', 'backbone',
         'utils',
+        'app.models',
         'app.result-collection', 'app.rating-history-collection',
         'app.header-view', 'app.results-view', 'app.rating-history-view'],
 
-    function ($, _, Backbone, Please, CurrentScoresCollection, HistoricScoresCollection, HeaderView, CurrentScoresView, RatingHistoryView) {
+    function ($, _, Backbone, Please, App, CurrentScoresCollection, HistoricScoresCollection, HeaderView, CurrentScoresView, RatingHistoryView) {
         'use strict';
 
         return Backbone.Router.extend({
             routes: {
                 'scores/current': 'showCurrentScores',
                 'scores/:year/:round': 'showScores',
-                'ratinghistory/:year': 'showRatingHistory',
+                'ratinghistory/:year/:round': 'showRatingHistory',
 
                 // Default
                 '*actions': 'defaultAction'
@@ -59,10 +60,11 @@ define([
             },
 
 
-            showRatingHistory: function (year) {
-                //console.log('showRankingsHistory(' + year + ') ...');
+            showRatingHistory: function (year, round) {
+                console.log('showRankingsHistory(' + year + ', ' + round + ') ...');
                 var results = new HistoricScoresCollection({
-                        year: year
+                        year: year,
+                        round: round
                     }),
                     headerView = new HeaderView({
                         el: 'header',

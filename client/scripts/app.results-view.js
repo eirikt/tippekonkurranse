@@ -132,18 +132,18 @@ define([
         return Backbone.View.extend({
 
             template: _.template('' +
-                    '<table class="table table-condenced table-striped table-hover table-bordered">' +
+                    '<table class="table table-condenced table-striped table-hover">' +
                     '<thead>' +
                     '<tr>' +
                     '  <th style="padding-left:2rem;width:3rem;"></th>' +
                     '  <th style="width:12rem;"></th>' +
-                    //'  <th style="width:5rem;"></th>' +
-                    '  <th class="rating-history" colspan="2">' +
-                    '    <a href="/#/ratinghistory/2014" type="button" class="btn btn-sm btn-success">' +
-                    '      <span style="margin-right:1rem;" class="icon-bar-chart"></span>Trend' +
-                    '    </a>' +
-                    '  </th>' +
                     '  <th style="width:8rem;"></th>' +
+                    '  <th class="rating-history" colspan="2"></th>' +
+                    //'  <th class="rating-history" colspan="2">' +
+                    //'    <a href="/#/ratinghistory/2014" type="button" class="btn btn-sm btn-success">' +
+                    //'      <span style="margin-right:1rem;" class="icon-bar-chart"></span>Trend' +
+                    //'    </a>' +
+                    //'  </th>' +
                     '  <th class="current-results">' +
                     '    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>' +
                     '  </th>' +
@@ -200,38 +200,43 @@ define([
                             //}
                         });
                         return dfd.promise();
-                    };
+                    },
+                    currentRound = this.collection.at(0).get("round");
 
                 this.$el.empty().append(this.template());
                 if (Client.isTouchDevice()) {
                     this.$("table").removeClass("table-hover");
                 }
+                if (currentRound) {
+                    var href = this.$(".rating-history").find("a").attr("href");
+                    this.$(".rating-history").find("a").attr("href", [href, currentRound].join("/"));
+                }
 
                 // Render all participant scores sequentially, one by one
-                var addingOfParticipantFns = [],
+                var addingOfParticipantFuncs = [],
                     delayInMillis = 175,
                     $tbody = this.$("tbody"),
                     i,
                     sortedParticipant,
-                    delayedParticipantFn,
-                    delayedAddingOfParticipantInTableFn;
+                    delayedParticipantFunc,
+                    delayedAddingOfParticipantInTableFunc;
 
                 for (i = 0; i < this.collection.length; i += 1) {
                     // Underscore: Bind a function to an object, meaning that whenever the function is called, the value of this will be the object
-                    delayedParticipantFn = _.bind(delayedAddParticipant, this);
+                    delayedParticipantFunc = _.bind(delayedAddParticipant, this);
 
                     // Underscore: Partially apply a function by filling in any number of its arguments, without changing its dynamic this value.
                     // You may pass _ in your list of arguments to specify an argument that should not be pre-filled, but left open to supply at call-time.
                     sortedParticipant = this.collection.at(i);
-                    delayedParticipantFn = _.partial(delayedParticipantFn, delayInMillis, $tbody, sortedParticipant);
+                    delayedParticipantFunc = _.partial(delayedParticipantFunc, delayInMillis, $tbody, sortedParticipant);
 
-                    addingOfParticipantFns.push(delayedParticipantFn);
+                    addingOfParticipantFuncs.push(delayedParticipantFunc);
                 }
 
                 // Execute all these deferred functions sequentially
-                delayedAddingOfParticipantInTableFn = addingOfParticipantFns[0]();
-                for (i = 0; i < addingOfParticipantFns.length; i += 1) {
-                    delayedAddingOfParticipantInTableFn = delayedAddingOfParticipantInTableFn.then(addingOfParticipantFns[i + 1]);
+                delayedAddingOfParticipantInTableFunc = addingOfParticipantFuncs[0]();
+                for (i = 0; i < addingOfParticipantFuncs.length; i += 1) {
+                    delayedAddingOfParticipantInTableFunc = delayedAddingOfParticipantInTableFunc.then(addingOfParticipantFuncs[i + 1]);
                 }
 
                 return this;

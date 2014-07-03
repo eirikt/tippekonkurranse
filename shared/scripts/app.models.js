@@ -33,7 +33,7 @@
                 },
                 ratingHistory: {
                     baseUri: '/api/ratinghistory',
-                    uri: '/api/ratinghistory/:year'
+                    uri: '/api/ratinghistory/:year/:round'
                 }
             },
 

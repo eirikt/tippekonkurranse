@@ -3,7 +3,7 @@
 
 var expect = require("../../../node_modules/chai/chai.js").expect,
 
-    __ = require('../../../node_modules/underscore/underscore-min'),
+    _ = require('../../../node_modules/underscore/underscore-min'),
     Backbone = require('../../../build/bower_components/backbone/backbone'),
 
     Comparators = require('../../../shared/scripts/comparators');
@@ -12,10 +12,44 @@ var expect = require("../../../node_modules/chai/chai.js").expect,
 describe("Comparators", function () {
     "use strict";
 
+    describe("aritmethicComparator", function () {
+        var arithmeticComparator = Comparators._arithmeticAscendingValue;
+
+        it("should exist", function () {
+            expect(arithmeticComparator).to.exist;
+        });
+        it("should sort Numbers", function () {
+            expect(arithmeticComparator(0, 0)).to.be.equal(0);
+            expect(arithmeticComparator(0, 0)).not.to.be.below(0);
+            expect(arithmeticComparator(0, 0)).not.to.be.above(0);
+
+            expect(arithmeticComparator(10, 1)).to.be.equal(9);
+            expect(arithmeticComparator(10, 1)).to.be.above(0);
+            expect(arithmeticComparator(10, 1)).not.to.be.below(0);
+
+            expect(arithmeticComparator(-3, 1)).to.be.equal(-4);
+            expect(arithmeticComparator(-3, 1)).not.to.be.above(0);
+            expect(arithmeticComparator(-3, 1)).to.be.below(0);
+        });
+        //it("should sort Strings", function () {
+        //expect(arithmeticComparator("a","a")).to.be.equal(11); // Nope
+        //});
+        it("should sort Dates", function () {
+            expect(arithmeticComparator(new Date(1999, 1, 2), new Date(1999, 1, 2))).to.be.equal(0);
+
+            expect(arithmeticComparator(new Date(1999, 1, 2), new Date(1999, 3, 4))).to.be.equal(-5266800000);
+            expect(arithmeticComparator(new Date(1999, 1, 2), new Date(1999, 3, 4))).not.to.be.above(0);
+            expect(arithmeticComparator(new Date(1999, 1, 2), new Date(1999, 3, 4))).to.be.below(0);
+        });
+        //it("should sort Arrays", function () {
+        //expect(arithmeticComparator([1, 2], [2, 3])).to.be.equal(11); // Nope
+        //});
+    });
+
     describe("chainableAscendingComparator", function () {
-        var chainableAscendingComparator = Comparators.chainableAscendingComparator,
-            backbonePropertyGetter = Comparators.backbonePropertyGetter,
-            alwaysEqualComparator = Comparators.alwaysEqualComparator;
+        var chainableAscendingComparator = Comparators._chainableAscending,
+            backbonePropertyGetter = Comparators._backbonePropertyGetter,
+            alwaysEqualComparator = Comparators._alwaysEqual;
 
         it("should exist", function () {
             expect(chainableAscendingComparator).to.exist;
@@ -24,17 +58,17 @@ describe("Comparators", function () {
         });
 
         it("should sort models by single number property value", function () {
-            var backboneChainableAscendingComparator = __.partial(chainableAscendingComparator, backbonePropertyGetter);
+            var backboneChainableAscendingComparator = _.partial(chainableAscendingComparator, backbonePropertyGetter);
             expect(backboneChainableAscendingComparator).to.exist;
-            expect(__.isFunction(backboneChainableAscendingComparator)).to.be.true;
+            expect(_.isFunction(backboneChainableAscendingComparator)).to.be.true;
 
-            var backboneAscendingComparator = __.partial(backboneChainableAscendingComparator, alwaysEqualComparator);
+            var backboneAscendingComparator = _.partial(backboneChainableAscendingComparator, alwaysEqualComparator);
             expect(backboneAscendingComparator).to.exist;
-            expect(__.isFunction(backboneAscendingComparator)).to.be.true;
+            expect(_.isFunction(backboneAscendingComparator)).to.be.true;
 
-            var myComparator = __.partial(backboneAscendingComparator, "myNumberProperty");
+            var myComparator = _.partial(backboneAscendingComparator, "myNumberProperty");
             expect(myComparator).to.exist;
-            expect(__.isFunction(myComparator)).to.be.true;
+            expect(_.isFunction(myComparator)).to.be.true;
 
             var model1 = new Backbone.Model({
                 "myId": "1",
@@ -56,7 +90,7 @@ describe("Comparators", function () {
         });
 
         it("should sort models by single string property value", function () {
-            var myComparator = __.partial(chainableAscendingComparator, backbonePropertyGetter, alwaysEqualComparator, "myId"),
+            var myComparator = _.partial(chainableAscendingComparator, backbonePropertyGetter, alwaysEqualComparator, "myId"),
 
                 model1 = new Backbone.Model({
                     "myId": "1",
@@ -79,20 +113,20 @@ describe("Comparators", function () {
     });
 
 
-    describe("ascendingBackboneComparator", function () {
-        var multiAscendingBackbone = Comparators.multiAscendingBackbone;
+    describe("backboneMultiAscending", function () {
+        var backboneMultiAscending = Comparators.backboneMultiAscending;
 
         it("should exist and be a function", function () {
-            expect(multiAscendingBackbone).to.exist;
-            expect(__.isFunction(multiAscendingBackbone)).to.be.true;
+            expect(backboneMultiAscending).to.exist;
+            expect(_.isFunction(backboneMultiAscending)).to.be.true;
         });
 
         it("should be somewhat robust", function () {
-            var myUndefinedPropertyNamesComparator = __.partial(multiAscendingBackbone, undefined),
-                myNullAsPropertyNamesComparator = __.partial(multiAscendingBackbone, null),
-                myEmptyPropertyNamesComparator = __.partial(multiAscendingBackbone, []),
-                myIllegalType1PropertyNamesComparator = __.partial(multiAscendingBackbone, 3.14),
-                myIllegalType2PropertyNamesComparator = __.partial(multiAscendingBackbone, [3.14, new Date()]),
+            var myUndefinedPropertyNamesComparator = _.partial(backboneMultiAscending, undefined),
+                myNullAsPropertyNamesComparator = _.partial(backboneMultiAscending, null),
+                myEmptyPropertyNamesComparator = _.partial(backboneMultiAscending, []),
+                myIllegalType1PropertyNamesComparator = _.partial(backboneMultiAscending, 3.14),
+                myIllegalType2PropertyNamesComparator = _.partial(backboneMultiAscending, [3.14, new Date()]),
 
                 model1 = { "myId": "1", "myNumberProperty": 1 },
                 model2 = { "myId": "2", "myNumberProperty": 2 },
@@ -126,7 +160,7 @@ describe("Comparators", function () {
         });
 
         it("should sort models by single number property value, non-array argument", function () {
-            var myNonArrayComparator = __.partial(multiAscendingBackbone, "myNumberProperty"),
+            var myNonArrayComparator = _.partial(backboneMultiAscending, "myNumberProperty"),
 
                 model1 = new Backbone.Model({
                     "myId": "1",
@@ -148,7 +182,7 @@ describe("Comparators", function () {
         });
 
         it("should sort models by single number property value", function () {
-            var myComparator = __.partial(multiAscendingBackbone, ["myNumberProperty"]),
+            var myComparator = _.partial(backboneMultiAscending, ["myNumberProperty"]),
 
                 model1 = new Backbone.Model({
                     "myId": "1",
@@ -170,7 +204,7 @@ describe("Comparators", function () {
         });
 
         it("should sort models", function () {
-            var myComparator = __.partial(multiAscendingBackbone,
+            var myComparator = _.partial(backboneMultiAscending,
                     ["myNumberProperty", "myDateProperty", "myStringProperty", "mySecondNumberProperty"]),
 
                 model1 = { myId: "1", myNumberProperty: 100, mySecondNumberProperty: -100, myStringProperty: "A", myDateProperty: new Date(2014, 6, 1) },

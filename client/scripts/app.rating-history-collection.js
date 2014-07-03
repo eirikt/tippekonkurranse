@@ -12,7 +12,7 @@ define([
 
         }, {
             /** Sort by last element in rating, to suit jqPlot series/label presentations */
-            comparatorPropertyGetter: function (model) {
+            comparableValueGetter: function (model) {
                 var modelRatings = model.get("ratings");
                 return modelRatings[modelRatings.length - 1];
             },
@@ -25,7 +25,7 @@ define([
                 var roundAndRating = _.map(model.get("ratings"), function (zeroBasedRoundRating, index) {
                     return [index + 1, zeroBasedRoundRating];
                 });
-                roundAndRating.unshift([0, 1]);
+                roundAndRating.unshift([0, 1]); // Initial plot for all
                 return roundAndRating;
             }
         });
@@ -37,16 +37,17 @@ define([
             initialize: function (options) {
                 if (options) {
                     this.year = options.year;
+                    this.round = options.round;
                 }
-                if (_.isUndefined(this.year)) {
-                    this.year = new Date().getFullYear();
-                }
+                //if (_.isUndefined(this.year)) {
+                //    this.year = new Date().getFullYear();
+                //}
             },
             url: function () {
-                return [App.resource.ratingHistory.baseUri, this.year].join("/");
+                return [App.resource.ratingHistory.baseUri, this.year, this.round].join("/");
             },
             comparator: function (model, otherModel) {
-                return Comparators.ascending(this.model.comparatorPropertyGetter, model, otherModel);
+                return Comparators.arithmeticAscending(this.model.comparableValueGetter, model, otherModel);
             },
             getJqPlotSeries: function () {
                 return _.map(this.models, this.model.toJqPlotSerie);

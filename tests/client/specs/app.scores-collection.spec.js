@@ -304,7 +304,7 @@ define([
                 expect(twelfth.name).to.be.equal("Hans Bernhard");
                 expect(thirteenth.name).to.be.equal("Eirik");
 
-                scoresCollection.comparator = scoresCollection.sortByPreviousRatingThenName;
+                scoresCollection.comparator = scoresCollection.sortByPreviousRatingThenByName;
                 scoresCollection.sort();
 
                 first = scoresCollection.models[0].toJSON();

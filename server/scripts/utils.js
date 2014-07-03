@@ -17,7 +17,7 @@ var __ = require("underscore"),
     },
 
     /**
-     * Trivial RQ.js requestion.
+     * Trivial RQ.js requestion => the identity function.
      * Convenient for triggering arrays of RQ.js requestors.
      */
     rqGo = exports.rqGo = __.identity;

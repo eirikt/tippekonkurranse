@@ -10,7 +10,7 @@ define([
         "use strict";
 
         /**
-         * Ranking scheme is 'standard competition ranking ("1224" ranking)'.
+         * Ranking scheme is "standard competition ranking ('1224' ranking)".
          * => Equal sum/rating gives the same rank.
          * @see http://en.wikipedia.org/wiki/Ranking
          */
@@ -22,13 +22,13 @@ define([
             model: ParticipantScore,
 
             // Ascending rating comparator
-            sortByRatingThenName: Comparators.multiAscendingBackbone([
+            sortByRatingThenByName: Comparators.backboneMultiAscending([
                 App.scoreModel.ratingPropertyName,
                 ParticipantScore.namePropertyName
             ]),
 
             // Ascending previous round rating comparator
-            sortByPreviousRatingThenName: Comparators.multiAscendingBackbone([
+            sortByPreviousRatingThenByName: Comparators.backboneMultiAscending([
                 App.scoreModel.previousRatingPropertyName,
                 ParticipantScore.namePropertyName
             ]),
@@ -38,7 +38,7 @@ define([
 
             initialize: function (options) {
                 // Default comparator
-                this.comparator = this.sortByRatingThenName;
+                this.comparator = this.sortByRatingThenByName;
 
                 if (options && options.year) {
                     this.year = options.year;
@@ -50,7 +50,7 @@ define([
 
             /** Set previous match round rank for participants (tendency tracking) */
             _setPreviousRank: function () {
-                this.comparator = this.sortByPreviousRatingThenName;
+                this.comparator = this.sortByPreviousRatingThenByName;
                 this.sort();
 
                 var previousRank = -1,
@@ -66,7 +66,7 @@ define([
                     }
                 });
 
-                this.comparator = this.sortByRatingThenName;
+                this.comparator = this.sortByRatingThenByName;
                 this.sort();
             },
 

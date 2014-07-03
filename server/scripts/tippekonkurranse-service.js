@@ -1,3 +1,5 @@
+// TODO: Remove this!
+
 /* global root:false, require:false, exports:false */
 
 // Environment
@@ -15,9 +17,9 @@ var env = process.env.NODE_ENV || "development",
 
 // Module dependencies, local application-specific
     dbSchema = require("./db-schema.js"),
-    predictions2014 = require("./user-predictions-2014.js").predictions2014,
     norwegianSoccerLeagueService = require("./norwegian-soccer-service.js"),
     appModels = require("./../../shared/scripts/app.models.js"),
+    predictions2014 = require("./user-predictions-2014.js").predictions2014,
 
 
 ////////////////////////////////////////
@@ -158,6 +160,7 @@ var env = process.env.NODE_ENV || "development",
     _scores = 8,                    // Object with properties 'scores' and 'metadata'
 
 
+// TODO: Promote to standalone requestion!
     _getStoredTippeligaData = function (year, round, requestion, args) {
         "use strict";
         dbSchema.TippeligaRound.findOne({ year: year, round: round }).exec(
@@ -208,8 +211,18 @@ var env = process.env.NODE_ENV || "development",
      * Exported with underscore prefix as it is exported for specification/testing purposes only ...
      * @private
      */
-    _addTippekonkurranseScores = exports._addTippekonkurranseScores = function (requestion, args) {
+    _addTippekonkurranseScores = exports._addTippekonkurranseScores = function (userPredictions, requestion, args) {
         "use strict";
+
+        if (arguments.length > 2) {
+            throw new Error("More than 2 arguments present - this requestion must be curried with predictions object before use");
+        }
+        if (!requestion) {
+            throw new Error("Requestion argument is missing - check your RQ.js setup");
+        }
+        if (!args) {
+            throw new Error("Argument array is missing, cannot calculate Tippekonkurranse scores");
+        }
 
         // Create associative array with team name as key, by extracting 'name'
         // => a team-name-indexed data structure, optimized for point calculations
@@ -217,9 +230,8 @@ var env = process.env.NODE_ENV || "development",
             indexedAdeccoligaTable = __.indexBy(args[_adeccoligaTable], "name"),
             currentStanding = {};
 
-        // TODO: Curry 'predictions2014' in function
-        for (var participant in predictions2014) {
-            if (predictions2014.hasOwnProperty(participant)) {
+        for (var participant in userPredictions) {
+            if (userPredictions.hasOwnProperty(participant)) {
                 var tabellScore = 0,
                     pallScore = 0,
                     nedrykkScore = 0,
@@ -228,7 +240,7 @@ var env = process.env.NODE_ENV || "development",
                     cupScore = 0,
                     rating = 0, sum = 0,
 
-                    participantObj = predictions2014[participant];
+                    participantObj = userPredictions[participant];
 
                 if (participantObj) {
                     __.each(participantObj.tabell, function (teamName, index) {
@@ -283,11 +295,15 @@ var env = process.env.NODE_ENV || "development",
     },
 
 
-    _addPreviousMatchRoundRatingToEachParticipant = function (requestion, args) {
+    _addTippekonkurranseScores2014 = curry(_addTippekonkurranseScores)(predictions2014),
+
+
+    _addPreviousMatchRoundRatingToEachParticipant = function (userPredictions, requestion, args) {
         "use strict";
         var year = args[_year],
             previousRound = args[_round] - 1,
-            _getPreviousRoundTippeligaData = curry(_getStoredTippeligaData)(year)(previousRound),
+            getPreviousRoundTippeligaData = curry(_getStoredTippeligaData)(year)(previousRound),
+            addTippekonkurranseScores2014 = curry(_addTippekonkurranseScores)(userPredictions),
 
             updatedScores = args[_scores].scores,
 
@@ -295,15 +311,14 @@ var env = process.env.NODE_ENV || "development",
             parentArgs = args;
 
         RQ.sequence([
-            _getPreviousRoundTippeligaData,
+            getPreviousRoundTippeligaData,
             _addNumberOfMatchesPlayedGrouping,
             _addCurrentRound,
-            _addTippekonkurranseScores,
+            addTippekonkurranseScores2014,
             function (requestion, args) {
                 for (var participant in updatedScores) {
                     if (updatedScores.hasOwnProperty(participant)) {
-                        updatedScores[participant][appModels.scoreModel.previousRatingPropertyName] =
-                            args[_scores].scores[participant][appModels.scoreModel.ratingPropertyName];
+                        updatedScores[participant][appModels.scoreModel.previousRatingPropertyName] = args[_scores].scores[participant][appModels.scoreModel.ratingPropertyName];
                     }
                 }
                 return requestion(args);
@@ -314,6 +329,9 @@ var env = process.env.NODE_ENV || "development",
             }
         ])(go);
     },
+
+
+    _addPreviousMatchRoundRatingToEachParticipant2014 = curry(_addPreviousMatchRoundRatingToEachParticipant)(predictions2014),
 
 
     _addMetadataToScores = function (requestion, args) {
@@ -472,8 +490,8 @@ var env = process.env.NODE_ENV || "development",
                 RQ.sequence([
                     _addNumberOfMatchesPlayedGrouping,
                     _addCurrentRound,
-                    _addTippekonkurranseScores,
-                    _addPreviousMatchRoundRatingToEachParticipant,
+                    _addTippekonkurranseScores2014,
+                    _addPreviousMatchRoundRatingToEachParticipant2014,
                     _addMetadataToScores,
                     curry(_dispatchScoresToClientForPresentation)(response),
                     _storeTippeligaRoundMatchData
@@ -501,7 +519,7 @@ var env = process.env.NODE_ENV || "development",
                         curry(_getStoredTippeligaData)(year)(round),
                         _addNumberOfMatchesPlayedGrouping,
                         _addCurrentRound,
-                        _addTippekonkurranseScores
+                        _addTippekonkurranseScores2014
                     ])
                 );
             }
