@@ -34,7 +34,6 @@ define(["chai", "underscore", "backbone", "../../../shared/scripts/comparators"]
                 it("should sort Dates", function () {
                     expect(arithmeticComparator(new Date(1999, 1, 2), new Date(1999, 1, 2))).to.be.equal(0);
 
-                    expect(arithmeticComparator(new Date(1999, 1, 2), new Date(1999, 3, 4))).to.be.equal(-5266800000);
                     expect(arithmeticComparator(new Date(1999, 1, 2), new Date(1999, 3, 4))).not.to.be.above(0);
                     expect(arithmeticComparator(new Date(1999, 1, 2), new Date(1999, 3, 4))).to.be.below(0);
                 });

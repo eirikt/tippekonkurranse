@@ -34,7 +34,7 @@ In production [here][1].
 _Status: In progress_
 
 
-#### v1.2.0 : ~~_Delivery goal 20.06.2014_~~ _Delivered 20.07.2014_
+#### v1.2.0 : ~~_Delivery goal 20.06.2014_~~ _Delivered 16.07.2014_
 * Simple presentation of historic data
 
 _Status: Done_
