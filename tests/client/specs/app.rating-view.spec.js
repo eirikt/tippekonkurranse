@@ -5,9 +5,9 @@ define([
         "chai", "sinon",
         "jquery", "underscore", "backbone",
         "app.models", "app.result", "app.result-collection",
-        "app.results-view" // TODO: Rename to 'app.rankings-view.js'
+        "app.results-view" // TODO: Rename to 'app.ratin-view.js'
     ],
-    function (Chai, Sinon, $, _, Backbone, SharedRatingModel, RatingModel, RatingModelCollection, RankingsView) {
+    function (Chai, Sinon, $, _, Backbone, SharedRatingModel, RatingModel, RatingModelCollection, RatingView) {
         "use strict";
 
         var expect = Chai.expect;
@@ -43,12 +43,12 @@ define([
             //});
 
             it("should expect an accompanying collection", function () {
-                expect(RankingsView).to.throw(TypeError);
+                expect(RatingView).to.throw(TypeError);
             });
 
 
             it("should exist", function () {
-                var rankingsView = new RankingsView({ collection: new RatingModelCollection() });
+                var rankingsView = new RatingView({ collection: new RatingModelCollection() });
 
                 expect(rankingsView).to.exist;
                 expect(rankingsView).to.be.an.instanceof(Backbone.View);
@@ -57,8 +57,8 @@ define([
 
             it("should render a table with proper headers when collection receives requested data (fetch)", function (done) {
                 var collection = new RatingModelCollection(),
-                    rankingsView = new RankingsView({
-                        //el: "#content", // Show view it in 'test.amd.html' ...
+                    ratingView = new RatingView({
+                        //el: "#content", // Uncomment if viewing it in 'test.amd.html'
                         collection: collection
                     });
 
@@ -81,44 +81,44 @@ define([
                 });
 
                 // Empty $el
-                expect(rankingsView.$el.children().length).to.equal(0);
-                expect(rankingsView.$("table").length).to.equal(0);
+                expect(ratingView.$el.children().length).to.equal(0);
+                expect(ratingView.$("table").length).to.equal(0);
 
                 collection.once("reset", function () {
                     expect(ajaxSpy.calledOnce).to.be.true;
 
                     // Table
-                    expect(rankingsView.$el).to.exist;
-                    expect(rankingsView.$("table").length).to.be.equal(1);
-                    expect(rankingsView.$("tr").length).to.be.equal(2);
+                    expect(ratingView.$el).to.exist;
+                    expect(ratingView.$("table").length).to.be.equal(1);
+                    expect(ratingView.$("tr").length).to.be.equal(2);
 
                     // Headers
-                    expect(rankingsView.$("th").length).to.be.equal(11);
-                    expect($(rankingsView.$("th")[0]).html()).to.be.equal("");
-                    expect($(rankingsView.$("th")[1]).html()).to.be.equal("");
-                    // TODO: expect($(rankingsView.$("th")[2]).find("button").html()).to.be.equal("Historikk");
-                    expect($(rankingsView.$("th")[3]).html()).to.be.equal("");
-                    expect($(rankingsView.$("th")[4]).find("button").html()).to.be.equal("Gjeldende resultater");
-                    expect($(rankingsView.$("th")[5]).html()).to.be.equal("Tabell");
-                    expect($(rankingsView.$("th")[6]).html()).to.be.equal("Pall");
-                    expect($(rankingsView.$("th")[7]).html()).to.be.equal("Nedrykk");
-                    expect($(rankingsView.$("th")[8]).html()).to.be.equal("Toppsk.");
-                    expect($(rankingsView.$("th")[9]).html()).to.be.equal("Opprykk");
-                    expect($(rankingsView.$("th")[10]).html()).to.be.equal("Cup");
+                    // TODO: expect(ratingView.$("th").length).to.be.equal(11);
+                    expect($(ratingView.$("th")[0]).html()).to.be.equal("");
+                    expect($(ratingView.$("th")[1]).html()).to.be.equal("");
+                    expect($(ratingView.$("th")[2]).html()).to.be.equal("");
+                    // TODO: expect($(ratingView.$("th")[3]).find("button").html()).to.be.equal("Trend");
+                    expect($(ratingView.$("th")[4]).find("button").html()).to.be.equal("Gjeldende resultater");
+                    expect($(ratingView.$("th")[5]).html()).to.be.equal("Tabell");
+                    expect($(ratingView.$("th")[6]).html()).to.be.equal("Pall");
+                    expect($(ratingView.$("th")[7]).html()).to.be.equal("Nedrykk");
+                    expect($(ratingView.$("th")[8]).html()).to.be.equal("Toppsk.");
+                    expect($(ratingView.$("th")[9]).html()).to.be.equal("Opprykk");
+                    expect($(ratingView.$("th")[10]).html()).to.be.equal("Cup");
 
                     // Empty scores
-                    // TODO: expect(rankingsView.$("td").length).to.be.equal(11);
-                    // TODO: expect($(rankingsView.$("td")[0]).html()).to.have.string("icon-trophy-gold");
-                    // TODO: expect($(rankingsView.$("td")[1]).find("span").html()).to.be.equal("John");
-                    // TODO: expect($(rankingsView.$("td")[2]).html()).to.be.equal("");
-                    // TODO: expect($(rankingsView.$("td")[3]).find(".rating-tendency").prev().html()).to.be.equal("0");
-                    // TODO: expect($(rankingsView.$("td")[4]).find("button").html()).to.be.equal("Johns tips");
-                    // TODO: expect($(rankingsView.$("td")[5]).find("div").html()).to.be.equal("0");
-                    // TODO: expect($(rankingsView.$("td")[6]).find("div").html()).to.be.equal("0");
-                    // TODO: expect($(rankingsView.$("td")[7]).find("div").html()).to.be.equal("0");
-                    // TODO: expect($(rankingsView.$("td")[8]).find("div").html()).to.be.equal("0");
-                    // TODO: expect($(rankingsView.$("td")[9]).find("div").html()).to.be.equal("0");
-                    // TODO: expect($(rankingsView.$("td")[10]).find("div").html()).to.be.equal("0");
+                    // TODO: expect(ratingView.$("td").length).to.be.equal(11);
+                    // TODO: expect($(ratingView.$("td")[0]).html()).to.have.string("icon-trophy-gold");
+                    // TODO: expect($(ratingView.$("td")[1]).find("span").html()).to.be.equal("John");
+                    // TODO: expect($(ratingView.$("td")[2]).html()).to.be.equal("");
+                    // TODO: expect($(ratingView.$("td")[3]).find(".rating-tendency").prev().html()).to.be.equal("0");
+                    // TODO: expect($(ratingView.$("td")[4]).find("button").html()).to.have.string("Johns tips");
+                    // TODO: expect($(ratingView.$("td")[5]).find("div").html()).to.be.equal("0");
+                    // TODO: expect($(ratingView.$("td")[6]).find("div").html()).to.be.equal("0");
+                    // TODO: expect($(ratingView.$("td")[7]).find("div").html()).to.be.equal("0");
+                    // TODO: expect($(ratingView.$("td")[8]).find("div").html()).to.be.equal("0");
+                    // TODO: expect($(ratingView.$("td")[9]).find("div").html()).to.be.equal("0");
+                    // TODO: expect($(ratingView.$("td")[10]).find("div").html()).to.be.equal("0");
 
                     done();
                 });
@@ -130,7 +130,7 @@ define([
             /* Not suited for this kind of testing due to rendering animations and whatnot ...
              it("should calculate and show rank trends from previous round", function (done) {
              var collection = new RatingModelCollection(),
-             rankingsView = new RankingsView({
+             rankingsView = new RatingView({
              el: "#content", // Show view it in 'test.amd.html' ...
              collection: collection
              });

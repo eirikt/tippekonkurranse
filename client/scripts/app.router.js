@@ -35,7 +35,7 @@ define([
                 results.fetch();
 
                 $('header').removeClass('hidden');
-                $('#jqplot').css({ height: '0px' }).empty();
+                $('#ratingHistory').css({ height: '0px' }).empty();
                 $('#content').empty();
                 $('#intro').remove();
                 $('footer').removeClass('hidden');
@@ -57,11 +57,13 @@ define([
                     });
 
                 results.fetch({ reset: true });
+
+                $('#ratingHistory').addClass('hidden');
             },
 
 
             showRatingHistory: function (year, round) {
-                console.log('showRankingsHistory(' + year + ', ' + round + ') ...');
+                //console.log('showRatingHistory(' + year + ', ' + round + ') ...');
                 var results = new HistoricScoresCollection({
                         year: year,
                         round: round
@@ -71,13 +73,16 @@ define([
                         collection: results
                     }),
                     ratingHistoryView = new RatingHistoryView({
-                        el: '#jqplot',
-                        collection: results
+                        el: '#ratingHistory',
+                        collection: results,
+                        year: parseInt(year, 10),
+                        round: parseInt(round, 10)
                     });
 
                 results.fetch({ reset: true });
 
                 $('header').removeClass('hidden');
+                $('#ratingHistory').removeClass('hidden');
                 $('#content').empty();
                 $('#intro').remove();
                 $('footer').removeClass('hidden');

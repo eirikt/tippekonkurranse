@@ -14,9 +14,7 @@ var env = process.env.NODE_ENV || "development",
     comparators = require("./../../shared/scripts/comparators.js"),
 
 // Module dependencies, local application-specific
-//dbSchema = require("./db-schema.js"),
     norwegianSoccerLeagueService = require("./norwegian-soccer-service.js"),
-//appModels = require("./../../shared/scripts/app.models.js"),
     tippekonkurranse = require("./tippekonkurranse.js"),
     tippekonkurranse2014 = require("./tippekonkurranse-2014.js"),
     predictions2014 = require("./user-predictions-2014.js").predictions2014,
@@ -48,14 +46,14 @@ var env = process.env.NODE_ENV || "development",
                     norwegianSoccerLeagueService.getCurrentTippeligaTable,
                     norwegianSoccerLeagueService.getCurrentTippeligaToppscorer,
                     norwegianSoccerLeagueService.getCurrentAdeccoligaTable,
-                    norwegianSoccerLeagueService.getCurrentRemainingCupContenders//,
+                    norwegianSoccerLeagueService.getCurrentRemainingCupContenders,
                     // TODO: Are these necessary?
                     // TODO: Move 'nullRequestion' function to common lib, e.g. 'basic-requestions.js'/'more-requestions.js'/...
-                    //tippekonkurranse.nullRequestion,
-                    //tippekonkurranse.nullRequestion,
-                    //tippekonkurranse.nullRequestion,
-                    //tippekonkurranse.nullRequestion,
-                    //tippekonkurranse.nullRequestion
+                    tippekonkurranse.nullRequestion,
+                    tippekonkurranse.nullRequestion,
+                    tippekonkurranse.nullRequestion,
+                    tippekonkurranse.nullRequestion,
+                    tippekonkurranse.nullRequestion
                 ]),
                 handleTippeligaData
             ])(go);
@@ -133,13 +131,13 @@ var env = process.env.NODE_ENV || "development",
                 currentRound = request.params.round,
 
                 round,
-                getHistoricTippekonkurranseScores = [],
                 data = {},
 
+                getHistoricTippekonkurranseScores = [],
                 sortByRound = curry(tippekonkurranse.sortByPropertyRequestion)(tippekonkurranse.roundIndex);
 
             // 1. Create array of requestions: all historic tippeligakonkurranse scores
-            for (round = 1; round < currentRound; round += 1) {
+            for (round = 1; round <= currentRound; round += 1) {
                 getHistoricTippekonkurranseScores.push(
                     RQ.sequence([
                         curry(tippekonkurranse.getStoredTippeligaDataRequestion)(year)(round),
@@ -178,6 +176,7 @@ var env = process.env.NODE_ENV || "development",
                     return requestion(data);
                 },
                 function (requestion, data) {
+                    // TODO: Include 'year' in response
                     /* Create/Transform to JqPlot-friendly data structure:
                      * var participants = [
                      *     { userId: {String}, ratings: [] }
@@ -192,44 +191,4 @@ var env = process.env.NODE_ENV || "development",
                     return requestion();
                 }
             ])(go);
-            /*
-             (1) Først:
-             var allParticipants = {
-             "eirik" = {
-             userId: "eirik",
-             ratings: [1, 10, 5, 9, 13, 11, 6, 3, 1, 1, 2, 4]
-             },
-             ...
-             };
-
-             (2) Deretter:
-             var rankingTendencyForEirik = {
-             userId: "eirik",
-             ratings: [1, 10, 5, 9, 13, 11, 6, 3, 1, 1, 2, 4]
-             },
-             rankingTendencyForOddvar = {
-             userId: "oddvar",
-             ratings: [3, 4, 5, 3, 3, 4, 7, 8, 8, 8, 6, 6]
-             },
-             rankingTendencyForJanTore = {
-             userId: "jan_tore",
-             ratings: [33, 44, 55, 33, 33, 44, 76, 82, 83, 85, 64, 23]
-             },
-             rankingTendencyForHansBernhard = {
-             userId: "hans_bernhard",
-             ratings: [8, 23, 25, 34, 39, 41, 77, 88, 88, 89, 62, 64]
-             },
-
-             ratings = [
-             rankingTendencyForHansBernhard,
-             rankingTendencyForEirik,
-             rankingTendencyForOddvar,
-             rankingTendencyForJanTore
-             ];
-
-             // As of now ...
-             console.log(JSON.stringify(ratings));
-             response.json(ratings);
-             */
         };
-

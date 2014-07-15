@@ -244,18 +244,26 @@ var env = process.env.NODE_ENV || "development",
                     if (participantObj) {
                         try {
                             __.each(participantObj.tabell, function (teamName, index) {
-                                var predictedTeamPlacing = index + 1,
-                                    actualTeamPlacing = indexedTippeligaTable[teamName].no;
+                                try {
+                                    var predictedTeamPlacing = index + 1,
+                                        actualTeamPlacing = indexedTippeligaTable[teamName].no;
 
-                                // Tabell
-                                tabellScore += _getTableScore(predictedTeamPlacing, actualTeamPlacing);
+                                    // Tabell
+                                    tabellScore += _getTableScore(predictedTeamPlacing, actualTeamPlacing);
 
-                                // Pall
-                                pallScore += _getPallScore(predictedTeamPlacing, actualTeamPlacing);
-                                pallScore += _getExtraPallScore(predictedTeamPlacing, pallScore);
+                                    // Pall
+                                    pallScore += _getPallScore(predictedTeamPlacing, actualTeamPlacing);
+                                    pallScore += _getExtraPallScore(predictedTeamPlacing, pallScore);
 
-                                // Nedrykk
-                                nedrykkScore += _getNedrykkScore(predictedTeamPlacing, actualTeamPlacing, nedrykkScore);
+                                    // Nedrykk
+                                    nedrykkScore += _getNedrykkScore(predictedTeamPlacing, actualTeamPlacing, nedrykkScore);
+                                } catch (e) {
+                                    if (e.name === "TypeError") {
+                                        if (e.arguments.length > 0 && e.arguments[0] === "no") {
+                                            throw new Error("Illegal data format, 'no' property is missing for '" + teamName + "'");
+                                        }
+                                    }
+                                }
                             });
 
                             // Toppscorer
@@ -393,7 +401,7 @@ var env = process.env.NODE_ENV || "development",
         function (propertyNameOrFunc, requestion, args) {
             "use strict";
             // TODO: Create common argument-checking functions
-            // TODO: Keep this argument-checking seremony at all!?
+            // TODO: Keep this argument-checking seremony at all ...
             if (!propertyNameOrFunc && propertyNameOrFunc !== 0) {
                 throw new Error("Property name or getter function argument are missing - cannot sort");
             }
@@ -422,51 +430,3 @@ var env = process.env.NODE_ENV || "development",
             "use strict";
             return requestion(null, undefined);
         };
-
-
-/*
- retrieveTippeligaDataAndThenDispatchToHandler = function (handleTippeligaData, request, response) {
- "use strict";
- var year = request.params.year,
- round = request.params.round;
-
- // Override with stored tippeliga data => for statistics/history/development ...
- if ((!year || !round) && env === "development") {
- if (root.overrideTippeligaDataWithYear && root.overrideTippeligaDataWithRound) {
- year = global.overrideTippeligaDataWithYear;
- round = global.overrideTippeligaDataWithRound;
- console.warn(utils.logPreamble() + "Overriding current Tippeliga results with stored data from year=" + year + " and round=" + round);
- }
- }
-
- if (year && round) {
- RQ.sequence([
- curry(_getStoredTippeligaData)(year)(round),
- handleTippeligaData
- ])(go);
-
- } else {
- RQ.sequence([
- RQ.parallel([
- norwegianSoccerLeagueService.getCurrentTippeligaTable,
- norwegianSoccerLeagueService.getCurrentTippeligaToppscorer,
- norwegianSoccerLeagueService.getCurrentAdeccoligaTable,
- norwegianSoccerLeagueService.getCurrentRemainingCupContenders,
- // TODO: Are these necessary?
- _nullRequestion,
- _nullRequestion,
- _nullRequestion,
- _nullRequestion,
- _nullRequestion
- ]),
- handleTippeligaData
- ])(go);
- }
- },
-
-
- handleRequest = function (handleTippeligaData, request, response) {
- "use strict";
- return _retrieveTippeligaDataAndThenDispatchToHandler(handleTippeligaData, request, response);
- };
- */

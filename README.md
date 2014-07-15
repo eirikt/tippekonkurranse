@@ -26,12 +26,6 @@ In production [here][1].
 
 #### v1.2.x
 * More cool graphs and whatnot
-
-_Status: In progress_
-
-
-#### v1.2 : _Delivery goal 20.06.2014_
-* Some simple presentation of historic data
 * Multiple draggable windows (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
 * Revisit automatic reloading of web page
 * Simple countdown timer
@@ -40,8 +34,14 @@ _Status: In progress_
 _Status: In progress_
 
 
+#### v1.2.0 : ~~_Delivery goal 20.06.2014_~~ _Delivered 20.07.2014_
+* Simple presentation of historic data
+
+_Status: Done_
+
+
 #### v1.1.6 : _Delivery goal 06.06.2014_
-* Altered participant rating, skipping non-used rating numbers 
+* Altered participant rating, skipping non-used rating numbers
 * Bugfix: Sorting of participants
 
 _Status: Done_
@@ -191,6 +191,9 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 
 #### v? : Proper URL
 * [Heroku/Custom domains][31]
+
+#### v? : Error handling
+* Gather onerror-info via GitHub Issues API
 
 #### v? : Some kind of Facebook integration
 * User images

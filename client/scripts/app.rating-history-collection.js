@@ -12,7 +12,7 @@ define([
 
         }, {
             /** Sort by last element in rating, to suit jqPlot series/label presentations */
-            comparableValueGetter: function (model) {
+            comparable: function (model) {
                 var modelRatings = model.get("ratings");
                 return modelRatings[modelRatings.length - 1];
             },
@@ -39,15 +39,12 @@ define([
                     this.year = options.year;
                     this.round = options.round;
                 }
-                //if (_.isUndefined(this.year)) {
-                //    this.year = new Date().getFullYear();
-                //}
             },
             url: function () {
                 return [App.resource.ratingHistory.baseUri, this.year, this.round].join("/");
             },
             comparator: function (model, otherModel) {
-                return Comparators.arithmeticAscending(this.model.comparableValueGetter, model, otherModel);
+                return Comparators.arithmeticAscending(this.model.comparable, model, otherModel);
             },
             getJqPlotSeries: function () {
                 return _.map(this.models, this.model.toJqPlotSerie);
