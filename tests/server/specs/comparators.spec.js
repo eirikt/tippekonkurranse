@@ -37,9 +37,8 @@ describe("Comparators", function () {
         it("should sort Dates", function () {
             expect(arithmeticComparator(new Date(1999, 1, 2), new Date(1999, 1, 2))).to.be.equal(0);
 
-            expect(arithmeticComparator(new Date(1999, 1, 2), new Date(1999, 3, 4))).to.be.equal(-5266800000);
-            expect(arithmeticComparator(new Date(1999, 1, 2), new Date(1999, 3, 4))).not.to.be.above(0);
-            expect(arithmeticComparator(new Date(1999, 1, 2), new Date(1999, 3, 4))).to.be.below(0);
+            expect(arithmeticComparator(new Date(1999, 1, 2), new Date(1999, 1, 3))).not.to.be.above(0);
+            expect(arithmeticComparator(new Date(1999, 1, 2), new Date(1999, 1, 3))).to.be.below(0);
         });
         //it("should sort Arrays", function () {
         //expect(arithmeticComparator([1, 2], [2, 3])).to.be.equal(11); // Nope

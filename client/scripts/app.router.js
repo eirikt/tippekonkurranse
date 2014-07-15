@@ -35,7 +35,7 @@ define([
                 results.fetch();
 
                 $('header').removeClass('hidden');
-                $('#ratingHistory').css({ height: '0px' }).empty();
+                $('#ratingHistory').empty().css({ height: 0 });
                 $('#content').empty();
                 $('#intro').remove();
                 $('footer').removeClass('hidden');
@@ -58,12 +58,11 @@ define([
 
                 results.fetch({ reset: true });
 
-                $('#ratingHistory').addClass('hidden');
+                $('#ratingHistory').empty().css({ height: 0 });
             },
 
 
             showRatingHistory: function (year, round) {
-                //console.log('showRatingHistory(' + year + ', ' + round + ') ...');
                 var results = new HistoricScoresCollection({
                         year: year,
                         round: round
@@ -90,7 +89,6 @@ define([
 
 
             defaultAction: function () {
-                //console.log("defaultAction() ...");
                 var self = this;
                 Please.wait(1650).then(function () {
                     $('#intro').hide('slow', self.showCurrentScores);

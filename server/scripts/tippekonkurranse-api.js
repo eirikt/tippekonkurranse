@@ -10,6 +10,7 @@ var env = process.env.NODE_ENV || "development",
 // Module dependencies, local generic
     utils = require("./utils.js"),
     RQ = require("./vendor/rq.js").RQ,
+    rq = require("./utils.js"),
     go = utils.rqGo,
     comparators = require("./../../shared/scripts/comparators.js"),
 
@@ -22,38 +23,36 @@ var env = process.env.NODE_ENV || "development",
 
     _retrieveTippeligaDataAndThenDispatchToHandler = function (handleTippeligaData, request, response) {
         "use strict";
-        var year = request.params.year,
+        var year = request.params.year || new Date().getFullYear(),
             round = request.params.round;
 
-        // Override with stored tippeliga data => for statistics/history/development ...
-        if ((!year || !round) && env === "development") {
-            if (root.overrideTippeligaDataWithYear && root.overrideTippeligaDataWithRound) {
-                year = global.overrideTippeligaDataWithYear;
-                round = global.overrideTippeligaDataWithRound;
+        // Override with stored Tippeliga data => for statistics/history/development ...
+        if (!round && env === "development") {
+            if (root.overrideTippeligaDataWithRound) {
+                round = root.overrideTippeligaDataWithRound;
                 console.warn(utils.logPreamble() + "Overriding current Tippeliga results with stored data from year=" + year + " and round=" + round);
             }
         }
 
-        if (year && round) {
+        if (round) {
             RQ.sequence([
-                curry(tippekonkurranse.getStoredTippeligaDataRequestion)(year)(round),
+                curry(tippekonkurranse.getStoredTippeligaDataRequestory)(year)(round),
                 handleTippeligaData
             ])(go);
 
         } else {
             RQ.sequence([
                 RQ.parallel([
+                    // The 'Tippekonkurranse' app-conventional argument ordering for requestions:
                     norwegianSoccerLeagueService.getCurrentTippeligaTable,
                     norwegianSoccerLeagueService.getCurrentTippeligaToppscorer,
                     norwegianSoccerLeagueService.getCurrentAdeccoligaTable,
                     norwegianSoccerLeagueService.getCurrentRemainingCupContenders,
-                    // TODO: Are these necessary?
-                    // TODO: Move 'nullRequestion' function to common lib, e.g. 'basic-requestions.js'/'more-requestions.js'/...
-                    tippekonkurranse.nullRequestion,
-                    tippekonkurranse.nullRequestion,
-                    tippekonkurranse.nullRequestion,
-                    tippekonkurranse.nullRequestion,
-                    tippekonkurranse.nullRequestion
+                    rq.identity(year),
+                    rq.nullArg,
+                    rq.nullArg,
+                    rq.nullArg,
+                    rq.nullArg
                 ]),
                 handleTippeligaData
             ])(go);
@@ -95,7 +94,7 @@ var env = process.env.NODE_ENV || "development",
 
             var resultsRequest = curry(_handleRequest)(
                 RQ.sequence([
-                    curry(tippekonkurranse.dispatchResultsToClientForPresentationRequestion)(response),
+                    rq.requestor(curry(tippekonkurranse.dispatchResultsToClientForPresentation)(response)),
                     tippekonkurranse.storeTippeligaRoundMatchData
                 ])
             );
@@ -110,13 +109,13 @@ var env = process.env.NODE_ENV || "development",
 
             var scoresRequest = curry(_handleRequest)(
                 RQ.sequence([
-                    tippekonkurranse.addNumberOfMatchesPlayedGrouping,
-                    tippekonkurranse.addCurrentRound,
+                    rq.requestor(tippekonkurranse.addTeamNumberOfMatchesPlayedGrouping),
+                    rq.requestor(tippekonkurranse.addCurrentRound),
                     tippekonkurranse2014.addTippekonkurranseScores2014,
                     tippekonkurranse2014.addPreviousMatchRoundRatingToEachParticipant2014,
-                    tippekonkurranse.addMetadataToScores,
-                    curry(tippekonkurranse.dispatchScoresToClientForPresentationRequestion)(response),
-                    tippekonkurranse.storeTippeligaRoundMatchData
+                    rq.requestor(tippekonkurranse.addMetadataToScores),
+                    rq.requestor(curry(tippekonkurranse.dispatchScoresToClientForPresentation)(response)),
+                    rq.requestor(tippekonkurranse.storeTippeligaRoundMatchData)
                 ])
             );
 
@@ -133,16 +132,15 @@ var env = process.env.NODE_ENV || "development",
                 round,
                 data = {},
 
-                getHistoricTippekonkurranseScores = [],
-                sortByRound = curry(tippekonkurranse.sortByPropertyRequestion)(tippekonkurranse.roundIndex);
+                getHistoricTippekonkurranseScores = [];
 
-            // 1. Create array of requestions: all historic tippeligakonkurranse scores
+            // 1. Create array of requestors: all historic Tippeligakonkurranse scores
             for (round = 1; round <= currentRound; round += 1) {
                 getHistoricTippekonkurranseScores.push(
                     RQ.sequence([
-                        curry(tippekonkurranse.getStoredTippeligaDataRequestion)(year)(round),
-                        tippekonkurranse.addNumberOfMatchesPlayedGrouping,
-                        tippekonkurranse.addCurrentRound,
+                        curry(tippekonkurranse.getStoredTippeligaDataRequestory)(year)(round),
+                        rq.requestor(tippekonkurranse.addTeamNumberOfMatchesPlayedGrouping),
+                        rq.requestor(tippekonkurranse.addCurrentRound),
                         tippekonkurranse2014.addTippekonkurranseScores2014
                     ])
                 );
@@ -151,11 +149,14 @@ var env = process.env.NODE_ENV || "development",
             // 2. Then process these ...
             RQ.sequence([
                 RQ.parallel(getHistoricTippekonkurranseScores),
-                sortByRound,
+
+                // Sort by round
+                rq.requestor(curry(tippekonkurranse.sortByProperty)(tippekonkurranse.roundIndex)),
+
                 function (requestion, args) {
                     /* Create processing-friendly data structure skeleton:
                      * var participants = {
-                     *     <userId> = { userId: {String}, ratings: [] }
+                     *     <userId> = { userId: {string}, ratings: [] }
                      * }
                      */
                     var userIdArray = Object.keys(args[0][tippekonkurranse.scoresIndex].scores);
@@ -166,6 +167,7 @@ var env = process.env.NODE_ENV || "development",
                         }
                     });
                 },
+
                 function (requestion, args) {
                     // Process/build data structure
                     __.each(args, function (completeTippekonkurranseRoundData) {
@@ -175,18 +177,21 @@ var env = process.env.NODE_ENV || "development",
                     });
                     return requestion(data);
                 },
+
                 function (requestion, data) {
                     // TODO: Include 'year' in response
                     /* Create/Transform to JqPlot-friendly data structure:
                      * var participants = [
-                     *     { userId: {String}, ratings: [] }
+                     *     { userId: {string}, ratings: [] }
                      * ]
                      */
                     data = __.map(data, __.identity);
                     return requestion(data);
                 },
+
+                // TODO: An obvious generic requestory ...
                 function (requestion, data) {
-                    // Dispatch historic tippekonkurranse scores response
+                    // Dispatch historic Tippekonkurranse scores response
                     response.json(data);
                     return requestion();
                 }

@@ -16,8 +16,33 @@ var __ = require("underscore"),
         return "[" + moment().format("YYYY-MM-DD HH:mm:ss") + "] ";
     },
 
+
+// TODO: Extract generic requestions out of here to a standalone reusable lib, document
+
     /**
      * Trivial RQ.js requestion => the identity function.
      * Convenient for triggering arrays of RQ.js requestors.
      */
-    rqGo = exports.rqGo = __.identity;
+    rqGo = exports.rqGo = function (value) {
+        "use strict";
+        return value;
+    },
+
+    nullRequestor = exports.nullArg = function (requestion, args) {
+        "use strict";
+        return requestion(null, undefined);
+    },
+
+    identityRequestory = exports.identity = function (value) {
+        "use strict";
+        return function requestor(requestion, args) {
+            return requestion(value, undefined);
+        };
+    },
+
+    functionWrapperRequestory = exports.requestor = function (func) {
+        "use strict";
+        return function requestor(requestion, args) {
+            return requestion(func(args), undefined);
+        };
+    };

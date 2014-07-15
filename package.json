@@ -18,10 +18,10 @@
         "underscore-contrib": "~0.3.0",
         "curry": "~1.2.0",
         "mongodb": "~1.4.7",
-        "mongoose": "~3.9.0",
+        "mongoose": "~3.8.13",
         "express": "~4.6.1",
         "request": "~2.37.0",
-        "cheerio": "~0.17.0",
+        "cheerio": "~0.15.0",
         "moment": "~2.7.0",
 
         "bower": "~1.3.8",

@@ -7,14 +7,14 @@ define(['jquery', 'underscore', 'backbone'],
         return Backbone.View.extend({
             jqplotId: 'jqplot',
             graphFilteringId: 'graphFiltering',
-            graphHeight: '400px',
+            graphHeight: 400,
             originalCollection: null,
             graphFilteringTemplate: null,
 
             events: {
                 "click #graphSeriesFiltering": function (event) {
-                    var show = $($(event.target).get(0)).is(":checked"),
-                        userId = $($(event.target).get(0)).attr("name"),
+                    var show = $($(event.target).get(0)).is(':checked'),
+                        userId = $($(event.target).get(0)).attr('name'),
                         model = this.originalCollection.findWhere({ userId: userId });
                     if (show) {
                         this.collection.add(model);
@@ -100,11 +100,15 @@ define(['jquery', 'underscore', 'backbone'],
 
             render: function () {
                 // Graph
-                this.$('#' + this.jqplotId).css({ height: this.graphHeight });
+                this.$('#' + this.jqplotId).css({ height: this.graphHeight + 'px' });
                 $.jqplot(this.jqplotId, this.collection.getJqPlotPlot(), this.getJqPlotConfig());
 
                 // Filtering options
                 this.$('#' + this.graphFilteringId).empty().append(this.graphFilteringTemplate());
+
+                // Parent element modifications
+                var elTotalHeight = this.graphHeight + this.$('#' + this.graphFilteringId).height() + 10 + 'px';
+                this.$el.css({ height: elTotalHeight });
 
                 return this;
             },
@@ -113,10 +117,13 @@ define(['jquery', 'underscore', 'backbone'],
                 // Graph
                 var jqPlotConfig = this.getJqPlotConfig();
                 jqPlotConfig.seriesDefaults.rendererOptions.animation.show = false;
-                this.$('#' + this.jqplotId).empty().css({ height: this.graphHeight });
+                this.$('#' + this.jqplotId).empty().css({ height: this.graphHeight + 'px' });
                 $.jqplot(this.jqplotId, this.collection.getJqPlotPlot(), jqPlotConfig);
 
                 // Filtering options
+                // ...
+
+                // Parent element modifications
                 // ...
 
                 return this;

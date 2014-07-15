@@ -296,9 +296,9 @@ module.exports = function (grunt) {
     grunt.registerTask('install:client', ['shell:install-client']);
     grunt.registerTask('mongodb', ['shell:createDataDir', 'shell:mongod']);
 
-    grunt.registerTask('build:client', ['clean', 'copy:to-client', 'copy:to-build'/*, 'uglify', 'cssmin'*/]);
+    grunt.registerTask('build:client', ['clean', 'copy:to-client', 'copy:to-build', 'uglify', 'cssmin']);
     // TODO: grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', 'blanket_mocha', 'mochacov:travis']);
-    grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', 'mochacov:travis']);
+    grunt.registerTask('build:travis', ['test', 'jshint', /*'jsdoc',*/ 'mochacov:travis']);
 
     grunt.registerTask('test:client', ['connect', 'shell:mocha-phantomjs']);
     grunt.registerTask('test:server', ['mochaTest']);

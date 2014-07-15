@@ -3,6 +3,7 @@
  */
 @import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700,300,300italic);
 
+
 /* Not suited for offline/AppCache usage ...
 @font-face {
     font-family: 'Open Sans Condensed';
@@ -11,6 +12,7 @@
     font-style: normal;
 }
 */
+
 
 /**
  * Base
@@ -30,6 +32,7 @@ hr {
 a:hover, a:visited, a:link, a:active {
     text-decoration: none;
 }
+
 
 /**
  * Bootstrap overrides
@@ -58,6 +61,7 @@ h2, .h2 {
     background-image: linear-gradient(to bottom right, #ffffff 0%, #f96e00 75%);
 }
 
+
 /**
  * Other content
  */
@@ -65,12 +69,6 @@ h2, .h2 {
     padding-top: 1rem;
     padding-bottom: .5rem;
 }
-
-/*
-#jqplot {
-    height: 500px;
-}
-*/
 
 /* TODO: ...
 .my-transform {
@@ -85,6 +83,7 @@ h2, .h2 {
     opacity: 0.5;
 }
 */
+
 
 /**
  *  Module           : Font Awesome icons
@@ -150,6 +149,7 @@ h2, .h2 {
     content: "\f091";
     color: #cd7f32;
 }
+
 
 /**
  *  Module           : Debug

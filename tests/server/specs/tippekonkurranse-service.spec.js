@@ -12,17 +12,18 @@ var __ = require("../../../node_modules/underscore/underscore.js"),
     tippeligaTableIndex = require("../../../server/scripts/tippekonkurranse.js").tippeligaTableIndex,
     adeccoligaTableIndex = require("../../../server/scripts/tippekonkurranse.js").adeccoligaTableIndex,
     scoresIndex = require("../../../server/scripts/tippekonkurranse.js").scoresIndex,
-    addTippekonkurranseScoresRequestion = require("../../../server/scripts/tippekonkurranse.js").addTippekonkurranseScoresRequestion,
+    addTippekonkurranseScoresRequestion = require("../../../server/scripts/tippekonkurranse.js").addTippekonkurranseScoresRequestor,
 
     addTippekonkurranseScores2014 = __.partial(addTippekonkurranseScoresRequestion, require("../../../server/scripts/user-predictions-2014.js").predictions2014),
 
-    sortByPropertyRequestion = require("../../../server/scripts/tippekonkurranse.js").sortByPropertyRequestion;
+    sortByPropertyRequestion = require("../../../server/scripts/tippekonkurranse.js").sortByProperty;
 
 
 describe("Tippekonkurranse service", function () {
     "use strict";
 
     describe("Underlying basics", function () {
+
         it("should ensure (native) sorting of number strings", function () {
             expect(Math.max.apply(null, ["1", "2"])).to.equal(2);
             expect(Math.max.apply(null, ["0", "4", "9"])).to.equal(9);
@@ -195,6 +196,38 @@ describe("Tippekonkurranse service", function () {
                     })
                 );
             });
+
+            it("should throw error if retrieved table data deviates from user prediction data", function () {
+                var userPredictions = {
+                        john: {
+                            tabell:  ["TeamA", "TeamB"],
+                            toppscorer: null,
+                            opprykk: null,
+                            cup: null
+                        }
+                    },
+                    actualTable = [
+                        { name: "TeamA" },
+                        { name: "TeamC" }
+                    ],
+                    requestion = go,
+                    args = [],
+                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
+
+                args[tippeligaTableIndex] = actualTable;
+
+                try {
+                    addTippekonkurranseScores(requestion, args);
+                    throw new Error("Should have thrown error");
+                } catch (e) {
+                    expect(e.message).to.be.equal("Unable to calculate scores for team 'TeamB' - probably illegal data format");
+                }
+                // TODO: Do something like this instead ...
+                //var addTippekonkurranseScores = __.bind(addTippekonkurranseScores, [{}, function () {}, {}]);
+                //expect(addTippekonkurranseScores).to.throw(Error, "More than 2 arguments present - this requestion must be curried with predictions object before use");
+                //});
+            });
+
         });
 
 
@@ -397,6 +430,7 @@ describe("Tippekonkurranse service", function () {
 
 
         describe("'Nedrykk' penalty point calculations", function () {
+
             it("should give -1 if both teams exist in prediction, whatever order ", function () {
                 var userPredictions = {
                         john: {
@@ -546,38 +580,6 @@ describe("Tippekonkurranse service", function () {
 
 
         describe("'Opprykk' penalty point calculations", function () {
-            it("should throw error if retrieved table data is missing 'no' property", function () {
-                var userPredictions = {
-                        john: {
-                            tabell: null,
-                            toppscorer: null,
-                            opprykk: ["TeamA", "TeamB"],
-                            cup: null
-                        }
-                    },
-                    actualOpprykkTable = [
-                        { name: "TeamA" },
-                        { name: "TeamB" },
-                        { name: "Some other team" },
-                        { name: "And one more team" }
-                    ],
-                    requestion = go,
-                    args = [],
-                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
-
-                args[tippeligaTableIndex] = actualOpprykkTable;
-
-                try {
-                    addTippekonkurranseScores(requestion, args);
-                    throw new Error("Should have thrown error");
-                } catch (e) {
-                    expect(e.message).to.be.equal("Illegal data format ('no' property is missing) - cannot calculate Tippekonkurranse scores");
-                }
-                // TODO: Do something like this instead ...
-                //var addTippekonkurranseScores = __.bind(addTippekonkurranseScores, [{}, function () {}, {}]);
-                //expect(addTippekonkurranseScores).to.throw(Error, "More than 2 arguments present - this requestion must be curried with predictions object before use");
-                //});
-            });
 
             it("should give -1 if both teams exist in prediction, whatever order ", function () {
                 var userPredictions = {
@@ -665,20 +667,14 @@ describe("Tippekonkurranse service", function () {
 
 
     describe("sortByPropertyRequestion", function () {
-        describe("Border cases", function () {
-            var bypassRequestion = go;
 
+        describe("Border cases", function () {
             it("should get hold on private functions within Node.js file", function () {
                 expect(sortByPropertyRequestion).to.exist;
             });
 
-            it("should throw error if no requestion argument is provided", function () {
-                var sortByMyPropertyRequestion = __.partial(sortByPropertyRequestion, "myProperty");
-                expect(sortByMyPropertyRequestion).to.throw(Error, "Requestion argument is missing - check your RQ.js setup");
-            });
-
             it("should throw error if no argument array is provided", function () {
-                var sortByMyPropertyRequestion = __.partial(sortByPropertyRequestion, "myProperty", bypassRequestion);
+                var sortByMyPropertyRequestion = __.partial(sortByPropertyRequestion, "myProperty");
                 expect(sortByMyPropertyRequestion).to.throw(Error, "Requestion argument array is missing - check your RQ.js functions and setup");
             });
 
@@ -697,7 +693,7 @@ describe("Tippekonkurranse service", function () {
                         [1]
                     ]
                 ];
-                expect(sortByPropertyRequestion(1, bypassRequestion, args)).to.be.deep.equal([
+                expect(sortByPropertyRequestion(1, args)).to.be.deep.equal([
                     [
                         ["B"],
                         [-1]
@@ -728,7 +724,7 @@ describe("Tippekonkurranse service", function () {
                         [1]
                     ]
                 ];
-                expect(sortByPropertyRequestion("0", bypassRequestion, args)).to.be.deep.equal([
+                expect(sortByPropertyRequestion("0", args)).to.be.deep.equal([
                     [
                         ["B"],
                         [-1]

@@ -14,7 +14,7 @@ var env = process.env.NODE_ENV || "development",
 
 // Module dependencies, local application-specific, curried/configured
     addTippekonkurranseScores2014 = exports.addTippekonkurranseScores2014 =
-        curry(tippekonkurranse.addTippekonkurranseScoresRequestion)(predictions2014),
+        curry(tippekonkurranse.addTippekonkurranseScoresRequestor)(predictions2014),
 
     addPreviousMatchRoundRatingToEachParticipant2014 = exports.addPreviousMatchRoundRatingToEachParticipant2014 =
-        curry(tippekonkurranse.addPreviousMatchRoundRatingToEachParticipantRequestion)(predictions2014);
+        curry(tippekonkurranse.addPreviousMatchRoundRatingToEachParticipantRequestor)(predictions2014);

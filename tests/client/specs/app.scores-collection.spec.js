@@ -1,5 +1,5 @@
 /* global define:false, describe:false, it:false */
-/* jshint -W030, -W106 */
+/* jshint -W030, -W071, -W106 */
 
 define([
         "jquery", "underscore", "backbone", "chai",

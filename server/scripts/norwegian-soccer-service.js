@@ -2,8 +2,13 @@
 
 // Module dependencies, external
 var __ = require("underscore"),
+    curry = require("curry"),
     request = require("request"),
     cheerio = require("cheerio"),
+
+// Module dependencies, local generic
+    utils = require("./utils.js"),
+    rq = require("./utils.js"),
 
 
 //////////////////////////////////
@@ -101,68 +106,52 @@ var __ = require("underscore"),
         return toppscorers;
     },
 
+    _getNorwegianSoccerDataRequestor = function (uri, parse, requestion, args) {
+        "use strict";
+        return request(
+            uri,
+            function (err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    return requestion(parse(body));
+                }
+                else {
+                    return requestion(undefined, err);
+                }
+            }
+        );
+    },
 
-//////////////////////////////////
+
+//////////////////////////////////////////////
 // Public functions
-//////////////////////////////////
+//
+// These are all "data generator" requestors
+// => No forwarding of existing data ...
+// TODO: Create RQ wrapper function and remove RQ dependency in this lib
+//////////////////////////////////////////////
 
-    _getCurrentTippeligaTable = exports.getCurrentTippeligaTable = function (requestion, arg) {
-        "use strict";
-        return request(
-            _currentTippeligaTableUrl,
-            function (err, response, body) {
-                if (!err && response.statusCode === 200) {
-                    return requestion(_parseTippeligaTable(body));
-                }
-                else {
-                    return requestion(undefined, err);
-                }
-            }
-        );
-    },
+    _getCurrentTippeligaTable = exports.getCurrentTippeligaTable =
+        curry(_getNorwegianSoccerDataRequestor)(_currentTippeligaTableUrl)(_parseTippeligaTable),
 
+    _getCurrentAdeccoligaTable = exports.getCurrentAdeccoligaTable =
+        curry(_getNorwegianSoccerDataRequestor)(_currentAdeccoligaTableUrl)(_parseAdeccoligaTable),
 
-    _getCurrentAdeccoligaTable = exports.getCurrentAdeccoligaTable = function (requestion, arg) {
-        "use strict";
-        return request(
-            _currentAdeccoligaTableUrl,
-            function (err, response, body) {
-                if (!err && response.statusCode === 200) {
-                    return requestion(_parseAdeccoligaTable(body));
-                }
-                else {
-                    return requestion(undefined, err);
-                }
-            }
-        );
-    },
+    _getCurrentTippeligaToppscorer = exports.getCurrentTippeligaToppscorer =
+        curry(_getNorwegianSoccerDataRequestor)(_currentTippeligaToppscorerTableUrl)(_parseTippeligaToppscorerTable),
 
-
-    _getCurrentTippeligaToppscorer = exports.getCurrentTippeligaToppscorer = function (requestion, arg) {
-        "use strict";
-        return request(
-            _currentTippeligaToppscorerTableUrl,
-            function (err, response, body) {
-                if (!err && response.statusCode === 200) {
-                    return requestion(_parseTippeligaToppscorerTable(body));
-                }
-                else {
-                    return requestion(undefined, err);
-                }
-            }
-        );
-    },
-
-
-    _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders = function (requestion, arg) {
+    _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders = function (requestion, args) {
         "use strict";
         // For the cup title, just manually remove the teams when they consecutively screw up, one after the other ...
         return requestion([
             "Bodø/Glimt",
             "Brann",
+            "Haugesund",
+            "Lillestrøm",
             "Molde",
+            "Odd",
+            "Sarpsborg 08",
             "Stabæk",
-            "Vålerenga"
+            "Viking"
         ]);
     },
 

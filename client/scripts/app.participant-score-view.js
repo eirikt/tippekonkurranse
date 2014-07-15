@@ -15,7 +15,7 @@ define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soc
                 if (!this.model[ParticipantScore.previousRankPropertyName]) {
                     return this;
                 }
-                var plusThreshold = 3,
+                var plusThreshold = 2,
                     upwardTrend = this.model[ParticipantScore.previousRankPropertyName] - this.model[ParticipantScore.rankPropertyName],
                     downwardTrend = this.model[ParticipantScore.rankPropertyName] - this.model[ParticipantScore.previousRankPropertyName],
                     rankDiff = upwardTrend,

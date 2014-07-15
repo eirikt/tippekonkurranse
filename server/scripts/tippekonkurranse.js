@@ -1,4 +1,5 @@
 /* global root:false, require:false, exports:false */
+/* jshint -W083 */
 
 // Environment
 var env = process.env.NODE_ENV || "development",
@@ -10,16 +11,13 @@ var env = process.env.NODE_ENV || "development",
 // Module dependencies, local generic
     utils = require("./utils.js"),
     RQ = require("./vendor/rq.js").RQ,
+    rq = require("./utils.js"),
     go = utils.rqGo,
     comparators = require("./../../shared/scripts/comparators.js"),
 
 // Module dependencies, local application-specific
     dbSchema = require("./db-schema.js"),
-//norwegianSoccerLeagueService = require("./norwegian-soccer-service.js"),
     appModels = require("./../../shared/scripts/app.models.js"),
-
-
-// TODO: Extract generic requestions out of here to a standalone reusable lib
 
 
 // Below, "scores" should be read as "penalty points", that's more accurate ...
@@ -85,7 +83,7 @@ var env = process.env.NODE_ENV || "development",
 
 
 // TODO: spec/test this one!
-// TODO: Promote to proper standalone requestion!
+// TODO: Promote to proper standalone requestor function!
     /**
      * Conditionally storing/updating of match round results in MongoDB.
      * This function should be curried, MongoDB callback arguments being the two last ones ...
@@ -144,19 +142,19 @@ var env = process.env.NODE_ENV || "development",
 
 
     /** App-conventional argument ordering for requestions -> composable server-side functions. */
-    _tippeligaTable = exports.tippeligaTableIndex = 0,      // ...
-    _tippeligaToppscorer = 1,                               // ...
-    _adeccoligaTable = exports.adeccoligaTableIndex = 2,    // ...
-    _remainingCupContenders = 3,                            // ...
+    _tippeligaTable = exports.tippeligaTableIndex = 0,      // TODO: Document ...
+    _tippeligaToppscorer = 1,                               // TODO: Document ...
+    _adeccoligaTable = exports.adeccoligaTableIndex = 2,    // TODO: Document ...
+    _remainingCupContenders = 3,                            // TODO: Document ...
 
-    _year = 4,                                              // ...
-    _round = exports.roundIndex = 5,                        // ...
-    _date = 6,                                              // ...
-    _matchesCountGrouping = 7,                              // ...
+    _year = 4,                                              // TODO: Document ...
+    _round = exports.roundIndex = 5,                        // TODO: Document ...
+    _date = 6,                                              // TODO: Document ...
+    _matchesCountGrouping = 7,                              // TODO: Document ...
     _scores = exports.scoresIndex = 8,                      // Object with properties 'scores' and 'metadata'
 
 
-    getStoredTippeligaDataRequestion = exports.getStoredTippeligaDataRequestion =
+    getStoredTippeligaDataRequestory = exports.getStoredTippeligaDataRequestory =
         function (year, round, requestion, args) {
             "use strict";
             dbSchema.TippeligaRound.findOne({ year: year, round: round }).exec(
@@ -184,28 +182,27 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
-    addNumberOfMatchesPlayedGrouping = exports.addNumberOfMatchesPlayedGrouping =
-        function (requestion, args) {
+    addTeamNumberOfMatchesPlayedGrouping = exports.addTeamNumberOfMatchesPlayedGrouping =
+        function (args) {
             "use strict";
 
             // TODO: Why do we have to clone args here?
             args = __.clone(args);
 
             args[_matchesCountGrouping] = __.groupBy(args[_tippeligaTable], "matches");
-            return requestion(args);
+            return args;
         },
 
 
-    addCurrentRound = exports.addCurrentRound =
-        function (requestion, args) {
-            "use strict";
-            var allMatchRoundsPresentInCurrentTippeligaTable = __.keys(args[_matchesCountGrouping]);
-            args[_round] = Math.max.apply(null, allMatchRoundsPresentInCurrentTippeligaTable);
-            return requestion(args);
-        },
+    addCurrentRound = exports.addCurrentRound = function (args) {
+        "use strict";
+        var allMatchRoundsPresentInCurrentTippeligaTable = __.keys(args[_matchesCountGrouping]);
+        args[_round] = Math.max.apply(null, allMatchRoundsPresentInCurrentTippeligaTable);
+        return args;
+    },
 
 
-    addTippekonkurranseScoresRequestion = exports.addTippekonkurranseScoresRequestion =
+    addTippekonkurranseScoresRequestor = exports.addTippekonkurranseScoresRequestor =
         function (userPredictions, requestion, args) {
             "use strict";
 
@@ -242,61 +239,50 @@ var env = process.env.NODE_ENV || "development",
                         participantObj = userPredictions[participant];
 
                     if (participantObj) {
-                        try {
-                            __.each(participantObj.tabell, function (teamName, index) {
-                                try {
-                                    var predictedTeamPlacing = index + 1,
-                                        actualTeamPlacing = indexedTippeligaTable[teamName].no;
-
-                                    // Tabell
-                                    tabellScore += _getTableScore(predictedTeamPlacing, actualTeamPlacing);
-
-                                    // Pall
-                                    pallScore += _getPallScore(predictedTeamPlacing, actualTeamPlacing);
-                                    pallScore += _getExtraPallScore(predictedTeamPlacing, pallScore);
-
-                                    // Nedrykk
-                                    nedrykkScore += _getNedrykkScore(predictedTeamPlacing, actualTeamPlacing, nedrykkScore);
-                                } catch (e) {
-                                    if (e.name === "TypeError") {
-                                        if (e.arguments.length > 0 && e.arguments[0] === "no") {
-                                            throw new Error("Illegal data format, 'no' property is missing for '" + teamName + "'");
-                                        }
-                                    }
-                                }
-                            });
-
-                            // Toppscorer
-                            __.each(participantObj.toppscorer, function (toppscorer, index) {
-                                if (index === 0 && __.contains(args[_tippeligaToppscorer], toppscorer)) {
-                                    toppscorerScore = -1;
-                                }
-                            });
-
-                            // Opprykk;
-                            __.each(participantObj.opprykk, function (teamName, index) {
+                        __.each(participantObj.tabell, function (teamName, index) {
+                            try {
                                 var predictedTeamPlacing = index + 1,
-                                    actualTeamPlacing = indexedAdeccoligaTable[teamName].no;
+                                    actualTeamPlacing = indexedTippeligaTable[teamName].no;
 
-                                opprykkScore += _getOpprykkScore(predictedTeamPlacing, actualTeamPlacing, opprykkScore);
-                            });
+                                // Tabell
+                                tabellScore += _getTableScore(predictedTeamPlacing, actualTeamPlacing);
 
-                            // Cup
-                            __.each(participantObj.cup, function (team, index) {
-                                if (index === 0 && __.contains(args[_remainingCupContenders], team)) {
-                                    cupScore = -1;
-                                }
-                            });
+                                // Pall
+                                pallScore += _getPallScore(predictedTeamPlacing, actualTeamPlacing);
+                                pallScore += _getExtraPallScore(predictedTeamPlacing, pallScore);
 
-                            // Sum
-                            rating = sum = tabellScore + pallScore + nedrykkScore + toppscorerScore + opprykkScore + cupScore;
-                        } catch (e) {
-                            if (e.name === "TypeError") {
-                                if (e.arguments.length > 0 && e.arguments[0] === "no") {
-                                    throw new Error("Illegal data format ('no' property is missing) - cannot calculate Tippekonkurranse scores");
-                                }
+                                // Nedrykk
+                                nedrykkScore += _getNedrykkScore(predictedTeamPlacing, actualTeamPlacing, nedrykkScore);
+
+                            } catch (e) {
+                                throw new Error("Unable to calculate scores for team '" + teamName + "' - probably illegal data format");
                             }
-                        }
+                        });
+
+                        // Toppscorer
+                        __.each(participantObj.toppscorer, function (toppscorer, index) {
+                            if (index === 0 && __.contains(args[_tippeligaToppscorer], toppscorer)) {
+                                toppscorerScore = -1;
+                            }
+                        });
+
+                        // Opprykk;
+                        __.each(participantObj.opprykk, function (teamName, index) {
+                            var predictedTeamPlacing = index + 1,
+                                actualTeamPlacing = indexedAdeccoligaTable[teamName].no;
+
+                            opprykkScore += _getOpprykkScore(predictedTeamPlacing, actualTeamPlacing, opprykkScore);
+                        });
+
+                        // Cup
+                        __.each(participantObj.cup, function (team, index) {
+                            if (index === 0 && __.contains(args[_remainingCupContenders], team)) {
+                                cupScore = -1;
+                            }
+                        });
+
+                        // Sum
+                        rating = sum = tabellScore + pallScore + nedrykkScore + toppscorerScore + opprykkScore + cupScore;
                     }
                     currentStanding[participant] =
                         appModels.scoreModel.createObjectWith(tabellScore, pallScore, nedrykkScore, toppscorerScore, opprykkScore, cupScore, rating);
@@ -310,13 +296,13 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
-    addPreviousMatchRoundRatingToEachParticipantRequestion = exports.addPreviousMatchRoundRatingToEachParticipantRequestion =
+    addPreviousMatchRoundRatingToEachParticipantRequestor = exports.addPreviousMatchRoundRatingToEachParticipantRequestor =
         function (userPredictions, requestion, args) {
             "use strict";
             var year = args[_year],
                 previousRound = args[_round] - 1,
-                getPreviousRoundTippeligaData = curry(getStoredTippeligaDataRequestion)(year)(previousRound),
-                addTippekonkurranseScores2014 = curry(addTippekonkurranseScoresRequestion)(userPredictions),
+                getPreviousRoundTippeligaData = curry(getStoredTippeligaDataRequestory)(year)(previousRound),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor)(userPredictions),
 
                 updatedScores = args[_scores].scores,
 
@@ -325,9 +311,9 @@ var env = process.env.NODE_ENV || "development",
 
             RQ.sequence([
                 getPreviousRoundTippeligaData,
-                addNumberOfMatchesPlayedGrouping,
-                addCurrentRound,
-                addTippekonkurranseScores2014,
+                rq.requestor(addTeamNumberOfMatchesPlayedGrouping),
+                rq.requestor(addCurrentRound),
+                addTippekonkurranseScores,
                 function (requestion, args) {
                     for (var participant in updatedScores) {
                         if (updatedScores.hasOwnProperty(participant)) {
@@ -345,26 +331,26 @@ var env = process.env.NODE_ENV || "development",
 
 
     addMetadataToScores = exports.addMetadataToScores =
-        function (requestion, args) {
+        function (args) {
             "use strict";
             args[_scores].metadata = {
                 year: args[_year],
                 round: args[_round]
             };
-            return requestion(args);
+            return args;
         },
 
 
-    dispatchScoresToClientForPresentationRequestion = exports.dispatchScoresToClientForPresentationRequestion =
-        function (response, requestion, args) {
+    dispatchScoresToClientForPresentation = exports.dispatchScoresToClientForPresentation =
+        function (response, args) {
             "use strict";
             response.json(args[_scores]);
-            return requestion(args);
+            return args;
         },
 
 
-    dispatchResultsToClientForPresentationRequestion = exports.dispatchResultsToClientForPresentationRequestion =
-        function (response, requestion, args) {
+    dispatchResultsToClientForPresentation = exports.dispatchResultsToClientForPresentation =
+        function (response, args) {
             "use strict";
             response.json({
                 currentTippeligaTable: args[_tippeligaTable],
@@ -375,12 +361,12 @@ var env = process.env.NODE_ENV || "development",
                 currentRound: args[_round],
                 currentDate: args[_date]
             });
-            return requestion(args);
+            return args;
         },
 
 
     storeTippeligaRoundMatchData = exports.storeTippeligaRoundMatchData =
-        function (requestion, args) {
+        function (args) {
             "use strict";
             for (var round in args[_matchesCountGrouping]) {
                 if (args[_matchesCountGrouping].hasOwnProperty(round)) {
@@ -393,12 +379,12 @@ var env = process.env.NODE_ENV || "development",
                         .exec(conditionallyStoreTippeligaRound);
                 }
             }
-            return requestion(args);
+            return args;
         },
 
 
-    sortByPropertyRequestion = exports.sortByPropertyRequestion =
-        function (propertyNameOrFunc, requestion, args) {
+    sortByProperty = exports.sortByProperty =
+        function (propertyNameOrFunc, args) {
             "use strict";
             // TODO: Create common argument-checking functions
             // TODO: Keep this argument-checking seremony at all ...
@@ -415,18 +401,12 @@ var env = process.env.NODE_ENV || "development",
                     throw new Error("Property Cannot sort by string, only numbers or dates");
                 }
             }
-            if (!requestion) {
-                throw new Error("Requestion argument is missing - check your RQ.js setup");
-            }
+            // Nope, RQ.js stuff factored away
+            //if (!requestion) {
+            //    throw new Error("Requestion argument is missing - check your RQ.js setup");
+            //}
             if (!args) {
                 throw new Error("Requestion argument array is missing - check your RQ.js functions and setup");
             }
-            return requestion(args.sort(comparators.propertyArithmeticAscending(propertyNameOrFunc)));
-        },
-
-
-    nullRequestion = exports.nullRequestion =
-        function (requestion) {
-            "use strict";
-            return requestion(null, undefined);
+            return args.sort(comparators.propertyArithmeticAscending(propertyNameOrFunc));
         };

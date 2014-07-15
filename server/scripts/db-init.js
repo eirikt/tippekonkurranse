@@ -1,4 +1,5 @@
 /* global require:false */
+/* jshint -W106 */
 
 // Environment
 var env = process.env.NODE_ENV || "development",
