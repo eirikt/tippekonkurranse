@@ -143,7 +143,6 @@ var __ = require("underscore"),
         "use strict";
         // For the cup title, just manually remove the teams when they consecutively screw up, one after the other ...
         return requestion([
-            "Bodø/Glimt",
             "Brann",
             "Haugesund",
             "Lillestrøm",
@@ -1066,6 +1065,62 @@ var __ = require("underscore"),
             "Brann",
             "Molde",
             "Stabæk"
+        ]
+    },
+
+
+    _dataForRound2014016 = exports.round2014016 = {
+        year: 2014,
+        round: 16,
+        date: "2014-07-22",
+        tippeliga: [
+            { name: "Molde", no: 1, matches: 16 },
+            { name: "Rosenborg", no: 2, matches: 16 },
+            { name: "Strømsgodset", no: 3, matches: 16 },
+            { name: "Odd", no: 4, matches: 16 },
+            { name: "Vålerenga", no: 5, matches: 16 },
+            { name: "Lillestrøm", no: 6, matches: 16 },
+            { name: "Viking", no: 7, matches: 16 },
+            { name: "Start", no: 8, matches: 16 },
+            { name: "Sarpsborg 08", no: 9, matches: 16 },
+            { name: "Sogndal", no: 10, matches: 16 },
+            { name: "Stabæk", no: 11, matches: 16 },
+            { name: "Bodø/Glimt", no: 12, matches: 16 },
+            { name: "Haugesund", no: 13, matches: 16 },
+            { name: "Aalesund", no: 14, matches: 16 },
+            { name: "Brann", no: 15, matches: 16 },
+            { name: "Sandnes Ulf", no: 16, matches: 16 }
+        ],
+        toppscorer: [
+            "Vidar Örn Kjartansson"
+        ],
+        adeccoliga: [
+            { name: "Sandefjord", no: 1, matches: 16 },
+            { name: "Tromsø", no: 2, matches: 15 },
+            { name: "Ranheim", no: 3, matches: 16 },
+            { name: "Kristiansund BK", no: 4, matches: 16 },
+            { name: "Fredrikstad", no: 5, matches: 16 },
+            { name: "Mjøndalen", no: 6, matches: 15 },
+            { name: "Hødd", no: 7, matches: 16 },
+            { name: "Nest-Sotra", no: 8, matches: 16 },
+            { name: "Strømmen", no: 9, matches: 16 },
+            { name: "Bærum", no: 10, matches: 16 },
+            { name: "Alta", no: 11, matches: 16 },
+            { name: "Bryne", no: 12, matches: 16 },
+            { name: "Hønefoss", no: 13, matches: 16 },
+            { name: "Tromsdalen", no: 14, matches: 16 },
+            { name: "Ullensaker/Kisa", no: 15, matches: 16 },
+            { name: "HamKam", no: 16, matches: 16 }
+        ],
+        remainingCupContenders: [
+            "Brann",
+            "Haugesund",
+            "Lillestrøm",
+            "Molde",
+            "Odd",
+            "Sarpsborg 08",
+            "Stabæk",
+            "Viking"
         ]
     },
 

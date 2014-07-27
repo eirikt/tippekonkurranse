@@ -22,14 +22,12 @@ var env = process.env.NODE_ENV || "development",
 
 // Below, "scores" should be read as "penalty points", that's more accurate ...
 
-// TODO: spec/test/document this one?
     _getTableScore = function (predictedTeamPlacing, actualTeamPlacing) {
         "use strict";
         return Math.abs(predictedTeamPlacing - actualTeamPlacing);
     },
 
 
-// TODO: spec/test/document this one?
     _getPallScore = function (predictedTeamPlacing, actualTeamPlacing) {
         "use strict";
         var pallPenaltyPoints = 0;
@@ -46,7 +44,6 @@ var env = process.env.NODE_ENV || "development",
     },
 
 
-// TODO: spec/test/document this one?
     _getExtraPallScore = function (predictedTeamPlacing, currentPallScore) {
         "use strict";
         return predictedTeamPlacing === 4 && currentPallScore === -3 ? -1 : 0;
@@ -54,7 +51,6 @@ var env = process.env.NODE_ENV || "development",
 
 
 // TODO: reduce cyclic complexity (from 7 to 5)
-// TODO: spec/test/document this one?
     _getGroupScore = function (fromPlace, predictedTeamPlacing, actualTeamPlacing, currentGroupScore) {
         "use strict";
         if ((predictedTeamPlacing === fromPlace) &&
@@ -82,13 +78,15 @@ var env = process.env.NODE_ENV || "development",
     _getOpprykkScore = curry(_getGroupScore)(1),
 
 
-// TODO: spec/test this one!
 // TODO: Promote to proper standalone requestor function!
     /**
+     * <p>
      * Conditionally storing/updating of match round results in MongoDB.
      * This function should be curried, MongoDB callback arguments being the two last ones ...
-     *
+     * </p>
+     * <p>
      * This function is exported with underscore prefix as it is exported for specification/testing purposes only ...
+     * </p>
      * @private
      */
     _storeTippeligaRound = exports._storeTippeligaRound =
@@ -141,7 +139,7 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
-    /** App-conventional argument ordering for requestions -> composable server-side functions. */
+// App-conventional argument ordering for requestions -> composable server-side functions
     _tippeligaTable = exports.tippeligaTableIndex = 0,      // TODO: Document ...
     _tippeligaToppscorer = 1,                               // TODO: Document ...
     _adeccoligaTable = exports.adeccoligaTableIndex = 2,    // TODO: Document ...
@@ -182,7 +180,7 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
-    addTeamNumberOfMatchesPlayedGrouping = exports.addTeamNumberOfMatchesPlayedGrouping =
+    addTeamAndNumberOfMatchesPlayedGrouping = exports.addTeamAndNumberOfMatchesPlayedGrouping =
         function (args) {
             "use strict";
 
@@ -311,7 +309,7 @@ var env = process.env.NODE_ENV || "development",
 
             RQ.sequence([
                 getPreviousRoundTippeligaData,
-                rq.requestor(addTeamNumberOfMatchesPlayedGrouping),
+                rq.requestor(addTeamAndNumberOfMatchesPlayedGrouping),
                 rq.requestor(addCurrentRound),
                 addTippekonkurranseScores,
                 function (requestion, args) {

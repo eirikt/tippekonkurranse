@@ -60,11 +60,6 @@ var env = process.env.NODE_ENV || "development",
     },
 
 
-    _handleRequest = function (handleTippeligaData, request, response) {
-        "use strict";
-        return _retrieveTippeligaDataAndThenDispatchToHandler(handleTippeligaData, request, response);
-    },
-
 ////////////////////////////////////////
 // Public functions
 ////////////////////////////////////////
@@ -92,7 +87,7 @@ var env = process.env.NODE_ENV || "development",
         function (request, response) {
             "use strict";
 
-            var resultsRequest = curry(_handleRequest)(
+            var resultsRequest = curry(_retrieveTippeligaDataAndThenDispatchToHandler)(
                 RQ.sequence([
                     rq.requestor(curry(tippekonkurranse.dispatchResultsToClientForPresentation)(response)),
                     tippekonkurranse.storeTippeligaRoundMatchData
@@ -107,9 +102,9 @@ var env = process.env.NODE_ENV || "development",
         function (request, response) {
             "use strict";
 
-            var scoresRequest = curry(_handleRequest)(
+            var scoresRequest = curry(_retrieveTippeligaDataAndThenDispatchToHandler)(
                 RQ.sequence([
-                    rq.requestor(tippekonkurranse.addTeamNumberOfMatchesPlayedGrouping),
+                    rq.requestor(tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping),
                     rq.requestor(tippekonkurranse.addCurrentRound),
                     tippekonkurranse2014.addTippekonkurranseScores2014,
                     tippekonkurranse2014.addPreviousMatchRoundRatingToEachParticipant2014,
@@ -139,7 +134,7 @@ var env = process.env.NODE_ENV || "development",
                 getHistoricTippekonkurranseScores.push(
                     RQ.sequence([
                         curry(tippekonkurranse.getStoredTippeligaDataRequestory)(year)(round),
-                        rq.requestor(tippekonkurranse.addTeamNumberOfMatchesPlayedGrouping),
+                        rq.requestor(tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping),
                         rq.requestor(tippekonkurranse.addCurrentRound),
                         tippekonkurranse2014.addTippekonkurranseScores2014
                     ])
