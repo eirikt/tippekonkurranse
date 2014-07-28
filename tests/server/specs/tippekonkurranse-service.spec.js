@@ -220,7 +220,7 @@ describe("Tippekonkurranse service", function () {
                     addTippekonkurranseScores(requestion, args);
                     throw new Error("Should have thrown error");
                 } catch (e) {
-                    expect(e.message).to.be.equal("Unable to calculate scores for team 'TeamB' - probably illegal data format");
+                    expect(e.message).to.be.equal("Unable to calculate scores for team 'TeamB' for participant 'john' - probably illegal data format");
                 }
                 // TODO: Do something like this instead ...
                 //var addTippekonkurranseScores = __.bind(addTippekonkurranseScores, [{}, function () {}, {}]);

@@ -253,7 +253,7 @@ var env = process.env.NODE_ENV || "development",
                                 nedrykkScore += _getNedrykkScore(predictedTeamPlacing, actualTeamPlacing, nedrykkScore);
 
                             } catch (e) {
-                                throw new Error("Unable to calculate scores for team '" + teamName + "' - probably illegal data format");
+                                throw new Error("Unable to calculate scores for team '" + teamName + "' for participant '" + participant + "' - probably illegal data format");
                             }
                         });
 

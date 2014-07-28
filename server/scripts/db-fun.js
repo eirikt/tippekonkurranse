@@ -331,4 +331,46 @@ var dbSchema = require("./db-schema.js"),
                 });
             }
         });
+    },
+
+    persistRound16 = exports.persistRound16 = function () {
+        "use strict";
+        dbSchema.TippeligaRound.count({ year: 2014, round: 16 }, function (err, count) {
+            if (count > 0) {
+                console.log(utils.logPreamble() + "Tippeliga 2014 round #16 already exists in db");
+                if (count > 1) {
+                    console.warn(utils.logPreamble() + "Tippeliga 2014 round #16 has more than one document in db!");
+                    throw new Error("Tippeliga 2014 round #16 has more than one document in db!");
+                }
+            } else {
+                var round16 = new dbSchema.TippeligaRound();
+                for (var attr in soccerResultService.round2014016) {
+                    round16[attr] = soccerResultService.round2014016[attr];
+                }
+                round16.save(function (err, round16) {
+                    console.log(utils.logPreamble() + "Tippeliga 2014 round #16 saved... OK");
+                });
+            }
+        });
+    },
+
+    persistRound17 = exports.persistRound17 = function () {
+        "use strict";
+        dbSchema.TippeligaRound.count({ year: 2014, round: 17 }, function (err, count) {
+            if (count > 0) {
+                console.log(utils.logPreamble() + "Tippeliga 2014 round #17 already exists in db");
+                if (count > 1) {
+                    console.warn(utils.logPreamble() + "Tippeliga 2014 round #17 has more than one document in db!");
+                    throw new Error("Tippeliga 2014 round #17 has more than one document in db!");
+                }
+            } else {
+                var round17 = new dbSchema.TippeligaRound();
+                for (var attr in soccerResultService.round2014017) {
+                    round17[attr] = soccerResultService.round2014017[attr];
+                }
+                round17.save(function (err, round17) {
+                    console.log(utils.logPreamble() + "Tippeliga 2014 round #17 saved... OK");
+                });
+            }
+        });
     };
