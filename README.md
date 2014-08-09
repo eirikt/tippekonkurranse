@@ -24,14 +24,10 @@ In production [here][1].
 
 ## Version history/roadmap
 
-#### v1.2.x
-* More cool graphs and whatnot
-* Multiple draggable windows (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
-* Revisit automatic reloading of web page
-* Simple countdown timer
-* More improved Facebook URL presence (large version)
+#### v1.2.1 : _Delivery goal 12.08.2014_
+* Automatic reload when Heroku server sleeps
 
-_Status: In progress_
+_Status: In progress ..._
 
 
 #### v1.2.0 : ~~_Delivery goal 20.06.2014_~~ _Delivered 16.07.2014_
@@ -183,6 +179,14 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 
 ## Backlog
 
+#### v? : Misc.
+* Reload when timing out, e.g. due to Heroku VM instance startup delay
+* Navigating historic ratings and scores
+* More cool graphs and whatnot
+* Multiple draggable windows (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
+* Revisit automatic reloading of web page
+* Simple countdown timer
+
 #### v? : Touch/Mobile
 * Mobile app
 * Touch-friendly version, uniform finger-friendly buttons
@@ -198,6 +202,7 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 #### v? : Some kind of Facebook integration
 * User images
 * Better Facebook URL presence: see http://stackoverflow.com/questions/1138460/how-does-facebook-sharer-select-images?lq=1
+* More improved Facebook URL presence (large version)
 * Inline presentation of tippekonkurranse standings ...
 * Create Facebook custom story? (see https://developers.facebook.com/docs/opengraph)
 

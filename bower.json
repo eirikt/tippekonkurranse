@@ -5,8 +5,8 @@
         "bootstrap": "~3.1.1",
         "font-awesome": "~4.0.3",
         "backbone": "~1.1.2",
-        "moment": "~2.5.1",
-        "toastr": "~2.0.2",
+        "moment": "~2.8.1",
+        "toastr": "~2.0.3",
         "jqplot-bower": "~1.0.8"
     }
 }

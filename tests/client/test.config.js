@@ -3,12 +3,12 @@ require.config({
     baseUrl: '.',
     nodeRequire: require,
     paths: {
-        jquery: '../../build/bower_components/jquery/dist/jquery',
-        underscore: '../../build/bower_components/underscore/underscore',
-        backbone: '../../build/bower_components/backbone/backbone',
-        moment: '../../build/bower_components/moment/moment',
-        'moment.nb': '../../build/bower_components/moment/lang/nb',
-        toastr: '../../build/bower_components/toastr/toastr',
+        'jquery': '../../build/bower_components/jquery/dist/jquery',
+        'underscore': '../../build/bower_components/underscore/underscore',
+        'backbone': '../../build/bower_components/backbone/backbone',
+        'moment': '../../build/bower_components/moment/moment',
+        'moment.nb': '../../build/bower_components/moment/locale/nb',
+        'toastr': '../../build/bower_components/toastr/toastr',
 
         chai: '../../node_modules/chai/chai',
         sinon: '../../node_modules/sinon/pkg/sinon',

@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# v1.2.0.4
+# v1.2.1
 
 CACHE:
 favicon.ico
@@ -20,13 +20,10 @@ bower_components/underscore/underscore.js
 bower_components/backbone/backbone.js
 bower_components/jquery/dist/jquery.min.js
 bower_components/moment/min/moment.min.js
-bower_components/moment/lang/nb.js
+bower_components/moment/locale/nb.js
 bower_components/bootstrap/dist/js/bootstrap.min.js
 bower_components/toastr/toastr.min.js
 bower_components/jqplot-bower/dist/jquery.jqplot.min.js
-
-
-
 
 scripts/fun.js
 scripts/string-extensions.js
