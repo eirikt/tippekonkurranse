@@ -1,4 +1,4 @@
-/* global  describe:false, it:false */
+/* global describe:false, it:false */
 /* jshint -W030 */
 
 var __ = require("../../../node_modules/underscore/underscore.js"),
@@ -11,6 +11,7 @@ var __ = require("../../../node_modules/underscore/underscore.js"),
 
     tippeligaTableIndex = require("../../../server/scripts/tippekonkurranse.js").tippeligaTableIndex,
     adeccoligaTableIndex = require("../../../server/scripts/tippekonkurranse.js").adeccoligaTableIndex,
+    serverSideProcessingArgumentCount = require("../../../server/scripts/tippekonkurranse.js").argumentCount,
     scoresIndex = require("../../../server/scripts/tippekonkurranse.js").scoresIndex,
     addTippekonkurranseScoresRequestion = require("../../../server/scripts/tippekonkurranse.js").addTippekonkurranseScoresRequestor,
 
@@ -78,7 +79,7 @@ describe("Tippekonkurranse service", function () {
                 expect(addTippekonkurranseScores(requestion, args)).to.exist;
                 expect(addTippekonkurranseScores(requestion, args)).to.be.an.object;
                 expect(addTippekonkurranseScores(requestion, args)).to.not.be.an.empty.object;
-                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(9);
+                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(serverSideProcessingArgumentCount);
 
                 expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.exist;
                 expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.be.an.object;
@@ -97,7 +98,7 @@ describe("Tippekonkurranse service", function () {
                 expect(addTippekonkurranseScores(requestion, args)).to.exist;
                 expect(addTippekonkurranseScores(requestion, args)).to.be.an.object;
                 expect(addTippekonkurranseScores(requestion, args)).to.not.be.an.empty.object;
-                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(9);
+                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(serverSideProcessingArgumentCount);
 
                 expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.exist;
                 expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.be.an.object;
@@ -123,7 +124,7 @@ describe("Tippekonkurranse service", function () {
                 expect(addTippekonkurranseScores(requestion, args)).to.exist;
                 expect(addTippekonkurranseScores(requestion, args)).to.be.an.object;
                 expect(addTippekonkurranseScores(requestion, args)).to.not.be.an.empty.object;
-                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(9);
+                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(serverSideProcessingArgumentCount);
 
                 expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.exist;
                 expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.be.an.object;
@@ -151,7 +152,7 @@ describe("Tippekonkurranse service", function () {
                 expect(addTippekonkurranseScores(requestion, args)).to.exist;
                 expect(addTippekonkurranseScores(requestion, args)).to.be.an.object;
                 expect(addTippekonkurranseScores(requestion, args)).to.not.be.an.empty.object;
-                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(9);
+                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(serverSideProcessingArgumentCount);
 
                 expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.exist;
                 expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.be.an.object;
@@ -182,7 +183,7 @@ describe("Tippekonkurranse service", function () {
                 expect(addTippekonkurranseScores(requestion, args)).to.exist;
                 expect(addTippekonkurranseScores(requestion, args)).to.be.an.object;
                 expect(addTippekonkurranseScores(requestion, args)).to.not.be.an.empty.object;
-                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(9);
+                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(serverSideProcessingArgumentCount);
 
                 expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.exist;
                 expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.be.an.object;
@@ -200,7 +201,7 @@ describe("Tippekonkurranse service", function () {
             it("should throw error if retrieved table data deviates from user prediction data", function () {
                 var userPredictions = {
                         john: {
-                            tabell:  ["TeamA", "TeamB"],
+                            tabell: ["TeamA", "TeamB"],
                             toppscorer: null,
                             opprykk: null,
                             cup: null

@@ -70,4 +70,6 @@ dbData.persistRound13();
 dbData.persistRound14();
 dbData.persistRound15();
 dbData.persistRound16();
-//dbData.persistRound17();
+dbData.persistRound17();
+dbData.persistRound18();
+dbData.persistRound19();

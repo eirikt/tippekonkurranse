@@ -155,7 +155,7 @@ define([
                     '</tr>' +
                     '</thead>' +
 
-                    // All participant data here
+                    // All participant data in here
                     '<tbody></tbody>' +
 
                     '</table>'
@@ -203,6 +203,7 @@ define([
                     currentRound = this.collection.at(0).get("round");
 
                 this.$el.empty().append(this.template());
+
                 if (Client.isTouchDevice()) {
                     this.$("table").removeClass("table-hover");
                 }

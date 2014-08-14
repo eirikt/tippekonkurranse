@@ -3,7 +3,6 @@
  */
 @import url(http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700,300,300italic);
 
-
 /* Not suited for offline/AppCache usage ...
 @font-face {
     font-family: 'Open Sans Condensed';
@@ -12,7 +11,6 @@
     font-style: normal;
 }
 */
-
 
 /**
  * Base
@@ -32,7 +30,6 @@ hr {
 a:hover, a:visited, a:link, a:active {
     text-decoration: none;
 }
-
 
 /**
  * Bootstrap overrides
@@ -61,29 +58,32 @@ h2, .h2 {
     background-image: linear-gradient(to bottom right, #ffffff 0%, #f96e00 75%);
 }
 
+/**
+ * Other classes
+ */
+.x-large {
+    font-size: x-large;
+}
+
+/* Flexbox: http://css-tricks.com/snippets/css/a-guide-to-flexbox */
+.full-width-inline-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+}
 
 /**
- * Other content
+ * Specific element manipulations
  */
-#content {
-    padding-top: 1rem;
-    padding-bottom: .5rem;
+#fullscreen {
+    margin-right: 4rem;
+    -o-transform: translate(2.5rem, -2rem);
+    -moz-transform: translate(2.5rem, -2rem);
+    -webkit-transform: translate(2.5rem, -2rem);
+    -ms-transform: translate(2.5rem, -2rem);
 }
-
-/* TODO: ...
-.my-transform {
-    transform: scale(1.5);
-    transform-origin: 0% 0%;
-    -webkit-transform: scaleX(1.5);
-    -webkit-transform: scaleY(0.5);
-    -webkit-transform-origin: 0% 0%;
-}
-
-.my-slide-in-effect {
-    opacity: 0.5;
-}
-*/
-
 
 /**
  *  Module           : Font Awesome icons
@@ -132,6 +132,23 @@ h2, .h2 {
     color: red;
 }
 
+.icon-chevron-left::before {
+    font-family: FontAwesome, sans-serif;
+    content: "\f053";
+    color: dimgrey;
+}
+
+.icon-chevron-right::before {
+    font-family: FontAwesome, sans-serif;
+    content: "\f054";
+    color: dimgrey;
+}
+
+.icon-arrows-alt::before {
+    font-family: FontAwesome, sans-serif;
+    content: "\f0b2";
+}
+
 .icon-trophy-gold::before {
     font-family: FontAwesome, sans-serif;
     content: "\f091";
@@ -149,7 +166,6 @@ h2, .h2 {
     content: "\f091";
     color: #cd7f32;
 }
-
 
 /**
  *  Module           : Debug

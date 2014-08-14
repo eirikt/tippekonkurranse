@@ -1,13 +1,12 @@
 /* global define:false, console:false, $:false */
-
 define([
         'jquery', 'underscore', 'backbone',
         'utils',
         'app.models',
         'app.result-collection', 'app.rating-history-collection',
-        'app.header-view', 'app.results-view', 'app.rating-history-view'],
+        'app.header-view', 'app.results-view', 'app.results-carousel-view', 'app.rating-history-view'],
 
-    function ($, _, Backbone, Please, App, CurrentScoresCollection, HistoricScoresCollection, HeaderView, CurrentScoresView, RatingHistoryView) {
+    function ($, _, Backbone, Please, App, CurrentScoresCollection, HistoricScoresCollection, HeaderView, CurrentScoresView, RoundCarouselView, RatingHistoryView) {
         'use strict';
 
         return Backbone.Router.extend({
@@ -28,7 +27,11 @@ define([
                         collection: results
                     }),
                     resultsView = new CurrentScoresView({
-                        el: '#content',
+                        el: '#content1',
+                        collection: results
+                    }),
+                    roundCarouselView = new RoundCarouselView({
+                        el: '#content2',
                         collection: results
                     });
 
@@ -36,8 +39,9 @@ define([
 
                 $('header').removeClass('hidden');
                 $('#ratingHistory').empty().css({ height: 0 });
-                $('#content').empty();
-                $('#intro').remove();
+                $('#content1').empty();
+                $('#content2').empty();
+                $('#splashscreen').remove();
                 $('footer').removeClass('hidden');
             },
 
@@ -52,13 +56,19 @@ define([
                         collection: results
                     }),
                     resultsView = new CurrentScoresView({
-                        el: '#content',
+                        el: '#content1',
+                        collection: results
+                    }),
+                    roundCarouselView = new RoundCarouselView({
+                        el: '#content2',
                         collection: results
                     });
 
                 results.fetch({ reset: true });
 
+                $('header').removeClass('hidden');
                 $('#ratingHistory').empty().css({ height: 0 });
+                $('#splashscreen').remove();
             },
 
 
@@ -82,8 +92,9 @@ define([
 
                 $('header').removeClass('hidden');
                 $('#ratingHistory').removeClass('hidden');
-                $('#content').empty();
-                $('#intro').remove();
+                $('#content1').empty();
+                $('#content2').empty();
+                $('#splashscreen').remove();
                 $('footer').removeClass('hidden');
             },
 
@@ -91,7 +102,7 @@ define([
             defaultAction: function () {
                 var self = this;
                 Please.wait(1650).then(function () {
-                    $('#intro').hide('slow', self.showCurrentScores);
+                    $('#splashscreen').hide('slow', self.showCurrentScores);
                 });
             }
         });

@@ -1,5 +1,5 @@
 /* global define:false */
-
+/* jshint -W031 */
 define([
         'jquery', 'underscore', 'backbone', 'bootstrap', 'toastr',
         'backbone.fetch-local-copy', 'app.router'],
@@ -17,7 +17,7 @@ define([
         $(document).ready(function () {
             console.log('DOM ready! Starting ...');
 
-            var appRouter = new AppRouter();
+            new AppRouter();
 
             Backbone.history.start({
                 pushState: false,

@@ -140,41 +140,59 @@ var env = process.env.NODE_ENV || "development",
 
 
 // App-conventional argument ordering for requestions -> composable server-side functions
-    _tippeligaTable = exports.tippeligaTableIndex = 0,      // TODO: Document ...
-    _tippeligaToppscorer = 1,                               // TODO: Document ...
-    _adeccoligaTable = exports.adeccoligaTableIndex = 2,    // TODO: Document ...
-    _remainingCupContenders = 3,                            // TODO: Document ...
+    _argumentCount = exports.argumentCount = 12,            // Number of arguments in server-side processing pipeline
 
-    _year = 4,                                              // TODO: Document ...
-    _round = exports.roundIndex = 5,                        // TODO: Document ...
-    _date = 6,                                              // TODO: Document ...
-    _matchesCountGrouping = 7,                              // TODO: Document ...
-    _scores = exports.scoresIndex = 8,                      // Object with properties 'scores' and 'metadata'
+    _liveData = exports.liveData = 0,                       // Live or historic Tippeliga data
+
+    _tippeligaTable = exports.tippeligaTableIndex = 1,      // TODO: Document ...
+    _tippeligaToppscorer = 2,                               // TODO: Document ...
+    _adeccoligaTable = exports.adeccoligaTableIndex = 3,    // TODO: Document ...
+    _remainingCupContenders = 4,                            // TODO: Document ...
+
+    _year = 5,                                              // TODO: Document ...
+    _round = exports.roundIndex = 6,                        // TODO: Document ...
+    _date = 7,                                              // TODO: Document ...
+    _currentYear = 8,                                       // This year (not the requested year)
+    _currentRound = 9,                                      // The latest round (not the requested round)
+
+    _matchesCountGrouping = 10,                             // TODO: Document ...
+    _scores = exports.scoresIndex = 11,                     // Object with properties 'scores' and 'metadata'
 
 
     getStoredTippeligaDataRequestory = exports.getStoredTippeligaDataRequestory =
         function (year, round, requestion, args) {
             "use strict";
-            dbSchema.TippeligaRound.findOne({ year: year, round: round }).exec(
-                function (err, tippeligaRound) {
+            var liveData = false;
+            dbSchema.TippeligaRound.find({ year: year }).exec(
+                function (err, allTippeligaRounds) {
                     if (err) {
                         return requestion(undefined, err);
                     }
-                    // TODO: Return custom requestion error?
-                    if (!tippeligaRound) {
-                        return requestion([]);
-                    }
-                    return requestion([
-                        tippeligaRound.tippeliga,
-                        tippeligaRound.toppscorer,
-                        tippeligaRound.adeccoliga,
-                        tippeligaRound.remainingCupContenders,
-                        tippeligaRound.year,
-                        tippeligaRound.round,
-                        tippeligaRound.date,
-                        null,
-                        null
-                    ]);
+                    dbSchema.TippeligaRound.findOne({ year: year, round: round }).exec(
+                        function (err, tippeligaRound) {
+                            if (err) {
+                                return requestion(undefined, err);
+                            }
+                            // TODO: Return custom requestion error?
+                            if (!tippeligaRound) {
+                                return requestion([]);
+                            }
+                            return requestion([
+                                liveData,
+                                tippeligaRound.tippeliga,
+                                tippeligaRound.toppscorer,
+                                tippeligaRound.adeccoliga,
+                                tippeligaRound.remainingCupContenders,
+                                tippeligaRound.year,
+                                tippeligaRound.round,
+                                tippeligaRound.date,
+                                new Date().getFullYear(),
+                                allTippeligaRounds.length,
+                                null,
+                                null
+                            ]);
+                        }
+                    );
                 }
             );
         },
@@ -192,12 +210,28 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
-    addCurrentRound = exports.addCurrentRound = function (args) {
-        "use strict";
-        var allMatchRoundsPresentInCurrentTippeligaTable = __.keys(args[_matchesCountGrouping]);
-        args[_round] = Math.max.apply(null, allMatchRoundsPresentInCurrentTippeligaTable);
-        return args;
-    },
+    addRound = exports.addRound =
+        function (args) {
+            "use strict";
+            if (!args[_round]) {
+                var allMatchRoundsPresentInCurrentTippeligaTable = __.keys(args[_matchesCountGrouping]);
+                args[_round] = Math.max.apply(null, allMatchRoundsPresentInCurrentTippeligaTable);
+            }
+            return args;
+        },
+
+
+    addCurrent = exports.addCurrent =
+        function (args) {
+            "use strict";
+            if (!args[_currentRound]) {
+                // Historic data already set in 'getStoredTippeligaDataRequestory' function
+                if (args[_liveData]) {
+                    args[_currentRound] = args[_round];
+                }
+            }
+            return args;
+        },
 
 
     addTippekonkurranseScoresRequestor = exports.addTippekonkurranseScoresRequestor =
@@ -307,24 +341,29 @@ var env = process.env.NODE_ENV || "development",
                 parentRequestion = requestion,
                 parentArgs = args;
 
-            RQ.sequence([
-                getPreviousRoundTippeligaData,
-                rq.requestor(addTeamAndNumberOfMatchesPlayedGrouping),
-                rq.requestor(addCurrentRound),
-                addTippekonkurranseScores,
-                function (requestion, args) {
-                    for (var participant in updatedScores) {
-                        if (updatedScores.hasOwnProperty(participant)) {
-                            updatedScores[participant][appModels.scoreModel.previousRatingPropertyName] = args[_scores].scores[participant][appModels.scoreModel.ratingPropertyName];
+            if (previousRound <= 0) {
+                return requestion(args);
+
+            } else {
+                RQ.sequence([
+                    getPreviousRoundTippeligaData,
+                    rq.requestor(addTeamAndNumberOfMatchesPlayedGrouping),
+                    rq.requestor(addRound),
+                    addTippekonkurranseScores,
+                    function (requestion, args) {
+                        for (var participant in updatedScores) {
+                            if (updatedScores.hasOwnProperty(participant)) {
+                                updatedScores[participant][appModels.scoreModel.previousRatingPropertyName] = args[_scores].scores[participant][appModels.scoreModel.ratingPropertyName];
+                            }
                         }
+                        return requestion(args);
+                    },
+                    function (requestion, args) {
+                        parentArgs[_scores].scores = updatedScores;
+                        return parentRequestion(parentArgs);
                     }
-                    return requestion(args);
-                },
-                function (requestion, args) {
-                    parentArgs[_scores].scores = updatedScores;
-                    return parentRequestion(parentArgs);
-                }
-            ])(go);
+                ])(go);
+            }
         },
 
 
@@ -332,8 +371,12 @@ var env = process.env.NODE_ENV || "development",
         function (args) {
             "use strict";
             args[_scores].metadata = {
+                live: args[_liveData],
                 year: args[_year],
-                round: args[_round]
+                round: args[_round],
+                date: args[_date],
+                currentYear: args[_currentYear],
+                currentRound: args[_currentRound]
             };
             return args;
         },
@@ -385,7 +428,7 @@ var env = process.env.NODE_ENV || "development",
         function (propertyNameOrFunc, args) {
             "use strict";
             // TODO: Create common argument-checking functions
-            // TODO: Keep this argument-checking seremony at all ...
+            // TODO: Do I want to keep this argument-checking ceremony at all?
             if (!propertyNameOrFunc && propertyNameOrFunc !== 0) {
                 throw new Error("Property name or getter function argument are missing - cannot sort");
             }

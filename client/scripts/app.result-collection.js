@@ -110,6 +110,12 @@ define([
             },
 
             parse: function (response) {
+                this.year = response.metadata.year;
+                this.round = response.metadata.round;
+                this.date = response.metadata.date;
+                this.currentYear = response.metadata.currentYear;
+                this.currentRound = response.metadata.currentRound;
+
                 for (var participant in response.scores) {
                     if (response.scores.hasOwnProperty(participant)) {
                         var participantScore = new this.model(response.scores[participant]);

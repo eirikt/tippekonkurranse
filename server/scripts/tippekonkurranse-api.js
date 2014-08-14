@@ -23,7 +23,8 @@ var env = process.env.NODE_ENV || "development",
 
     _retrieveTippeligaDataAndThenDispatchToHandler = function (handleTippeligaData, request, response) {
         "use strict";
-        var year = request.params.year || new Date().getFullYear(),
+        var liveData = true,
+            year = request.params.year,
             round = request.params.round;
 
         // Override with stored Tippeliga data => for statistics/history/development ...
@@ -34,22 +35,26 @@ var env = process.env.NODE_ENV || "development",
             }
         }
 
-        if (round) {
+        if (year && round) {
             RQ.sequence([
                 curry(tippekonkurranse.getStoredTippeligaDataRequestory)(year)(round),
                 handleTippeligaData
             ])(go);
 
         } else {
+            var now = new Date();
             RQ.sequence([
                 RQ.parallel([
                     // The 'Tippekonkurranse' app-conventional argument ordering for requestions:
+                    rq.identity(liveData),
                     norwegianSoccerLeagueService.getCurrentTippeligaTable,
                     norwegianSoccerLeagueService.getCurrentTippeligaToppscorer,
                     norwegianSoccerLeagueService.getCurrentAdeccoligaTable,
                     norwegianSoccerLeagueService.getCurrentRemainingCupContenders,
-                    rq.identity(year),
+                    rq.identity(now.getFullYear()),
                     rq.nullArg,
+                    rq.identity(now),
+                    rq.identity(now.getFullYear()),
                     rq.nullArg,
                     rq.nullArg,
                     rq.nullArg
@@ -69,14 +74,13 @@ var env = process.env.NODE_ENV || "development",
             "use strict";
 
             var year = parseInt(request.params.year, 10),
-                userId = request.params.userId,
-                predictions = null;
+                userId = request.params.userId;
 
             // TODO:
             //predictions = predictions[year][userId];
             if (year === 2014) {
-                predictions = predictions2014[userId];
-                response.json(200, predictions);
+                response.status(200).json(predictions2014[userId]);
+
             } else {
                 response.json(404);
             }
@@ -105,7 +109,8 @@ var env = process.env.NODE_ENV || "development",
             var scoresRequest = curry(_retrieveTippeligaDataAndThenDispatchToHandler)(
                 RQ.sequence([
                     rq.requestor(tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping),
-                    rq.requestor(tippekonkurranse.addCurrentRound),
+                    rq.requestor(tippekonkurranse.addRound),
+                    rq.requestor(tippekonkurranse.addCurrent),
                     tippekonkurranse2014.addTippekonkurranseScores2014,
                     tippekonkurranse2014.addPreviousMatchRoundRatingToEachParticipant2014,
                     rq.requestor(tippekonkurranse.addMetadataToScores),
@@ -122,20 +127,20 @@ var env = process.env.NODE_ENV || "development",
         function (request, response) {
             "use strict";
             var year = request.params.year || new Date().getFullYear(),
-                currentRound = request.params.round,
+                round = request.params.round,
 
-                round,
+                roundIndex,
                 data = {},
 
                 getHistoricTippekonkurranseScores = [];
 
             // 1. Create array of requestors: all historic Tippeligakonkurranse scores
-            for (round = 1; round <= currentRound; round += 1) {
+            for (roundIndex = 1; roundIndex <= round; roundIndex += 1) {
                 getHistoricTippekonkurranseScores.push(
                     RQ.sequence([
-                        curry(tippekonkurranse.getStoredTippeligaDataRequestory)(year)(round),
+                        curry(tippekonkurranse.getStoredTippeligaDataRequestory)(year)(roundIndex),
                         rq.requestor(tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping),
-                        rq.requestor(tippekonkurranse.addCurrentRound),
+                        rq.requestor(tippekonkurranse.addRound),
                         tippekonkurranse2014.addTippekonkurranseScores2014
                     ])
                 );

@@ -1,6 +1,6 @@
 {
     "name": "Tippekonkurranse",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "description": "A simple Node-based screen-scrapin' web application hosted on Heroku",
     "author": "Eirik Torske <eirik.torske@gmail.com>",
     "license": "MIT",
@@ -19,7 +19,7 @@
         "curry": "~1.2.0",
         "mongodb": "~1.4.7",
         "mongoose": "~3.8.13",
-        "express": "~4.7.2",
+        "express": "~4.8.2",
         "request": "~2.40.0",
         "cheerio": "~0.15.0",
         "moment": "~2.8.1",
@@ -49,7 +49,7 @@
         "grunt-contrib-watch": "~0.6.1"
     },
     "engines": {
-        "node": "0.10.28"
+        "node": "0.10.30"
     },
     "scripts": {
         "postinstall": "npm install grunt-cli",

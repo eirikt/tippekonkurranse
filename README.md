@@ -24,10 +24,12 @@ In production [here][1].
 
 ## Version history/roadmap
 
-#### v1.2.1 : _Delivery goal 12.08.2014_
-* Automatic reload when Heroku server sleeps
+#### v1.2.1 : _Delivery goal 14.08.2014_
+* Navigating (via time-line) historic ratings and scores
+* Full screen option (very nice for touch devices, I guess)
+* Automatic reload when Heroku single-dyno server sleeps/restart
 
-_Status: In progress ..._
+_Status: Done_
 
 
 #### v1.2.0 : ~~_Delivery goal 20.06.2014_~~ _Delivered 16.07.2014_
@@ -180,15 +182,14 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 ## Backlog
 
 #### v? : Misc.
-* Reload when timing out, e.g. due to Heroku VM instance startup delay
-* Navigating historic ratings and scores
 * More cool graphs and whatnot
 * Multiple draggable windows (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
 * Revisit automatic reloading of web page
 * Simple countdown timer
+* Show 'Gjeldende resultater' contextual to what round is actively chosen, as done with 'Trend'
 
 #### v? : Touch/Mobile
-* Mobile app
+* Mobile app, using Apache Cordova or something
 * Touch-friendly version, uniform finger-friendly buttons
 * ~~Touch-device aware => remove striping~~ Done!
 * ~~Small-screen-friendly version ...~~ Seems to be just fine
