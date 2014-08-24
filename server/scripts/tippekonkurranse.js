@@ -173,9 +173,10 @@ var env = process.env.NODE_ENV || "development",
                             if (err) {
                                 return requestion(undefined, err);
                             }
-                            // TODO: Return custom requestion error?
                             if (!tippeligaRound) {
-                                return requestion([]);
+                                //return requestion([]);
+                                // TODO: Do something a bit more clever! Return custom requestion error? Redirect to latest completed round?
+                                return requestion(undefined, "No data for round"); // => Blank screen ...
                             }
                             return requestion([
                                 liveData,

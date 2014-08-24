@@ -26,7 +26,9 @@ In production [here][1].
 
 #### v1.2.1 : _Delivery goal 14.08.2014_
 * Navigating (via time-line) historic ratings and scores
-* Full screen option (very nice for touch devices, I guess)
+* ~~Full screen option
+  (Not supported in iOS, neither by Safari nor Chrome -> iPad useless :-\)
+  (Not supported by Android Browser and scrolling disabled for Android Chrome it seems -> Android useless :-\)~~
 * Automatic reload when Heroku single-dyno server sleeps/restart
 
 _Status: Done_

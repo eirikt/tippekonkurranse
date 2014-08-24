@@ -23,7 +23,7 @@ var env = process.env.NODE_ENV || "development",
 
     _retrieveTippeligaDataAndThenDispatchToHandler = function (handleTippeligaData, request, response) {
         "use strict";
-        var liveData = true,
+        var useLiveData = true,
             year = request.params.year,
             round = request.params.round;
 
@@ -46,7 +46,7 @@ var env = process.env.NODE_ENV || "development",
             RQ.sequence([
                 RQ.parallel([
                     // The 'Tippekonkurranse' app-conventional argument ordering for requestions:
-                    rq.identity(liveData),
+                    rq.identity(useLiveData),
                     norwegianSoccerLeagueService.getCurrentTippeligaTable,
                     norwegianSoccerLeagueService.getCurrentTippeligaToppscorer,
                     norwegianSoccerLeagueService.getCurrentAdeccoligaTable,

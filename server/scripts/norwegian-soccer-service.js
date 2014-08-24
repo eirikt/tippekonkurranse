@@ -1285,6 +1285,110 @@ var __ = require("underscore"),
     },
 
 
+    _dataForRound2014020 = exports.round2014020 = {
+        year: 2014,
+        round: 20,
+        date: "2014-08-17",
+        tippeliga: [
+            { name: "Molde", no: 1, matches: 20 },
+            { name: "Odd", no: 2, matches: 20 },
+            { name: "Strømsgodset", no: 3, matches: 20 },
+            { name: "Rosenborg", no: 4, matches: 20 },
+            { name: "Vålerenga", no: 5, matches: 20 },
+            { name: "Lillestrøm", no: 6, matches: 20 },
+            { name: "Viking", no: 7, matches: 20 },
+            { name: "Sarpsborg 08", no: 8, matches: 20 },
+            { name: "Stabæk", no: 9, matches: 20 },
+            { name: "Bodø/Glimt", no: 10, matches: 20 },
+            { name: "Start", no: 11, matches: 20 },
+            { name: "Haugesund", no: 12, matches: 20 },
+            { name: "Aalesund", no: 13, matches: 20 },
+            { name: "Sogndal", no: 14, matches: 20 },
+            { name: "Brann", no: 15, matches: 20 },
+            { name: "Sandnes Ulf", no: 16, matches: 20 }
+        ],
+        toppscorer: [
+            "Vidar Örn Kjartansson"
+        ],
+        adeccoliga: [
+            { name: "Sandefjord", no: 1, matches: 20 },
+            { name: "Tromsø", no: 2, matches: 19 },
+            { name: "Mjøndalen", no: 3, matches: 19 },
+            { name: "Ranheim", no: 4, matches: 20 },
+            { name: "Fredrikstad", no: 5, matches: 20 },
+            { name: "Bærum", no: 6, matches: 20 },
+            { name: "Kristiansund BK", no: 7, matches: 20 },
+            { name: "Nest-Sotra", no: 8, matches: 20 },
+            { name: "Strømmen", no: 9, matches: 20 },
+            { name: "Hødd", no: 10, matches: 20 },
+            { name: "Bryne", no: 11, matches: 20 },
+            { name: "Alta", no: 12, matches: 20 },
+            { name: "Hønefoss", no: 13, matches: 20 },
+            { name: "Tromsdalen", no: 14, matches: 20 },
+            { name: "Ullensaker/Kisa", no: 15, matches: 20 },
+            { name: "HamKam", no: 16, matches: 20 }
+        ],
+        remainingCupContenders: [
+            "Molde",
+            "Odd",
+            "Sarpsborg 08",
+            "Stabæk"
+        ]
+    },
+
+
+    _dataForRound2014021 = exports.round2014021 = {
+        year: 2014,
+        round: 21,
+        date: "2014-08-24",
+        tippeliga: [
+            { name: "Molde", no: 1, matches: 21 },
+            { name: "Odd", no: 2, matches: 21 },
+            { name: "Strømsgodset", no: 3, matches: 21 },
+            { name: "Rosenborg", no: 4, matches: 21 },
+            { name: "Lillestrøm", no: 5, matches: 21 },
+            { name: "Vålerenga", no: 6, matches: 21 },
+            { name: "Viking", no: 7, matches: 21 },
+            { name: "Stabæk", no: 8, matches: 21 },
+            { name: "Bodø/Glimt", no: 9, matches: 21 },
+            { name: "Sarpsborg 08", no: 10, matches: 21 },
+            { name: "Start", no: 11, matches: 21 },
+            { name: "Haugesund", no: 12, matches: 21 },
+            { name: "Aalesund", no: 13, matches: 21 },
+            { name: "Sogndal", no: 14, matches: 21 },
+            { name: "Brann", no: 15, matches: 21 },
+            { name: "Sandnes Ulf", no: 16, matches: 21 }
+        ],
+        toppscorer: [
+            "Vidar Örn Kjartansson"
+        ],
+        adeccoliga: [
+            { name: "Sandefjord", no: 1, matches: 20 },
+            { name: "Tromsø", no: 2, matches: 19 },
+            { name: "Mjøndalen", no: 3, matches: 19 },
+            { name: "Ranheim", no: 4, matches: 20 },
+            { name: "Fredrikstad", no: 5, matches: 20 },
+            { name: "Bærum", no: 6, matches: 20 },
+            { name: "Kristiansund BK", no: 7, matches: 20 },
+            { name: "Nest-Sotra", no: 8, matches: 20 },
+            { name: "Strømmen", no: 9, matches: 20 },
+            { name: "Hødd", no: 10, matches: 20 },
+            { name: "Bryne", no: 11, matches: 20 },
+            { name: "Alta", no: 12, matches: 20 },
+            { name: "Hønefoss", no: 13, matches: 20 },
+            { name: "Tromsdalen", no: 14, matches: 20 },
+            { name: "Ullensaker/Kisa", no: 15, matches: 20 },
+            { name: "HamKam", no: 16, matches: 20 }
+        ],
+        remainingCupContenders: [
+            "Molde",
+            "Odd",
+            "Sarpsborg 08",
+            "Stabæk"
+        ]
+    },
+
+
     _getTippeligaTable2013 = exports.getTippeligaTable2013 = function () {
         "use strict";
         return [

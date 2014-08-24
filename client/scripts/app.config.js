@@ -8,11 +8,10 @@ require.config({
         'moment': '../bower_components/moment/min/moment.min',
         'moment.nb': '../bower_components/moment/locale/nb',
         'toastr': '../bower_components/toastr/toastr.min',
-        'jqplot': '../bower_components/jqplot-bower/dist/jquery.jqplot.min',
+        'jqplot': '../bower_components/jqplot-bower/dist/jquery.jqplot.min'//,
         //'jqplot.highlighter': '../bower_components/jqplot-bower/dist/plugins/jqplot.highlighter.min',
         //'jqplot.cursor': '../bower_components/jqplot-bower/dist/plugins/jqplot.cursor.min',
         //'jqplot.dateAxisRenderer': '../bower_components/jqplot-bower/dist/plugins/jqplot.dateAxisRenderer.min'
-        'screenfull': '../bower_components/screenfull/dist/screenfull.min'
     },
     shim: {
         'bootstrap': {
@@ -22,7 +21,7 @@ require.config({
         'jqplot': {
             deps: ['jquery'],
             exports: 'jqplot'
-        },
+        }//,
         //'jqplot.highlighter': {
         //    deps: ['jquery', 'jqplot'],
         //    exports: 'jqplot.highlighter'
@@ -35,17 +34,12 @@ require.config({
         //    deps: ['jquery', 'jqplot'],
         //    exports: 'jqplot.dateAxisRenderer'
         //}
-        'screenfull': {
-            deps: [],
-            exports: 'screenfull'
-        }//,
     }
 });
 
 // Load and execute these
 require(['app', 'jqplot']);
-//require(['app', 'jqplot', 'screenfull']);
-//require(['app', 'jqplot', 'screenfull', 'jqplot.highlighter', 'jqplot.cursor', 'jqplot.dateAxisRenderer']);
+//require(['app', 'jqplot', 'jqplot.highlighter', 'jqplot.cursor', 'jqplot.dateAxisRenderer']);
 
 // Listen to window errors: remedy for Heroku instances sleeping/warm-up
 window.onerror = function (message, url, lineNumber) {

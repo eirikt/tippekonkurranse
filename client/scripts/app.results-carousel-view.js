@@ -8,7 +8,7 @@ define([
         return Backbone.View.extend({
 
             template: _.template(
-                '<div id="scoresCarousel" class="x-large full-width-inline-list" style="margin-top:1rem;"></div>'
+                '<div id="scoresCarousel" class="x-large full-width-inline-list" style="margin-left:2rem;margin-top:1rem;"></div>'
             ),
 
             initialize: function () {
