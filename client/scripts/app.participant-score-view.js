@@ -10,7 +10,8 @@ define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soc
                     '<span class="tendency-arrow"></span>' +
                     '<small>&nbsp;<%= rankDiff %></small>'
             ),
-            // TODO: reduce cyclic complexity (from 8 to 5)
+            // Do not see any particular complexity problems with this one ...
+            /* jshint -W074 */
             render: function () {
                 if (!this.model[ParticipantScore.previousRankPropertyName]) {
                     return this;

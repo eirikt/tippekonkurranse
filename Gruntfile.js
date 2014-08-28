@@ -144,7 +144,7 @@ module.exports = function (grunt) {
                 maxparams: 14,
                 maxdepth: 5,
                 maxstatements: 30,
-                maxcomplexity: 20, // TODO: Bring this down to... let's say 5 - YES, REALLY!
+                maxcomplexity: 7, // TODO: Bring this down to... let's say 5 - YES, REALLY!
                 //maxlen: 180,
 
                 laxcomma: true
@@ -278,6 +278,7 @@ module.exports = function (grunt) {
         }
     });
 
+
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -293,18 +294,19 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-blanket-mocha');
     grunt.loadNpmTasks('grunt-jsdoc');
 
+
     grunt.registerTask('help', ['shell:help']);
     grunt.registerTask('install:client', ['shell:install-client']);
     grunt.registerTask('mongodb', ['shell:createDataDir', 'shell:mongod']);
 
     grunt.registerTask('build:client', ['clean', 'copy:to-client', 'copy:to-build', 'uglify', 'cssmin']);
-    // TODO: grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', 'blanket_mocha', 'mochacov:travis']);
-    grunt.registerTask('build:travis', ['test', 'jshint', /*'jsdoc',*/ 'mochacov:travis']);
 
     grunt.registerTask('test:client', ['connect', 'shell:mocha-phantomjs']);
     grunt.registerTask('test:server', ['mochaTest']);
     grunt.registerTask('coverage:server', ['mochacov:report']);
     grunt.registerTask('test', ['install:client', 'build:client', 'test:server', 'test:client']);
+
+    grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', /*'blanket_mocha',*/ 'mochacov:travis']);
 
     grunt.registerTask('deploy:development', ['env:dev', 'install:client', 'copy:to-client', 'shell:run']);
     grunt.registerTask('deploy:local', ['env:prod', 'install:client', 'build:client', 'shell:run']);

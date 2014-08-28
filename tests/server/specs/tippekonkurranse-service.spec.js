@@ -432,7 +432,7 @@ describe("Tippekonkurranse service", function () {
 
         describe("'Nedrykk' penalty point calculations", function () {
 
-            it("should give -1 if both teams exist in prediction, whatever order ", function () {
+            it("should give -1 if both teams exist in prediction, whatever order", function () {
                 var userPredictions = {
                         john: {
                             tabell: [
@@ -505,7 +505,7 @@ describe("Tippekonkurranse service", function () {
                 expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.nedrykk).to.equal(-1);
             });
 
-            it("should give nothing if only one team exist in prediction, whatever order ", function () {
+            it("should give nothing if only one team exist in prediction, whatever order", function () {
                 var userPredictions = {
                         john: {
                             tabell: [
@@ -582,7 +582,7 @@ describe("Tippekonkurranse service", function () {
 
         describe("'Opprykk' penalty point calculations", function () {
 
-            it("should give -1 if both teams exist in prediction, whatever order ", function () {
+            it("should give -1 if both teams exist in prediction, whatever order", function () {
                 var userPredictions = {
                         john: {
                             tabell: null,
@@ -622,7 +622,7 @@ describe("Tippekonkurranse service", function () {
                 );
             });
 
-            it("should give nothing if only one team exist in prediction, whatever order ", function () {
+            it("should give nothing if only one team exist in prediction, whatever order", function () {
                 var userPredictions = {
                         john: {
                             tabell: null,
