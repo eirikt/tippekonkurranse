@@ -24,18 +24,20 @@ In production [here][1].
 
 ## Version history/roadmap
 
-#### v1.2.1 : _Delivery goal 14.08.2014_
+
+#### v1.2.2 : _Delivered 17.09.2014_
 * Navigating (via time-line) historic ratings and scores
 * ~~Full screen option
   (Not supported in iOS, neither by Safari nor Chrome -> iPad useless :-\)
   (Not supported by Android Browser and scrolling disabled for Android Chrome it seems -> Android useless :-\)~~
 * Automatic reload when Heroku single-dyno server sleeps/restart
+* Bugfix: "Gjeldende resultater" (v1.2.2)
 
 _Status: Done_
 
 
 #### v1.2.0 : ~~_Delivery goal 20.06.2014_~~ _Delivered 16.07.2014_
-* Simple presentation of historic data
+* Simple graph presentation of historic rating trends
 
 _Status: Done_
 
@@ -189,6 +191,9 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 * Revisit automatic reloading of web page
 * Simple countdown timer
 * Show 'Gjeldende resultater' contextual to what round is actively chosen, as done with 'Trend'
+* Rewrite norwegian soccer result data retrieval to use
+  http://www.nrk.no/sport/folg-hele-eliteserierunden-1.11601821
+  and other resources from NRK
 
 #### v? : Touch/Mobile
 * Mobile app, using Apache Cordova or something
