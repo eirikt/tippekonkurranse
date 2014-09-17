@@ -42,6 +42,7 @@ require(['app', 'jqplot']);
 //require(['app', 'jqplot', 'jqplot.highlighter', 'jqplot.cursor', 'jqplot.dateAxisRenderer']);
 
 // Listen to window errors: remedy for Heroku instances sleeping/warm-up
+/*
 window.onerror = function (message, url, lineNumber) {
     "use strict";
     var initialNumberOfReloads = 1,
@@ -99,3 +100,4 @@ window.onerror = function (message, url, lineNumber) {
     }
     return false;
 };
+*/
