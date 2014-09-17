@@ -80,7 +80,13 @@ define([
                     this.model = _.clone(this.model);
 
                     // Meta-data for offline
-                    this.model.set("appName", this.model.name(), { silent: true });
+                    // TODO: On Heroku (not locally) the 'name' function has suddenly disappeared ... Why? (timing issues maybe)
+                    if (this.model.name) {
+                        this.model.set("appName", this.model.name(), { silent: true });
+                    } else {
+                        // Quick fix ...
+                        this.model.set("appName", "Tippekonkurranse", { silent: true });
+                    }
                     this.model.set("uri", this.model.urlRoot, { silent: true });
 
                     // Pretty date presentation
