@@ -478,4 +478,67 @@ var dbSchema = require("./db-schema.js"),
                 });
             }
         });
+    },
+
+    persistRound23 = exports.persistRound23 = function () {
+        "use strict";
+        dbSchema.TippeligaRound.count({ year: 2014, round: 23 }, function (err, count) {
+            if (count > 0) {
+                console.log(utils.logPreamble() + "Tippeliga 2014 round #23 already exists in db");
+                if (count > 1) {
+                    console.warn(utils.logPreamble() + "Tippeliga 2014 round #23 has more than one document in db!");
+                    throw new Error("Tippeliga 2014 round #23 has more than one document in db!");
+                }
+            } else {
+                var round23 = new dbSchema.TippeligaRound();
+                for (var attr in soccerResultService.round2014023) {
+                    round23[attr] = soccerResultService.round2014023[attr];
+                }
+                round23.save(function (err, round23) {
+                    console.log(utils.logPreamble() + "Tippeliga 2014 round #23 saved... OK");
+                });
+            }
+        });
+    },
+
+    persistRound24 = exports.persistRound24 = function () {
+        "use strict";
+        dbSchema.TippeligaRound.count({ year: 2014, round: 24 }, function (err, count) {
+            if (count > 0) {
+                console.log(utils.logPreamble() + "Tippeliga 2014 round #24 already exists in db");
+                if (count > 1) {
+                    console.warn(utils.logPreamble() + "Tippeliga 2014 round #24 has more than one document in db!");
+                    throw new Error("Tippeliga 2014 round #24 has more than one document in db!");
+                }
+            } else {
+                var round24 = new dbSchema.TippeligaRound();
+                for (var attr in soccerResultService.round2014024) {
+                    round24[attr] = soccerResultService.round2014024[attr];
+                }
+                round24.save(function (err, round24) {
+                    console.log(utils.logPreamble() + "Tippeliga 2014 round #24 saved... OK");
+                });
+            }
+        });
+    },
+
+    persistRound25 = exports.persistRound25 = function () {
+        "use strict";
+        dbSchema.TippeligaRound.count({ year: 2014, round: 25 }, function (err, count) {
+            if (count > 0) {
+                console.log(utils.logPreamble() + "Tippeliga 2014 round #25 already exists in db");
+                if (count > 1) {
+                    console.warn(utils.logPreamble() + "Tippeliga 2014 round #25 has more than one document in db!");
+                    throw new Error("Tippeliga 2014 round #25 has more than one document in db!");
+                }
+            } else {
+                var round25 = new dbSchema.TippeligaRound();
+                for (var attr in soccerResultService.round2014025) {
+                    round25[attr] = soccerResultService.round2014025[attr];
+                }
+                round25.save(function (err, round25) {
+                    console.log(utils.logPreamble() + "Tippeliga 2014 round #25 saved... OK");
+                });
+            }
+        });
     };

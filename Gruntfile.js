@@ -45,9 +45,9 @@ module.exports = function (grunt) {
                     'echo.',
                     'echo Essential grunt tasks are:',
                     'echo   install:client   installs client resources via Bower',
-                    'echo   mongodb          starts a MongoDB instance using a local data folder (blocking command)',
                     'echo   test             installs, builds, and executes all Mocha tests',
-                    'echo   run              starts up local Node.js runtime (blocking command)'
+                    'echo   mongodb          starts a MongoDB instance using a local data folder (blocking command)',
+                    'echo   run              starts up local Node.js runtime                     (blocking command)'
                 ].join('&&')
             },
             createDataDir: {

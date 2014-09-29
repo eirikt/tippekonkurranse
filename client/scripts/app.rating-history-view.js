@@ -65,8 +65,8 @@ define(['jquery', 'underscore', 'backbone'],
                         xaxis: {
                             label: 'Tippeligarunde',
                             min: 0,
-                            max: this.round + 2,
-                            numberTicks: this.round + 3
+                            max: this.round + 4,
+                            numberTicks: this.round + 5
                         },
                         yaxis: {
                             label: '&nbsp;&nbsp;&nbsp;&nbsp;Poeng',

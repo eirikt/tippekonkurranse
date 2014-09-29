@@ -99,9 +99,9 @@ h2, .h2 {
     content: "\f00c";
 }
 
-.icon-bar-chart::before {
+.icon-line-chart::before {
     font-family: FontAwesome, sans-serif;
-    content: "\f080";
+    content: "\f201";
 }
 
 .icon-up-plus::before {

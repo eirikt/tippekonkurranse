@@ -140,7 +140,7 @@ define([
                     '  <th style="width:8rem;"></th>' +
                     '  <th class="rating-history" colspan="2">' +
                     '    <a href="/#/ratinghistory/2014" type="button" class="btn btn-sm btn-success">' +
-                    '      <span style="margin-right:1rem;" class="icon-bar-chart"></span>Trend' +
+                    '      <span style="margin-right:1rem;" class="icon-line-chart"></span>Trend' +
                     '    </a>' +
                     '  </th>' +
                     '  <th class="current-results">' +

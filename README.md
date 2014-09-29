@@ -25,13 +25,24 @@ In production [here][1].
 ## Version history/roadmap
 
 
+#### v1.2.3 : _Delivered 29.09.2014_
+* Dependencies update (Node.js v0.10.32)
+
+_Status: Done_
+
+
 #### v1.2.2 : _Delivered 17.09.2014_
+* Bugfix: "Gjeldende resultater"
+
+_Status: Done_
+
+
+#### v1.2.1 : _Delivered 14.09.2014_
 * Navigating (via time-line) historic ratings and scores
 * ~~Full screen option
   (Not supported in iOS, neither by Safari nor Chrome -> iPad useless :-\)
   (Not supported by Android Browser and scrolling disabled for Android Chrome it seems -> Android useless :-\)~~
 * Automatic reload when Heroku single-dyno server sleeps/restart
-* Bugfix: "Gjeldende resultater" (v1.2.2)
 
 _Status: Done_
 

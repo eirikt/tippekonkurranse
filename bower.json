@@ -1,11 +1,11 @@
 {
     "name": "Tippekonkurranse",
     "dependencies": {
-        "requirejs": "~2.1.11",
-        "bootstrap": "~3.1.1",
-        "font-awesome": "~4.0.3",
+        "requirejs": "~2.1.15",
+        "bootstrap": "~3.2.0",
+        "font-awesome": "~4.2.0",
         "backbone": "~1.1.2",
-        "moment": "~2.8.1",
+        "moment": "~2.8.3",
         "toastr": "~2.0.3",
         "jqplot-bower": "~1.0.8"
     }
