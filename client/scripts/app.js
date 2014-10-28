@@ -1,10 +1,10 @@
 /* global define:false */
 /* jshint -W031 */
 define([
-        'jquery', 'underscore', 'backbone', 'bootstrap', 'toastr',
+        'jquery', 'underscore', 'backbone', 'toastr',
         'backbone.fetch-local-copy', 'app.router'],
 
-    function ($, _, Backbone, Bootstrap, toastr, BackboneFetchLocalCopy, AppRouter) {
+    function ($, _, Backbone, toastr, BackboneFetchLocalCopy, AppRouter) {
         'use strict';
 
         // Toastr.js config (=> http://codeseven.github.io/toastr/demo.html)

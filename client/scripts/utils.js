@@ -6,25 +6,12 @@ define(['jquery', 'string-extensions'],
         'use strict';
 
         return {
-
-            // TODO: reduce cyclic complexity (from 6 to 5)
             isTouchDeviceUserAgentString: function (userAgentString) {
                 if (userAgentString) {
-                    if (userAgentString.contains('iPad')) {
-                        return true;
-
-                    } else if (userAgentString.contains('iPhone')) {
-                        return true;
-
-                    } else if (userAgentString.contains('Android')) {
-                        return true;
-
-                    } else if (userAgentString.contains('CriOs')) {
-                        return true;
-
-                    } else {
-                        return false;
-                    }
+                    return !!(userAgentString.contains('iPad') ||
+                        userAgentString.contains('iPhone') ||
+                        userAgentString.contains('Android') ||
+                        userAgentString.contains('CriOs'));
                 }
                 return false;
             },

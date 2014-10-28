@@ -13,7 +13,7 @@
 
         var
             /**
-             * JavaScript's default way of accessing object properties.
+             * JavaScript's default way of accessing object properties and array elements.
              * @private
              * @return The property with the given <code>propertyName</code> in the given object
              */
@@ -121,6 +121,8 @@
             arithmeticAscending: _arithmeticAscendingComparator,
 
             propertyArithmeticAscending: _propertyArithmeticAscendingComparator(_propertyGetter),
+            arrayElementArithmeticAscending: _propertyArithmeticAscendingComparator(_propertyGetter),
+
             backbonePropertyArithmeticAscending: _propertyArithmeticAscendingComparator(_backbonePropertyGetter),
 
             multiAscending: _multiAscendingComparator(_propertyGetter),

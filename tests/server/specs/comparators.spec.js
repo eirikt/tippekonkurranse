@@ -1,7 +1,7 @@
 /* global describe:false, it:false */
 /* jshint -W030 */
 
-var expect = require("../../../node_modules/chai/chai.js").expect,
+var expect = require("../../../node_modules/chai/chai").expect,
 
     _ = require('../../../node_modules/underscore/underscore-min'),
     Backbone = require('../../../build/bower_components/backbone/backbone'),

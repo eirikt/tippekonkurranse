@@ -5,7 +5,8 @@ module.exports = function (grunt) {
 
     // Test setup
     var port = 8981,
-        clientTestPath = '/tests/client/test.amd.html';
+        clientTestUri = '/tests/client/test.amd.html',
+        clientTestUrl = 'http://127.0.0.1:' + port + clientTestUri;
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -72,20 +73,20 @@ module.exports = function (grunt) {
             },
             'mocha-phantomjs': {
                 options: { stdout: true, stderr: true, failOnError: true },
-                command: 'node ./node_modules/mocha-phantomjs/bin/mocha-phantomjs -R spec http://localhost:' + port + clientTestPath
+                command: 'node ./node_modules/mocha-phantomjs/bin/mocha-phantomjs -R spec ' + clientTestUrl
             }
         },
 
         copy: {
-            "to-build": {
+            'to-client': {
                 files: [
-                    { expand: true, cwd: 'client', src: ['**'], dest: 'build' },
-                    { expand: true, cwd: 'shared', src: ['**'], dest: 'build' }
+                    { expand: true, cwd: 'shared', src: [ '**' ], dest: 'client' }
                 ]
             },
-            "to-client": {
+            'to-build': {
                 files: [
-                    { expand: true, cwd: 'shared', src: ['**'], dest: 'client' }
+                    { expand: true, cwd: 'client', src: [ '**' ], dest: 'build' },
+                    { expand: true, cwd: 'shared', src: [ '**' ], dest: 'build' }
                 ]
             }
         },
@@ -95,7 +96,7 @@ module.exports = function (grunt) {
                 'no-write': false
             },
             build: {
-                src: ['build']
+                src: [ 'build' ]
             }
         },
 
@@ -104,7 +105,7 @@ module.exports = function (grunt) {
                 'Gruntfile.js',
                 'package.json',
                 'bower.json',
-                'server/scripts/**/*.js', '!server/scripts/fun.js', '!server/scripts/vendor/**/*.js',
+                'server/scripts/**/*.js', '!server/scripts/vendor/**/*.js',
                 'client/scripts/**/*.js', '!client/scripts/app.models.js', '!client/scripts/comparators.js', '!client/scripts/fun.js', '!client/scripts/string-extensions.js',
                 'shared/scripts/**/*.js',
                 'tests/**/*.js'
@@ -141,10 +142,10 @@ module.exports = function (grunt) {
                 //unused: true,
                 strict: true,
                 trailing: true,
-                maxparams: 14,
-                maxdepth: 5,
+                maxparams: 12,
+                maxdepth: 3,
                 maxstatements: 30,
-                maxcomplexity: 7, // TODO: Bring this down to... let's say 5 - YES, REALLY!
+                maxcomplexity: 5,
                 //maxlen: 180,
 
                 laxcomma: true
@@ -160,6 +161,9 @@ module.exports = function (grunt) {
                 src: [
                     'tests/server/specs/string-extensions.spec.js',
                     'tests/server/specs/comparators.spec.js',
+                    'tests/server/specs/utils.spec.js',
+
+                    'tests/server/specs/app.models.spec.js',
                     'tests/server/specs/tippekonkurranse-service.spec.js'
                 ]
             }
@@ -186,6 +190,7 @@ module.exports = function (grunt) {
                 files: [
                     'tests/server/specs/string-extensions.spec.js',
                     'tests/server/specs/comparators.spec.js',
+                    'tests/server/specs/utils.spec.js',
                     'tests/server/specs/tippekonkurranse-service.spec.js'
                 ]
             }
@@ -202,12 +207,28 @@ module.exports = function (grunt) {
             }
         },
 
+        'saucelabs-mocha': {
+            all: {
+                options: {
+                    urls: [ clientTestUrl ],
+                    build: process.env.CI_BUILD_NUMBER,
+                    testname: 'Tippekonkurranse',
+                    browsers: [ {
+                        platform: 'XP',
+                        browserName: 'chrome',
+                        version: '35'
+                    } ]
+                    // optionally, he `browsers` param can be a flattened array:
+                    // [["XP", "firefox", 19], ["XP", "chrome", 31]]
+                }
+            }
+        },
+
         uglify: {
             myUglifyTask: {
                 files: {
                     // Minified versions not available via Bower ...
                     'build/bower_components/requirejs/require.js': 'build/bower_components/requirejs/require.js',
-                    'build/bower_components/underscore/underscore.js': 'build/bower_components/underscore/underscore.js',
                     'build/bower_components/backbone/backbone.js': 'build/bower_components/backbone/backbone.js',
 
                     'build/scripts/fun.js': 'build/scripts/fun.js',
@@ -236,7 +257,7 @@ module.exports = function (grunt) {
             minify: {
                 expand: true,
                 cwd: 'build/styles/',
-                src: ['*.css', '!*.min.css'],
+                src: [ '*.css', '!*.min.css' ],
                 dest: 'build/styles/'
             }
         },
@@ -244,7 +265,7 @@ module.exports = function (grunt) {
         jsdoc: {
             dist: {
                 //src: ['server/scripts/*.js', 'client/scripts/*.js'],
-                src: ['server/scripts/*.js'],
+                src: [ 'server/scripts/*.js' ],
                 options: {
                     destination: 'docs'
                 }
@@ -261,7 +282,7 @@ module.exports = function (grunt) {
                     'client/index.html',
                     'client/manifest.appcache'
                 ],
-                tasks: ['copy']
+                tasks: [ 'copy' ]
             },
             tests: {
                 files: [
@@ -269,7 +290,7 @@ module.exports = function (grunt) {
                     'shared/scripts/*.js',
                     'tests/**/*'
                 ],
-                tasks: ['test']//,
+                tasks: [ 'test' ]//,
                 //options: {
                 //    interval : 5000,
                 //    debounceDelay: 5000
@@ -292,26 +313,27 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-mocha-cov');
     grunt.loadNpmTasks('grunt-blanket-mocha');
+    grunt.loadNpmTasks('grunt-saucelabs');
     grunt.loadNpmTasks('grunt-jsdoc');
 
 
-    grunt.registerTask('help', ['shell:help']);
-    grunt.registerTask('install:client', ['shell:install-client']);
-    grunt.registerTask('mongodb', ['shell:createDataDir', 'shell:mongod']);
+    grunt.registerTask('help', [ 'shell:help' ]);
+    grunt.registerTask('install:client', [ 'shell:install-client' ]);
+    grunt.registerTask('mongodb', [ 'shell:createDataDir', 'shell:mongod' ]);
 
-    grunt.registerTask('build:client', ['clean', 'copy:to-client', 'copy:to-build', 'uglify', 'cssmin']);
+    grunt.registerTask('build:client', [ 'clean', 'copy:to-client', 'copy:to-build', 'uglify', 'cssmin' ]);
 
-    grunt.registerTask('test:client', ['connect', 'shell:mocha-phantomjs']);
-    grunt.registerTask('test:server', ['mochaTest']);
-    grunt.registerTask('coverage:server', ['mochacov:report']);
-    grunt.registerTask('test', ['install:client', 'build:client', 'test:server', 'test:client']);
+    grunt.registerTask('test:client', [ 'connect', 'shell:mocha-phantomjs' ]);
+    grunt.registerTask('test:server', [ 'mochaTest' ]);
+    grunt.registerTask('coverage:server', [ 'mochacov:report' ]);
+    grunt.registerTask('test', [ 'install:client', 'build:client', 'test:server', 'test:client' ]);
 
-    grunt.registerTask('build:travis', ['test', 'jshint', 'jsdoc', /*'blanket_mocha',*/ 'mochacov:travis']);
+    grunt.registerTask('build:travis', [ 'test', 'jshint', 'jsdoc', /*'blanket_mocha',*/ 'mochacov:travis', 'saucelabs-mocha' ]);
 
-    grunt.registerTask('deploy:development', ['env:dev', 'install:client', 'copy:to-client', 'shell:run']);
-    grunt.registerTask('deploy:local', ['env:prod', 'install:client', 'build:client', 'shell:run']);
-    grunt.registerTask('deploy:production', ['install:client', 'build:client']);
-    grunt.registerTask('deploy:heroku', ['deploy:production']);
+    grunt.registerTask('deploy:development', [ 'env:dev', 'install:client', 'copy:to-client', 'shell:run' ]);
+    grunt.registerTask('deploy:local', [ 'env:prod', 'install:client', 'build:client', 'shell:run' ]);
+    grunt.registerTask('deploy:production', [ 'install:client', 'build:client' ]);
+    grunt.registerTask('deploy:heroku', [ 'deploy:production' ]);
 
     /*
      * http://stackoverflow.com/questions/13784600/how-to-deploy-node-app-that-uses-grunt-to-heroku
@@ -332,9 +354,9 @@ module.exports = function (grunt) {
     //>NODE_ENV: production
     //>D:\workspace\Tippekonkurranse [master +11 ~2 -0 !]>
     //grunt.registerTask('heroku:development', 'clean less mincss');
-    grunt.registerTask('heroku:production', ['deploy:heroku']);
+    grunt.registerTask('heroku:production', [ 'deploy:heroku' ]);
 
-    grunt.registerTask('run', ['deploy:development']);
+    grunt.registerTask('run', [ 'deploy:development' ]);
 
-    grunt.registerTask('default', ['help']);
+    grunt.registerTask('default', [ 'help' ]);
 };

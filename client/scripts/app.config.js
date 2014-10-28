@@ -3,7 +3,7 @@ require.config({
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',
         'bootstrap': '../bower_components/bootstrap/dist/js/bootstrap.min',
-        'underscore': '../bower_components/underscore/underscore',
+        'underscore': '../bower_components/underscore/underscore-min',
         'backbone': '../bower_components/backbone/backbone',
         'moment': '../bower_components/moment/min/moment.min',
         'moment.nb': '../bower_components/moment/locale/nb',
@@ -37,11 +37,14 @@ require.config({
     }
 });
 
+
 // Load and execute these
 require(['app', 'jqplot']);
 //require(['app', 'jqplot', 'jqplot.highlighter', 'jqplot.cursor', 'jqplot.dateAxisRenderer']);
 
+
 // Listen to window errors: remedy for Heroku instances sleeping/warm-up
+/*
 window.onerror = function (message, url, lineNumber) {
     "use strict";
     var initialNumberOfReloads = 1,
@@ -99,3 +102,4 @@ window.onerror = function (message, url, lineNumber) {
     }
     return false;
 };
+*/

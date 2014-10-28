@@ -8,7 +8,7 @@
 data
 
 # Ignore local logs
-npm-debug.log
+*.log
 
 # Ignore derived/generated/transient project files/resources
 client/scripts/fun.js

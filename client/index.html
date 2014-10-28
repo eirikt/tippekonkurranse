@@ -35,23 +35,19 @@
 <body>
 
 <!--[if lt IE 10]>
-<div style="margin:3rem;border:1px dotted">
+<section style="margin:3rem;border:1px dotted">
     <p style="padding:1rem;font-size:x-large;color:red;">
         <em>Hei, kamerat - på høy tid at du <a href="http://browsehappy.com/">oppgraderer</a> nettleseren din gitt
             ...</em>
     </p>
-</div>
+</section>
 <![endif]-->
-
-<!-- TODO: include Bootstrap stuff in 'Bootstrap-types' views -->
-<div class="modal fade" id="currentResultsTable" tabindex="-1" role="dialog" aria-labelledby="currentResultsLabel" aria-hidden="true"></div>
-
-<!-- TODO: include Bootstrap stuff in 'Bootstrap-types' views -->
-<div class="modal fade" id="predictionsTable" tabindex="-1" role="dialog" aria-labelledby="predictionsLabel" aria-hidden="true"></div>
 
 <header class="hidden"></header>
 
-<div id="splashscreen">
+<section class="modal fade" id="currentResultsTable"></section>
+<section class="modal fade" id="predictionsTable"></section>
+<section id="splashscreen">
     <section id="intro" class="rw-wrapper">
         <h2 class="rw-sentence">
             <span>Tippegjengen presenterer&nbsp;&Colon;</span>
@@ -65,13 +61,10 @@
             </div>
         </h2>
     </section>
-</div>
-
-<div id="content1"></div>
-
-<div id="content2"></div>
-
-<div id="ratingHistory" class="hidden"></div>
+</section>
+<section id="content1"></section>
+<section id="content2"></section>
+<section id="ratingHistory" class="hidden"></section>
 
 <footer class="hidden" style="text-align:center;margin-bottom:2rem;">
     <hr>

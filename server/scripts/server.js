@@ -9,15 +9,13 @@ var env = process.env.NODE_ENV || "development",
 
 // Module dependencies, external
     path = require("path"),
-    http = require("http"),
     express = require("express"),
-    curry = require("curry"),
 
 // Module dependencies, local
-    initDb = require("./db-init.js"),
-    tippekonkurranse = require("./tippekonkurranse-api.js"),
-    utils = require("./utils.js"),
-    app = require("./../../shared/scripts/app.models.js"),
+    initDb = require("./db-init"),
+    tippekonkurranse = require("./tippekonkurranse-api"),
+    utils = require("./utils"),
+    app = require("./../../shared/scripts/app.models"),
 
 // The app server
     server = express(),
@@ -56,5 +54,5 @@ server.listen(port, function () {
 if (env === "development") {
     // Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
     root.overrideTippeligaDataWithYear = 2014;
-    //root.overrideTippeligaDataWithRound = 25;
+    //root.overrideTippeligaDataWithRound = 28;
 }

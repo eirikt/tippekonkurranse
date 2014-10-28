@@ -8,7 +8,7 @@ var env = process.env.NODE_ENV || "development",
     mongoose = require("mongoose"),
 
 // Module dependencies, local
-    dbData = require("./db-fun.js"),
+    dbData = require("./db-fun"),
 
 // MongoDB URLs
     dbUrl = process.env.MONGOLAB_URI || "mongodb://localhost/tippekonkurranse",
@@ -53,7 +53,8 @@ var env = process.env.NODE_ENV || "development",
 // Connect to database via Mongoose
 mongoose.connect(dbUrl);
 
-// Baseline data (to be removed ...)
+// Baseline data (TODO: to be removed ...)
+// 2014
 dbData.persistRound1();
 dbData.persistRound2();
 dbData.persistRound3();
@@ -78,4 +79,10 @@ dbData.persistRound21();
 dbData.persistRound22();
 dbData.persistRound23();
 dbData.persistRound24();
-//dbData.persistRound25();
+dbData.persistRound25();
+dbData.persistRound26();
+dbData.persistRound27();
+dbData.persistRound28();
+//dbData.persistRound29();
+//dbData.persistRound30();
+// /2014

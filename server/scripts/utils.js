@@ -4,9 +4,7 @@
 var __ = require("underscore"),
     moment = require("moment"),
 
-
 // Module dependencies, local
-
 
 // Global helpers
 
@@ -14,39 +12,24 @@ var __ = require("underscore"),
      * A simple timestamp in brackets, suitable for log line preambles.
      * @returns {String} Simple date-in-square-brackets string
      */
-    logPreamble = exports.logPreamble = function () {
+    _logPreamble = exports.logPreamble = function () {
         "use strict";
         return "[" + moment().format("YYYY-MM-DD HH:mm:ss") + "] ";
     },
 
-
-// TODO: Extract generic requestions out of here to a standalone reusable lib, and document it!
-
     /**
-     * Trivial RQ.js requestion => the identity function.
-     * Convenient for triggering arrays of RQ.js requestors.
-     * @return {*} The given argument
+     * Maximum sum of displacements of elements in a permutation of (1..n)
+     * Defined by:
+     *
+     *     f(n) = floor(n^2/2)
+     *
+     * @see http://oeis.org/A007590
+     * @returns {Number} The maximum sum of displacements of elements in a permutation of given argument
      */
-    rqGo = exports.rqGo = function (value) {
+    _maxDisplacementSumInPermutationOfLength = exports.maxDisplacementSumInPermutationOfLength = function (n) {
         "use strict";
-        return value;
-    },
-
-    nullRequestor = exports.nullArg = function (requestion, args) {
-        "use strict";
-        return requestion(null, undefined);
-    },
-
-    identityRequestory = exports.identity = function (value) {
-        "use strict";
-        return function requestor(requestion, args) {
-            return requestion(value, undefined);
-        };
-    },
-
-    functionWrapperRequestory = exports.requestor = function (func) {
-        "use strict";
-        return function requestor(requestion, args) {
-            return requestion(func(args), undefined);
-        };
+        if (!__.isNumber(n) || (n % 1 !== 0)) {
+            throw new Error("Natural number (including zero) argument is mandatory");
+        }
+        return Math.floor(Math.pow(n, 2) / 2);
     };

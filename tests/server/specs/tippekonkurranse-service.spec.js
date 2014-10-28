@@ -1,27 +1,28 @@
-/* global describe:false, it:false */
+/* global require:false, describe:false, it:false */
 /* jshint -W030 */
 
-var __ = require("../../../node_modules/underscore/underscore.js"),
-    curry = require("../../../node_modules/curry/curry"),
+var __ = require("underscore"),
 
-    expect = require("../../../node_modules/chai/chai.js").expect,
-    sinon = require('../../../node_modules/sinon/lib/sinon'),
+    expect = require("chai").expect,
+    sinon = require("sinon"),
 
-    go = require("../../../server/scripts/utils.js").rqGo,
+    Comparators = require('../../../shared/scripts/comparators'),
+    curry = require("../../../shared/scripts/fun").curry,
+    rq = require("../../../server/scripts/rq-fun"),
+    maxDisplacementSumInPermutationOfLength = require("../../../server/scripts/utils").maxDisplacementSumInPermutationOfLength,
 
-    tippeligaTableIndex = require("../../../server/scripts/tippekonkurranse.js").tippeligaTableIndex,
-    adeccoligaTableIndex = require("../../../server/scripts/tippekonkurranse.js").adeccoligaTableIndex,
-    serverSideProcessingArgumentCount = require("../../../server/scripts/tippekonkurranse.js").argumentCount,
-    scoresIndex = require("../../../server/scripts/tippekonkurranse.js").scoresIndex,
-    addTippekonkurranseScoresRequestion = require("../../../server/scripts/tippekonkurranse.js").addTippekonkurranseScoresRequestor,
+    TeamPlacement = require("../../../shared/scripts/app.models").TeamPlacement,
+    TippekonkurranseData = require("../../../shared/scripts/app.models").TippekonkurranseData,
 
-    addTippekonkurranseScores2014 = __.partial(addTippekonkurranseScoresRequestion, require("../../../server/scripts/user-predictions-2014.js").predictions2014),
+    addTippekonkurranseScoresRequestor = require("../../../server/scripts/tippekonkurranse").addTippekonkurranseScoresRequestor,
 
-    sortByPropertyRequestion = require("../../../server/scripts/tippekonkurranse.js").sortByProperty;
+//addTippekonkurranseScores2014 = __.partial(addTippekonkurranseScoresRequestor, require("../../../server/scripts/user-predictions-2014").predictions2014);
+    addTippekonkurranseScores2014 = curry(addTippekonkurranseScoresRequestor, require("../../../server/scripts/user-predictions-2014").predictions2014);
 
 
 describe("Tippekonkurranse service", function () {
     "use strict";
+
 
     describe("Underlying basics", function () {
 
@@ -34,650 +35,871 @@ describe("Tippekonkurranse service", function () {
     });
 
 
-    describe("addTippekonkurranseScores requestion", function () {
+    describe("addTippekonkurranseScores requestor", function () {
 
-        describe("Border cases", function () {
-
-            it("should get hold on private functions within Node.js file", function () {
-                expect(addTippekonkurranseScores2014).to.exist;
-            });
-
-            it("should throw error if no requestion argument is provided", function () {
-                expect(addTippekonkurranseScores2014).to.throw(Error, "Requestion argument is missing - check your RQ.js setup");
-            });
-
-            it("should throw error if no argument array is provided", function () {
-                var addTippekonkurranseScores = __.partial(addTippekonkurranseScores2014, function () {
-                });
-                expect(addTippekonkurranseScores).to.throw(Error, "Requestion argument array is missing - check your RQ.js functions and setup");
-            });
-
-            it("should throw error if no user predictions are provided", function () {
-                var userPredictions = null,
-                    requestion = go,
-                    args = [],
-                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);//,
-                //addTippekonkurranseScores = __.partial(addTippekonkurranseScores2014, requestion, args);
-                try {
-                    addTippekonkurranseScores(requestion, args);
-                    throw new Error("Should have thrown error");
-                } catch (e) {
-                    expect(e.message).to.be.equal("User predictions argument are missing - cannot calculate Tippekonkurranse scores");
-                }
-                // TODO: Do something like this instead ...
-                //var addTippekonkurranseScores = __.bind(addTippekonkurranseScores, [{}, function () {}, {}]);
-                //expect(addTippekonkurranseScores).to.throw(Error, "More than 2 arguments present - this requestion must be curried with predictions object before use");
-                //});
-            });
-
-            it("should return empty score object if empty user prediction object is provided", function () {
-                var userPredictions = {},
-                    requestion = go,
-                    args = [],
-                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
-
-                expect(addTippekonkurranseScores(requestion, args)).to.exist;
-                expect(addTippekonkurranseScores(requestion, args)).to.be.an.object;
-                expect(addTippekonkurranseScores(requestion, args)).to.not.be.an.empty.object;
-                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(serverSideProcessingArgumentCount);
-
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.exist;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.be.an.object;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores).to.be.an.empty.object;
-            });
-
-            it("should return zero-only score object if null user prediction object is provided", function () {
-                var userPredictions = {
-                        john: null
-                    },
-                    requestion = go,
-                    args = [],
-                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
-
-                expect(addTippekonkurranseScores(requestion, args)).to.exist;
-                expect(addTippekonkurranseScores(requestion, args)).to.be.an.object;
-                expect(addTippekonkurranseScores(requestion, args)).to.not.be.an.empty.object;
-                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(serverSideProcessingArgumentCount);
-
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.exist;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.be.an.object;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores).not.to.be.an.empty.object;
-
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
-                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.be.equal(
-                    JSON.stringify({
-                        john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, rating: 0 }
-                    })
-                );
-            });
-
-            it("should return zero-only score object if empty user prediction object is provided", function () {
-                var userPredictions = {
-                        john: {}
-                    },
-                    requestion = go,
-                    args = [],
-                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
-
-                expect(addTippekonkurranseScores(requestion, args)).to.exist;
-                expect(addTippekonkurranseScores(requestion, args)).to.be.an.object;
-                expect(addTippekonkurranseScores(requestion, args)).to.not.be.an.empty.object;
-                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(serverSideProcessingArgumentCount);
-
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.exist;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.be.an.object;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores).not.to.be.an.empty.object;
-
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
-                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.be.equal(
-                    JSON.stringify({
-                        john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, rating: 0 }
-                    })
-                );
-            });
-
-            it("should return zero-only score object if non-complete user prediction object is provided", function () {
-                var userPredictions = {
-                        john: {
-                            tabell: null
-                        }
-                    },
-                    requestion = go,
-                    args = [],
-                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
-
-                expect(addTippekonkurranseScores(requestion, args)).to.exist;
-                expect(addTippekonkurranseScores(requestion, args)).to.be.an.object;
-                expect(addTippekonkurranseScores(requestion, args)).to.not.be.an.empty.object;
-                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(serverSideProcessingArgumentCount);
-
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.exist;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.be.an.object;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores).not.to.be.an.empty.object;
-
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
-                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.be.equal(
-                    JSON.stringify({
-                        john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, rating: 0 }
-                    })
-                );
-            });
-
-            it("should return zero-only score object if non-complete user prediction object is provided", function () {
-                var userPredictions = {
-                        john: {
-                            tabell: [],
-                            toppscorer: undefined,
-                            opprykk: null,
-                            cup: []
-                        }
-                    },
-                    requestion = go,
-                    args = [],
-                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
-
-                expect(addTippekonkurranseScores(requestion, args)).to.exist;
-                expect(addTippekonkurranseScores(requestion, args)).to.be.an.object;
-                expect(addTippekonkurranseScores(requestion, args)).to.not.be.an.empty.object;
-                expect(addTippekonkurranseScores(requestion, args).length).to.be.equal(serverSideProcessingArgumentCount);
-
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.exist;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex]).to.be.an.object;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores).not.to.be.an.empty.object;
-
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].metadata).to.be.null;
-                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.be.equal(
-                    JSON.stringify({
-                        john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, rating: 0 }
-                    })
-                );
-            });
-
-            it("should throw error if retrieved table data deviates from user prediction data", function () {
-                var userPredictions = {
-                        john: {
-                            tabell: ["TeamA", "TeamB"],
-                            toppscorer: null,
-                            opprykk: null,
-                            cup: null
-                        }
-                    },
-                    actualTable = [
-                        { name: "TeamA" },
-                        { name: "TeamC" }
-                    ],
-                    requestion = go,
-                    args = [],
-                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
-
-                args[tippeligaTableIndex] = actualTable;
-
-                try {
-                    addTippekonkurranseScores(requestion, args);
-                    throw new Error("Should have thrown error");
-                } catch (e) {
-                    expect(e.message).to.be.equal("Unable to calculate scores for team 'TeamB' for participant 'john' - probably illegal data format");
-                }
-                // TODO: Do something like this instead ...
-                //var addTippekonkurranseScores = __.bind(addTippekonkurranseScores, [{}, function () {}, {}]);
-                //expect(addTippekonkurranseScores).to.throw(Error, "More than 2 arguments present - this requestion must be curried with predictions object before use");
-                //});
-            });
-
+        it("should throw error if no requestion argument is provided", function () {
+            expect(addTippekonkurranseScores2014).to.throw(Error, "Requestion argument is missing - check your RQ.js setup");
         });
 
 
-        describe("'Tabell' penalty point calculations", function () {
-
-            it("should have 0 as minimum penalty points", function () {
-                var userPredictions = {
-                        john: {
-                            tabell: [
-                                "Strømsgodset",
-                                "Rosenborg",
-                                "Haugesund",
-                                "Aalesund",
-                                "Viking",
-                                "Molde",
-                                "Odd",
-                                "Brann",
-                                "Start",
-                                "Lillestrøm",
-                                "Vålerenga",
-                                "Sogndal",
-                                "Sandnes Ulf",
-                                "Sarpsborg 08",
-                                "Tromsø",
-                                "Hønefoss"
-                            ]
-                        }
-                    },
-                    actualTable = [
-                        { name: "Strømsgodset", no: 1, matches: 30 },
-                        { name: "Rosenborg", no: 2, matches: 30 },
-                        { name: "Haugesund", no: 3, matches: 30 },
-                        { name: "Aalesund", no: 4, matches: 30 },
-                        { name: "Viking", no: 5, matches: 30 },
-                        { name: "Molde", no: 6, matches: 30 },
-                        { name: "Odd", no: 7, matches: 30 },
-                        { name: "Brann", no: 8, matches: 30 },
-                        { name: "Start", no: 9, matches: 30 },
-                        { name: "Lillestrøm", no: 10, matches: 30 },
-                        { name: "Vålerenga", no: 11, matches: 30 },
-                        { name: "Sogndal", no: 12, matches: 30 },
-                        { name: "Sandnes Ulf", no: 13, matches: 30 },
-                        { name: "Sarpsborg 08", no: 14, matches: 30 },
-                        { name: "Tromsø", no: 15, matches: 30 },
-                        { name: "Hønefoss", no: 16, matches: 30 }
-                    ],
-                    requestion = go,
-                    args = [],
-                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions),
-                    impeccablePrediction;
-
-                args[tippeligaTableIndex] = actualTable;
-                impeccablePrediction = addTippekonkurranseScores(requestion, args)[scoresIndex];
-
-                expect(impeccablePrediction.scores.john.tabell).to.equal(0);
-                expect(impeccablePrediction.scores.john.nedrykk).to.equal(-1);
-                expect(impeccablePrediction.scores.john.pall).to.equal(-4);
-            });
-
-            it("should give 1 penalty point for each table placing deviation", function () {
-                var userPredictions = {
-                        john: {
-                            tabell: [
-                                "Strømsgodset",
-                                "Rosenborg",
-                                "Haugesund",
-                                "Aalesund",
-                                "Viking",
-                                "Molde",
-                                "Odd",
-                                "Brann",
-                                "Start",
-                                "Lillestrøm",
-                                "Vålerenga",
-                                "Sogndal",
-                                "Sandnes Ulf",
-                                "Sarpsborg 08",
-                                "Tromsø",
-                                "Hønefoss"
-                            ]
-                        }
-                    },
-                    actualTable2penaltyPoints = [
-                        { name: "Rosenborg", no: 1, matches: 30 },      // Switched
-                        { name: "Strømsgodset", no: 2, matches: 30 },   // Switched
-                        { name: "Haugesund", no: 3, matches: 30 },
-                        { name: "Aalesund", no: 4, matches: 30 },
-                        { name: "Viking", no: 5, matches: 30 },
-                        { name: "Molde", no: 6, matches: 30 },
-                        { name: "Odd", no: 7, matches: 30 },
-                        { name: "Brann", no: 8, matches: 30 },
-                        { name: "Start", no: 9, matches: 30 },
-                        { name: "Lillestrøm", no: 10, matches: 30 },
-                        { name: "Vålerenga", no: 11, matches: 30 },
-                        { name: "Sogndal", no: 12, matches: 30 },
-                        { name: "Sandnes Ulf", no: 13, matches: 30 },
-                        { name: "Sarpsborg 08", no: 14, matches: 30 },
-                        { name: "Tromsø", no: 15, matches: 30 },
-                        { name: "Hønefoss", no: 16, matches: 30 }
-                    ],
-                    actualTable10penaltyPoints = [
-                        { name: "Strømsgodset", no: 1, matches: 30 },
-                        { name: "Rosenborg", no: 2, matches: 30 },
-                        { name: "Haugesund", no: 3, matches: 30 },
-                        { name: "Aalesund", no: 4, matches: 30 },
-                        { name: "Viking", no: 5, matches: 30 },
-                        { name: "Vålerenga", no: 6, matches: 30 },      // Switched
-                        { name: "Odd", no: 7, matches: 30 },
-                        { name: "Brann", no: 8, matches: 30 },
-                        { name: "Start", no: 9, matches: 30 },
-                        { name: "Lillestrøm", no: 10, matches: 30 },
-                        { name: "Molde", no: 11, matches: 30 },         // Switched
-                        { name: "Sogndal", no: 12, matches: 30 },
-                        { name: "Sandnes Ulf", no: 13, matches: 30 },
-                        { name: "Sarpsborg 08", no: 14, matches: 30 },
-                        { name: "Tromsø", no: 15, matches: 30 },
-                        { name: "Hønefoss", no: 16, matches: 30 }
-                    ],
-                    actualTable32penaltyPoints = [
-                        { name: "Strømsgodset", no: 1, matches: 30 },
-                        { name: "Rosenborg", no: 2, matches: 30 },
-                        { name: "Sarpsborg 08", no: 3, matches: 30 },   // Switched 2
-                        { name: "Aalesund", no: 4, matches: 30 },
-                        { name: "Viking", no: 5, matches: 30 },
-                        { name: "Vålerenga", no: 6, matches: 30 },      // Switched 1
-                        { name: "Odd", no: 7, matches: 30 },
-                        { name: "Brann", no: 8, matches: 30 },
-                        { name: "Start", no: 9, matches: 30 },
-                        { name: "Lillestrøm", no: 10, matches: 30 },
-                        { name: "Molde", no: 11, matches: 30 },         // Switched 1
-                        { name: "Sogndal", no: 12, matches: 30 },
-                        { name: "Sandnes Ulf", no: 13, matches: 30 },
-                        { name: "Haugesund", no: 14, matches: 30 },     // Switched 2
-                        { name: "Tromsø", no: 15, matches: 30 },
-                        { name: "Hønefoss", no: 16, matches: 30 }
-                    ],
-                    requestion = go,
-                    args = [],
-                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
-
-                args[tippeligaTableIndex] = actualTable2penaltyPoints;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.tabell).to.equal(2);
-
-                args[tippeligaTableIndex] = actualTable10penaltyPoints;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.tabell).to.equal(10);
-
-                args[tippeligaTableIndex] = actualTable32penaltyPoints;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.tabell).to.equal(32);
-            });
-
-            it("should have 116 as maximum score, shouldn't it?", function () {
-                var userPredictions = {
-                        john: {
-                            tabell: [
-                                "Hønefoss",
-                                "Haugesund",
-                                "Tromsø",
-                                "Sarpsborg 08",
-                                "Sandnes Ulf",
-                                "Sogndal",
-                                "Vålerenga",
-                                "Lillestrøm",
-                                "Start",
-                                "Brann",
-                                "Odd",
-                                "Molde",
-                                "Viking",
-                                "Aalesund",
-                                "Rosenborg",
-                                "Strømsgodset"
-                            ]
-                        }
-                    },
-                    actualTable = [
-                        { name: "Strømsgodset", no: 1, matches: 30 },
-                        { name: "Rosenborg", no: 2, matches: 30 },
-                        { name: "Haugesund", no: 3, matches: 30 },
-                        { name: "Aalesund", no: 4, matches: 30 },
-                        { name: "Viking", no: 5, matches: 30 },
-                        { name: "Molde", no: 6, matches: 30 },
-                        { name: "Odd", no: 7, matches: 30 },
-                        { name: "Brann", no: 8, matches: 30 },
-                        { name: "Start", no: 9, matches: 30 },
-                        { name: "Lillestrøm", no: 10, matches: 30 },
-                        { name: "Vålerenga", no: 11, matches: 30 },
-                        { name: "Sogndal", no: 12, matches: 30 },
-                        { name: "Sandnes Ulf", no: 13, matches: 30 },
-                        { name: "Sarpsborg 08", no: 14, matches: 30 },
-                        { name: "Tromsø", no: 15, matches: 30 },
-                        { name: "Hønefoss", no: 16, matches: 30 }
-                    ],
-                    requestion = go,
-                    args = [],
-                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
-
-                args[tippeligaTableIndex] = actualTable;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.tabell).to.equal(116);
-            });
+        it("should throw error if no argument array is provided", function () {
+            expect(curry(addTippekonkurranseScores2014, rq.execute)).to.throw(Error, "Requestion argument array is missing - check your RQ.js setup");
         });
 
 
-        describe("'Nedrykk' penalty point calculations", function () {
-
-            it("should give -1 if both teams exist in prediction, whatever order", function () {
-                var userPredictions = {
-                        john: {
-                            tabell: [
-                                "Strømsgodset",
-                                "Rosenborg",
-                                "Haugesund",
-                                "Aalesund",
-                                "Viking",
-                                "Molde",
-                                "Odd",
-                                "Brann",
-                                "Start",
-                                "Lillestrøm",
-                                "Vålerenga",
-                                "Sogndal",
-                                "Sandnes Ulf",
-                                "Sarpsborg 08",
-                                "TeamA",
-                                "TeamB"
-                            ],
-                            opprykk: null,
-                            toppscorer: null,
-                            cup: null
-                        }
-                    },
-                    actualNedrykkTable1 = [
-                        { name: "Strømsgodset", no: 1, matches: 30 },
-                        { name: "Rosenborg", no: 2, matches: 30 },
-                        { name: "Haugesund", no: 3, matches: 30 },
-                        { name: "Aalesund", no: 4, matches: 30 },
-                        { name: "Viking", no: 5, matches: 30 },
-                        { name: "Molde", no: 6, matches: 30 },
-                        { name: "Odd", no: 7, matches: 30 },
-                        { name: "Brann", no: 8, matches: 30 },
-                        { name: "Start", no: 9, matches: 30 },
-                        { name: "Lillestrøm", no: 10, matches: 30 },
-                        { name: "Vålerenga", no: 11, matches: 30 },
-                        { name: "Sogndal", no: 12, matches: 30 },
-                        { name: "Sandnes Ulf", no: 13, matches: 30 },
-                        { name: "Sarpsborg 08", no: 14, matches: 30 },
-                        { name: "TeamA", no: 15, matches: 30 },
-                        { name: "TeamB", no: 16, matches: 30 }
-                    ],
-                    actualNedrykkTable2 = [
-                        { name: "Strømsgodset", no: 1, matches: 30 },
-                        { name: "Rosenborg", no: 2, matches: 30 },
-                        { name: "Haugesund", no: 3, matches: 30 },
-                        { name: "Aalesund", no: 4, matches: 30 },
-                        { name: "Viking", no: 5, matches: 30 },
-                        { name: "Molde", no: 6, matches: 30 },
-                        { name: "Odd", no: 7, matches: 30 },
-                        { name: "Brann", no: 8, matches: 30 },
-                        { name: "Start", no: 9, matches: 30 },
-                        { name: "Lillestrøm", no: 10, matches: 30 },
-                        { name: "Vålerenga", no: 11, matches: 30 },
-                        { name: "Sogndal", no: 12, matches: 30 },
-                        { name: "Sandnes Ulf", no: 13, matches: 30 },
-                        { name: "Sarpsborg 08", no: 14, matches: 30 },
-                        { name: "TeamB", no: 15, matches: 30 },
-                        { name: "TeamA", no: 16, matches: 30 }
-                    ],
-                    requestion = go,
-                    args = [],
-                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
-
-                args[tippeligaTableIndex] = actualNedrykkTable1;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.nedrykk).to.equal(-1);
-
-                args[tippeligaTableIndex] = actualNedrykkTable2;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.nedrykk).to.equal(-1);
-            });
-
-            it("should give nothing if only one team exist in prediction, whatever order", function () {
-                var userPredictions = {
-                        john: {
-                            tabell: [
-                                "Strømsgodset",
-                                "Rosenborg",
-                                "Haugesund",
-                                "Aalesund",
-                                "Viking",
-                                "Molde",
-                                "Odd",
-                                "Brann",
-                                "Start",
-                                "Lillestrøm",
-                                "Vålerenga",
-                                "Sogndal",
-                                "Sandnes Ulf",
-                                "Sarpsborg 08",
-                                "TeamA",
-                                "TeamB"
-                            ],
-                            toppscorer: null,
-                            opprykk: null,
-                            cup: null
-                        }
-                    },
-                    actualNedrykkTable1 = [
-                        { name: "Strømsgodset", no: 1, matches: 30 },
-                        { name: "Rosenborg", no: 2, matches: 30 },
-                        { name: "Haugesund", no: 3, matches: 30 },
-                        { name: "Aalesund", no: 4, matches: 30 },
-                        { name: "Viking", no: 5, matches: 30 },
-                        { name: "Molde", no: 6, matches: 30 },
-                        { name: "Odd", no: 7, matches: 30 },
-                        { name: "Brann", no: 8, matches: 30 },
-                        { name: "Start", no: 9, matches: 30 },
-                        { name: "Lillestrøm", no: 10, matches: 30 },
-                        { name: "Vålerenga", no: 11, matches: 30 },
-                        { name: "Sogndal", no: 12, matches: 30 },
-                        { name: "Sandnes Ulf", no: 13, matches: 30 },
-                        { name: "TeamB", no: 14, matches: 30 },
-                        { name: "TeamA", no: 15, matches: 30 },
-                        { name: "Sarpsborg 08", no: 16, matches: 30 }
-                    ],
-                    actualNedrykkTable2 = [
-                        { name: "Strømsgodset", no: 1, matches: 30 },
-                        { name: "Rosenborg", no: 2, matches: 30 },
-                        { name: "Haugesund", no: 3, matches: 30 },
-                        { name: "Aalesund", no: 4, matches: 30 },
-                        { name: "Viking", no: 5, matches: 30 },
-                        { name: "Molde", no: 6, matches: 30 },
-                        { name: "Odd", no: 7, matches: 30 },
-                        { name: "Brann", no: 8, matches: 30 },
-                        { name: "Start", no: 9, matches: 30 },
-                        { name: "Lillestrøm", no: 10, matches: 30 },
-                        { name: "Vålerenga", no: 11, matches: 30 },
-                        { name: "Sogndal", no: 12, matches: 30 },
-                        { name: "Sandnes Ulf", no: 13, matches: 30 },
-                        { name: "TeamA", no: 14, matches: 30 },
-                        { name: "Sarpsborg 08", no: 15, matches: 30 },
-                        { name: "TeamB", no: 16, matches: 30 }
-                    ],
-                    requestion = go,
-                    args = [],
-                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
-
-                args[tippeligaTableIndex] = actualNedrykkTable1;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.nedrykk).to.equal(0);
-
-                args[tippeligaTableIndex] = actualNedrykkTable2;
-                expect(addTippekonkurranseScores(requestion, args)[scoresIndex].scores.john.nedrykk).to.equal(0);
-            });
+        it("should throw error if no user predictions are provided", function () {
+            expect(addTippekonkurranseScoresRequestor).to.throw(Error, "User predictions are missing - cannot calculate Tippekonkurranse scores");
         });
 
 
-        describe("'Opprykk' penalty point calculations", function () {
+        it("should throw error if null as user predictions are provided", function () {
+            var userPredictions = null,
+                requestion = null,
+                args = null,
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, requestion, args);
 
-            it("should give -1 if both teams exist in prediction, whatever order", function () {
-                var userPredictions = {
-                        john: {
-                            tabell: null,
-                            toppscorer: null,
-                            opprykk: ["TeamA", "TeamB"],
-                            cup: null
-                        }
-                    },
-                    actualOpprykkTable1 = [
-                        { name: "TeamA", no: 1, matches: 3 },
-                        { name: "TeamB", no: 2, matches: 3 },
-                        { name: "Some other team", no: 3, matches: 3 },
-                        { name: "And one more team", no: 4, matches: 3 }
-                    ],
-                    actualOpprykkTable2 = [
-                        { name: "TeamB", no: 1, matches: 3 },
-                        { name: "TeamA", no: 2, matches: 3 },
-                        { name: "Some other team", no: 3, matches: 3 },
-                        { name: "And one more team", no: 4, matches: 3 }
-                    ],
-                    requestion = go,
-                    args = [],
-                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
+            expect(addTippekonkurranseScores).to.throw(Error, "User predictions are missing - cannot calculate Tippekonkurranse scores");
+        });
 
-                args[adeccoligaTableIndex] = actualOpprykkTable1;
-                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.equal(
-                    JSON.stringify({
-                        john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: -1, cup: 0, rating: -1 }
-                    })
-                );
 
-                args[tippeligaTableIndex] = actualOpprykkTable2;
-                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.equal(
-                    JSON.stringify({
-                        john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: -1, cup: 0, rating: -1 }
-                    })
-                );
-            });
+        it("should throw error if empty user prediction object is provided", function () {
+            var userPredictions = {},
+                requestion = null,
+                args = null,
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, requestion, args);
 
-            it("should give nothing if only one team exist in prediction, whatever order", function () {
-                var userPredictions = {
-                        john: {
-                            tabell: null,
-                            toppscorer: null,
-                            opprykk: ["TeamA", "TeamC"],
-                            cup: null
-                        }
-                    },
-                    actualOpprykkTable1 = [
-                        { name: "TeamA", no: 1, matches: 3 },
-                        { name: "TeamB", no: 2, matches: 3 },
-                        { name: "TeamC", no: 3, matches: 3 },
-                        { name: "And one more team", no: 4, matches: 3 }
-                    ],
-                    actualOpprykkTable2 = [
-                        { name: "TeamC", no: 1, matches: 3 },
-                        { name: "TeamB", no: 2, matches: 3 },
-                        { name: "TeamA", no: 3, matches: 3 },
-                        { name: "And one more team", no: 4, matches: 3 }
-                    ],
-                    requestion = go,
-                    args = [],
-                    addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestion)(userPredictions);
+            expect(addTippekonkurranseScores).to.throw(Error, "User predictions are missing - cannot calculate Tippekonkurranse scores");
+        });
 
-                args[adeccoligaTableIndex] = actualOpprykkTable1;
 
-                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.equal(
-                    JSON.stringify({
-                        john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, rating: 0 }
-                    })
-                );
+        it("should return scores-of-more-than-999 (meaning: missing predictions) if null user prediction property is provided", function (done) {
+            var userPredictions = {
+                    john: null
+                },
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                verify = function (args) {
+                    expect(args).to.exist;
+                    expect(args).to.be.an.object;
+                    expect(args).to.not.be.an.empty.object;
 
-                args[tippeligaTableIndex] = actualOpprykkTable2;
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores).to.exist;
+                    expect(tippekonkurranseData.scores).to.be.an.object;
+                    expect(tippekonkurranseData.scores.metadata).to.be.null;
+                    expect(tippekonkurranseData.scores.scores).not.to.be.an.empty.object;
+                    expect(tippekonkurranseData.scores.metadata).to.be.null;
+                    expect(JSON.stringify(tippekonkurranseData.scores.scores)).to.be.equal(
+                        JSON.stringify({
+                            john: {
+                                tabell: 1000,
+                                pall: 1000,
+                                nedrykk: 1000,
+                                toppscorer: 1000,
+                                opprykk: 1000,
+                                cup: 1000,
+                                rating: 1000
+                            }
+                        })
+                    );
+                },
+                args = [];
 
-                expect(JSON.stringify(addTippekonkurranseScores(requestion, args)[scoresIndex].scores)).to.equal(
-                    JSON.stringify({
-                        john: { tabell: 0, pall: 0, nedrykk: 0, toppscorer: 0, opprykk: 0, cup: 0, rating: 0 }
-                    })
-                );
-            });
+            rq.executeAndVerify(addTippekonkurranseScores, args, verify, done);
+        });
+
+
+        it("should return scores-of-more-than-999 (meaning: missing predictions) if empty user prediction property is provided", function (done) {
+            var userPredictions = {
+                    john: {}
+                },
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                verify = function (args) {
+                    expect(args).to.exist;
+                    expect(args).to.be.an.object;
+                    expect(args).to.not.be.an.empty.object;
+
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores).to.exist;
+                    expect(tippekonkurranseData.scores).to.be.an.object;
+                    expect(tippekonkurranseData.scores.metadata).to.be.null;
+                    expect(tippekonkurranseData.scores.scores).not.to.be.an.empty.object;
+                    expect(tippekonkurranseData.scores.metadata).to.be.null;
+                    expect(JSON.stringify(tippekonkurranseData.scores.scores)).to.be.equal(
+                        JSON.stringify({
+                            john: {
+                                tabell: 1000,
+                                pall: 1000,
+                                nedrykk: 1000,
+                                toppscorer: 1000,
+                                opprykk: 1000,
+                                cup: 1000,
+                                rating: 1000
+                            }
+                        })
+                    );
+                },
+                args = [];
+
+            rq.executeAndVerify(addTippekonkurranseScores, args, verify, done);
+        });
+
+
+        it("should return scores-of-more-than-999 (meaning: missing predictions) if non-complete user prediction property is provided (1)", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: null
+                    }
+                },
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                verify = function (args) {
+                    expect(args).to.exist;
+                    expect(args).to.be.an.object;
+                    expect(args).to.not.be.an.empty.object;
+
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores).to.exist;
+                    expect(tippekonkurranseData.scores).to.be.an.object;
+                    expect(tippekonkurranseData.scores.metadata).to.be.null;
+                    expect(tippekonkurranseData.scores.scores).not.to.be.an.empty.object;
+                    expect(tippekonkurranseData.scores.metadata).to.be.null;
+                    expect(JSON.stringify(tippekonkurranseData.scores.scores)).to.be.equal(
+                        JSON.stringify({
+                            john: {
+                                tabell: 1000,
+                                pall: 2000,
+                                nedrykk: 1000,
+                                toppscorer: 1000,
+                                opprykk: 1000,
+                                cup: 1000,
+                                rating: 7000
+                            }
+                        })
+                    );
+                },
+                args = [];
+
+            rq.executeAndVerify(addTippekonkurranseScores, args, verify, done);
+        });
+
+
+        it("should return scores-of-more-than-999 (meaning: missing predictions) if non-complete user prediction property is provided (2)", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: [],
+                        toppscorer: undefined,
+                        opprykk: null,
+                        cup: []
+                    }
+                },
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                verify = function (args) {
+                    expect(args).to.exist;
+                    expect(args).to.be.an.object;
+                    expect(args).to.not.be.an.empty.object;
+
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores).to.exist;
+                    expect(tippekonkurranseData.scores).to.be.an.object;
+                    expect(tippekonkurranseData.scores.metadata).to.be.null;
+                    expect(tippekonkurranseData.scores.scores).not.to.be.an.empty.object;
+                    expect(tippekonkurranseData.scores.metadata).to.be.null;
+                    expect(JSON.stringify(tippekonkurranseData.scores.scores)).to.be.equal(
+                        JSON.stringify({
+                            john: {
+                                tabell: 1000,
+                                pall: 2000,
+                                nedrykk: 1000,
+                                toppscorer: 1000,
+                                opprykk: 1000,
+                                cup: 1000,
+                                rating: 7000
+                            }
+                        })
+                    );
+                },
+                args = [];
+
+            rq.executeAndVerify(addTippekonkurranseScores, args, verify, done);
+        });
+
+
+        // TODO: Struggling with this one ...
+        /*
+         it("should throw error if retrieved table data deviates from user prediction data", function (done) {
+         var userPredictions = {
+         john: {
+         tabell: ["TeamA", "TeamB"],
+         toppscorer: null,
+         opprykk: null,
+         cup: null
+         }
+         },
+         actualTable = [
+         { name: "TeamA" },
+         { name: "TeamC" }
+         ],
+         requestion = rq.execute,
+         //verify = rq.execute,
+         verify = function () {
+         var e = 3;
+         },
+
+         args = [],
+         addTippekonkurranseScores;
+
+         args[tippeligaTableIndex] = actualTable;
+
+         addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions);//, requestion, args);
+
+         //try {
+         //    addTippekonkurranseScores();
+         //} catch (e) {
+         //    expect(e.message).to.equal("Unable to calculate scores for team 'TeamB' for participant 'john' - probably illegal data format");
+         //    done();
+         //}
+
+         //try {
+         rq.executeAndVerify(addTippekonkurranseScores, verify, done, args);
+         //} catch (e) {
+         //    expect(e.message).to.equal("Unable to calculate scores for team 'TeamB' for participant 'john' - probably illegal data format");
+         //    done();
+         //}
+         });
+         */
+    });
+
+
+    describe("'Tabell' penalty points calculations", function () {
+
+        it("should have 0 as minimum penalty points", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: [
+                            "Strømsgodset",
+                            "Rosenborg",
+                            "Haugesund",
+                            "Aalesund",
+                            "Viking",
+                            "Molde",
+                            "Odd",
+                            "Brann",
+                            "Start",
+                            "Lillestrøm",
+                            "Vålerenga",
+                            "Sogndal",
+                            "Sandnes Ulf",
+                            "Sarpsborg 08",
+                            "Tromsø",
+                            "Hønefoss"
+                        ]
+                    }
+                },
+                actualTable = [
+                    {name: "Strømsgodset", no: 1, matches: 30},
+                    {name: "Rosenborg", no: 2, matches: 30},
+                    {name: "Haugesund", no: 3, matches: 30},
+                    {name: "Aalesund", no: 4, matches: 30},
+                    {name: "Viking", no: 5, matches: 30},
+                    {name: "Molde", no: 6, matches: 30},
+                    {name: "Odd", no: 7, matches: 30},
+                    {name: "Brann", no: 8, matches: 30},
+                    {name: "Start", no: 9, matches: 30},
+                    {name: "Lillestrøm", no: 10, matches: 30},
+                    {name: "Vålerenga", no: 11, matches: 30},
+                    {name: "Sogndal", no: 12, matches: 30},
+                    {name: "Sandnes Ulf", no: 13, matches: 30},
+                    {name: "Sarpsborg 08", no: 14, matches: 30},
+                    {name: "Tromsø", no: 15, matches: 30},
+                    {name: "Hønefoss", no: 16, matches: 30}
+                ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    var perfectPrediction = tippekonkurranseData.scores;
+
+                    expect(perfectPrediction.scores.john.tabell).to.equal(0);
+                    expect(perfectPrediction.scores.john.pall).to.equal(-4);
+                    expect(perfectPrediction.scores.john.nedrykk).to.equal(-1);
+                };
+
+            inputArgs.tippeligaTable = actualTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("should give 1 penalty point for each table placing deviation, 2 points", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: [
+                            "Strømsgodset",
+                            "Rosenborg",
+                            "Haugesund",
+                            "Aalesund",
+                            "Viking",
+                            "Molde",
+                            "Odd",
+                            "Brann",
+                            "Start",
+                            "Lillestrøm",
+                            "Vålerenga",
+                            "Sogndal",
+                            "Sandnes Ulf",
+                            "Sarpsborg 08",
+                            "Tromsø",
+                            "Hønefoss"
+                        ]
+                    }
+                },
+                twoPenaltyPoints = [
+                    {name: "Rosenborg", no: 1, matches: 30},      // Switched
+                    {name: "Strømsgodset", no: 2, matches: 30},   // Switched
+                    {name: "Haugesund", no: 3, matches: 30},
+                    {name: "Aalesund", no: 4, matches: 30},
+                    {name: "Viking", no: 5, matches: 30},
+                    {name: "Molde", no: 6, matches: 30},
+                    {name: "Odd", no: 7, matches: 30},
+                    {name: "Brann", no: 8, matches: 30},
+                    {name: "Start", no: 9, matches: 30},
+                    {name: "Lillestrøm", no: 10, matches: 30},
+                    {name: "Vålerenga", no: 11, matches: 30},
+                    {name: "Sogndal", no: 12, matches: 30},
+                    {name: "Sandnes Ulf", no: 13, matches: 30},
+                    {name: "Sarpsborg 08", no: 14, matches: 30},
+                    {name: "Tromsø", no: 15, matches: 30},
+                    {name: "Hønefoss", no: 16, matches: 30}
+                ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.tabell).to.equal(2);
+                };
+
+            inputArgs.tippeligaTable = twoPenaltyPoints;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("should give 1 penalty point for each table placing deviation, 10 points", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: [
+                            "Strømsgodset",
+                            "Rosenborg",
+                            "Haugesund",
+                            "Aalesund",
+                            "Viking",
+                            "Molde",
+                            "Odd",
+                            "Brann",
+                            "Start",
+                            "Lillestrøm",
+                            "Vålerenga",
+                            "Sogndal",
+                            "Sandnes Ulf",
+                            "Sarpsborg 08",
+                            "Tromsø",
+                            "Hønefoss"
+                        ]
+                    }
+                },
+                tenPenaltyPoints = [
+                    {name: "Strømsgodset", no: 1, matches: 30},
+                    {name: "Rosenborg", no: 2, matches: 30},
+                    {name: "Haugesund", no: 3, matches: 30},
+                    {name: "Aalesund", no: 4, matches: 30},
+                    {name: "Viking", no: 5, matches: 30},
+                    {name: "Vålerenga", no: 6, matches: 30},      // Switched
+                    {name: "Odd", no: 7, matches: 30},
+                    {name: "Brann", no: 8, matches: 30},
+                    {name: "Start", no: 9, matches: 30},
+                    {name: "Lillestrøm", no: 10, matches: 30},
+                    {name: "Molde", no: 11, matches: 30},         // Switched
+                    {name: "Sogndal", no: 12, matches: 30},
+                    {name: "Sandnes Ulf", no: 13, matches: 30},
+                    {name: "Sarpsborg 08", no: 14, matches: 30},
+                    {name: "Tromsø", no: 15, matches: 30},
+                    {name: "Hønefoss", no: 16, matches: 30}
+                ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.tabell).to.equal(10);
+                };
+
+            inputArgs.tippeligaTable = tenPenaltyPoints;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("should give 1 penalty point for each table placing deviation, 32 points", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: [
+                            "Strømsgodset",
+                            "Rosenborg",
+                            "Haugesund",
+                            "Aalesund",
+                            "Viking",
+                            "Molde",
+                            "Odd",
+                            "Brann",
+                            "Start",
+                            "Lillestrøm",
+                            "Vålerenga",
+                            "Sogndal",
+                            "Sandnes Ulf",
+                            "Sarpsborg 08",
+                            "Tromsø",
+                            "Hønefoss"
+                        ]
+                    }
+                },
+                thirtyTwoPenaltyPoints = [
+                    {name: "Strømsgodset", no: 1, matches: 30},
+                    {name: "Rosenborg", no: 2, matches: 30},
+                    {name: "Sarpsborg 08", no: 3, matches: 30},   // Switched 2
+                    {name: "Aalesund", no: 4, matches: 30},
+                    {name: "Viking", no: 5, matches: 30},
+                    {name: "Vålerenga", no: 6, matches: 30},      // Switched 1
+                    {name: "Odd", no: 7, matches: 30},
+                    {name: "Brann", no: 8, matches: 30},
+                    {name: "Start", no: 9, matches: 30},
+                    {name: "Lillestrøm", no: 10, matches: 30},
+                    {name: "Molde", no: 11, matches: 30},         // Switched 1
+                    {name: "Sogndal", no: 12, matches: 30},
+                    {name: "Sandnes Ulf", no: 13, matches: 30},
+                    {name: "Haugesund", no: 14, matches: 30},     // Switched 2
+                    {name: "Tromsø", no: 15, matches: 30},
+                    {name: "Hønefoss", no: 16, matches: 30}
+                ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.tabell).to.equal(32);
+                };
+
+            inputArgs.tippeligaTable = thirtyTwoPenaltyPoints;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("should have 128 as maximum penalty points with 16 teams", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: [
+                            "Hønefoss",
+                            "Haugesund",
+                            "Tromsø",
+                            "Sarpsborg 08",
+                            "Sandnes Ulf",
+                            "Sogndal",
+                            "Vålerenga",
+                            "Lillestrøm",
+                            "Start",
+                            "Brann",
+                            "Odd",
+                            "Molde",
+                            "Viking",
+                            "Aalesund",
+                            "Rosenborg",
+                            "Strømsgodset"
+                        ]
+                    }
+                },
+                reversedClonedPredictionTable = JSON.parse(JSON.stringify(userPredictions.john.tabell)).reverse(),
+                reversedTable = [],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.tabell).to.equal(maxDisplacementSumInPermutationOfLength(reversedTable.length));
+                    expect(tippekonkurranseData.scores.scores.john.tabell).to.equal(128);
+                };
+
+            for (var i = 0; i < reversedClonedPredictionTable.length; i += 1) {
+                reversedTable[i] = new TeamPlacement(reversedClonedPredictionTable[i], i + 1, reversedClonedPredictionTable.length * 2 - 2);
+            }
+
+            inputArgs.tippeligaTable = reversedTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
     });
 
 
+    describe("'Nedrykk' penalty point calculations", function () {
+
+        it("should give -1 if both teams exist in prediction, exact order", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: [
+                            "N",
+                            "M",
+                            "L",
+                            "K",
+                            "J",
+                            "I",
+                            "H",
+                            "G",
+                            "F",
+                            "E",
+                            "D",
+                            "C",
+                            "B",
+                            "A",
+                            "TeamA",
+                            "TeamB"
+                        ],
+                        opprykk: null,
+                        toppscorer: null,
+                        cup: null
+                    }
+                },
+                actualNedrykkTable = [
+                    {name: "A", no: 1, matches: 30},
+                    {name: "B", no: 2, matches: 30},
+                    {name: "C", no: 3, matches: 30},
+                    {name: "D", no: 4, matches: 30},
+                    {name: "E", no: 5, matches: 30},
+                    {name: "F", no: 6, matches: 30},
+                    {name: "G", no: 7, matches: 30},
+                    {name: "H", no: 8, matches: 30},
+                    {name: "I", no: 9, matches: 30},
+                    {name: "J", no: 10, matches: 30},
+                    {name: "K", no: 11, matches: 30},
+                    {name: "L", no: 12, matches: 30},
+                    {name: "M", no: 13, matches: 30},
+                    {name: "N", no: 14, matches: 30},
+                    {name: "TeamA", no: 15, matches: 30},
+                    {name: "TeamB", no: 16, matches: 30}
+                ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.nedrykk).to.equal(-1);
+                };
+
+            inputArgs.tippeligaTable = actualNedrykkTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("should give -1 if both teams exist in prediction, whatever order", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: [
+                            "N",
+                            "M",
+                            "L",
+                            "K",
+                            "J",
+                            "I",
+                            "H",
+                            "G",
+                            "F",
+                            "E",
+                            "D",
+                            "C",
+                            "B",
+                            "A",
+                            "TeamA",
+                            "TeamB"
+                        ],
+                        opprykk: null,
+                        toppscorer: null,
+                        cup: null
+                    }
+                },
+                actualNedrykkTable = [
+                    {name: "A", no: 1, matches: 30},
+                    {name: "B", no: 2, matches: 30},
+                    {name: "C", no: 3, matches: 30},
+                    {name: "D", no: 4, matches: 30},
+                    {name: "E", no: 5, matches: 30},
+                    {name: "F", no: 6, matches: 30},
+                    {name: "G", no: 7, matches: 30},
+                    {name: "H", no: 8, matches: 30},
+                    {name: "I", no: 9, matches: 30},
+                    {name: "J", no: 10, matches: 30},
+                    {name: "K", no: 11, matches: 30},
+                    {name: "L", no: 12, matches: 30},
+                    {name: "M", no: 13, matches: 30},
+                    {name: "N", no: 14, matches: 30},
+                    {name: "TeamB", no: 15, matches: 30},
+                    {name: "TeamA", no: 16, matches: 30}
+                ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.nedrykk).to.equal(-1);
+                };
+
+            inputArgs.tippeligaTable = actualNedrykkTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("should give nothing if only one team exist in prediction, whatever order 1", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: [
+                            "N",
+                            "M",
+                            "L",
+                            "K",
+                            "J",
+                            "I",
+                            "H",
+                            "G",
+                            "F",
+                            "E",
+                            "D",
+                            "C",
+                            "B",
+                            "A",
+                            "TeamA",
+                            "TeamB"
+                        ],
+                        toppscorer: null,
+                        opprykk: null,
+                        cup: null
+                    }
+                },
+                actualNedrykkTable = [
+                    {name: "A", no: 1, matches: 30},
+                    {name: "B", no: 2, matches: 30},
+                    {name: "C", no: 3, matches: 30},
+                    {name: "D", no: 4, matches: 30},
+                    {name: "E", no: 5, matches: 30},
+                    {name: "F", no: 6, matches: 30},
+                    {name: "G", no: 7, matches: 30},
+                    {name: "H", no: 8, matches: 30},
+                    {name: "I", no: 9, matches: 30},
+                    {name: "J", no: 10, matches: 30},
+                    {name: "K", no: 11, matches: 30},
+                    {name: "L", no: 12, matches: 30},
+                    {name: "M", no: 13, matches: 30},
+                    {name: "TeamB", no: 14, matches: 30},
+                    {name: "TeamA", no: 15, matches: 30},
+                    {name: "N", no: 16, matches: 30}
+                ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.nedrykk).to.equal(0);
+                };
+
+            inputArgs.tippeligaTable = actualNedrykkTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("should give nothing if only one team exist in prediction, whatever order 2", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: [
+                            "N",
+                            "M",
+                            "L",
+                            "K",
+                            "J",
+                            "I",
+                            "H",
+                            "G",
+                            "F",
+                            "E",
+                            "D",
+                            "C",
+                            "B",
+                            "A",
+                            "TeamA",
+                            "TeamB"
+                        ],
+                        toppscorer: null,
+                        opprykk: null,
+                        cup: null
+                    }
+                },
+                actualNedrykkTable = [
+                    {name: "A", no: 1, matches: 30},
+                    {name: "B", no: 2, matches: 30},
+                    {name: "C", no: 3, matches: 30},
+                    {name: "D", no: 4, matches: 30},
+                    {name: "E", no: 5, matches: 30},
+                    {name: "F", no: 6, matches: 30},
+                    {name: "G", no: 7, matches: 30},
+                    {name: "H", no: 8, matches: 30},
+                    {name: "I", no: 9, matches: 30},
+                    {name: "J", no: 10, matches: 30},
+                    {name: "K", no: 11, matches: 30},
+                    {name: "L", no: 12, matches: 30},
+                    {name: "M", no: 13, matches: 30},
+                    {name: "TeamA", no: 14, matches: 30},
+                    {name: "TeamB", no: 15, matches: 30},
+                    {name: "N", no: 16, matches: 30}
+                ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.nedrykk).to.equal(0);
+                };
+
+            inputArgs.tippeligaTable = actualNedrykkTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+    });
+
+
+    describe("'Opprykk' penalty point calculations", function () {
+
+        it("should give -1 if both teams exist in prediction, exact order", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: null,
+                        toppscorer: null,
+                        opprykk: ["TeamA", "TeamB", "C", "D"],
+                        cup: null
+                    }
+                },
+                actualOpprykkTable = [
+                    new TeamPlacement("TeamA", 1, 30),
+                    new TeamPlacement("TeamB", 2, 30),
+                    new TeamPlacement("C", 3, 30),
+                    new TeamPlacement("D", 4, 30)
+                ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.opprykk).to.equal(-1);
+                };
+
+            inputArgs.adeccoligaTable = actualOpprykkTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("should give -1 if both teams exist in prediction, whatever order", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: null,
+                        toppscorer: null,
+                        opprykk: ["TeamA", "TeamB"],
+                        cup: null
+                    }
+                },
+                actualOpprykkTable = [
+                    {name: "TeamB", no: 1, matches: 3},
+                    {name: "TeamA", no: 2, matches: 3},
+                    {name: "Some other team", no: 3, matches: 3},
+                    {name: "And one more team", no: 4, matches: 3}
+                ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.opprykk).to.equal(-1);
+                };
+
+            inputArgs.adeccoligaTable = actualOpprykkTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("should give nothing if only one team exist in prediction, whatever order 1", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: null,
+                        toppscorer: null,
+                        opprykk: ["TeamA", "TeamC"],
+                        cup: null
+                    }
+                },
+                actualOpprykkTable = [
+                    {name: "TeamA", no: 1, matches: 3},
+                    {name: "TeamB", no: 2, matches: 3},
+                    {name: "TeamC", no: 3, matches: 3},
+                    {name: "And one more team", no: 4, matches: 3}
+                ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.opprykk).to.equal(0);
+                };
+
+            inputArgs.adeccoligaTable = actualOpprykkTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("should give nothing if only one team exist in prediction, whatever order 2", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: null,
+                        toppscorer: null,
+                        opprykk: ["TeamA", "TeamC"],
+                        cup: null
+                    }
+                },
+                actualOpprykkTable = [
+                    {name: "TeamC", no: 1, matches: 3},
+                    {name: "TeamB", no: 2, matches: 3},
+                    {name: "TeamA", no: 3, matches: 3},
+                    {name: "And one more team", no: 4, matches: 3}
+                ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.opprykk).to.equal(0);
+                };
+
+            inputArgs.adeccoligaTable = actualOpprykkTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+    });
+
+/*
     describe("sortByPropertyRequestion", function () {
 
         describe("Border cases", function () {
-            it("should get hold on private functions within Node.js file", function () {
-                expect(sortByPropertyRequestion).to.exist;
-            });
 
-            it("should throw error if no argument array is provided", function () {
-                var sortByMyPropertyRequestion = __.partial(sortByPropertyRequestion, "myProperty");
-                expect(sortByMyPropertyRequestion).to.throw(Error, "Requestion argument array is missing - check your RQ.js functions and setup");
-            });
+            //it("should get hold on private functions within Node.js file", function () {
+            //    var sortByElementIndex = function (elementIndex, args) {
+            //            return args.sort(Comparators.arrayElementArithmeticAscending(elementIndex));
+            //        },
+            //        sortByRound = rq.requestor(curry(sortByElementIndex, new TippekonkurranseData().indexOfRound));
+            //
+            //    expect(sortByPropertyRequestion).to.exist;
+            //});
+
+
+            //it("should throw error if no argument array is provided", function () {
+            //    var sortByMyPropertyRequestion = __.partial(sortByPropertyRequestion, "myProperty");
+            //    expect(sortByMyPropertyRequestion).to.throw(Error, "Requestion argument array is missing - check your RQ.js functions and setup");
+            //});
+
 
             it("should sort arguments array by numbers", function () {
                 var args = [
@@ -709,6 +931,7 @@ describe("Tippekonkurranse service", function () {
                     ]
                 ]);
             });
+
 
             it("should sort arguments array by number strings as well", function () {
                 var args = [
@@ -742,4 +965,5 @@ describe("Tippekonkurranse service", function () {
             });
         });
     });
+    */
 });

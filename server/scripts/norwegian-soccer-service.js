@@ -2,23 +2,24 @@
 
 // Module dependencies, external
 var __ = require("underscore"),
-    curry = require("curry"),
-    request = require("request"),
     cheerio = require("cheerio"),
+    RQ = require("./vendor/rq").RQ,
 
 // Module dependencies, local generic
-    utils = require("./utils.js"),
-    rq = require("./utils.js"),
+    rq = require("./rq-fun"),
+
+// Module dependencies, local
+    TeamPlacement = require("./../../shared/scripts/app.models").TeamPlacement,
 
 
 //////////////////////////////////
 // www.altomfotball.no
 //////////////////////////////////
 
-    _currentTippeligaTableUrl =
+    currentTippeligaTableUrl =
         "http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&subCmd=total&live=true&useFullUrl=false",
 
-    _parseTippeligaTable = function (body) {
+    parseTippeligaTable = function (body) {
         "use strict";
         var currentTable = [],
             $ = cheerio.load(body),
@@ -37,15 +38,15 @@ var __ = require("underscore"),
             // Normalize ...
 
             // The data format
-            currentTable.push({ name: team, no: parseInt(no, 10), matches: matches });
+            currentTable.push(new TeamPlacement(team, parseInt(no, 10), matches));
         });
         return currentTable;
     },
 
-    _currentAdeccoligaTableUrl =
+    currentAdeccoligaTableUrl =
         "http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=2&subCmd=total&live=true&useFullUrl=false",
 
-    _parseAdeccoligaTable = function (body) {
+    parseAdeccoligaTable = function (body) {
         "use strict";
         var currentTable = [],
             $ = cheerio.load(body),
@@ -64,15 +65,15 @@ var __ = require("underscore"),
             // Normalize ...
 
             // The data format
-            currentTable.push({ name: team, no: parseInt(no, 10), matches: matches });
+            currentTable.push(new TeamPlacement(team, parseInt(no, 10), matches));
         });
         return currentTable;
     },
 
-    _currentTippeligaToppscorerTableUrl =
+    currentTippeligaToppscorerTableUrl =
         "http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&seasonId=&teamId=&useFullUrl=false",
 
-    _parseTippeligaToppscorerTable = function (body) {
+    parseTippeligaTopScorerTable = function (body) {
         "use strict";
         var toppscorers = [],
             $ = cheerio.load(body),
@@ -106,49 +107,36 @@ var __ = require("underscore"),
         return toppscorers;
     },
 
-    _getNorwegianSoccerDataRequestor = function (uri, parse, requestion, args) {
-        "use strict";
-        return request(
-            uri,
-            function (err, response, body) {
-                if (!err && response.statusCode === 200) {
-                    return requestion(parse(body));
-                }
-                else {
-                    return requestion(undefined, err);
-                }
-            }
-        );
-    },
-
 
 //////////////////////////////////////////////
 // Public functions
-//
-// These are all "data generator" requestors
-// => No forwarding of existing data ...
-// TODO: Create RQ wrapper function and remove RQ dependency in this lib
 //////////////////////////////////////////////
 
-    _getCurrentTippeligaTable = exports.getCurrentTippeligaTable =
-        curry(_getNorwegianSoccerDataRequestor)(_currentTippeligaTableUrl)(_parseTippeligaTable),
+// These requestories all returns "data generator" requestors => No forwarding of existing data ...
+    _getCurrentTippeligaTableRequestory = exports.getCurrentTippeligaTable =
+        RQ.sequence([
+            rq.get(currentTippeligaTableUrl),
+            rq.then(parseTippeligaTable)
+        ]),
 
-    _getCurrentAdeccoligaTable = exports.getCurrentAdeccoligaTable =
-        curry(_getNorwegianSoccerDataRequestor)(_currentAdeccoligaTableUrl)(_parseAdeccoligaTable),
+    _getCurrentAdeccoligaTableRequestory = exports.getCurrentAdeccoligaTable =
+        RQ.sequence([
+            rq.get(currentAdeccoligaTableUrl),
+            rq.then(parseAdeccoligaTable)
+        ]),
 
-    _getCurrentTippeligaToppscorer = exports.getCurrentTippeligaToppscorer =
-        curry(_getNorwegianSoccerDataRequestor)(_currentTippeligaToppscorerTableUrl)(_parseTippeligaToppscorerTable),
+    _getCurrentTippeligaTopScorerRequestory = exports.getCurrentTippeligaTopScorer =
+        RQ.sequence([
+            rq.get(currentTippeligaToppscorerTableUrl),
+            rq.then(parseTippeligaTopScorerTable)
+        ]),
 
-    _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders = function (requestion, args) {
-        "use strict";
-        // For the cup title, just manually remove the teams when they consecutively screw up, one after the other ...
-        return requestion([
-            "Molde",
-            "Odd"
-        ]);
-    },
+    _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
+        rq.return(["Molde", "Odd"]),
+// /Requestories
 
 
+// TODO: Establish MongoDB/Mongolab export/import routines and lean on them - then delete all below!
     _dataForRound201401 = exports.round201401 = {
         year: 2014,
         round: 1,
@@ -1593,7 +1581,157 @@ var __ = require("underscore"),
     },
 
 
-    _getTippeligaTable2013 = exports.getTippeligaTable2013 = function () {
+    _dataForRound2014026 = exports.round2014026 = {
+        year: 2014,
+        round: 26,
+        date: "2014-10-05",
+        tippeliga: [
+            { name: "Molde", no: 1, matches: 26 },
+            { name: "Odd", no: 2, matches: 26 },
+            { name: "Rosenborg", no: 3, matches: 26 },
+            { name: "Strømsgodset", no: 4, matches: 26 },
+            { name: "Lillestrøm", no: 5, matches: 26 },
+            { name: "Vålerenga", no: 6, matches: 26 },
+            { name: "Start", no: 7, matches: 26 },
+            { name: "Stabæk", no: 8, matches: 26 },
+            { name: "Sarpsborg 08", no: 9, matches: 26 },
+            { name: "Viking", no: 10, matches: 26 },
+            { name: "Aalesund", no: 11, matches: 26 },
+            { name: "Bodø/Glimt", no: 12, matches: 26 },
+            { name: "Haugesund", no: 13, matches: 26 },
+            { name: "Sogndal", no: 14, matches: 26 },
+            { name: "Brann", no: 15, matches: 26 },
+            { name: "Sandnes Ulf", no: 16, matches: 26 }
+        ],
+        toppscorer: [
+            "Vidar Örn Kjartansson"
+        ],
+        adeccoliga: [
+            { name: "Sandefjord", no: 2, matches: 27 },
+            { name: "Tromsø", no: 2, matches: 27 },
+            { name: "Kristiansund BK", no: 3, matches: 27 },
+            { name: "Ranheim", no: 4, matches: 27 },
+            { name: "Fredrikstad", no: 5, matches: 27 },
+            { name: "Bærum", no: 6, matches: 27 },
+            { name: "Mjøndalen", no: 7, matches: 27 },
+            { name: "Bryne", no: 8, matches: 27 },
+            { name: "Strømmen", no: 9, matches: 27 },
+            { name: "Hødd", no: 10, matches: 27 },
+            { name: "Nest-Sotra", no: 11, matches: 27 },
+            { name: "Hønefoss", no: 12, matches: 27 },
+            { name: "Alta", no: 13, matches: 27 },
+            { name: "Tromsdalen", no: 14, matches: 27 },
+            { name: "Ullensaker/Kisa", no: 15, matches: 27 },
+            { name: "HamKam", no: 16, matches: 27 }
+        ],
+        remainingCupContenders: [
+            "Molde",
+            "Odd"
+        ]
+    },
+
+
+    _dataForRound2014027 = exports.round2014027 = {
+        year: 2014,
+        round: 27,
+        date: "2014-10-19",
+        tippeliga: [
+            { name: "Molde", no: 1, matches: 27 },
+            { name: "Odd", no: 2, matches: 27 },
+            { name: "Rosenborg", no: 3, matches: 27 },
+            { name: "Strømsgodset", no: 4, matches: 27 },
+            { name: "Lillestrøm", no: 5, matches: 27 },
+            { name: "Vålerenga", no: 6, matches: 27 },
+            { name: "Sarpsborg 08", no: 7, matches: 27 },
+            { name: "Stabæk", no: 8, matches: 27 },
+            { name: "Start", no: 9, matches: 27 },
+            { name: "Viking", no: 10, matches: 27 },
+            { name: "Aalesund", no: 11, matches: 27 },
+            { name: "Haugesund", no: 12, matches: 27 },
+            { name: "Bodø/Glimt", no: 13, matches: 27 },
+            { name: "Sogndal", no: 14, matches: 27 },
+            { name: "Brann", no: 15, matches: 27 },
+            { name: "Sandnes Ulf", no: 16, matches: 27 }
+        ],
+        toppscorer: [
+            "Vidar Örn Kjartansson"
+        ],
+        adeccoliga: [
+            { name: "Sandefjord", no: 2, matches: 28 },
+            { name: "Tromsø", no: 2, matches: 27 },
+            { name: "Kristiansund BK", no: 3, matches: 28 },
+            { name: "Fredrikstad", no: 4, matches: 28 },
+            { name: "Mjøndalen", no: 5, matches: 28 },
+            { name: "Ranheim", no: 6, matches: 28 },
+            { name: "Bærum", no: 7, matches: 28 },
+            { name: "Hødd", no: 8, matches: 28 },
+            { name: "Bryne", no: 9, matches: 28 },
+            { name: "Strømmen", no: 10, matches: 28 },
+            { name: "Hønefoss", no: 11, matches: 28 },
+            { name: "Nest-Sotra", no: 12, matches: 28 },
+            { name: "Alta", no: 13, matches: 28 },
+            { name: "Tromsdalen", no: 14, matches: 28 },
+            { name: "Ullensaker/Kisa", no: 15, matches: 28 },
+            { name: "HamKam", no: 16, matches: 28 }
+        ],
+        remainingCupContenders: [
+            "Molde",
+            "Odd"
+        ]
+    },
+
+
+    _dataForRound2014028 = exports.round2014028 = {
+        year: 2014,
+        round: 28,
+        date: "2014-10-26",
+        tippeliga: [
+            { name: "Molde", no: 1, matches: 28 },
+            { name: "Odd", no: 2, matches: 28 },
+            { name: "Rosenborg", no: 3, matches: 28 },
+            { name: "Strømsgodset", no: 4, matches: 28 },
+            { name: "Lillestrøm", no: 5, matches: 28 },
+            { name: "Vålerenga", no: 6, matches: 28 },
+            { name: "Sarpsborg 08", no: 7, matches: 28 },
+            { name: "Stabæk", no: 8, matches: 28 },
+            { name: "Aalesund", no: 9, matches: 28 },
+            { name: "Start", no: 10, matches: 28 },
+            { name: "Viking", no: 11, matches: 28 },
+            { name: "Haugesund", no: 12, matches: 28 },
+            { name: "Bodø/Glimt", no: 13, matches: 28 },
+            { name: "Sogndal", no: 14, matches: 28 },
+            { name: "Brann", no: 15, matches: 28 },
+            { name: "Sandnes Ulf", no: 16, matches: 28 }
+        ],
+        toppscorer: [
+            "Vidar Örn Kjartansson"
+        ],
+        adeccoliga: [
+            { name: "Sandefjord", no: 2, matches: 29 },
+            { name: "Tromsø", no: 2, matches: 29 },
+            { name: "Mjøndalen", no: 3, matches: 29 },
+            { name: "Kristiansund BK", no: 4, matches: 29 },
+            { name: "Fredrikstad", no: 5, matches: 29 },
+            { name: "Bærum", no: 6, matches: 29 },
+            { name: "Ranheim", no: 7, matches: 29 },
+            { name: "Hødd", no: 8, matches: 29 },
+            { name: "Bryne", no: 9, matches: 29 },
+            { name: "Strømmen", no: 10, matches: 29 },
+            { name: "Hønefoss", no: 11, matches: 29 },
+            { name: "Nest-Sotra", no: 12, matches: 29 },
+            { name: "Alta", no: 13, matches: 29 },
+            { name: "Tromsdalen", no: 14, matches: 29 },
+            { name: "Ullensaker/Kisa", no: 15, matches: 29 },
+            { name: "HamKam", no: 16, matches: 29 }
+        ],
+        remainingCupContenders: [
+            "Molde",
+            "Odd"
+        ]
+    },
+
+
+_getTippeligaTable2013 = exports.getTippeligaTable2013 = function () {
         "use strict";
         return [
             { name: "Strømsgodset", no: 1, matches: 30 },
