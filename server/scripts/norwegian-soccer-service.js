@@ -22,14 +22,14 @@ var __ = require("underscore"),
     parseTippeligaTable = function (body) {
         "use strict";
         var currentTable = [],
-            $ = cheerio.load(body),
+            $ = cheerio.load(body, { decodeEntities: false }),
             rows = $($).find("tbody").find("tr");
 
         __.each(rows, function (element) {
             var $cells = $(element).find("td"),
-                no = $($cells[0]).html(),
+                no = $($cells[ 0 ]).html(),
                 team = $cells.find("a").first().html(),
-                matches = $($cells[2]).html();
+                matches = $($cells[ 2 ]).html();
 
             // Launder ...
             no = no.substring(0, no.length - 1);
@@ -49,14 +49,14 @@ var __ = require("underscore"),
     parseAdeccoligaTable = function (body) {
         "use strict";
         var currentTable = [],
-            $ = cheerio.load(body),
+            $ = cheerio.load(body, { decodeEntities: false }),
             rows = $($).find("tbody").find("tr");
 
         __.each(rows, function (element) {
             var $cells = $(element).find("td"),
-                no = $($cells[0]).html(),
+                no = $($cells[ 0 ]).html(),
                 team = $cells.find("a").first().html(),
-                matches = $($cells[2]).html();
+                matches = $($cells[ 2 ]).html();
 
             // Launder ...
             no = no.substring(0, no.length - 1);
@@ -83,7 +83,7 @@ var __ = require("underscore"),
         __.each(rows, function (element, index) {
             var $cells = $(element).find("td"),
                 player = $cells.find("a").first().html(),
-                goals = $($cells[3]).html();
+                goals = $($cells[ 3 ]).html();
 
             // Launder ...
             // => max two spaces in name ...
@@ -132,7 +132,7 @@ var __ = require("underscore"),
         ]),
 
     _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
-        rq.return(["Molde", "Odd"]),
+        rq.return([ "Molde", "Odd" ]),
 // /Requestories
 
 
@@ -1731,7 +1731,7 @@ var __ = require("underscore"),
     },
 
 
-_getTippeligaTable2013 = exports.getTippeligaTable2013 = function () {
+    _getTippeligaTable2013 = exports.getTippeligaTable2013 = function () {
         "use strict";
         return [
             { name: "Strømsgodset", no: 1, matches: 30 },

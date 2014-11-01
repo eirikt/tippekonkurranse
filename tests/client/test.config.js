@@ -11,7 +11,7 @@ require.config({
         'toastr': '../../build/bower_components/toastr/toastr',
 
         chai: '../../node_modules/chai/chai',
-        sinon: '../../node_modules/sinon/pkg/sinon',
+        sinon: '../../node_modules/sinon/lib/sinon',
         //fakeServer: '../../node_modules/sinon/pkg/sinon/util/fake_server',
 
         // Shared util libs
