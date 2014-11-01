@@ -1,6 +1,6 @@
 # Tippekonkurranse
 
-A simple idiomatic full-stack JavaScript-based web application,
+A simple, idiomatic, full-stack JavaScript-based web application,
 persisting data using [MongoDB][51],
 with server-side functional composition using [RQ][52],
 and keeping client-side somewhat tidy with [Backbone][53].
@@ -23,6 +23,14 @@ In production [here][1].
 
 
 ## Version history/roadmap
+
+
+#### v1.2.4 :
+* Refactorings: Cyclic complexity reduced to 5 (one 8-exception only ...)
+* Dependencies update
+* Multi-browser testing with Sauce Labs
+
+_Status: In progress_
 
 
 #### v1.2.3 : _Delivered 29.09.2014_
@@ -196,16 +204,6 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 
 ## Backlog
 
-#### v? : Misc.
-* More cool graphs and whatnot
-* Multiple draggable windows (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
-* Revisit automatic reloading of web page
-* Simple countdown timer
-* Show 'Gjeldende resultater' contextual to what round is actively chosen, as done with 'Trend'
-* Rewrite norwegian soccer result data retrieval to use
-  http://www.nrk.no/sport/folg-hele-eliteserierunden-1.11601821
-  and other resources from NRK
-
 #### v? : Touch/Mobile
 * Mobile app, using Apache Cordova or something
 * Touch-friendly version, uniform finger-friendly buttons
@@ -239,9 +237,18 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 #### v? : Public web app
 * Establish multi-tenant 'Tippeligakonkurranse' groups with full web-based user- and group administration
 
-#### v? : Misc improvements
+#### v? : Misc. improvements
+* Revisit automatic reloading of web page
+* Simple countdown timer
 * Real SPA instead of the HTTP refresh
 * ~~Compress the wire with gzip~~ (Obsolete by AppCache usage really)
+* Multiple draggable windows (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
+* Show 'Gjeldende resultater' contextual to what round is actively chosen, as done with 'Trend'
+* Rewrite norwegian soccer result data retrieval to use
+  http://www.nrk.no/sport/folg-hele-eliteserierunden-1.11601821
+  and other resources from NRK
+* Configurable strategy-based rules for calculating scores. The rules may differ from year to year ...
+
 
 
 ## License

@@ -4,7 +4,7 @@ module.exports = function (grunt) {
     'use strict';
 
     // Test setup
-    var port = 8981,
+    var port = 9999,
         clientTestUri = '/tests/client/test.amd.html',
         clientTestUrl = 'http://127.0.0.1:' + port + clientTestUri;
 
@@ -23,7 +23,8 @@ module.exports = function (grunt) {
         connect: {
             server: {
                 options: {
-                    port: port//,
+                    base: '',
+                    port: port
                     //protocol: 'http',
                     //hostname: '127.0.0.1',
                     //base: '.',
@@ -210,16 +211,13 @@ module.exports = function (grunt) {
         'saucelabs-mocha': {
             all: {
                 options: {
-                    urls: [ clientTestUrl ],
-                    build: process.env.CI_BUILD_NUMBER,
+                    urls: [ 'http://127.0.0.1:9999/tests/client/sauce.html' ],
+                    build: process.env.TRAVIS_JOB_ID,
                     testname: 'Tippekonkurranse',
-                    browsers: [ {
-                        platform: 'XP',
-                        browserName: 'chrome',
-                        version: '35'
-                    } ]
-                    // optionally, he `browsers` param can be a flattened array:
-                    // [["XP", "firefox", 19], ["XP", "chrome", 31]]
+                    tags: [ 'master' ],
+                    browsers: [
+                        { platform: 'XP', browserName: 'chrome', version: '35' }
+                    ]
                 }
             }
         },
@@ -324,9 +322,11 @@ module.exports = function (grunt) {
     grunt.registerTask('build:client', [ 'clean', 'copy:to-client', 'copy:to-build', 'uglify', 'cssmin' ]);
 
     grunt.registerTask('test:client', [ 'connect', 'shell:mocha-phantomjs' ]);
+    grunt.registerTask('test:client-watch', [ 'connect', 'watch' ]);
     grunt.registerTask('test:server', [ 'mochaTest' ]);
     grunt.registerTask('coverage:server', [ 'mochacov:report' ]);
     grunt.registerTask('test', [ 'install:client', 'build:client', 'test:server', 'test:client' ]);
+    grunt.registerTask('test:saucelabs', [ 'connect', 'saucelabs-mocha' ]);
 
     grunt.registerTask('build:travis', [ 'test', 'jshint', 'jsdoc', /*'blanket_mocha',*/ 'mochacov:travis', 'saucelabs-mocha' ]);
 

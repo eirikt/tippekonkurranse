@@ -10,7 +10,7 @@ define(['jquery', 'underscore', 'backbone', 'app.models', 'app.result', 'app.soc
                     '<span class="tendency-arrow"></span>' +
                     '<small>&nbsp;<%= rankDiff %></small>'
             ),
-            // Do not see any particular complexity problems with this one ...
+            // Hmm, I really don't see any particular complexity problems with this one ...
             /* jshint -W074 */
             render: function () {
                 if (!this.model[ParticipantScore.previousRankPropertyName]) {
