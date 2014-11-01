@@ -10,8 +10,9 @@ In production [here][1].
 &nbsp;&nbsp;&nbsp;
 [![Coverage Status](https://coveralls.io/repos/eirikt/tippekonkurranse/badge.png?branch=master)](https://coveralls.io/r/eirikt/tippekonkurranse?branch=master)
 &nbsp;&nbsp;&nbsp;
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/eirikt.svg)](https://saucelabs.com/u/eirikt)
 [![Dependency Status](https://david-dm.org/eirikt/tippekonkurranse.png)](https://david-dm.org/eirikt/tippekonkurranse)
+
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/eirikt.svg)](https://saucelabs.com/u/eirikt)
 
 
 
