@@ -13,10 +13,17 @@ install:
 script:
     grunt build:travis
 
+# Sauce Labs tippekonkurranse account
 env:
   global:
-    - secure: BX2mSg5d3WwPOkmmKfue+5HHWq8Hp72fhMIosDTc0Z5oUbyp67Rdo/TeyInGycTaQzIIMtuu99PfMzjgdN51XgaQKkX+3obW1xH02KfUbppfttbUzwBm4SKzyoaIB1xBZxUnDfRWi11U/Ocax0CofAVd+8S50hJgxPSswxdLuzE=
-    - secure: fl2qP4TKnqWb/pAgYPg7b3rMYyEJc3rnukosCzQ6Tzy0SDsxc+8OUY2k1FIk0JHYMVSYFBTOe1vNg6XVg1OAb4yAmDpIMBvtdj+fPQVlaE34BTtFgc3hgGmI1Re3bHzcsRUiI4ucIyDHIstCe9HAqvhBMIwaODJ5J9BfVy19ZNk=
+    - secure: TKLZOXTcZ/GeuVELavltYzWlLM7XPrvxxS9IsIP47yP7VdQfXJTGY5rf38Vt2FosoVxF41p6c9WwjZLBdycdOBFK2vXT3pBV4DyZDr1Sa7vsCEfvqsES7/XOghQ5u0kT5NsW6h2smUg6XqTPB2Tt1Smk+cyUTVQc7z7Nlm/p48s=
+    - secure: BIlO8j+qgQ93CO+gUXc1iPgUllEbrNTSejlbkqXl40CuAlaXOdjr9C9XFMJvMswgEBerY0rpf/KYHUUas070t8/LqQFyCjtUgaSQxHVSWE4HxtSoA2FELdhLkwyAySHzzlCJ5FVXCnWPLIxSBlfogfH1I6EgK0IiGIuq5czvzrk=
+
+# Sauce Labs eirikt account
+#env:
+#  global:
+#    - secure: BX2mSg5d3WwPOkmmKfue+5HHWq8Hp72fhMIosDTc0Z5oUbyp67Rdo/TeyInGycTaQzIIMtuu99PfMzjgdN51XgaQKkX+3obW1xH02KfUbppfttbUzwBm4SKzyoaIB1xBZxUnDfRWi11U/Ocax0CofAVd+8S50hJgxPSswxdLuzE=
+#    - secure: fl2qP4TKnqWb/pAgYPg7b3rMYyEJc3rnukosCzQ6Tzy0SDsxc+8OUY2k1FIk0JHYMVSYFBTOe1vNg6XVg1OAb4yAmDpIMBvtdj+fPQVlaE34BTtFgc3hgGmI1Re3bHzcsRUiI4ucIyDHIstCe9HAqvhBMIwaODJ5J9BfVy19ZNk=
 
 addons:
     sauce_connect: true
