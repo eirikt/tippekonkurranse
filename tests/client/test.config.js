@@ -66,8 +66,32 @@ require([
         'specs/app.rating-history-collection.spec.js',
         'specs/app.rating-view.spec.js'
     ],
+
     function () {
         'use strict';
-        (window.mochaPhantomJS || mocha).run();
+
+        var runner = (window.mochaPhantomJS || mocha).run(),
+            failedTests = [];
+
+        runner.on('end', function () {
+            window.mochaResults = runner.stats;
+            window.mochaResults.reports = failedTests;
+        });
+        runner.on('fail', function (test, err) {
+            failedTests.push({
+                name: test.title,
+                result: false,
+                message: err.message,
+                stack: err.stack,
+                titles: function (test) {
+                    var titles = [];
+                    while (test.parent.title) {
+                        titles.push(test.parent.title);
+                        test = test.parent;
+                    }
+                    return titles.reverse();
+                }
+            });
+        });
     }
 );

@@ -211,12 +211,16 @@ module.exports = function (grunt) {
         'saucelabs-mocha': {
             all: {
                 options: {
-                    urls: [ 'http://127.0.0.1:9999/tests/client/sauce.html' ],
+                    urls: [ clientTestUrl ],
                     build: process.env.TRAVIS_JOB_ID,
+                    concurrency: 2,
                     testname: 'Tippekonkurranse',
                     tags: [ 'master' ],
                     browsers: [
-                        { platform: 'XP', browserName: 'chrome', version: '35' }
+                        { platform: 'Windows XP', browserName: 'Chrome', version: '38' },
+                        { platform: 'Windows XP', browserName: 'Firefox', version: '33' },
+                        { platform: 'Windows 7', browserName: 'Safari', version: '5' },
+                        { platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' }
                     ]
                 }
             }
@@ -328,7 +332,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test', [ 'install:client', 'build:client', 'test:server', 'test:client' ]);
     grunt.registerTask('test:saucelabs', [ 'connect', 'saucelabs-mocha' ]);
 
-    grunt.registerTask('build:travis', [ 'test', 'jshint', 'jsdoc', /*'blanket_mocha',*/ 'mochacov:travis', 'saucelabs-mocha' ]);
+    grunt.registerTask('build:travis', [ 'test', 'saucelabs-mocha', /*'blanket_mocha',*/ 'mochacov:travis', 'jshint', 'jsdoc' ]);
 
     grunt.registerTask('deploy:development', [ 'env:dev', 'install:client', 'copy:to-client', 'shell:run' ]);
     grunt.registerTask('deploy:local', [ 'env:prod', 'install:client', 'build:client', 'shell:run' ]);
