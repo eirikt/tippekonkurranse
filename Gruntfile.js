@@ -235,6 +235,7 @@ module.exports = function (grunt) {
 
                     'build/scripts/fun.js': 'build/scripts/fun.js',
                     'build/scripts/comparators.js': 'build/scripts/comparators.js',
+                    'build/scripts/string-extensions.js': 'build/scripts/string-extensions.js',
 
                     'build/scripts/app.models.js': 'build/scripts/app.models.js',
 

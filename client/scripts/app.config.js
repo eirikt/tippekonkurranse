@@ -59,6 +59,8 @@ require(['app', 'jqplot']);
 
 
 // Listen to window errors: remedy for Heroku instances sleeping/warm-up
+// TODO: Fix ASAP
+/* jshint -W073, -W074 */
 window.onerror = function (message, url, lineNumber) {
     "use strict";
     var initialNumberOfReloads = 1,

@@ -26,6 +26,7 @@ require.config({
         // Client-side-only util libs
         utils: '../../build/scripts/utils',
         'backbone.fetch-local-copy': '../../build/scripts/backbone.fetch-local-copy',
+        'backbone.bootstrap.views': '../../build/scripts/backbone.bootstrap.views',
 
         // Client-side-only app libs (Router)
         'app.router': '../../build/scripts/app.router',
