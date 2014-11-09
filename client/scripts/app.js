@@ -7,15 +7,8 @@ define([
     function ($, _, Backbone, toastr, BackboneFetchLocalCopy, AppRouter) {
         'use strict';
 
-        // Toastr.js config (=> http://codeseven.github.io/toastr/demo.html)
-        toastr.options = {
-            "positionClass": 'toast-top-full-width',
-            "timeOut": 6000
-        };
-
-        // Application starting point (when DOM is ready ...)
         $(document).ready(function () {
-            console.log('DOM ready! Starting ...');
+            console.log('DOM ready! Application starting ...');
 
             new AppRouter();
 

@@ -1,12 +1,12 @@
 /* global define:false, console:false, $:false */
 define([
-        'jquery', 'underscore', 'backbone',
+        'jquery', 'underscore', 'backbone', 'bootstrap',
         'utils',
         'app.models',
         'app.result-collection', 'app.rating-history-collection',
         'app.header-view', 'app.results-view', 'app.results-carousel-view', 'app.rating-history-view'],
 
-    function ($, _, Backbone, Please, App, CurrentScoresCollection, HistoricScoresCollection, HeaderView, CurrentScoresView, RoundCarouselView, RatingHistoryView) {
+    function ($, _, Backbone, Bootstrap, Please, App, CurrentScoresCollection, HistoricScoresCollection, HeaderView, CurrentScoresView, RoundCarouselView, RatingHistoryView) {
         'use strict';
 
         return Backbone.Router.extend({
@@ -19,6 +19,12 @@ define([
                 '*actions': 'defaultAction'
             },
 
+            defaultAction: function () {
+                var self = this;
+                Please.wait(1650).then(function () {
+                    $('#splashscreen').hide('slow', self.showCurrentScores);
+                });
+            },
 
             showCurrentScores: function () {
                 var results = new CurrentScoresCollection(),
@@ -45,7 +51,6 @@ define([
                 $('footer').removeClass('hidden');
             },
 
-
             showScores: function (year, round) {
                 var results = new CurrentScoresCollection({
                         year: year,
@@ -71,7 +76,6 @@ define([
                 $('#splashscreen').remove();
             },
 
-
             showRatingHistory: function (year, round) {
                 var results = new HistoricScoresCollection({
                         year: year,
@@ -96,14 +100,6 @@ define([
                 $('#content2').empty();
                 $('#splashscreen').remove();
                 $('footer').removeClass('hidden');
-            },
-
-
-            defaultAction: function () {
-                var self = this;
-                Please.wait(1650).then(function () {
-                    $('#splashscreen').hide('slow', self.showCurrentScores);
-                });
             }
         });
     }

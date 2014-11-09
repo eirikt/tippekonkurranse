@@ -27,27 +27,27 @@ In production [here][1].
 ## Version history/roadmap
 
 
-#### v1.2.4 :
+#### v1.2.4 : _Deployed 09.11.2014_
 * Refactorings: Cyclic complexity reduced to 5 (one 8-exception only ...)
 * Dependencies update
 * Multi-browser testing with Sauce Labs
 
-_Status: In progress_
+_Status: Done_
 
 
-#### v1.2.3 : _Delivered 29.09.2014_
+#### v1.2.3 : _Deployed 29.09.2014_
 * Dependencies update (Node.js v0.10.32)
 
 _Status: Done_
 
 
-#### v1.2.2 : _Delivered 17.09.2014_
+#### v1.2.2 : _Deployed 17.09.2014_
 * Bugfix: "Gjeldende resultater"
 
 _Status: Done_
 
 
-#### v1.2.1 : _Delivered 14.09.2014_
+#### v1.2.1 : _Deployed 14.09.2014_
 * Navigating (via time-line) historic ratings and scores
 * ~~Full screen option
   (Not supported in iOS, neither by Safari nor Chrome -> iPad useless :-\)
@@ -57,7 +57,7 @@ _Status: Done_
 _Status: Done_
 
 
-#### v1.2.0 : ~~_Delivery goal 20.06.2014_~~ _Delivered 16.07.2014_
+#### v1.2.0 : ~~_Delivery goal 20.06.2014_~~ _Deployed 16.07.2014_
 * Simple graph presentation of historic rating trends
 
 _Status: Done_

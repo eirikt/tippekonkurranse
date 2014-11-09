@@ -117,7 +117,9 @@
             _arithmeticAscendingValue: _arithmeticAscendingValueComparator,
             _alwaysEqual: _alwaysEqualComparator,
             _chainableAscending: _chainableAscendingComparator,
+            // /"Private" functions
 
+            // Public API
             arithmeticAscending: _arithmeticAscendingComparator,
 
             propertyArithmeticAscending: _propertyArithmeticAscendingComparator(_propertyGetter),

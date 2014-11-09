@@ -9,6 +9,7 @@ require.config({
         'moment.nb': '../bower_components/moment/locale/nb',
         'toastr': '../bower_components/toastr/toastr.min',
         'jqplot': '../bower_components/jqplot-bower/dist/jquery.jqplot.min'//,
+        // TODO: Make the jqplot cursor work ...
         //'jqplot.highlighter': '../bower_components/jqplot-bower/dist/plugins/jqplot.highlighter.min',
         //'jqplot.cursor': '../bower_components/jqplot-bower/dist/plugins/jqplot.cursor.min',
         //'jqplot.dateAxisRenderer': '../bower_components/jqplot-bower/dist/plugins/jqplot.dateAxisRenderer.min'
@@ -38,13 +39,26 @@ require.config({
 });
 
 
-// Load and execute these
+// Application configuration
+require(['toastr'],
+    function (toastr) {
+        'use strict';
+
+        // Toastr.js config (=> http://codeseven.github.io/toastr/demo.html)
+        toastr.options = {
+            "positionClass": 'toast-top-full-width',
+            "timeOut": 6000
+        };
+    }
+);
+
+// Application start
 require(['app', 'jqplot']);
 //require(['app', 'jqplot', 'jqplot.highlighter', 'jqplot.cursor', 'jqplot.dateAxisRenderer']);
 
 
+
 // Listen to window errors: remedy for Heroku instances sleeping/warm-up
-/*
 window.onerror = function (message, url, lineNumber) {
     "use strict";
     var initialNumberOfReloads = 1,
@@ -102,4 +116,3 @@ window.onerror = function (message, url, lineNumber) {
     }
     return false;
 };
-*/

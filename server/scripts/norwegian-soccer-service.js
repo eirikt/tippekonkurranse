@@ -22,7 +22,7 @@ var __ = require("underscore"),
     parseTippeligaTable = function (body) {
         "use strict";
         var currentTable = [],
-            $ = cheerio.load(body, { decodeEntities: false }),
+            $ = cheerio.load(body, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false }),
             rows = $($).find("tbody").find("tr");
 
         __.each(rows, function (element) {
@@ -49,7 +49,7 @@ var __ = require("underscore"),
     parseAdeccoligaTable = function (body) {
         "use strict";
         var currentTable = [],
-            $ = cheerio.load(body, { decodeEntities: false }),
+            $ = cheerio.load(body, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false }),
             rows = $($).find("tbody").find("tr");
 
         __.each(rows, function (element) {
@@ -76,7 +76,7 @@ var __ = require("underscore"),
     parseTippeligaTopScorerTable = function (body) {
         "use strict";
         var toppscorers = [],
-            $ = cheerio.load(body),
+            $ = cheerio.load(body, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false }),
             rows = $($).find("tbody").find("tr"),
             maxGoals = 0;
 
@@ -1723,6 +1723,56 @@ var __ = require("underscore"),
             { name: "Tromsdalen", no: 14, matches: 29 },
             { name: "Ullensaker/Kisa", no: 15, matches: 29 },
             { name: "HamKam", no: 16, matches: 29 }
+        ],
+        remainingCupContenders: [
+            "Molde",
+            "Odd"
+        ]
+    },
+
+
+    _dataForRound2014029 = exports.round2014029 = {
+        year: 2014,
+        round: 29,
+        date: "2014-11-02",
+        tippeliga: [
+            { name: "Molde", no: 1, matches: 29 },
+            { name: "Odd", no: 2, matches: 29 },
+            { name: "Rosenborg", no: 3, matches: 29 },
+            { name: "Strømsgodset", no: 4, matches: 29 },
+            { name: "Lillestrøm", no: 5, matches: 29 },
+            { name: "Vålerenga", no: 6, matches: 29 },
+            { name: "Aalesund", no: 7, matches: 29 },
+            { name: "Sarpsborg 08", no: 8, matches: 29 },
+            { name: "Viking", no: 9, matches: 29 },
+            { name: "Haugesund", no: 10, matches: 29 },
+            { name: "Stabæk", no: 11, matches: 29 },
+            { name: "Start", no: 12, matches: 29 },
+            { name: "Bodø/Glimt", no: 13, matches: 29 },
+            { name: "Brann", no: 14, matches: 29 },
+            { name: "Sogndal", no: 15, matches: 29 },
+            { name: "Sandnes Ulf", no: 16, matches: 29 }
+        ],
+        toppscorer: [
+            "Vidar Örn Kjartansson"
+        ],
+        adeccoliga: [
+            { name: "Sandefjord", no: 2, matches: 30 },
+            { name: "Tromsø", no: 2, matches: 30 },
+            { name: "Mjøndalen", no: 3, matches: 30 },
+            { name: "Kristiansund BK", no: 4, matches: 30 },
+            { name: "Bærum", no: 5, matches: 30 },
+            { name: "Fredrikstad", no: 6, matches: 30 },
+            { name: "Ranheim", no: 7, matches: 30 },
+            { name: "Hødd", no: 8, matches: 30 },
+            { name: "Bryne", no: 9, matches: 30 },
+            { name: "Strømmen", no: 10, matches: 30 },
+            { name: "Hønefoss", no: 11, matches: 30 },
+            { name: "Nest-Sotra", no: 12, matches: 30 },
+            { name: "Alta", no: 13, matches: 30 },
+            { name: "Tromsdalen", no: 14, matches: 30 },
+            { name: "Ullensaker/Kisa", no: 15, matches: 30 },
+            { name: "HamKam", no: 16, matches: 30 }
         ],
         remainingCupContenders: [
             "Molde",

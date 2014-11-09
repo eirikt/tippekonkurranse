@@ -6,6 +6,7 @@
 // - http://vimeo.com/74294252
 ///////////////////////////////////////////////////////////
 
+// TODO: RQ.ja must be put in npm global repoMove to 'rq-essentials-request.js'
 var RQ = require("./vendor/rq").RQ,
 
 // TODO: Move to 'rq-essentials-request.js'
@@ -37,8 +38,8 @@ var RQ = require("./vendor/rq").RQ,
 
 
     /**
-     * A clone function
-     * Use of Object.freeze() in RQ dictates argument cloning ...
+     * Deep cloning.
+     * Sometimes necessary to clone arguments due to Object.freeze() in RQ.
      */
     _clone = exports.clone = function (arg) {
         "use strict";
@@ -122,7 +123,7 @@ var RQ = require("./vendor/rq").RQ,
      *
      * f(fContinuation, x) = fContinuation(x)
      *
-     * Just pass things along ...
+     * Just pass things along without doing anything ...
      */
     _noopRequestor = exports.noopRequestor = function (requestion, args) {
         "use strict";
@@ -130,13 +131,20 @@ var RQ = require("./vendor/rq").RQ,
     },
 
 
+///////////////////////////////////////////////////////////////////////////////
+// More requestors, curry-friendly
+//
+// Functions that executes requests, synchronously or asynchronously
+// Asynchronicity is handled by request continuations; "requestions"
+///////////////////////////////////////////////////////////////////////////////
+
     /**
      * f(g, fContinuation, x) = fContinuation(g(x))
      *
      * This is the curry-friendly version of the regular function-wrapper requestory below ("then").
      * Especially handy when you have to curry the requestion, e.g. when terminating nested requestor pipelines.
      */
-    _terminatorRequestor = exports.then = exports.terminator = function (g, requestion, args) {
+    _terminatorRequestor = exports.terminator = function (g, requestion, args) {
         "use strict";
         return requestion(g(args));
     },
@@ -145,43 +153,44 @@ var RQ = require("./vendor/rq").RQ,
     /**
      * f(g, y, fContinuation, x) = fContinuation(g(y))
      *
-     * This function hi-jacks the argument-passing by substituting the continuation arguments with its own
+     * This function hi-jacks the argument-passing by substituting the continuation arguments with its own.
      */
-        // TODO: Find out the relationship with requestory functions below ...
     _interceptorRequestor = exports.interceptor = function (g, y, requestion, args) {
         "use strict";
 
-        // Argument 'y' may come from other requestors, so clone arguments due to Object.freeze() in RQ
+        // Argument 'y' may come from other requestors => cloning arguments due to Object.freeze() in RQ
         //return requestion(g(_clone(y)));
 
         return requestion(g(y));
     },
 
 
-    /**
-     * Simple requestor wrapper for HTTP GET using the "request" library.
-     *
-     * A "data generator" requestor => No forwarding of existing data.
-     * A typical parallel requestor, or as a starting requestor in a sequence ...
-     *
-     * @see https://github.com/mikeal/request
-     * @see https://www.npmjs.org/package/request
-     */
+/**
+ * Simple requestor wrapper for HTTP GET using the "request" library.
+ *
+ * A "data generator" requestor => No forwarding of existing data.
+ * A typical parallel requestor, or as a starting requestor in a sequence ...
+ *
+ * @see https://github.com/mikeal/request
+ * @see https://www.npmjs.org/package/request
+ */
 // TODO: Move to 'rq-essentials-request.js'
-    _httpGetRequestor = exports.httpGet = function (uri, requestion, args) {
-        "use strict";
-        return request(uri, function (err, response, body) {
-            if (!err && response.statusCode === 200) {
-                return requestion(body);
+/*
+ _httpGetRequestor = exports.httpGet = function (uri, requestion, args) {
+ "use strict";
+ return request(uri, function (err, response, body) {
+ if (!err && response.statusCode === 200) {
+ return requestion(body);
 
-            } else {
-                if (!err) {
-                    err = "Unexpected HTTP status code: " + response.statusCode + " (only status code 200 is supported)";
-                }
-                return requestion(undefined, err);
-            }
-        });
-    },
+ } else {
+ if (!err) {
+ err = "Unexpected HTTP status code: " + response.statusCode + " (only status code 200 is supported)";
+ }
+ return requestion(undefined, err);
+ }
+ });
+ },
+ */
 
 
 ///////////////////////////////////////////////////////////
@@ -251,7 +260,17 @@ var RQ = require("./vendor/rq").RQ,
     _getRequestory = exports.get = function (uri) {
         "use strict";
         return function requestor(requestion, args) {
-            return _httpGetRequestor(uri, requestion);
+            return request(uri, function (err, response, body) {
+                if (!err && response.statusCode === 200) {
+                    return requestion(body);
+
+                } else {
+                    if (!err) {
+                        err = "Unexpected HTTP status code: " + response.statusCode + " (only status code 200 is supported)";
+                    }
+                    return requestion(undefined, err);
+                }
+            });
         };
     },
 
@@ -261,7 +280,7 @@ var RQ = require("./vendor/rq").RQ,
 ///////////////////////////////////////////////////////////
 
     /**
-     * Typical execution of Mocha-based specification/test requestors.
+     * Typical execution of Mocha-based specification/test of requestors.
      *
      * Something like:
      * it("should execute an asynchronous test using RQ", function (done) {

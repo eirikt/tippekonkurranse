@@ -2,15 +2,15 @@
 /* jshint -W106 */
 
 define([
-        "jquery", "underscore", "backbone", "moment", "moment.nb",
+        "jquery", "underscore", "backbone", "bootstrap", "backbone.bootstrap.views", "moment", "moment.nb",
         "app.models", "app.participant-score-view", "app.soccer-table-views",
         "backbone.fetch-local-copy", "utils"
     ],
-    function ($, _, Backbone, Moment, Moment_nb, App, ParticipantScoreView, SoccerTableViews, BackboneFetchLocalCopy, Client) {
+    function ($, _, Backbone, Bootstrap, BootstrapViews, Moment, Moment_nb, App, ParticipantScoreView, SoccerTableViews, BackboneFetchLocalCopy, Client) {
         "use strict";
 
         var CurrentResults = Backbone.Model.extend({
-            urlRoot: [App.resource.results.baseUri, App.resource.uri.element.current].join("/")
+            urlRoot: [ App.resource.results.baseUri, App.resource.uri.element.current ].join("/")
         });
         _.extend(CurrentResults.prototype, App.nameable);
         _.extend(CurrentResults.prototype, BackboneFetchLocalCopy);
@@ -25,52 +25,44 @@ define([
                     }
                 },
                 render: function () {
-                    //if (this.model.date) {
-                    //    if (this.model.preamble) {
-                    //        this.el = this.model.preamble + new Moment(this.model.date).format(this.momentJsDateFormat);
-                    //    } else {
-                    //        this.el = new Moment(this.model.date).format(this.momentJsDateFormat);
-                    //    }
-                    //} else {
                     this.el = new Moment().format(this.momentJsDateFormat);
-                    //}
                     return this;
                 }
             }),
 
             ModalCurrentResultsView = Backbone.View.extend({
                 template: _.template('' +
-                        '<div class="modal-dialog">' +
-                        '  <div class="modal-content">' +
-                        '    <div class="modal-header">' +
-                        '      <button type="button" class="close" style="font-size:xx-large;font-weight:bold;" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-                        '      <span class="modal-title" style="font-size:large;" id="currentResultsLabel"><strong>Gjeldende fotballresultater</strong>&nbsp;&nbsp;|&nbsp;&nbsp;<%= currentDate %></span>' +
-                        '    </div>' +
-                        '    <div class="modal-body">' +
-                        '      <p>' +
-                        '        <span id="offlineCurrentResultsNotification" class="hidden" data-appname="<%= appName %>" data-uri="<%= uri %>" data-urititle="Disse fotballresultatene er hentet" style="color:#d20000;font-weight:bold;"></span>' +
-                        '      </p>' +
-                        '      <table style="width:100%">' +
-                        '        <tr>' +
-                        '          <td style="width:33%;vertical-align:top;">' +
-                        '            <p style="margin-left:.8rem">Tippeliga:</p>' +
-                        '            <p><strong><%= currentTippeligaTable %></strong></p>' +
-                        '          </td>' +
-                        '          <td style="width:33%;vertical-align:top;">' +
-                        '            <p style="margin-left:.8rem">Adeccoliga:</p>' +
-                        '            <p><strong><%= currentAdeccoligaTable %></strong></p>' +
-                        '          </td>' +
-                        '          <td style="width:33%;vertical-align:top;">' +
-                        '            <p>Toppskårer:</p>' +
-                        '            <p><strong><%= currentTippeligaToppscorer %></strong></p>' +
-                        '            <p style="margin-top:2rem;">Fortsatt med i cupen:</p>' +
-                        '            <p><strong><%= currentRemainingCupContenders %></strong></p>' +
-                        '          </td>' +
-                        '        </tr>' +
-                        '      </table>' +
-                        '    </div>' +
-                        '  </div>' +
-                        '</div>'
+                    '<div class="modal-dialog">' +
+                    '  <div class="modal-content">' +
+                    '    <div class="modal-header">' +
+                    '      <button type="button" class="close" style="font-size:xx-large;font-weight:bold;" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+                    '      <span class="modal-title" style="font-size:large;" id="currentResultsLabel"><strong>Gjeldende fotballresultater</strong>&nbsp;&nbsp;|&nbsp;&nbsp;<%= currentDate %></span>' +
+                    '    </div>' +
+                    '    <div class="modal-body">' +
+                    '      <p>' +
+                    '        <span id="offlineCurrentResultsNotification" class="hidden" data-appname="<%= appName %>" data-uri="<%= uri %>" data-urititle="Disse fotballresultatene er hentet" style="color:#d20000;font-weight:bold;"></span>' +
+                    '      </p>' +
+                    '      <table style="width:100%">' +
+                    '        <tr>' +
+                    '          <td style="width:33%;vertical-align:top;">' +
+                    '            <p style="margin-left:.8rem">Tippeliga:</p>' +
+                    '            <p><strong><%= currentTippeligaTable %></strong></p>' +
+                    '          </td>' +
+                    '          <td style="width:33%;vertical-align:top;">' +
+                    '            <p style="margin-left:.8rem">Adeccoliga:</p>' +
+                    '            <p><strong><%= currentAdeccoligaTable %></strong></p>' +
+                    '          </td>' +
+                    '          <td style="width:33%;vertical-align:top;">' +
+                    '            <p>Toppskårer:</p>' +
+                    '            <p><strong><%= currentTippeligaToppscorer %></strong></p>' +
+                    '            <p style="margin-top:2rem;">Fortsatt med i cupen:</p>' +
+                    '            <p><strong><%= currentRemainingCupContenders %></strong></p>' +
+                    '          </td>' +
+                    '        </tr>' +
+                    '      </table>' +
+                    '    </div>' +
+                    '  </div>' +
+                    '</div>'
                 ),
                 initialize: function () {
                     this.listenTo(this.model, "change error", this.render);
@@ -122,7 +114,7 @@ define([
                     }, "");
                     this.model.set("currentRemainingCupContenders", cupContenders, { silent: true });
 
-                    this.$el.empty().append(this.template(this.model.toJSON()));
+                    $('#currentResultsTable').append(this.template(this.model.toJSON()));
 
                     return this;
                 }
@@ -132,52 +124,57 @@ define([
         return Backbone.View.extend({
 
             template: _.template('' +
-                    '<table class="table table-condenced table-striped table-hover">' +
-                    '<thead>' +
-                    '<tr>' +
-                    '  <th style="padding-left:2rem;width:3rem;"></th>' +
-                    '  <th style="width:12rem;"></th>' +
-                    '  <th style="width:8rem;"></th>' +
-                    '  <th class="rating-history" colspan="2">' +
-                    '    <a href="/#/ratinghistory/2014" type="button" class="btn btn-sm btn-success">' +
-                    '      <span style="margin-right:1rem;" class="icon-line-chart"></span>Trend' +
-                    '    </a>' +
-                    '  </th>' +
-                    '  <th class="current-results">' +
-                    '    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>' +
-                    '  </th>' +
-                    '  <th style="text-align:center;color:darkgray;width:8rem;">Tabell</th>' +
-                    '  <th style="text-align:center;color:darkgray;width:8rem;">Pall</th>' +
-                    '  <th style="text-align:center;color:darkgray;width:9rem;">Nedrykk</th>' +
-                    '  <th style="text-align:center;color:darkgray;width:9rem;">Toppsk.</th>' +
-                    '  <th style="text-align:center;color:darkgray;width:9rem;">Opprykk</th>' +
-                    '  <th style="text-align:center;color:darkgray;width:9rem;">Cup</th>' +
-                    '</tr>' +
-                    '</thead>' +
+                '<table class="table table-condenced table-striped table-hover">' +
+                '<thead>' +
+                '<tr>' +
+                '  <th style="padding-left:2rem;width:3rem;"></th>' +
+                '  <th style="width:12rem;"></th>' +
+                '  <th style="width:8rem;"></th>' +
+                '  <th class="rating-history" colspan="2">' +
+                '    <a href="/#/ratinghistory/2014" type="button" class="btn btn-sm btn-success">' +
+                '      <span style="margin-right:1rem;" class="icon-line-chart"></span>Trend' +
+                '    </a>' +
+                '  </th>' +
+                '  <th class="current-results">' +
+                '    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>' +
+                '  </th>' +
+                '  <th style="text-align:center;color:darkgray;width:8rem;">Tabell</th>' +
+                '  <th style="text-align:center;color:darkgray;width:8rem;">Pall</th>' +
+                '  <th style="text-align:center;color:darkgray;width:9rem;">Nedrykk</th>' +
+                '  <th style="text-align:center;color:darkgray;width:9rem;">Toppsk.</th>' +
+                '  <th style="text-align:center;color:darkgray;width:9rem;">Opprykk</th>' +
+                '  <th style="text-align:center;color:darkgray;width:9rem;">Cup</th>' +
+                '</tr>' +
+                '</thead>' +
 
                     // All participant data in here
-                    '<tbody></tbody>' +
+                '<tbody></tbody>' +
 
-                    '</table>'
+                '</table>'
             ),
 
             events: {
                 "click .current-results": function () {
+                    this.bootstrapModalContainerView.reset();
                     this.currentResults.fetch({ reset: true });
                 }
             },
 
             currentResults: null,
 
+            bootstrapModalContainerView: null,
             modalCurrentResultsView: null,
 
             initialize: function () {
                 this.currentResults = new CurrentResults();
+                this.bootstrapModalContainerView = new BootstrapViews.ModalContainerView({
+                    parentSelector: 'body',
+                    id: 'currentResultsTable'//,
+                    //ariaLabelledby: 'currentResultsLabel'
+                });
                 this.modalCurrentResultsView = new ModalCurrentResultsView({
-                    el: $("#currentResultsTable"),
                     model: this.currentResults
                 });
-
                 this.listenTo(this.collection, "reset", this.render);
             },
 
@@ -209,7 +206,7 @@ define([
                 }
                 if (currentRound) {
                     var href = this.$(".rating-history").find("a").attr("href");
-                    this.$(".rating-history").find("a").attr("href", [href, currentRound].join("/"));
+                    this.$(".rating-history").find("a").attr("href", [ href, currentRound ].join("/"));
                 }
 
                 // Render all participant scores sequentially, one by one
@@ -234,9 +231,9 @@ define([
                 }
 
                 // Execute all these deferred functions sequentially
-                delayedAddingOfParticipantInTableFunc = addingOfParticipantFuncs[0]();
+                delayedAddingOfParticipantInTableFunc = addingOfParticipantFuncs[ 0 ]();
                 for (i = 0; i < addingOfParticipantFuncs.length; i += 1) {
-                    delayedAddingOfParticipantInTableFunc = delayedAddingOfParticipantInTableFunc.then(addingOfParticipantFuncs[i + 1]);
+                    delayedAddingOfParticipantInTableFunc = delayedAddingOfParticipantInTableFunc.then(addingOfParticipantFuncs[ i + 1 ]);
                 }
 
                 return this;

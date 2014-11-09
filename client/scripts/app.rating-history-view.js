@@ -71,8 +71,8 @@ define(['jquery', 'underscore', 'backbone'],
                         yaxis: {
                             label: '&nbsp;&nbsp;&nbsp;&nbsp;Poeng',
                             min: 100,
-                            max: 40,
-                            numberTicks: 6
+                            max: 30,
+                            numberTicks: 8
                         }
                     }//,
                     // TODO: Get highlightning and/or cursor values to work ...

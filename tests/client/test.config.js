@@ -4,6 +4,7 @@ require.config({
     nodeRequire: require,
     paths: {
         'jquery': '../../build/bower_components/jquery/dist/jquery',
+        'bootstrap': '../../build/bower_components/bootstrap/dist/js/bootstrap',
         'underscore': '../../build/bower_components/underscore/underscore',
         'backbone': '../../build/bower_components/backbone/backbone',
         'moment': '../../build/bower_components/moment/moment',

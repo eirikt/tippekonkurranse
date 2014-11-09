@@ -1,5 +1,4 @@
 /* global define:false */
-/* jshint -W121 */
 
 define(['jquery', 'string-extensions'],
     function ($) {
