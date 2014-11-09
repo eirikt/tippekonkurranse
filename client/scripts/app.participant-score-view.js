@@ -162,7 +162,7 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrap', 'backbone.bootstrap.vi
 
             events: {
                 "click .prediction": function () {
-                    this.bootstrapModalContainerView.reset();
+                    this.bootstrapModalContainerView.resett();
                     this.predictionsModel.fetch({ reset: true });
                 }
             },
@@ -175,8 +175,8 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrap', 'backbone.bootstrap.vi
                 this.predictionsModel = new PredictionsModel({ userId: this.model.userId, year: this.model.year });
                 this.bootstrapModalContainerView = new BootstrapViews.ModalContainerView({
                     parentSelector: 'body',
-                    id: 'predictionsTable'//,
-                    //ariaLabelledby: 'predictionsLabel'
+                    id: 'predictionsTable',
+                    ariaLabelledBy: 'predictionsLabel'
                 });
                 this.modalPredictionsView = new BootstrapModalPredictionsView({
                     model: this.predictionsModel

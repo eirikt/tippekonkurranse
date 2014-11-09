@@ -8,23 +8,22 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrap' ],
         var ModalContainerView = Backbone.View.extend({
             className: 'modal fade',
             parentSelector: null,
-            ariaLabelledby: null,
+            ariaLabelledBy: null,
 
             attributes: function () {
                 return {
                     id: this.id,
                     tabindex: -1,
                     role: 'dialog',
-                    'aria-labelledby': this.ariaLabelledby,
+                    'aria-labelledby': this.ariaLabelledBy,
                     'aria-hidden': true
                 };
             },
             initialize: function (attr) {
                 this.parentSelector = attr.parentSelector;
             },
-            reset: function () {
-                this.remove();
-                $('#' + this.id).remove();
+            resett: function () {
+                $('#' + this.id).empty().remove();
                 $(this.parentSelector).append(this.el);
             }
         });

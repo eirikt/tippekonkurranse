@@ -155,7 +155,7 @@ define([
 
             events: {
                 "click .current-results": function () {
-                    this.bootstrapModalContainerView.reset();
+                    this.bootstrapModalContainerView.resett();
                     this.currentResults.fetch({ reset: true });
                 }
             },
@@ -169,8 +169,8 @@ define([
                 this.currentResults = new CurrentResults();
                 this.bootstrapModalContainerView = new BootstrapViews.ModalContainerView({
                     parentSelector: 'body',
-                    id: 'currentResultsTable'//,
-                    //ariaLabelledby: 'currentResultsLabel'
+                    id: 'currentResultsTable',
+                    ariaLabelledBy: 'currentResultsLabel'
                 });
                 this.modalCurrentResultsView = new ModalCurrentResultsView({
                     model: this.currentResults
