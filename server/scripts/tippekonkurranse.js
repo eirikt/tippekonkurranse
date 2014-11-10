@@ -278,8 +278,8 @@ var env = process.env.NODE_ENV || "development",
                             tippekonkurranseData.remainingCupContenders = tippeligaRound.remainingCupContenders;
 
                             tippekonkurranseData.round = tippeligaRound.round;
-                            tippekonkurranseData.currentRound = allTippeligaRounds.length;
                             tippekonkurranseData.date = tippeligaRound.date;
+                            tippekonkurranseData.currentRound = allTippeligaRounds.length;
                             tippekonkurranseData.currentDate = new Date();
 
                             tippekonkurranseData.matchesCountGrouping = null;
@@ -296,11 +296,7 @@ var env = process.env.NODE_ENV || "development",
     _addTeamAndNumberOfMatchesPlayedGrouping = exports.addTeamAndNumberOfMatchesPlayedGrouping =
         function (args) {
             "use strict";
-
-            // TODO: Why do we have to clone args here?
-            //args = __.clone(args);
             var tippekonkurranseData = new TippekonkurranseData(args);
-
             tippekonkurranseData.matchesCountGrouping = __.groupBy(tippekonkurranseData.tippeligaTable, "matches");
             return tippekonkurranseData.toArray();
         },
@@ -453,7 +449,7 @@ var env = process.env.NODE_ENV || "development",
             return RQ.sequence([
                 RQ.parallel(scoresRequestors),
                 curry(rq.interceptor, curry(updateStandings, currentStanding), args),
-                curry(rq.terminator, requestion),
+                curry(rq.terminator, requestion)
             ])(rq.execute);
         },
 
@@ -597,8 +593,8 @@ var env = process.env.NODE_ENV || "development",
                 tippekonkurranseData.remainingCupContenders = norwegianSoccerLeagueService.getCurrentRemainingCupContenders;
 
                 tippekonkurranseData.round = rq.null;
-                tippekonkurranseData.currentRound = rq.null;
                 tippekonkurranseData.date = rq.return(now);
+                tippekonkurranseData.currentRound = rq.null;
                 tippekonkurranseData.currentDate = rq.return(now);
 
                 tippekonkurranseData.matchesCountGrouping = rq.null;

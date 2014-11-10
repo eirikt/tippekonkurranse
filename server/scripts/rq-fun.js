@@ -119,13 +119,28 @@ var RQ = require("./vendor/rq").RQ,
 
 
     /**
+     * A timestamp requestor.
+     * Returning <code>Date.now()</code>, the number of milliseconds elapsed since 1 January 1970 00:00:00 UTC.
+     *
+     * f(fContinuation, x) = fContinuation(Date.now())
+     *
+     * A "data generator" requestor => No forwarding of existing data.
+     * A typical parallel requestor, or as a starting requestor in a sequence ...
+     */
+    _timestampRequestor = exports.timestamp = exports.now = function (requestion, args) {
+        "use strict";
+        return requestion(Date.now(), undefined);
+    },
+
+
+    /**
      * The NOP/NOOP requestor.
      *
      * f(fContinuation, x) = fContinuation(x)
      *
      * Just pass things along without doing anything ...
      */
-    _noopRequestor = exports.noopRequestor = function (requestion, args) {
+    _noopRequestor = exports.noop = function (requestion, args) {
         "use strict";
         return requestion(args, undefined);
     },
@@ -141,7 +156,7 @@ var RQ = require("./vendor/rq").RQ,
     /**
      * f(g, fContinuation, x) = fContinuation(g(x))
      *
-     * This is the curry-friendly version of the regular function-wrapper requestory below ("then").
+     * This is the curry-friendly version of the regular function-wrapper requestory below (with the alias 'then').
      * Especially handy when you have to curry the requestion, e.g. when terminating nested requestor pipelines.
      */
     _terminatorRequestor = exports.terminator = function (g, requestion, args) {
@@ -163,34 +178,6 @@ var RQ = require("./vendor/rq").RQ,
 
         return requestion(g(y));
     },
-
-
-/**
- * Simple requestor wrapper for HTTP GET using the "request" library.
- *
- * A "data generator" requestor => No forwarding of existing data.
- * A typical parallel requestor, or as a starting requestor in a sequence ...
- *
- * @see https://github.com/mikeal/request
- * @see https://www.npmjs.org/package/request
- */
-// TODO: Move to 'rq-essentials-request.js'
-/*
- _httpGetRequestor = exports.httpGet = function (uri, requestion, args) {
- "use strict";
- return request(uri, function (err, response, body) {
- if (!err && response.statusCode === 200) {
- return requestion(body);
-
- } else {
- if (!err) {
- err = "Unexpected HTTP status code: " + response.statusCode + " (only status code 200 is supported)";
- }
- return requestion(undefined, err);
- }
- });
- },
- */
 
 
 ///////////////////////////////////////////////////////////

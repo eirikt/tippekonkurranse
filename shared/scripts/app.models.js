@@ -86,6 +86,7 @@
             },
 
 
+            /** Object.defineProperty config */
             _mutablePropertyWithDefaultValue = function (defaultValue) {
                 return {
                     value: defaultValue,
@@ -95,6 +96,7 @@
                 };
             },
 
+            /** Object.defineProperty config */
             _immutablePropertyWithDefaultValue = function (defaultValue) {
                 return {
                     value: defaultValue,
@@ -120,22 +122,20 @@
                 if (!(this instanceof TippekonkurranseData)) {
                     return new TippekonkurranseData(updatedPropertyArray, options);
                 }
-                var _isLiveData = 0,                       // Live or historic Tippeliga data
+                var _isLiveData = 0,                // Live or historic Tippeliga data
 
-                    _tippeligaTable = 1,      // TODO: Document ...
-                    _tippeligaTopScorer = 2,                               // TODO: Document ...
-                    _adeccoligaTable = 3,    // TODO: Document ...
-                    _remainingCupContenders = 4,                            // TODO: Document ...
+                    _tippeligaTable = 1,            // TODO: Document ...
+                    _tippeligaTopScorer = 2,        // TODO: Document ...
+                    _adeccoligaTable = 3,           // TODO: Document ...
+                    _remainingCupContenders = 4,    // TODO: Document ...
 
-                //_currentYear = 5,                                       // This year (not the requested year)
-                //_year = 6,                                              // TODO: Document ...
-                    _round = 5,                        // TODO: Document ...
-                    _date = 6,                                              // TODO: Document ...
-                    _currentRound = 7,                                      // The latest round (not the requested round)
-                    _currentDate = 8,                                              // TODO: Document ...
+                    _round = 5,                     // TODO: Document ...
+                    _date = 6,                      // TODO: Document ...
+                    _currentRound = 7,              // The latest round (not the requested round)
+                    _currentDate = 8,               // TODO: Document ...
 
-                    _matchesCountGrouping = 9,                             // TODO: Document ...
-                    _scores = 10,                     // Object with properties 'scores' and 'metadata'
+                    _matchesCountGrouping = 9,      // TODO: Document ...
+                    _scores = 10,                   // Object with properties 'scores' and 'metadata'
 
                     useDefaultValues = !(updatedPropertyArray && _.isArray(updatedPropertyArray) && updatedPropertyArray.length > 0);
 
@@ -148,10 +148,8 @@
                     Object.defineProperty(this, 'tippeligaTopScorer', _mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'adeccoligaTable', _mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'remainingCupContenders', _mutablePropertyWithDefaultValue(null));
-                    //Object.defineProperty(this, 'currentYear', _mutablePropertyWithDefaultValue(new Date().getFullYear()));
-                    //Object.defineProperty(this, 'year', _mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'round', _mutablePropertyWithDefaultValue(null));
-                    Object.defineProperty(this, 'date', _mutablePropertyWithDefaultValue(new Date()));
+                    Object.defineProperty(this, 'date', _mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'currentRound', _mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'currentDate', _mutablePropertyWithDefaultValue(new Date()));
                     Object.defineProperty(this, 'matchesCountGrouping', _mutablePropertyWithDefaultValue(null));
@@ -163,8 +161,6 @@
                     Object.defineProperty(this, 'tippeligaTopScorer', _mutablePropertyWithDefaultValue(updatedPropertyArray[_tippeligaTopScorer]));
                     Object.defineProperty(this, 'adeccoligaTable', _mutablePropertyWithDefaultValue(updatedPropertyArray[_adeccoligaTable]));
                     Object.defineProperty(this, 'remainingCupContenders', _mutablePropertyWithDefaultValue(updatedPropertyArray[_remainingCupContenders]));
-                    //Object.defineProperty(this, 'currentYear', _mutablePropertyWithDefaultValue(updatedPropertyArray[_currentYear]));
-                    //Object.defineProperty(this, 'year', _mutablePropertyWithDefaultValue(updatedPropertyArray[_year]));
                     Object.defineProperty(this, 'round', _mutablePropertyWithDefaultValue(updatedPropertyArray[_round]));
                     Object.defineProperty(this, 'date', _mutablePropertyWithDefaultValue(updatedPropertyArray[_date]));
                     Object.defineProperty(this, 'currentRound', _mutablePropertyWithDefaultValue(updatedPropertyArray[_currentRound]));
@@ -187,8 +183,6 @@
                         this.tippeligaTopScorer,
                         this.adeccoligaTable,
                         this.remainingCupContenders,
-                        //this.currentYear,
-                        //this.year,
                         this.round,
                         this.date,
                         this.currentRound,
