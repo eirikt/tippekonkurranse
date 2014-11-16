@@ -339,28 +339,11 @@ module.exports = function (grunt) {
     grunt.registerTask('deploy:development', [ 'env:dev', 'install:client', 'copy:to-client', 'shell:run' ]);
     grunt.registerTask('deploy:local', [ 'env:prod', 'install:client', 'build:client', 'shell:run' ]);
     grunt.registerTask('deploy:production', [ 'install:client', 'build:client' ]);
-    grunt.registerTask('deploy:heroku', [ 'deploy:production' ]);
-
     /*
+     * Using npm trick described in:
      * http://stackoverflow.com/questions/13784600/how-to-deploy-node-app-that-uses-grunt-to-heroku
-     *
-     * =>
-     * Heroku buildpack: Node.js with grunt support
-     * https://github.com/mbuchetics/heroku-buildpack-nodejs-grunt
      */
-    //>D:\workspace\Tippekonkurranse [master +11 ~2 -0 !]> heroku config:add BUILDPACK_URL=https://github.com/mbuchetics/heroku-buildpack-nodejs-grunt.git
-    //>Setting config vars and restarting tippekonkurranse... done, v19
-    //>BUILDPACK_URL: https://github.com/mbuchetics/heroku-buildpack-nodejs-grunt.git
-    //>D:\workspace\Tippekonkurranse [master +11 ~2 -0 !]> heroku labs:enable user-env-compile
-    //>Enabling user-env-compile for tippekonkurranse... done
-    //>WARNING: This feature is experimental and may change or be removed without notice.
-    //>For more information see: http://devcenter.heroku.com/articles/labs-user-env-compile
-    //>D:\workspace\Tippekonkurranse [master +11 ~2 -0 !]> heroku config:set NODE_ENV=production
-    //>Setting config vars and restarting tippekonkurranse... done, v20
-    //>NODE_ENV: production
-    //>D:\workspace\Tippekonkurranse [master +11 ~2 -0 !]>
-    //grunt.registerTask('heroku:development', 'clean less mincss');
-    grunt.registerTask('heroku:production', [ 'deploy:heroku' ]);
+    grunt.registerTask('deploy:heroku', [ 'deploy:production' ]);
 
     grunt.registerTask('run', [ 'deploy:development' ]);
 
