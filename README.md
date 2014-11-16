@@ -1,6 +1,6 @@
 # Tippekonkurranse
 
-A simple, idiomatic, full-stack JavaScript-based web application,
+A full-stack JavaScript-based web application,
 persisting data using [MongoDB][51],
 with server-side functional composition using [RQ][52],
 and keeping client-side somewhat tidy with [Backbone][53].
@@ -9,6 +9,11 @@ In production [here][1].
 [![Build Status](https://travis-ci.org/eirikt/tippekonkurranse.png?branch=master)](https://travis-ci.org/eirikt/tippekonkurranse)
 &nbsp;&nbsp;&nbsp;
 [![Coverage Status](https://coveralls.io/repos/eirikt/tippekonkurranse/badge.png?branch=master)](https://coveralls.io/r/eirikt/tippekonkurranse?branch=master)
+&nbsp;&nbsp;&nbsp;
+[![Codacy Badge](https://www.codacy.com/project/badge/4f9fda90eb834d27ae6cc2f539ae263c)](https://www.codacy.com/public/eiriktorske/tippekonkurranse)
+
+[![Dependency Status](https://www.versioneye.com/user/projects/54690c9395082540da000012/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54690c9395082540da000012)
+[![Dependency Status](https://www.versioneye.com/user/projects/54690c92950825928500000b/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54690c92950825928500000b)
 &nbsp;&nbsp;&nbsp;
 [![Dependency Status](https://david-dm.org/eirikt/tippekonkurranse.png)](https://david-dm.org/eirikt/tippekonkurranse)
 
@@ -284,6 +289,7 @@ SOFTWARE.
 [30]: https://www.heroku.com
 [31]: https://devcenter.heroku.com/articles/getting-started-with-nodejs
 [32]: https://devcenter.heroku.com/articles/custom-domains
+[35]: https://mongolab.com
 [40]: http://tiny.cc
 [50]: http://nodejs.org
 [51]: https://www.mongodb.org
