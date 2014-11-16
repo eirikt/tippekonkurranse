@@ -403,7 +403,7 @@ var env = process.env.NODE_ENV || "development",
                         );
                 },
 
-                updateStandings = function (currentStanding, args) {
+                _updateStandings = function (currentStanding, args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
                     tippekonkurranseData.scores = {
                         scores: currentStanding,
@@ -448,7 +448,7 @@ var env = process.env.NODE_ENV || "development",
 
             return RQ.sequence([
                 RQ.parallel(scoresRequestors),
-                curry(rq.interceptor, curry(updateStandings, currentStanding), args),
+                curry(rq.interceptor, curry(_updateStandings, currentStanding), args),
                 curry(rq.terminator, requestion)
             ])(rq.execute);
         },
@@ -457,9 +457,9 @@ var env = process.env.NODE_ENV || "development",
     _addPreviousMatchRoundRatingToEachParticipantRequestor = exports.addPreviousMatchRoundRatingToEachParticipantRequestor =
         function (userPredictions, requestion, args) {
             "use strict";
-            var tippekonkurranseData = new TippekonkurranseData(args);
+            var tippekonkurranseData = new TippekonkurranseData(args),
 
-            var year = tippekonkurranseData.date.getFullYear(),
+                year = tippekonkurranseData.date.getFullYear(),
                 previousRound = tippekonkurranseData.round - 1,
                 getPreviousRoundTippeligaData = curry(_getStoredTippeligaDataRequestor, year, previousRound),
                 addTippekonkurranseScores = curry(_addTippekonkurranseScoresRequestor, userPredictions),
@@ -478,11 +478,9 @@ var env = process.env.NODE_ENV || "development",
                     rq.requestor(_addRound),
                     addTippekonkurranseScores,
                     function (requestion, args) {
-                        for (var participant in updatedScores) {
-                            if (updatedScores.hasOwnProperty(participant)) {
-                                updatedScores[ participant ][ appModels.scoreModel.previousRatingPropertyName ] = args[ tippekonkurranseData.indexOfScores ].scores[ participant ][ appModels.scoreModel.ratingPropertyName ];
-                            }
-                        }
+                        __.each(__.keys(updatedScores), function (participant) {
+                            updatedScores[ participant ][ appModels.scoreModel.previousRatingPropertyName ] = args[ tippekonkurranseData.indexOfScores ].scores[ participant ][ appModels.scoreModel.ratingPropertyName ];
+                        });
                         return requestion();
                     },
                     function (requestion, args) {

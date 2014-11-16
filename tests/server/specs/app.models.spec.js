@@ -78,7 +78,7 @@ describe("TippekonkurranseData constructor function / objects", function () {
         expect(tippekonkurranseData.currentDate).to.be.a.property;
         expect(tippekonkurranseData.currentDate).to.be.above(new Date().setSeconds(new Date().getSeconds() - 1));
         expect(tippekonkurranseData.date).to.be.a.property;
-        expect(tippekonkurranseData.date).to.be.above(new Date().setSeconds(new Date().getSeconds() - 1));
+        expect(tippekonkurranseData.date).to.be.null;
         expect(tippekonkurranseData.matchesCountGrouping).to.be.a.property;
         expect(tippekonkurranseData.matchesCountGrouping).to.be.null;
         expect(tippekonkurranseData.scores).to.be.a.property;
