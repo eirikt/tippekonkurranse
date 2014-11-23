@@ -10,10 +10,12 @@ In production [here][1].
 &nbsp;&nbsp;&nbsp;
 [![Codacy Badge](https://www.codacy.com/project/badge/4f9fda90eb834d27ae6cc2f539ae263c)](https://www.codacy.com/public/eiriktorske/tippekonkurranse)
 
-<sub><sup>__Server-side__</sup></sub>: [![Dependency Status](https://www.versioneye.com/user/projects/54690c9395082540da000012/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54690c9395082540da000012)
+<sub><sup>__Server-side__:</sup></sub> [![Dependency Status](https://www.versioneye.com/user/projects/54690c9395082540da000012/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54690c9395082540da000012)
+&nbsp;&nbsp;&nbsp;
 [![Coverage Status](https://coveralls.io/repos/eirikt/tippekonkurranse/badge.png?branch=master)](https://coveralls.io/r/eirikt/tippekonkurranse?branch=master)
 
-<sub><sup>__Client-side__</sup></sub>: [![Dependency Status](https://www.versioneye.com/user/projects/54690c92950825928500000b/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54690c92950825928500000b)
+<sub><sup>__Client-side__:</sup></sub> [![Dependency Status](https://www.versioneye.com/user/projects/54690c92950825928500000b/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54690c92950825928500000b)
+&nbsp;&nbsp;&nbsp;
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/eirikt.svg)](https://saucelabs.com/u/eirikt)
 
 
@@ -28,7 +30,6 @@ In production [here][1].
 
 ## Version history/roadmap
 
-
 #### v1.3 : _Planned Q1 2015_
 * Multi-season handling with proper archiving
 * User admin
@@ -41,7 +42,7 @@ In production [here][1].
 _Status: In progress_
 
 
-#### v1.2.5 : _Planned 24.11.2014_
+#### v1.2.5 : _Deployed 23.11.2014_
 * Results for 2014 season completed
 * Heroku environment upgraded to Cedar-14
 * Heroku buildpack dependency removed
