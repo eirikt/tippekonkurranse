@@ -1,6 +1,6 @@
 {
     "name": "Tippekonkurranse",
-    "version": "1.2.4",
+    "version": "1.2.5",
     "description": "A simple Node-based screen-scrapin' web application hosted on Heroku",
     "author": "Eirik Torske <eirik.torske@gmail.com>",
     "license": "MIT",

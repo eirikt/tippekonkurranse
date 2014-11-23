@@ -8,15 +8,12 @@ In production [here][1].
 
 [![Build Status](https://travis-ci.org/eirikt/tippekonkurranse.png?branch=master)](https://travis-ci.org/eirikt/tippekonkurranse)
 &nbsp;&nbsp;&nbsp;
-[![Coverage Status](https://coveralls.io/repos/eirikt/tippekonkurranse/badge.png?branch=master)](https://coveralls.io/r/eirikt/tippekonkurranse?branch=master)
-&nbsp;&nbsp;&nbsp;
 [![Codacy Badge](https://www.codacy.com/project/badge/4f9fda90eb834d27ae6cc2f539ae263c)](https://www.codacy.com/public/eiriktorske/tippekonkurranse)
 
-[![Dependency Status](https://www.versioneye.com/user/projects/54690c9395082540da000012/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54690c9395082540da000012)
-[![Dependency Status](https://www.versioneye.com/user/projects/54690c92950825928500000b/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54690c92950825928500000b)
-&nbsp;&nbsp;&nbsp;
-[![Dependency Status](https://david-dm.org/eirikt/tippekonkurranse.png)](https://david-dm.org/eirikt/tippekonkurranse)
+<sub><sup>__Server-side__</sup></sub>: [![Dependency Status](https://www.versioneye.com/user/projects/54690c9395082540da000012/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54690c9395082540da000012)
+[![Coverage Status](https://coveralls.io/repos/eirikt/tippekonkurranse/badge.png?branch=master)](https://coveralls.io/r/eirikt/tippekonkurranse?branch=master)
 
+<sub><sup>__Client-side__</sup></sub>: [![Dependency Status](https://www.versioneye.com/user/projects/54690c92950825928500000b/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54690c92950825928500000b)
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/eirikt.svg)](https://saucelabs.com/u/eirikt)
 
 
@@ -30,6 +27,27 @@ In production [here][1].
 
 
 ## Version history/roadmap
+
+
+#### v1.3 : _Planned Q1 2015_
+* Multi-season handling with proper archiving
+* User admin
+* Admin UI for data management
+* Revisiting automatic reloading of web page (simple countdown timer, or real SPA instead of the HTTP refresh)
+* Multiple draggable windows (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
+* Show 'Gjeldende resultater' contextual to what round is actively chosen, as done with 'Trend'
+* Configurable strategy-based rules for calculating scores. The rules may differ from year to year ...
+
+_Status: In progress_
+
+
+#### v1.2.5 : _Planned 24.11.2014_
+* Results for 2014 season completed
+* Heroku environment upgraded to Cedar-14
+* Heroku buildpack dependency removed
+* Dependencies update
+
+_Status: Done_
 
 
 #### v1.2.4 : _Deployed 09.11.2014_
@@ -238,23 +256,14 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 * Establish proper REST service for Tippeliga data for everybody to use without leaning to crappy web scraping routines
 * Brag about it
 
-#### v? : Admin UI
-* Admin UI for data management
-
 #### v? : Public web app
 * Establish multi-tenant 'Tippeligakonkurranse' groups with full web-based user- and group administration
 
 #### v? : Misc. improvements
-* Revisit automatic reloading of web page
-* Simple countdown timer
-* Real SPA instead of the HTTP refresh
 * ~~Compress the wire with gzip~~ (Obsolete by AppCache usage really)
-* Multiple draggable windows (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
-* Show 'Gjeldende resultater' contextual to what round is actively chosen, as done with 'Trend'
 * Rewrite norwegian soccer result data retrieval to use
   http://www.nrk.no/sport/folg-hele-eliteserierunden-1.11601821
   and other resources from NRK
-* Configurable strategy-based rules for calculating scores. The rules may differ from year to year ...
 
 
 

@@ -21,38 +21,8 @@ var env = process.env.NODE_ENV || "development",
     appModels = require("./../../shared/scripts/app.models"),
 
 
-// Below, "scores" should be read as "penalty points", that's more accurate ...
-
-    _getTableScore = function (predictedTeamPlacing, actualTeamPlacing) {
-        "use strict";
-        return Math.abs(predictedTeamPlacing - actualTeamPlacing);
-    },
-
-
-    _getPallScore = function (predictedTeamPlacing, actualTeamPlacing) {
-        "use strict";
-        var pallPenaltyPoints = 0;
-        if (predictedTeamPlacing === 1 && predictedTeamPlacing === actualTeamPlacing) {
-            pallPenaltyPoints += -1;
-        }
-        if (predictedTeamPlacing === 2 && predictedTeamPlacing === actualTeamPlacing) {
-            pallPenaltyPoints += -1;
-        }
-        if (predictedTeamPlacing === 3 && predictedTeamPlacing === actualTeamPlacing) {
-            pallPenaltyPoints += -1;
-        }
-        return pallPenaltyPoints;
-    },
-
-
-    _getExtraPallScore = function (predictedTeamPlacing, currentPallScore) {
-        "use strict";
-        return predictedTeamPlacing === 4 && currentPallScore === -3 ? -1 : 0;
-    },
-
-
     /**
-     * // TODO: Describe and document! How generic is this? Move to utils?
+     * // TODO: Describe and document! How generic is this function? Move it to utils?
      *
      * @param valueOrArrayArgs
      * @param targetArray
@@ -83,6 +53,36 @@ var env = process.env.NODE_ENV || "development",
             }
         }
         return argIndexCompensator;
+    },
+
+
+// Below, "scores" should be read as "penalty points", that's more accurate ...
+
+    _getTableScore = function (predictedTeamPlacing, actualTeamPlacing) {
+        "use strict";
+        return Math.abs(predictedTeamPlacing - actualTeamPlacing);
+    },
+
+
+    _getPallScore = function (predictedTeamPlacing, actualTeamPlacing) {
+        "use strict";
+        var pallPenaltyPoints = 0;
+        if (predictedTeamPlacing === 1 && predictedTeamPlacing === actualTeamPlacing) {
+            pallPenaltyPoints += -1;
+        }
+        if (predictedTeamPlacing === 2 && predictedTeamPlacing === actualTeamPlacing) {
+            pallPenaltyPoints += -1;
+        }
+        if (predictedTeamPlacing === 3 && predictedTeamPlacing === actualTeamPlacing) {
+            pallPenaltyPoints += -1;
+        }
+        return pallPenaltyPoints;
+    },
+
+
+    _getExtraPallScore = function (predictedTeamPlacing, currentPallScore) {
+        "use strict";
+        return predictedTeamPlacing === 4 && currentPallScore === -3 ? -1 : 0;
     },
 
 
@@ -293,6 +293,49 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
+    _retrieveTippeligaDataRequestory = exports.retrieveTippeligaData =
+        function (request) {
+            "use strict";
+            var year = request.params.year || new Date().getFullYear(),
+                round = request.params.round,
+                now,
+                tippekonkurranseData;
+
+            // Override with stored Tippeliga data => for statistics/history/development ...
+            if (!round && env === "development") {
+                if (root.overrideTippeligaDataWithRound) {
+                    round = root.overrideTippeligaDataWithRound;
+                    console.warn(utils.logPreamble() + "Overriding current Tippeliga results with stored data from year=" + year + " and round=" + round);
+                }
+            }
+
+            if (year && round) {
+                return curry(_getStoredTippeligaDataRequestor, year, round);
+
+            } else {
+                now = new Date();
+                tippekonkurranseData = new TippekonkurranseData();
+
+                tippekonkurranseData.isLive = rq.true;
+
+                tippekonkurranseData.tippeligaTable = norwegianSoccerLeagueService.getCurrentTippeligaTable;
+                tippekonkurranseData.tippeligaTopScorer = norwegianSoccerLeagueService.getCurrentTippeligaTopScorer;
+                tippekonkurranseData.adeccoligaTable = norwegianSoccerLeagueService.getCurrentAdeccoligaTable;
+                tippekonkurranseData.remainingCupContenders = norwegianSoccerLeagueService.getCurrentRemainingCupContenders;
+
+                tippekonkurranseData.round = rq.null;
+                tippekonkurranseData.date = rq.return(now);
+                tippekonkurranseData.currentRound = rq.null;
+                tippekonkurranseData.currentDate = rq.return(now);
+
+                tippekonkurranseData.matchesCountGrouping = rq.null;
+                tippekonkurranseData.scores = rq.null;
+
+                return RQ.parallel(tippekonkurranseData.toArray());
+            }
+        },
+
+
     _addTeamAndNumberOfMatchesPlayedGrouping = exports.addTeamAndNumberOfMatchesPlayedGrouping =
         function (args) {
             "use strict";
@@ -314,6 +357,7 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
+// TODO: Rename to 'addCurrentRound'
     _addCurrent = exports.addCurrent =
         function (args) {
             "use strict";
@@ -329,6 +373,71 @@ var env = process.env.NODE_ENV || "development",
 
 
     _addTippekonkurranseScoresRequestor = exports.addTippekonkurranseScoresRequestor =
+
+// TODO: Introduce (curried) scores strategy:
+        //function (userPredictions, scoresStrategy, requestion, args) {
+        /*
+         scoresStrategy:
+         ('exact' is permutation-like, 'present' is combination-like)
+
+         tabellScoreStrategy: {
+         strategy: 'displacement([16])',
+         direction: '+',
+         points: 1
+         }
+
+         pall1ScoreStrategy: {
+         strategy: 'match([#1], 'exact')',
+         direction: '-',
+         points: 1
+         }
+
+         pall2ScoreStrategy: {
+         strategy: 'match([#2], 'exact')',
+         direction: '-',
+         points: 1
+         }
+
+         pall3ScoreStrategy: {
+         strategy: 'match([#3], 'exact')',
+         direction: '-',
+         points: 1
+         }
+
+         pallBonusScoreStrategy: {
+         strategy: 'match([#1,#2,#3], 'exact')',
+         direction: '-',
+         points: 1
+         }
+
+         nedrykkScoreStrategy: {
+         strategy: 'match([#15,#16], 'present')'
+         direction: '-',
+         points: 1
+         }
+
+         toppscorerScoreStrategy: {
+         strategy: 'match([#1], 'present')'
+         direction: '-',
+         points: 1
+         }
+
+         opprykkScoreStrategy: {
+         strategy: 'match([#1,#2], 'present')'
+         direction: '-',
+         points: 1
+         }
+
+         cupScoreStrategy: {
+         strategy: 'match([#1], 'present')'
+         direction: '-',
+         points: 1
+         }
+
+         ratingStrategy: {
+         strategy: 'sum'
+         }
+         */
         function (userPredictions, requestion, args) {
             "use strict";
 
@@ -557,47 +666,4 @@ var env = process.env.NODE_ENV || "development",
                 }
             }
             return args;
-        },
-
-
-    _retrieveTippeligaDataRequestory = exports.retrieveTippeligaData =
-        function (request) {
-            "use strict";
-            var year = request.params.year || new Date().getFullYear(),
-                round = request.params.round,
-                now,
-                tippekonkurranseData;
-
-            // Override with stored Tippeliga data => for statistics/history/development ...
-            if (!round && env === "development") {
-                if (root.overrideTippeligaDataWithRound) {
-                    round = root.overrideTippeligaDataWithRound;
-                    console.warn(utils.logPreamble() + "Overriding current Tippeliga results with stored data from year=" + year + " and round=" + round);
-                }
-            }
-
-            if (year && round) {
-                return curry(_getStoredTippeligaDataRequestor, year, round);
-
-            } else {
-                now = new Date();
-                tippekonkurranseData = new TippekonkurranseData();
-
-                tippekonkurranseData.isLive = rq.true;
-
-                tippekonkurranseData.tippeligaTable = norwegianSoccerLeagueService.getCurrentTippeligaTable;
-                tippekonkurranseData.tippeligaTopScorer = norwegianSoccerLeagueService.getCurrentTippeligaTopScorer;
-                tippekonkurranseData.adeccoligaTable = norwegianSoccerLeagueService.getCurrentAdeccoligaTable;
-                tippekonkurranseData.remainingCupContenders = norwegianSoccerLeagueService.getCurrentRemainingCupContenders;
-
-                tippekonkurranseData.round = rq.null;
-                tippekonkurranseData.date = rq.return(now);
-                tippekonkurranseData.currentRound = rq.null;
-                tippekonkurranseData.currentDate = rq.return(now);
-
-                tippekonkurranseData.matchesCountGrouping = rq.null;
-                tippekonkurranseData.scores = rq.null;
-
-                return RQ.parallel(tippekonkurranseData.toArray());
-            }
         };

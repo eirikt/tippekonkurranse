@@ -4,12 +4,14 @@
 // Boilerplate for CommonJS and AMD support (no RequireJS shimming required)
 // => https://blog.codecentric.de/en/2014/02/cross-platform-javascript/
 // => http://www.2ality.com/2011/11/module-gap.html
-({ define: typeof define === 'function' ? define : function (A, F) {
-    'use strict';
-    module.exports = F.apply(null, A.map(require));
-}}).
+({
+    define: typeof define === 'function' ? define : function (A, F) {
+        'use strict';
+        module.exports = F.apply(null, A.map(require));
+    }
+}).
 
-    define(['underscore'], function (__) {
+    define([ 'underscore' ], function (__) {
         'use strict';
 
         var _trim = function (str) {

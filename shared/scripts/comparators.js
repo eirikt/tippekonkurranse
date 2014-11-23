@@ -3,12 +3,14 @@
 // Boilerplate for CommonJS and AMD support (no RequireJS shimming required)
 // => https://blog.codecentric.de/en/2014/02/cross-platform-javascript/
 // => http://www.2ality.com/2011/11/module-gap.html
-({ define: typeof define === 'function' ? define : function (A, F) {
-    'use strict';
-    module.exports = F.apply(null, A.map(require));
-}}).
+({
+    define: typeof define === 'function' ? define : function (A, F) {
+        'use strict';
+        module.exports = F.apply(null, A.map(require));
+    }
+}).
 
-    define(['./fun'], function (F) {
+    define([ './fun' ], function (F) {
         'use strict';
 
         var
@@ -18,7 +20,7 @@
              * @return The property with the given <code>propertyName</code> in the given object
              */
             _propertyGetter = function (propertyName, object) {
-                return object[propertyName];
+                return object[ propertyName ];
             },
 
             /**
@@ -98,13 +100,13 @@
              * @param otherObject {Object} object to be compared against
              */
             _multiAscendingComparator = function (propertyGetter, propertyNameArray, object, otherObject) {
-                var propArray = F.isArray(propertyNameArray) ? propertyNameArray : [propertyNameArray],
+                var propArray = F.isArray(propertyNameArray) ? propertyNameArray : [ propertyNameArray ],
                     prop, i, ascendingComparator;
 
-                prop = propArray[propArray.length - 1];
+                prop = propArray[ propArray.length - 1 ];
                 ascendingComparator = _chainableAscendingComparator(propertyGetter, _alwaysEqualComparator, prop);
                 for (i = propArray.length - 2; i >= 0; i -= 1) {
-                    prop = propArray[i];
+                    prop = propArray[ i ];
                     ascendingComparator = _chainableAscendingComparator(propertyGetter, ascendingComparator, prop);
                 }
                 return ascendingComparator(object, otherObject);

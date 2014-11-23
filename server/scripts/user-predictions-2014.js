@@ -1,6 +1,8 @@
 /* global exports:false */
 /* jshint -W106 */
 
+// Rename to 'tippekonkurranse-2014-user-predictions.js'
+
 var _pred2014 = exports.predictions2014 = {
     einar: {
         tabell: [

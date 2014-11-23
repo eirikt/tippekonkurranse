@@ -4,10 +4,12 @@
 // Boilerplate for CommonJS and AMD support (no RequireJS shimming required)
 // => https://blog.codecentric.de/en/2014/02/cross-platform-javascript/
 // => http://www.2ality.com/2011/11/module-gap.html
-({ define: typeof define === 'function' ? define : function (A, F) {
-    'use strict';
-    module.exports = F.apply(null, A.map(require));
-}}).
+({
+    define: typeof define === 'function' ? define : function (A, F) {
+        'use strict';
+        module.exports = F.apply(null, A.map(require));
+    }
+}).
 
     define([], function () {
         'use strict';
@@ -22,8 +24,8 @@
              * @see http://underscorejs.org/#isArray
              */
             _isArray = Array.isArray || function (obj) {
-                return Object.prototype.toString.call(obj) === '[object Array]';
-            },
+                    return Object.prototype.toString.call(obj) === '[object Array]';
+                },
 
             /**
              * @see https://github.com/loop-recur/FunctionalJS/blob/master/functional.js/
@@ -49,9 +51,9 @@
                 numArgs = numArgs || fn.length;
                 var f = function () {
                     if (arguments.length < numArgs) {
-                        return numArgs - arguments.length > 0
-                            ? _autoCurry(_curry.apply(this, [fn].concat(_toArray(arguments))), numArgs - arguments.length)
-                            : _curry.apply(this, [fn].concat(_toArray(arguments)));
+                        return (numArgs - arguments.length > 0)
+                            ? _autoCurry(_curry.apply(this, [ fn ].concat(_toArray(arguments))), numArgs - arguments.length)
+                            : _curry.apply(this, [ fn ].concat(_toArray(arguments)));
                     }
                     return fn.apply(this, arguments);
                 };

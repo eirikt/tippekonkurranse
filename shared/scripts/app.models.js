@@ -10,7 +10,7 @@
     }
 }).
 
-    define(['underscore'], function (_) {
+    define([ 'underscore' ], function (_) {
         'use strict';
 
         var _appName = 'Tippekonkurranse',
@@ -78,7 +78,7 @@
                     }
 
                     scoreModelPropertyNamesArray.forEach(function (propName, index) {
-                        model[propName] = args[index];
+                        model[ propName ] = args[ index ];
                     });
 
                     return model;
@@ -86,6 +86,7 @@
             },
 
 
+        // TODO: Move this function to a shared utils lib
             /** Object.defineProperty config */
             _mutablePropertyWithDefaultValue = function (defaultValue) {
                 return {
@@ -96,6 +97,7 @@
                 };
             },
 
+        // TODO: Move this function to a shared utils lib
             /** Object.defineProperty config */
             _immutablePropertyWithDefaultValue = function (defaultValue) {
                 return {
@@ -117,25 +119,26 @@
             },
 
 
-            /* jshint -W071 */
+        /* jshint -W071 */
             TippekonkurranseData = function TippekonkurranseData(updatedPropertyArray, options) {
                 if (!(this instanceof TippekonkurranseData)) {
                     return new TippekonkurranseData(updatedPropertyArray, options);
                 }
                 var _isLiveData = 0,                // Live or historic Tippeliga data
 
-                    _tippeligaTable = 1,            // TODO: Document ...
-                    _tippeligaTopScorer = 2,        // TODO: Document ...
-                    _adeccoligaTable = 3,           // TODO: Document ...
-                    _remainingCupContenders = 4,    // TODO: Document ...
+                    _tippeligaTable = 1,            // The Tippeliga table, on the format defined by TeamPlacement function
+                    _tippeligaTopScorer = 2,        // The Tippeliga top scorer, array of strings
+                    _adeccoligaTable = 3,           // The Adeccoliga table, on the format defined by TeamPlacement function
+                    _remainingCupContenders = 4,    // The remaining cup contenders, array of strings
 
-                    _round = 5,                     // TODO: Document ...
-                    _date = 6,                      // TODO: Document ...
-                    _currentRound = 7,              // The latest round (not the requested round)
-                    _currentDate = 8,               // TODO: Document ...
+                // If _isLiveData === true, then requested and current are the same
+                    _round = 5,                     // The requested round (may or may not be the latest round)
+                    _date = 6,                      // The date of the requested round
+                    _currentRound = 7,              // The latest round (may or may not be the requested round)
+                    _currentDate = 8,               // The date of the latest round
 
                     _matchesCountGrouping = 9,      // TODO: Document ...
-                    _scores = 10,                   // Object with properties 'scores' and 'metadata'
+                    _scores = 10,                   // "View model" object with properties 'scores' and 'metadata' (properties being complex objects)
 
                     useDefaultValues = !(updatedPropertyArray && _.isArray(updatedPropertyArray) && updatedPropertyArray.length > 0);
 
@@ -156,20 +159,21 @@
                     Object.defineProperty(this, 'scores', _mutablePropertyWithDefaultValue(null));
 
                 } else {
-                    Object.defineProperty(this, 'isLive', _mutablePropertyWithDefaultValue(updatedPropertyArray[_isLiveData]));
-                    Object.defineProperty(this, 'tippeligaTable', _mutablePropertyWithDefaultValue(updatedPropertyArray[_tippeligaTable]));
-                    Object.defineProperty(this, 'tippeligaTopScorer', _mutablePropertyWithDefaultValue(updatedPropertyArray[_tippeligaTopScorer]));
-                    Object.defineProperty(this, 'adeccoligaTable', _mutablePropertyWithDefaultValue(updatedPropertyArray[_adeccoligaTable]));
-                    Object.defineProperty(this, 'remainingCupContenders', _mutablePropertyWithDefaultValue(updatedPropertyArray[_remainingCupContenders]));
-                    Object.defineProperty(this, 'round', _mutablePropertyWithDefaultValue(updatedPropertyArray[_round]));
-                    Object.defineProperty(this, 'date', _mutablePropertyWithDefaultValue(updatedPropertyArray[_date]));
-                    Object.defineProperty(this, 'currentRound', _mutablePropertyWithDefaultValue(updatedPropertyArray[_currentRound]));
-                    Object.defineProperty(this, 'currentDate', _mutablePropertyWithDefaultValue(updatedPropertyArray[_currentDate]));
-                    Object.defineProperty(this, 'matchesCountGrouping', _mutablePropertyWithDefaultValue(updatedPropertyArray[_matchesCountGrouping]));
-                    Object.defineProperty(this, 'scores', _mutablePropertyWithDefaultValue(updatedPropertyArray[_scores]));
+                    Object.defineProperty(this, 'isLive', _mutablePropertyWithDefaultValue(updatedPropertyArray[ _isLiveData ]));
+                    Object.defineProperty(this, 'tippeligaTable', _mutablePropertyWithDefaultValue(updatedPropertyArray[ _tippeligaTable ]));
+                    Object.defineProperty(this, 'tippeligaTopScorer', _mutablePropertyWithDefaultValue(updatedPropertyArray[ _tippeligaTopScorer ]));
+                    Object.defineProperty(this, 'adeccoligaTable', _mutablePropertyWithDefaultValue(updatedPropertyArray[ _adeccoligaTable ]));
+                    Object.defineProperty(this, 'remainingCupContenders', _mutablePropertyWithDefaultValue(updatedPropertyArray[ _remainingCupContenders ]));
+                    Object.defineProperty(this, 'round', _mutablePropertyWithDefaultValue(updatedPropertyArray[ _round ]));
+                    Object.defineProperty(this, 'date', _mutablePropertyWithDefaultValue(updatedPropertyArray[ _date ]));
+                    Object.defineProperty(this, 'currentRound', _mutablePropertyWithDefaultValue(updatedPropertyArray[ _currentRound ]));
+                    Object.defineProperty(this, 'currentDate', _mutablePropertyWithDefaultValue(updatedPropertyArray[ _currentDate ]));
+                    Object.defineProperty(this, 'matchesCountGrouping', _mutablePropertyWithDefaultValue(updatedPropertyArray[ _matchesCountGrouping ]));
+                    Object.defineProperty(this, 'scores', _mutablePropertyWithDefaultValue(updatedPropertyArray[ _scores ]));
                 }
 
                 TippekonkurranseData.prototype.indexOfRound = _round;
+
                 TippekonkurranseData.prototype.indexOfScores = _scores;
 
                 TippekonkurranseData.prototype.getYear = function () {

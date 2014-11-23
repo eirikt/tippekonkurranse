@@ -116,23 +116,23 @@ var __ = require("underscore"),
     _getCurrentTippeligaTableRequestory = exports.getCurrentTippeligaTable =
         RQ.sequence([
             rq.get(currentTippeligaTableUrl),
-            rq.then(parseTippeligaTable)
+            rq.do(parseTippeligaTable)
         ]),
 
     _getCurrentAdeccoligaTableRequestory = exports.getCurrentAdeccoligaTable =
         RQ.sequence([
             rq.get(currentAdeccoligaTableUrl),
-            rq.then(parseAdeccoligaTable)
+            rq.do(parseAdeccoligaTable)
         ]),
 
     _getCurrentTippeligaTopScorerRequestory = exports.getCurrentTippeligaTopScorer =
         RQ.sequence([
             rq.get(currentTippeligaToppscorerTableUrl),
-            rq.then(parseTippeligaTopScorerTable)
+            rq.do(parseTippeligaTopScorerTable)
         ]),
 
     _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
-        rq.return([ "Molde", "Odd" ]),
+        rq.return([ "Molde" ]),
 // /Requestories
 
 
@@ -1828,50 +1828,4 @@ var __ = require("underscore"),
             "Molde",
             "Odd"
         ]
-    },
-
-
-    _getTippeligaTable2013 = exports.getTippeligaTable2013 = function () {
-        "use strict";
-        return [
-            { name: "Strømsgodset", no: 1, matches: 30 },
-            { name: "Rosenborg", no: 2, matches: 30 },
-            { name: "Haugesund", no: 3, matches: 30 },
-            { name: "Aalesund", no: 4, matches: 30 },
-            { name: "Viking", no: 5, matches: 30 },
-            { name: "Molde", no: 6, matches: 30 },
-            { name: "Odd", no: 7, matches: 30 },
-            { name: "Brann", no: 8, matches: 30 },
-            { name: "Start", no: 9, matches: 30 },
-            { name: "Lillestrøm", no: 10, matches: 30 },
-            { name: "Vålerenga", no: 11, matches: 30 },
-            { name: "Sogndal", no: 12, matches: 30 },
-            { name: "Sandnes Ulf", no: 13, matches: 30 },
-            { name: "Sarpsborg 08", no: 14, matches: 30 },
-            { name: "Tromsø", no: 15, matches: 30 },
-            { name: "Hønefoss", no: 16, matches: 30 }
-        ];
-    },
-
-
-    _getAdeccoligaTable2013 = exports.getAdeccoligaTable2013 = function () {
-        "use strict";
-        return [
-            { name: "Bodø/Glimt", no: 1, matches: 30 },
-            { name: "Stabæk", no: 2, matches: 30 },
-            { name: "Hødd", no: 3, matches: 30 },
-            { name: "Ranheim", no: 4, matches: 30 },
-            { name: "HamKam", no: 5, matches: 30 },
-            { name: "Mjøndalen", no: 6, matches: 30 },
-            { name: "Bryne", no: 7, matches: 30 },
-            { name: "Sandefjord", no: 8, matches: 30 },
-            { name: "Kristiansund BK", no: 9, matches: 30 },
-            { name: "Fredrikstad", no: 10, matches: 30 },
-            { name: "Strømmen", no: 11, matches: 30 },
-            { name: "Ullensaker/Kisa", no: 12, matches: 30 },
-            { name: "Vard Haugesund", no: 13, matches: 30 },
-            { name: "Kongsvinger", no: 14, matches: 30 },
-            { name: "Follo", no: 15, matches: 30 },
-            { name: "Elverum", no: 16, matches: 30 }
-        ];
     };

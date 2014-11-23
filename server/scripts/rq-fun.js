@@ -63,7 +63,7 @@ var RQ = require("./vendor/rq").RQ,
 ///////////////////////////////////////////////////////////////////////////////
 
     /**
-     * A requestor version of "the null function".
+     * The requestor version of "the null function".
      *
      * f(fContinuation, x) = fContinuation(undefined)
      *
@@ -77,7 +77,7 @@ var RQ = require("./vendor/rq").RQ,
 
 
     /**
-     * A requestor version of "the empty function".
+     * The requestor version of "the empty function".
      *
      * f(fContinuation, x) = fContinuation(null)
      *
@@ -91,7 +91,7 @@ var RQ = require("./vendor/rq").RQ,
 
 
     /**
-     * A tautology requestor.
+     * The tautology requestor.
      *
      * f(fContinuation, x) = fContinuation(true)
      *
@@ -105,7 +105,7 @@ var RQ = require("./vendor/rq").RQ,
 
 
     /**
-     * A contradiction requestor.
+     * The contradiction requestor.
      *
      * f(fContinuation, x) = fContinuation(false)
      *
@@ -119,7 +119,7 @@ var RQ = require("./vendor/rq").RQ,
 
 
     /**
-     * A timestamp requestor.
+     * The UNIX timestamp requestor.
      * Returning <code>Date.now()</code>, the number of milliseconds elapsed since 1 January 1970 00:00:00 UTC.
      *
      * f(fContinuation, x) = fContinuation(Date.now())
@@ -206,7 +206,7 @@ var RQ = require("./vendor/rq").RQ,
      *
      * A typical sequence requestor ...
      */
-    _failFastFunctionWrapperRequestory = exports.requestor = exports.then = function (g) {
+    _failFastFunctionWrapperRequestory = exports.requestor = exports.then = exports.do = function (g) {
         "use strict";
         return function requestor(requestion, args) {
             return requestion(g(args), undefined);

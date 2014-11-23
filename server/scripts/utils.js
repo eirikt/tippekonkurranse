@@ -1,5 +1,7 @@
 /* global require:false */
 
+// TODO: Move this lib to 'shared' area
+
 // Module dependencies, external
 var __ = require("underscore"),
     moment = require("moment"),
