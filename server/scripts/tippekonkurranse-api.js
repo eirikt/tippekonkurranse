@@ -10,7 +10,7 @@ var env = process.env.NODE_ENV || "development",
 // Module dependencies, local generic
     comparators = require("./../../shared/scripts/comparators"),
     curry = require("./../../shared/scripts/fun").curry,
-    utils = require("./utils"),
+    utils = require("./../../shared/scripts/utils"),
     RQ = require("./vendor/rq").RQ,
     rq = require("./rq-fun"),
 
@@ -18,8 +18,8 @@ var env = process.env.NODE_ENV || "development",
     TeamPlacement = require("./../../shared/scripts/app.models").TeamPlacement,
     TippekonkurranseData = require("./../../shared/scripts/app.models").TippekonkurranseData,
     tippekonkurranse = require("./tippekonkurranse"),
+    predictions2014 = require("./tippekonkurranse-2014-user-predictions").predictions2014,
     tippekonkurranse2014 = require("./tippekonkurranse-2014"),
-    predictions2014 = require("./user-predictions-2014").predictions2014,
 
 
 ////////////////////////////////////////
@@ -62,7 +62,7 @@ var env = process.env.NODE_ENV || "development",
                 tippekonkurranse.retrieveTippeligaData(request),
                 rq.requestor(tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping),
                 rq.requestor(tippekonkurranse.addRound),
-                rq.requestor(tippekonkurranse.addCurrent),
+                rq.requestor(tippekonkurranse.addCurrentRound),
                 tippekonkurranse2014.addTippekonkurranseScores2014,
                 tippekonkurranse2014.addPreviousMatchRoundRatingToEachParticipant2014,
                 rq.requestor(tippekonkurranse.addMetadataToScores),

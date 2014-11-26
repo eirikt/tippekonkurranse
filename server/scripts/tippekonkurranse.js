@@ -5,12 +5,11 @@ var env = process.env.NODE_ENV || "development",
 
 // Module dependencies, external
     __ = require("underscore"),
-//    curry2 = require("curry"),
 
 // Module dependencies, local generic
     comparators = require("./../../shared/scripts/comparators"),
     curry = require("./../../shared/scripts/fun").curry,
-    utils = require("./utils"),
+    utils = require("./../../shared/scripts/utils"),
     RQ = require("./vendor/rq").RQ,
     rq = require("./rq-fun"),
 
@@ -21,168 +20,92 @@ var env = process.env.NODE_ENV || "development",
     appModels = require("./../../shared/scripts/app.models"),
 
 
-    /**
-     * // TODO: Describe and document! How generic is this function? Move it to utils?
-     *
-     * @param valueOrArrayArgs
-     * @param targetArray
-     * @param argIndex
-     * @param argIndexCompensator
-     * @returns {*}
-     */
-    _mergeArgsIntoArray = function (valueOrArrayArgs, targetArray, argIndex, argIndexCompensator) {
+    _calculateTippeligaScores = function (strategy, participantObj, tippeligaTable) {
         "use strict";
-        var i = 0,
-            isArray = Array.isArray,
-            calculatedScores;
-
-        if (!argIndexCompensator) {
-            argIndexCompensator = 0;
-        }
-
-        calculatedScores = valueOrArrayArgs[ argIndex - argIndexCompensator ];
-
-        if (calculatedScores) {
-            if (isArray(calculatedScores)) {
-                for (; i < calculatedScores.length; i += 1) {
-                    targetArray[ argIndex + i ] = calculatedScores[ i ];
-                }
-                argIndexCompensator = argIndexCompensator + calculatedScores.length - 1;
-            } else {
-                targetArray[ argIndex ] = calculatedScores;
-            }
-        }
-        return argIndexCompensator;
-    },
-
-
-// Below, "scores" should be read as "penalty points", that's more accurate ...
-
-    _getTableScore = function (predictedTeamPlacing, actualTeamPlacing) {
-        "use strict";
-        return Math.abs(predictedTeamPlacing - actualTeamPlacing);
-    },
-
-
-    _getPallScore = function (predictedTeamPlacing, actualTeamPlacing) {
-        "use strict";
-        var pallPenaltyPoints = 0;
-        if (predictedTeamPlacing === 1 && predictedTeamPlacing === actualTeamPlacing) {
-            pallPenaltyPoints += -1;
-        }
-        if (predictedTeamPlacing === 2 && predictedTeamPlacing === actualTeamPlacing) {
-            pallPenaltyPoints += -1;
-        }
-        if (predictedTeamPlacing === 3 && predictedTeamPlacing === actualTeamPlacing) {
-            pallPenaltyPoints += -1;
-        }
-        return pallPenaltyPoints;
-    },
-
-
-    _getExtraPallScore = function (predictedTeamPlacing, currentPallScore) {
-        "use strict";
-        return predictedTeamPlacing === 4 && currentPallScore === -3 ? -1 : 0;
-    },
-
-
-    _doublePlacingScores = function (description, placing, participantObj, tableIndexedByName) {
-        "use strict";
-        if (__.isEmpty(participantObj)) {
-            console.warn("'" + description + "' property is missing");
-            return 1000;
-        }
-        var opprykkTeamName1 = participantObj[ placing ];
-        var opprykkTeamName2 = participantObj[ placing + 1 ];
-
-        var actualTeamPlacing1 = tableIndexedByName[ opprykkTeamName1 ].no;
-        var actualTeamPlacing2 = tableIndexedByName[ opprykkTeamName2 ].no;
-
-        if ((actualTeamPlacing1 === placing + 1 || actualTeamPlacing1 === placing + 2) &&
-            (actualTeamPlacing2 === placing + 1 || actualTeamPlacing2 === placing + 2)) {
-            return -1;
-        }
-        return 0;
-    },
-
-
-    _calculateTippeligaScores = function (participantObj, indexedTippeligaTable, requestion, args) {
-        "use strict";
-        var i = 0,
-            tableScore = 0,
-            pallScore = 0,
-            pallBonusScore = 0,
-            nedrykkScore = 0;
+        var tableScore, pallScore, pallBonusScore, nedrykkScore, indexedTippeligaTable;
 
         if (__.isEmpty(participantObj.tabell)) {
             console.warn("'Tabell' property is missing");
-            return requestion([ 1000, 1000, 1000, 1000 ]);
+            return [ 1000, 1000, 1000, 1000 ];
         }
 
-        for (; i < participantObj.tabell.length; i += 1) {
+        // Create associative array with team name as key, by extracting 'name'
+        // => a team-name-indexed data structure
+        indexedTippeligaTable = __.indexBy(tippeligaTable, "name");
+
+        tableScore = __.reduce(participantObj.tabell, function (memo, teamName, index) {
             try {
-                var teamName = participantObj.tabell[ i ],
-                    predictedTeamPlacing = i + 1,
+                var predictedTeamPlacing = index + 1,
                     actualTeamPlacing = indexedTippeligaTable[ teamName ].no;
 
-                tableScore += _getTableScore(predictedTeamPlacing, actualTeamPlacing);
-
-                pallScore += _getPallScore(predictedTeamPlacing, actualTeamPlacing);
-                pallBonusScore += _getExtraPallScore(predictedTeamPlacing, pallScore);
-
+                return memo + utils.getDisplacementPoints(strategy.tabellScoresStrategy.polarity, strategy.tabellScoresStrategy.weight,
+                        predictedTeamPlacing,
+                        actualTeamPlacing);
             } catch (e) {
-                var errorMessage = "Unable to calculate scores for team '" + participantObj.tabell[ i ] + "' for participant '" + participantObj.name + "' - probably illegal data format";
+                var errorMessage = "Unable to calculate scores for team '" + participantObj.tabell[ index ] + "' for participant '" + participantObj.name + "' - probably illegal data format";
                 console.warn(errorMessage);
                 throw new Error(errorMessage);
-                //return requestion([tableScore, pallScore, pallBonusScore, nedrykkScore], new Error(errorMessage));
-                //return requestion(errorMessage, undefined);
-                //return requestion(undefined, errorMessage);
             }
+        }, 0);
+
+        pallScore =
+            utils.getMatchPoints(strategy.pall1ScoreStrategy.polarity, strategy.pall1ScoreStrategy.weight,
+                participantObj.tabell[ 0 ], tippeligaTable[ 0 ].name) +
+            utils.getMatchPoints(strategy.pall2ScoreStrategy.polarity, strategy.pall2ScoreStrategy.weight,
+                participantObj.tabell[ 1 ], tippeligaTable[ 1 ].name) +
+            utils.getMatchPoints(strategy.pall3ScoreStrategy.polarity, strategy.pall3ScoreStrategy.weight,
+                participantObj.tabell[ 2 ], tippeligaTable[ 2 ].name);
+
+        pallBonusScore = utils.getMatchPoints(strategy.pallBonusScoreStrategy.polarity, strategy.pallBonusScoreStrategy.weight,
+            [ participantObj.tabell[ 0 ], participantObj.tabell[ 1 ], participantObj.tabell[ 2 ] ],
+            [ tippeligaTable[ 0 ].name, tippeligaTable[ 1 ].name, tippeligaTable[ 2 ].name ]
+        );
+
+        nedrykkScore = utils.getPresentPoints(strategy.nedrykkScoreStrategy.polarity, strategy.nedrykkScoreStrategy.weight,
+            [ participantObj.tabell[ 14 ], participantObj.tabell[ 15 ] ],
+            [ tippeligaTable[ 14 ].name, tippeligaTable[ 15 ].name ]
+        );
+
+        return [ tableScore, pallScore, pallBonusScore, nedrykkScore ];
+    },
+
+
+    _calculateOpprykkScores = function (strategy, participantObj, adeccoligaTable) {
+        "use strict";
+        if (__.isEmpty(participantObj.opprykk)) {
+            console.warn("'Opprykk' property is missing");
+            return 1000;
         }
-        nedrykkScore = _doublePlacingScores("Nedrykk", 14, participantObj.tabell, indexedTippeligaTable);
-
-        return requestion([ tableScore, pallScore, pallBonusScore, nedrykkScore ]);
+        return utils.getPresentPoints(strategy.opprykkScoreStrategy.polarity, strategy.opprykkScoreStrategy.weight,
+            [ participantObj.opprykk[ 0 ], participantObj.opprykk[ 1 ] ],
+            [ adeccoligaTable[ 0 ].name, adeccoligaTable[ 1 ].name ]
+        );
     },
 
 
-    _calculateOpprykkScores = function (participantObj, indexedAdeccoligaTable) {
+    _calculateToppscorerScores = function (strategy, participantObj, tippeligaToppscorer) {
         "use strict";
-        return _doublePlacingScores("Opprykk", 0, participantObj.opprykk, indexedAdeccoligaTable);
-    },
-
-
-    _calculateToppscorerScores = function (participantObj, tippeligaToppscorer) {
-        "use strict";
-        var i = 0,
-            toppscorerScore = 0;
         if (__.isEmpty(participantObj.toppscorer)) {
             console.warn("'Toppscorer' property is missing");
             return 1000;
         }
-        for (; i < participantObj.toppscorer.length; i += 1) {
-            if (i === 0 && __.contains(tippeligaToppscorer, participantObj.toppscorer[ i ])) {
-                toppscorerScore = -1;
-            }
-        }
-        return toppscorerScore;
+        return utils.getPresentPoints(strategy.toppscorerScoreStrategy.polarity, strategy.toppscorerScoreStrategy.weight,
+            participantObj.toppscorer[ 0 ],
+            tippeligaToppscorer
+        );
     },
 
 
-    _calculateCupScores = function (participantObj, remainingCupContenders) {
+    _calculateCupScores = function (strategy, participantObj, remainingCupContenders) {
         "use strict";
-        var i = 0,
-            cupScore = 0;
         if (__.isEmpty(participantObj.cup)) {
             console.warn("'Cup' property is missing");
             return 1000;
         }
-        for (; i < participantObj.cup.length; i += 1) {
-            var teamName = participantObj.cup[ i ];
-            if (i === 0 && __.contains(remainingCupContenders, teamName)) {
-                cupScore = -1;
-            }
-        }
-        return cupScore;
+        return utils.getPresentPoints(strategy.cupScoreStrategy.polarity, strategy.cupScoreStrategy.weight,
+            participantObj.cup[ 0 ],
+            remainingCupContenders
+        );
     },
 
 
@@ -357,8 +280,7 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
-// TODO: Rename to 'addCurrentRound'
-    _addCurrent = exports.addCurrent =
+    _addCurrentRound = exports.addCurrentRound =
         function (args) {
             "use strict";
             var tippekonkurranseData = new TippekonkurranseData(args);
@@ -373,72 +295,7 @@ var env = process.env.NODE_ENV || "development",
 
 
     _addTippekonkurranseScoresRequestor = exports.addTippekonkurranseScoresRequestor =
-
-// TODO: Introduce (curried) scores strategy:
-        //function (userPredictions, scoresStrategy, requestion, args) {
-        /*
-         scoresStrategy:
-         ('exact' is permutation-like, 'present' is combination-like)
-
-         tabellScoreStrategy: {
-         strategy: 'displacement([16])',
-         direction: '+',
-         points: 1
-         }
-
-         pall1ScoreStrategy: {
-         strategy: 'match([#1], 'exact')',
-         direction: '-',
-         points: 1
-         }
-
-         pall2ScoreStrategy: {
-         strategy: 'match([#2], 'exact')',
-         direction: '-',
-         points: 1
-         }
-
-         pall3ScoreStrategy: {
-         strategy: 'match([#3], 'exact')',
-         direction: '-',
-         points: 1
-         }
-
-         pallBonusScoreStrategy: {
-         strategy: 'match([#1,#2,#3], 'exact')',
-         direction: '-',
-         points: 1
-         }
-
-         nedrykkScoreStrategy: {
-         strategy: 'match([#15,#16], 'present')'
-         direction: '-',
-         points: 1
-         }
-
-         toppscorerScoreStrategy: {
-         strategy: 'match([#1], 'present')'
-         direction: '-',
-         points: 1
-         }
-
-         opprykkScoreStrategy: {
-         strategy: 'match([#1,#2], 'present')'
-         direction: '-',
-         points: 1
-         }
-
-         cupScoreStrategy: {
-         strategy: 'match([#1], 'present')'
-         direction: '-',
-         points: 1
-         }
-
-         ratingStrategy: {
-         strategy: 'sum'
-         }
-         */
-        function (userPredictions, requestion, args) {
+        function (userPredictions, scoresStrategy, requestion, args) {
             "use strict";
 
             if (!userPredictions || (__.isEmpty(userPredictions))) {
@@ -470,7 +327,7 @@ var env = process.env.NODE_ENV || "development",
                         scores = __.range(ratingIndex).map(function () {
                             return 0;
                         }),
-                        populateScores = curry(_mergeArgsIntoArray, scoresArray, scores);
+                        populateScores = curry(utils.mergeArgsIntoArray, scoresArray, scores);
 
                     return RQ.sequence([
                         rq.requestor(curry(populateScores, tabellScoreIndex)),
@@ -523,7 +380,6 @@ var env = process.env.NODE_ENV || "development",
 
             __.each(__.keys(userPredictions), function (participant) {
                 var indexedTippeligaTable,
-                    indexedAdeccoligaTable,
                     tippekonkurranseData = new TippekonkurranseData(args);
 
                 if (__.isEmpty(userPredictions[ participant ])) {
@@ -532,21 +388,16 @@ var env = process.env.NODE_ENV || "development",
                     );
 
                 } else {
-                    // Create associative array with team name as key, by extracting 'name'
-                    // => a team name-indexed data structure, optimized for point calculations
-                    indexedTippeligaTable = __.indexBy(tippekonkurranseData.tippeligaTable, "name");
-                    indexedAdeccoligaTable = __.indexBy(tippekonkurranseData.adeccoligaTable, "name");
-
                     // Key as property, nice to have
                     userPredictions[ participant ].name = participant;
 
                     scoresRequestors.push(
                         RQ.sequence([
                             RQ.parallel([
-                                curry(_calculateTippeligaScores, userPredictions[ participant ], indexedTippeligaTable),
-                                rq.requestor(curry(_calculateToppscorerScores, userPredictions[ participant ], tippekonkurranseData.tippeligaToppscorer)),
-                                rq.requestor(curry(_calculateOpprykkScores, userPredictions[ participant ], indexedAdeccoligaTable)),
-                                rq.requestor(curry(_calculateCupScores, userPredictions[ participant ], tippekonkurranseData.remainingCupContenders))
+                                rq.requestor(curry(_calculateTippeligaScores, scoresStrategy, userPredictions[ participant ], tippekonkurranseData.tippeligaTable)),
+                                rq.requestor(curry(_calculateToppscorerScores, scoresStrategy, userPredictions[ participant ], tippekonkurranseData.tippeligaTopScorer)),
+                                rq.requestor(curry(_calculateOpprykkScores, scoresStrategy, userPredictions[ participant ], tippekonkurranseData.adeccoligaTable)),
+                                rq.requestor(curry(_calculateCupScores, scoresStrategy, userPredictions[ participant ], tippekonkurranseData.remainingCupContenders))
                             ]),
                             curry(_sum, ratingIndex),
                             rq.requestor(curry(_currentStandingUpdate, currentStanding, participant))
@@ -564,7 +415,7 @@ var env = process.env.NODE_ENV || "development",
 
 
     _addPreviousMatchRoundRatingToEachParticipantRequestor = exports.addPreviousMatchRoundRatingToEachParticipantRequestor =
-        function (userPredictions, requestion, args) {
+        function (userPredictions, scoresStrategy, requestion, args) {
             "use strict";
             var tippekonkurranseData = new TippekonkurranseData(args),
 

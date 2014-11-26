@@ -9,28 +9,95 @@ var __ = require("underscore"),
     Comparators = require('../../../shared/scripts/comparators'),
     curry = require("../../../shared/scripts/fun").curry,
     rq = require("../../../server/scripts/rq-fun"),
-    maxDisplacementSumInPermutationOfLength = require("../../../server/scripts/utils").maxDisplacementSumInPermutationOfLength,
+    maxDisplacementSumInPermutationOfLength = require("../../../shared/scripts/utils").maxDisplacementSumInPermutationOfLength,
 
     TeamPlacement = require("../../../shared/scripts/app.models").TeamPlacement,
     TippekonkurranseData = require("../../../shared/scripts/app.models").TippekonkurranseData,
 
     addTippekonkurranseScoresRequestor = require("../../../server/scripts/tippekonkurranse").addTippekonkurranseScoresRequestor,
 
-//addTippekonkurranseScores2014 = __.partial(addTippekonkurranseScoresRequestor, require("../../../server/scripts/user-predictions-2014").predictions2014);
-    addTippekonkurranseScores2014 = curry(addTippekonkurranseScoresRequestor, require("../../../server/scripts/user-predictions-2014").predictions2014);
+// TODO: Promote this to a 'type'/'class', and move this to 'app.models.js' (like 'TippekonkurranseData')
+    scoresStrategy = {
+        tabellScoresStrategy: {
+            //target: 'tippeligatabell',
+            //strategy: 'displacement',
+            //number: 16,
+            polarity: '+',
+            weight: 1
+        },
+        pall1ScoreStrategy: {
+            //target: 'tippeligatabell',
+            //strategy: 'match',
+            //number: 1,
+            polarity: '-',
+            weight: 1
+        },
+        pall2ScoreStrategy: {
+            //target: 'tippeligatabell',
+            //strategy: 'match',
+            //number: 2,
+            polarity: '-',
+            weight: 1
+        },
+        pall3ScoreStrategy: {
+            //target: 'tippeligatabell',
+            //strategy: 'match',
+            //number: 3,
+            polarity: '-',
+            weight: 1
+        },
+        pallBonusScoreStrategy: {
+            //target: 'tippeligatabell',
+            //strategy: 'match',
+            //number: [ 1, 2, 3 ],
+            polarity: '-',
+            weight: 1
+        },
+        nedrykkScoreStrategy: {
+            //target: 'tippeligatabell',
+            //strategy: 'present',
+            //number: [ 15, 16 ],
+            polarity: '-',
+            weight: 1
+        },
+        toppscorerScoreStrategy: {
+            //target: 'toppskårer',
+            //strategy: 'in',
+            //number: 1,
+            polarity: '-',
+            weight: 1
+        },
+        opprykkScoreStrategy: {
+            //target: 'adeccoligatabell',
+            //strategy: 'present',
+            //number: [ 1, 2 ],
+            polarity: '-',
+            weight: 1
+        },
+        cupScoreStrategy: {
+            //target: 'cup',
+            //strategy: 'in',
+            //number: 1,
+            polarity: '-',
+            weight: 1
+        }//,
+        //ratingStrategy: {
+        //    strategy: 'sum'
+        //}
+    },
+    addTippekonkurranseScores2014 = curry(addTippekonkurranseScoresRequestor, require("../../../server/scripts/tippekonkurranse-2014-user-predictions").predictions2014, scoresStrategy);
 
 
 describe("Tippekonkurranse service", function () {
     "use strict";
 
-
     describe("Underlying basics", function () {
 
         it("should ensure (native) sorting of number strings", function () {
-            expect(Math.max.apply(null, ["1", "2"])).to.equal(2);
-            expect(Math.max.apply(null, ["0", "4", "9"])).to.equal(9);
-            expect(Math.max.apply(null, ["8", "9", "10"])).to.equal(10);
-            expect(Math.max.apply(null, ["02", "009", "10", "103"])).to.equal(103);
+            expect(Math.max.apply(null, [ "1", "2" ])).to.equal(2);
+            expect(Math.max.apply(null, [ "0", "4", "9" ])).to.equal(9);
+            expect(Math.max.apply(null, [ "8", "9", "10" ])).to.equal(10);
+            expect(Math.max.apply(null, [ "02", "009", "10", "103" ])).to.equal(103);
         });
     });
 
@@ -76,7 +143,7 @@ describe("Tippekonkurranse service", function () {
             var userPredictions = {
                     john: null
                 },
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 verify = function (args) {
                     expect(args).to.exist;
                     expect(args).to.be.an.object;
@@ -112,7 +179,7 @@ describe("Tippekonkurranse service", function () {
             var userPredictions = {
                     john: {}
                 },
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 verify = function (args) {
                     expect(args).to.exist;
                     expect(args).to.be.an.object;
@@ -150,7 +217,7 @@ describe("Tippekonkurranse service", function () {
                         tabell: null
                     }
                 },
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 verify = function (args) {
                     expect(args).to.exist;
                     expect(args).to.be.an.object;
@@ -191,7 +258,7 @@ describe("Tippekonkurranse service", function () {
                         cup: []
                     }
                 },
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 verify = function (args) {
                     expect(args).to.exist;
                     expect(args).to.be.an.object;
@@ -228,7 +295,7 @@ describe("Tippekonkurranse service", function () {
          it("should throw error if retrieved table data deviates from user prediction data", function (done) {
          var userPredictions = {
          john: {
-         tabell: ["TeamA", "TeamB"],
+         tabell: [ "TeamA", "TeamB" ],
          toppscorer: null,
          opprykk: null,
          cup: null
@@ -247,9 +314,9 @@ describe("Tippekonkurranse service", function () {
          args = [],
          addTippekonkurranseScores;
 
-         args[tippeligaTableIndex] = actualTable;
+         args[ TippekonkurranseData.indexOfTippeligaTable ] = actualTable;
 
-         addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions);//, requestion, args);
+         addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy);//, requestion, args);
 
          //try {
          //    addTippekonkurranseScores();
@@ -295,24 +362,24 @@ describe("Tippekonkurranse service", function () {
                     }
                 },
                 actualTable = [
-                    {name: "Strømsgodset", no: 1, matches: 30},
-                    {name: "Rosenborg", no: 2, matches: 30},
-                    {name: "Haugesund", no: 3, matches: 30},
-                    {name: "Aalesund", no: 4, matches: 30},
-                    {name: "Viking", no: 5, matches: 30},
-                    {name: "Molde", no: 6, matches: 30},
-                    {name: "Odd", no: 7, matches: 30},
-                    {name: "Brann", no: 8, matches: 30},
-                    {name: "Start", no: 9, matches: 30},
-                    {name: "Lillestrøm", no: 10, matches: 30},
-                    {name: "Vålerenga", no: 11, matches: 30},
-                    {name: "Sogndal", no: 12, matches: 30},
-                    {name: "Sandnes Ulf", no: 13, matches: 30},
-                    {name: "Sarpsborg 08", no: 14, matches: 30},
-                    {name: "Tromsø", no: 15, matches: 30},
-                    {name: "Hønefoss", no: 16, matches: 30}
+                    { name: "Strømsgodset", no: 1, matches: 30 },
+                    { name: "Rosenborg", no: 2, matches: 30 },
+                    { name: "Haugesund", no: 3, matches: 30 },
+                    { name: "Aalesund", no: 4, matches: 30 },
+                    { name: "Viking", no: 5, matches: 30 },
+                    { name: "Molde", no: 6, matches: 30 },
+                    { name: "Odd", no: 7, matches: 30 },
+                    { name: "Brann", no: 8, matches: 30 },
+                    { name: "Start", no: 9, matches: 30 },
+                    { name: "Lillestrøm", no: 10, matches: 30 },
+                    { name: "Vålerenga", no: 11, matches: 30 },
+                    { name: "Sogndal", no: 12, matches: 30 },
+                    { name: "Sandnes Ulf", no: 13, matches: 30 },
+                    { name: "Sarpsborg 08", no: 14, matches: 30 },
+                    { name: "Tromsø", no: 15, matches: 30 },
+                    { name: "Hønefoss", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -353,24 +420,24 @@ describe("Tippekonkurranse service", function () {
                     }
                 },
                 twoPenaltyPoints = [
-                    {name: "Rosenborg", no: 1, matches: 30},      // Switched
-                    {name: "Strømsgodset", no: 2, matches: 30},   // Switched
-                    {name: "Haugesund", no: 3, matches: 30},
-                    {name: "Aalesund", no: 4, matches: 30},
-                    {name: "Viking", no: 5, matches: 30},
-                    {name: "Molde", no: 6, matches: 30},
-                    {name: "Odd", no: 7, matches: 30},
-                    {name: "Brann", no: 8, matches: 30},
-                    {name: "Start", no: 9, matches: 30},
-                    {name: "Lillestrøm", no: 10, matches: 30},
-                    {name: "Vålerenga", no: 11, matches: 30},
-                    {name: "Sogndal", no: 12, matches: 30},
-                    {name: "Sandnes Ulf", no: 13, matches: 30},
-                    {name: "Sarpsborg 08", no: 14, matches: 30},
-                    {name: "Tromsø", no: 15, matches: 30},
-                    {name: "Hønefoss", no: 16, matches: 30}
+                    { name: "Rosenborg", no: 1, matches: 30 },      // Switched
+                    { name: "Strømsgodset", no: 2, matches: 30 },   // Switched
+                    { name: "Haugesund", no: 3, matches: 30 },
+                    { name: "Aalesund", no: 4, matches: 30 },
+                    { name: "Viking", no: 5, matches: 30 },
+                    { name: "Molde", no: 6, matches: 30 },
+                    { name: "Odd", no: 7, matches: 30 },
+                    { name: "Brann", no: 8, matches: 30 },
+                    { name: "Start", no: 9, matches: 30 },
+                    { name: "Lillestrøm", no: 10, matches: 30 },
+                    { name: "Vålerenga", no: 11, matches: 30 },
+                    { name: "Sogndal", no: 12, matches: 30 },
+                    { name: "Sandnes Ulf", no: 13, matches: 30 },
+                    { name: "Sarpsborg 08", no: 14, matches: 30 },
+                    { name: "Tromsø", no: 15, matches: 30 },
+                    { name: "Hønefoss", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -407,24 +474,24 @@ describe("Tippekonkurranse service", function () {
                     }
                 },
                 tenPenaltyPoints = [
-                    {name: "Strømsgodset", no: 1, matches: 30},
-                    {name: "Rosenborg", no: 2, matches: 30},
-                    {name: "Haugesund", no: 3, matches: 30},
-                    {name: "Aalesund", no: 4, matches: 30},
-                    {name: "Viking", no: 5, matches: 30},
-                    {name: "Vålerenga", no: 6, matches: 30},      // Switched
-                    {name: "Odd", no: 7, matches: 30},
-                    {name: "Brann", no: 8, matches: 30},
-                    {name: "Start", no: 9, matches: 30},
-                    {name: "Lillestrøm", no: 10, matches: 30},
-                    {name: "Molde", no: 11, matches: 30},         // Switched
-                    {name: "Sogndal", no: 12, matches: 30},
-                    {name: "Sandnes Ulf", no: 13, matches: 30},
-                    {name: "Sarpsborg 08", no: 14, matches: 30},
-                    {name: "Tromsø", no: 15, matches: 30},
-                    {name: "Hønefoss", no: 16, matches: 30}
+                    { name: "Strømsgodset", no: 1, matches: 30 },
+                    { name: "Rosenborg", no: 2, matches: 30 },
+                    { name: "Haugesund", no: 3, matches: 30 },
+                    { name: "Aalesund", no: 4, matches: 30 },
+                    { name: "Viking", no: 5, matches: 30 },
+                    { name: "Vålerenga", no: 6, matches: 30 },      // Switched
+                    { name: "Odd", no: 7, matches: 30 },
+                    { name: "Brann", no: 8, matches: 30 },
+                    { name: "Start", no: 9, matches: 30 },
+                    { name: "Lillestrøm", no: 10, matches: 30 },
+                    { name: "Molde", no: 11, matches: 30 },         // Switched
+                    { name: "Sogndal", no: 12, matches: 30 },
+                    { name: "Sandnes Ulf", no: 13, matches: 30 },
+                    { name: "Sarpsborg 08", no: 14, matches: 30 },
+                    { name: "Tromsø", no: 15, matches: 30 },
+                    { name: "Hønefoss", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -461,24 +528,24 @@ describe("Tippekonkurranse service", function () {
                     }
                 },
                 thirtyTwoPenaltyPoints = [
-                    {name: "Strømsgodset", no: 1, matches: 30},
-                    {name: "Rosenborg", no: 2, matches: 30},
-                    {name: "Sarpsborg 08", no: 3, matches: 30},   // Switched 2
-                    {name: "Aalesund", no: 4, matches: 30},
-                    {name: "Viking", no: 5, matches: 30},
-                    {name: "Vålerenga", no: 6, matches: 30},      // Switched 1
-                    {name: "Odd", no: 7, matches: 30},
-                    {name: "Brann", no: 8, matches: 30},
-                    {name: "Start", no: 9, matches: 30},
-                    {name: "Lillestrøm", no: 10, matches: 30},
-                    {name: "Molde", no: 11, matches: 30},         // Switched 1
-                    {name: "Sogndal", no: 12, matches: 30},
-                    {name: "Sandnes Ulf", no: 13, matches: 30},
-                    {name: "Haugesund", no: 14, matches: 30},     // Switched 2
-                    {name: "Tromsø", no: 15, matches: 30},
-                    {name: "Hønefoss", no: 16, matches: 30}
+                    { name: "Strømsgodset", no: 1, matches: 30 },
+                    { name: "Rosenborg", no: 2, matches: 30 },
+                    { name: "Sarpsborg 08", no: 3, matches: 30 },   // Switched 2
+                    { name: "Aalesund", no: 4, matches: 30 },
+                    { name: "Viking", no: 5, matches: 30 },
+                    { name: "Vålerenga", no: 6, matches: 30 },      // Switched 1
+                    { name: "Odd", no: 7, matches: 30 },
+                    { name: "Brann", no: 8, matches: 30 },
+                    { name: "Start", no: 9, matches: 30 },
+                    { name: "Lillestrøm", no: 10, matches: 30 },
+                    { name: "Molde", no: 11, matches: 30 },         // Switched 1
+                    { name: "Sogndal", no: 12, matches: 30 },
+                    { name: "Sandnes Ulf", no: 13, matches: 30 },
+                    { name: "Haugesund", no: 14, matches: 30 },     // Switched 2
+                    { name: "Tromsø", no: 15, matches: 30 },
+                    { name: "Hønefoss", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -516,7 +583,7 @@ describe("Tippekonkurranse service", function () {
                 },
                 reversedClonedPredictionTable = JSON.parse(JSON.stringify(userPredictions.john.tabell)).reverse(),
                 reversedTable = [],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -525,7 +592,7 @@ describe("Tippekonkurranse service", function () {
                 };
 
             for (var i = 0; i < reversedClonedPredictionTable.length; i += 1) {
-                reversedTable[i] = new TeamPlacement(reversedClonedPredictionTable[i], i + 1, reversedClonedPredictionTable.length * 2 - 2);
+                reversedTable[ i ] = new TeamPlacement(reversedClonedPredictionTable[ i ], i + 1, reversedClonedPredictionTable.length * 2 - 2);
             }
 
             inputArgs.tippeligaTable = reversedTable;
@@ -535,7 +602,7 @@ describe("Tippekonkurranse service", function () {
     });
 
 
-    describe("'Nedrykk' penalty point calculations", function () {
+    describe("'Nedrykk' bonus point calculations", function () {
 
         it("should give -1 if both teams exist in prediction, exact order", function (done) {
             var userPredictions = {
@@ -564,24 +631,24 @@ describe("Tippekonkurranse service", function () {
                     }
                 },
                 actualNedrykkTable = [
-                    {name: "A", no: 1, matches: 30},
-                    {name: "B", no: 2, matches: 30},
-                    {name: "C", no: 3, matches: 30},
-                    {name: "D", no: 4, matches: 30},
-                    {name: "E", no: 5, matches: 30},
-                    {name: "F", no: 6, matches: 30},
-                    {name: "G", no: 7, matches: 30},
-                    {name: "H", no: 8, matches: 30},
-                    {name: "I", no: 9, matches: 30},
-                    {name: "J", no: 10, matches: 30},
-                    {name: "K", no: 11, matches: 30},
-                    {name: "L", no: 12, matches: 30},
-                    {name: "M", no: 13, matches: 30},
-                    {name: "N", no: 14, matches: 30},
-                    {name: "TeamA", no: 15, matches: 30},
-                    {name: "TeamB", no: 16, matches: 30}
+                    { name: "A", no: 1, matches: 30 },
+                    { name: "B", no: 2, matches: 30 },
+                    { name: "C", no: 3, matches: 30 },
+                    { name: "D", no: 4, matches: 30 },
+                    { name: "E", no: 5, matches: 30 },
+                    { name: "F", no: 6, matches: 30 },
+                    { name: "G", no: 7, matches: 30 },
+                    { name: "H", no: 8, matches: 30 },
+                    { name: "I", no: 9, matches: 30 },
+                    { name: "J", no: 10, matches: 30 },
+                    { name: "K", no: 11, matches: 30 },
+                    { name: "L", no: 12, matches: 30 },
+                    { name: "M", no: 13, matches: 30 },
+                    { name: "N", no: 14, matches: 30 },
+                    { name: "TeamA", no: 15, matches: 30 },
+                    { name: "TeamB", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -621,24 +688,24 @@ describe("Tippekonkurranse service", function () {
                     }
                 },
                 actualNedrykkTable = [
-                    {name: "A", no: 1, matches: 30},
-                    {name: "B", no: 2, matches: 30},
-                    {name: "C", no: 3, matches: 30},
-                    {name: "D", no: 4, matches: 30},
-                    {name: "E", no: 5, matches: 30},
-                    {name: "F", no: 6, matches: 30},
-                    {name: "G", no: 7, matches: 30},
-                    {name: "H", no: 8, matches: 30},
-                    {name: "I", no: 9, matches: 30},
-                    {name: "J", no: 10, matches: 30},
-                    {name: "K", no: 11, matches: 30},
-                    {name: "L", no: 12, matches: 30},
-                    {name: "M", no: 13, matches: 30},
-                    {name: "N", no: 14, matches: 30},
-                    {name: "TeamB", no: 15, matches: 30},
-                    {name: "TeamA", no: 16, matches: 30}
+                    { name: "A", no: 1, matches: 30 },
+                    { name: "B", no: 2, matches: 30 },
+                    { name: "C", no: 3, matches: 30 },
+                    { name: "D", no: 4, matches: 30 },
+                    { name: "E", no: 5, matches: 30 },
+                    { name: "F", no: 6, matches: 30 },
+                    { name: "G", no: 7, matches: 30 },
+                    { name: "H", no: 8, matches: 30 },
+                    { name: "I", no: 9, matches: 30 },
+                    { name: "J", no: 10, matches: 30 },
+                    { name: "K", no: 11, matches: 30 },
+                    { name: "L", no: 12, matches: 30 },
+                    { name: "M", no: 13, matches: 30 },
+                    { name: "N", no: 14, matches: 30 },
+                    { name: "TeamB", no: 15, matches: 30 },
+                    { name: "TeamA", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -678,24 +745,24 @@ describe("Tippekonkurranse service", function () {
                     }
                 },
                 actualNedrykkTable = [
-                    {name: "A", no: 1, matches: 30},
-                    {name: "B", no: 2, matches: 30},
-                    {name: "C", no: 3, matches: 30},
-                    {name: "D", no: 4, matches: 30},
-                    {name: "E", no: 5, matches: 30},
-                    {name: "F", no: 6, matches: 30},
-                    {name: "G", no: 7, matches: 30},
-                    {name: "H", no: 8, matches: 30},
-                    {name: "I", no: 9, matches: 30},
-                    {name: "J", no: 10, matches: 30},
-                    {name: "K", no: 11, matches: 30},
-                    {name: "L", no: 12, matches: 30},
-                    {name: "M", no: 13, matches: 30},
-                    {name: "TeamB", no: 14, matches: 30},
-                    {name: "TeamA", no: 15, matches: 30},
-                    {name: "N", no: 16, matches: 30}
+                    { name: "A", no: 1, matches: 30 },
+                    { name: "B", no: 2, matches: 30 },
+                    { name: "C", no: 3, matches: 30 },
+                    { name: "D", no: 4, matches: 30 },
+                    { name: "E", no: 5, matches: 30 },
+                    { name: "F", no: 6, matches: 30 },
+                    { name: "G", no: 7, matches: 30 },
+                    { name: "H", no: 8, matches: 30 },
+                    { name: "I", no: 9, matches: 30 },
+                    { name: "J", no: 10, matches: 30 },
+                    { name: "K", no: 11, matches: 30 },
+                    { name: "L", no: 12, matches: 30 },
+                    { name: "M", no: 13, matches: 30 },
+                    { name: "TeamB", no: 14, matches: 30 },
+                    { name: "TeamA", no: 15, matches: 30 },
+                    { name: "N", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -735,24 +802,24 @@ describe("Tippekonkurranse service", function () {
                     }
                 },
                 actualNedrykkTable = [
-                    {name: "A", no: 1, matches: 30},
-                    {name: "B", no: 2, matches: 30},
-                    {name: "C", no: 3, matches: 30},
-                    {name: "D", no: 4, matches: 30},
-                    {name: "E", no: 5, matches: 30},
-                    {name: "F", no: 6, matches: 30},
-                    {name: "G", no: 7, matches: 30},
-                    {name: "H", no: 8, matches: 30},
-                    {name: "I", no: 9, matches: 30},
-                    {name: "J", no: 10, matches: 30},
-                    {name: "K", no: 11, matches: 30},
-                    {name: "L", no: 12, matches: 30},
-                    {name: "M", no: 13, matches: 30},
-                    {name: "TeamA", no: 14, matches: 30},
-                    {name: "TeamB", no: 15, matches: 30},
-                    {name: "N", no: 16, matches: 30}
+                    { name: "A", no: 1, matches: 30 },
+                    { name: "B", no: 2, matches: 30 },
+                    { name: "C", no: 3, matches: 30 },
+                    { name: "D", no: 4, matches: 30 },
+                    { name: "E", no: 5, matches: 30 },
+                    { name: "F", no: 6, matches: 30 },
+                    { name: "G", no: 7, matches: 30 },
+                    { name: "H", no: 8, matches: 30 },
+                    { name: "I", no: 9, matches: 30 },
+                    { name: "J", no: 10, matches: 30 },
+                    { name: "K", no: 11, matches: 30 },
+                    { name: "L", no: 12, matches: 30 },
+                    { name: "M", no: 13, matches: 30 },
+                    { name: "TeamA", no: 14, matches: 30 },
+                    { name: "TeamB", no: 15, matches: 30 },
+                    { name: "N", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -766,14 +833,14 @@ describe("Tippekonkurranse service", function () {
     });
 
 
-    describe("'Opprykk' penalty point calculations", function () {
+    describe("'Opprykk' bonus point calculations", function () {
 
         it("should give -1 if both teams exist in prediction, exact order", function (done) {
             var userPredictions = {
                     john: {
                         tabell: null,
                         toppscorer: null,
-                        opprykk: ["TeamA", "TeamB", "C", "D"],
+                        opprykk: [ "TeamA", "TeamB", "C", "D" ],
                         cup: null
                     }
                 },
@@ -783,7 +850,7 @@ describe("Tippekonkurranse service", function () {
                     new TeamPlacement("C", 3, 30),
                     new TeamPlacement("D", 4, 30)
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -801,17 +868,17 @@ describe("Tippekonkurranse service", function () {
                     john: {
                         tabell: null,
                         toppscorer: null,
-                        opprykk: ["TeamA", "TeamB"],
+                        opprykk: [ "TeamA", "TeamB" ],
                         cup: null
                     }
                 },
                 actualOpprykkTable = [
-                    {name: "TeamB", no: 1, matches: 3},
-                    {name: "TeamA", no: 2, matches: 3},
-                    {name: "Some other team", no: 3, matches: 3},
-                    {name: "And one more team", no: 4, matches: 3}
+                    { name: "TeamB", no: 1, matches: 3 },
+                    { name: "TeamA", no: 2, matches: 3 },
+                    { name: "Some other team", no: 3, matches: 3 },
+                    { name: "And one more team", no: 4, matches: 3 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -829,17 +896,17 @@ describe("Tippekonkurranse service", function () {
                     john: {
                         tabell: null,
                         toppscorer: null,
-                        opprykk: ["TeamA", "TeamC"],
+                        opprykk: [ "TeamA", "TeamC" ],
                         cup: null
                     }
                 },
                 actualOpprykkTable = [
-                    {name: "TeamA", no: 1, matches: 3},
-                    {name: "TeamB", no: 2, matches: 3},
-                    {name: "TeamC", no: 3, matches: 3},
-                    {name: "And one more team", no: 4, matches: 3}
+                    { name: "TeamA", no: 1, matches: 3 },
+                    { name: "TeamB", no: 2, matches: 3 },
+                    { name: "TeamC", no: 3, matches: 3 },
+                    { name: "And one more team", no: 4, matches: 3 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -857,17 +924,17 @@ describe("Tippekonkurranse service", function () {
                     john: {
                         tabell: null,
                         toppscorer: null,
-                        opprykk: ["TeamA", "TeamC"],
+                        opprykk: [ "TeamA", "TeamC" ],
                         cup: null
                     }
                 },
                 actualOpprykkTable = [
-                    {name: "TeamC", no: 1, matches: 3},
-                    {name: "TeamB", no: 2, matches: 3},
-                    {name: "TeamA", no: 3, matches: 3},
-                    {name: "And one more team", no: 4, matches: 3}
+                    { name: "TeamC", no: 1, matches: 3 },
+                    { name: "TeamB", no: 2, matches: 3 },
+                    { name: "TeamA", no: 3, matches: 3 },
+                    { name: "And one more team", no: 4, matches: 3 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -880,90 +947,75 @@ describe("Tippekonkurranse service", function () {
         });
     });
 
-/*
-    describe("sortByPropertyRequestion", function () {
 
-        describe("Border cases", function () {
+    describe("'Toppscorer' bonus point calculations", function () {
 
-            //it("should get hold on private functions within Node.js file", function () {
-            //    var sortByElementIndex = function (elementIndex, args) {
-            //            return args.sort(Comparators.arrayElementArithmeticAscending(elementIndex));
-            //        },
-            //        sortByRound = rq.requestor(curry(sortByElementIndex, new TippekonkurranseData().indexOfRound));
-            //
-            //    expect(sortByPropertyRequestion).to.exist;
-            //});
+        it("should give -1 if toppscorer is correct", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: null,
+                        toppscorer: [ "Mr. T" ],
+                        opprykk: null,
+                        cup: null
+                    }
+                },
+                actualToppscorerTable = [ "Mr. T" ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.toppscorer).to.equal(-1);
+                };
 
+            inputArgs.tippeligaTopScorer = actualToppscorerTable;
 
-            //it("should throw error if no argument array is provided", function () {
-            //    var sortByMyPropertyRequestion = __.partial(sortByPropertyRequestion, "myProperty");
-            //    expect(sortByMyPropertyRequestion).to.throw(Error, "Requestion argument array is missing - check your RQ.js functions and setup");
-            //});
-
-
-            it("should sort arguments array by numbers", function () {
-                var args = [
-                    [
-                        ["A"],
-                        [3]
-                    ],
-                    [
-                        ["B"],
-                        [-1]
-                    ],
-                    [
-                        ["C"],
-                        [1]
-                    ]
-                ];
-                expect(sortByPropertyRequestion(1, args)).to.be.deep.equal([
-                    [
-                        ["B"],
-                        [-1]
-                    ],
-                    [
-                        ["C"],
-                        [1]
-                    ],
-                    [
-                        ["A"],
-                        [3]
-                    ]
-                ]);
-            });
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
 
 
-            it("should sort arguments array by number strings as well", function () {
-                var args = [
-                    [
-                        ["B"],
-                        [-1]
-                    ],
-                    [
-                        ["A"],
-                        [3]
-                    ],
-                    [
-                        ["C"],
-                        [1]
-                    ]
-                ];
-                expect(sortByPropertyRequestion("0", args)).to.be.deep.equal([
-                    [
-                        ["B"],
-                        [-1]
-                    ],
-                    [
-                        ["A"],
-                        [3]
-                    ],
-                    [
-                        ["C"],
-                        [1]
-                    ]
-                ]);
-            });
+        it("should give 0 if toppscorer is not present in toppscorer collection (more than one toppscorer)", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: null,
+                        toppscorer: [ "Mr. T" ],
+                        opprykk: null,
+                        cup: null
+                    }
+                },
+                actualToppscorerTable = [ "Mr. A", "Mr. B" ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.toppscorer).to.equal(0);
+                };
+
+            inputArgs.tippeligaTopScorer = actualToppscorerTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("should give 0 if toppscorer is not present in toppscorer collection (more than one toppscorer)", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: null,
+                        toppscorer: [ "Mr. T" ],
+                        opprykk: null,
+                        cup: null
+                    }
+                },
+                actualToppscorerTable = [ "Mr. A", "Mr. T" ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.toppscorer).to.equal(-1);
+                };
+
+            inputArgs.tippeligaTopScorer = actualToppscorerTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
     });
-    */
 });

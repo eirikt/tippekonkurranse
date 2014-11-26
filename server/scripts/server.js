@@ -14,7 +14,7 @@ var env = process.env.NODE_ENV || "development",
 // Module dependencies, local
     initDb = require("./db-init"),
     tippekonkurranse = require("./tippekonkurranse-api"),
-    utils = require("./utils"),
+    utils = require("./../../shared/scripts/utils"),
     app = require("./../../shared/scripts/app.models"),
 
 // The app server

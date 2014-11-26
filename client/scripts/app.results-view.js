@@ -4,7 +4,7 @@
 define([
         "jquery", "underscore", "backbone", "bootstrap", "backbone.bootstrap.views", "moment", "moment.nb",
         "app.models", "app.participant-score-view", "app.soccer-table-views",
-        "backbone.fetch-local-copy", "utils"
+        "backbone.fetch-local-copy", "client-utils"
     ],
     function ($, _, Backbone, Bootstrap, BootstrapViews, Moment, Moment_nb, App, ParticipantScoreView, SoccerTableViews, BackboneFetchLocalCopy, Client) {
         "use strict";

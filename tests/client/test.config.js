@@ -18,15 +18,16 @@ require.config({
         // Shared util libs
         fun: '../../build/scripts/fun',
         'string-extensions': '../../build/scripts/string-extensions',
+        utils: '../../build/scripts/utils',
         comparators: '../../build/scripts/comparators',
 
         // Shared app libs
         'app.models': '../../build/scripts/app.models',
 
         // Client-side-only util libs
-        utils: '../../build/scripts/utils',
         'backbone.fetch-local-copy': '../../build/scripts/backbone.fetch-local-copy',
         'backbone.bootstrap.views': '../../build/scripts/backbone.bootstrap.views',
+        'client-utils': '../../build/scripts/client-utils',
 
         // Client-side-only app libs (Router)
         'app.router': '../../build/scripts/app.router',
@@ -60,9 +61,10 @@ require.config({
 require([
         'specs/test.spec.js',
         'specs/string-extensions.amd.spec.js',
+        'specs/utils.amd.spec.js',
         'specs/comparators.amd.spec.js',
 
-        'specs/utils.spec.js',
+        'specs/client-utils.spec.js',
 
         'specs/app.scores-collection.spec.js',
         'specs/app.rating-history-collection.spec.js',

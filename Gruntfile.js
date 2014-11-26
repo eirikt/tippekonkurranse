@@ -236,6 +236,7 @@ module.exports = function (grunt) {
                     'build/scripts/fun.js': 'build/scripts/fun.js',
                     'build/scripts/comparators.js': 'build/scripts/comparators.js',
                     'build/scripts/string-extensions.js': 'build/scripts/string-extensions.js',
+                    'build/scripts/utils.js': 'build/scripts/utils.js',
 
                     'build/scripts/app.models.js': 'build/scripts/app.models.js',
 
@@ -252,7 +253,7 @@ module.exports = function (grunt) {
                     'build/scripts/app.soccer-table-views.js': 'build/scripts/app.soccer-table-views.js',
                     'build/scripts/backbone.bootstrap.views.js': 'build/scripts/backbone.bootstrap.views.js',
                     'build/scripts/backbone.fetch-local-copy.js': 'build/scripts/backbone.fetch-local-copy.js',
-                    'build/scripts/utils.js': 'build/scripts/utils.js'
+                    'build/scripts/client-utils.js': 'build/scripts/client-utils.js'
                 }
             }
         },
@@ -339,6 +340,7 @@ module.exports = function (grunt) {
     grunt.registerTask('deploy:development', [ 'env:dev', 'install:client', 'copy:to-client', 'shell:run' ]);
     grunt.registerTask('deploy:local', [ 'env:prod', 'install:client', 'build:client', 'shell:run' ]);
     grunt.registerTask('deploy:production', [ 'install:client', 'build:client' ]);
+
     /*
      * Using npm trick described in:
      * http://stackoverflow.com/questions/13784600/how-to-deploy-node-app-that-uses-grunt-to-heroku

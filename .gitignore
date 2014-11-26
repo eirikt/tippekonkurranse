@@ -13,6 +13,7 @@ data
 # Ignore derived/generated/transient project files/resources
 client/scripts/fun.js
 client/scripts/string-extensions.js
+client/scripts/utils.js
 client/scripts/comparators.js
 client/scripts/app.models.js
 client/bower_components
@@ -20,12 +21,3 @@ node_modules
 build
 docs
 howto.txt
-README.html
-
-# Temporary local dev stuff, not sure about their future ...
-client/fonts
-client/images/podium_resultats.jpeg
-client/images/sport-man-on-podium-184220.jpg
-client/medal.ico
-client/nff.ico
-server/scripts/fun.js

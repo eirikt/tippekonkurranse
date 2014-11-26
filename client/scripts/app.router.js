@@ -1,7 +1,7 @@
 /* global define:false, console:false, $:false */
 define([
         'jquery', 'underscore', 'backbone', 'bootstrap',
-        'utils',
+        'client-utils',
         'app.models',
         'app.result-collection', 'app.rating-history-collection',
         'app.header-view', 'app.results-view', 'app.results-carousel-view', 'app.rating-history-view'],
