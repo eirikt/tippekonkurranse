@@ -1,9 +1,7 @@
 /* global exports:false */
 /* jshint -W106 */
 
-// Rename to 'tippekonkurranse-2014-user-predictions.js'
-
-var _pred2014 = exports.predictions2014 = {
+var _predictions2014 = exports.predictions2014 = {
     einar: {
         tabell: [
             "Rosenborg",
@@ -23,9 +21,9 @@ var _pred2014 = exports.predictions2014 = {
             "Sogndal",
             "Sarpsborg 08"
         ],
-        opprykk: ["Tromsø", "Sandefjord"],
-        toppscorer: ["Alexander Toft Søderlund"],
-        cup: ["Rosenborg"]
+        opprykk: [ "Tromsø", "Sandefjord" ],
+        toppscorer: [ "Alexander Toft Søderlund" ],
+        cup: [ "Rosenborg" ]
     },
     eirik: {
         tabell: [
@@ -46,9 +44,9 @@ var _pred2014 = exports.predictions2014 = {
             "Sarpsborg 08",
             "Stabæk"
         ],
-        opprykk: ["Tromsø", "Bryne"],
-        toppscorer: ["Frode Johnsen"],
-        cup: ["Stabæk"]
+        opprykk: [ "Tromsø", "Bryne" ],
+        toppscorer: [ "Frode Johnsen" ],
+        cup: [ "Stabæk" ]
     },
     geir: {
         tabell: [
@@ -69,9 +67,9 @@ var _pred2014 = exports.predictions2014 = {
             "Stabæk",
             "Sandnes Ulf"
         ],
-        opprykk: ["Tromsø", "Fredrikstad"],
-        toppscorer: ["Björn Bergmann Sigurdarson"],
-        cup: ["Rosenborg"]
+        opprykk: [ "Tromsø", "Fredrikstad" ],
+        toppscorer: [ "Björn Bergmann Sigurdarson" ],
+        cup: [ "Rosenborg" ]
     },
     hans_bernhard: {
         tabell: [
@@ -92,9 +90,9 @@ var _pred2014 = exports.predictions2014 = {
             "Stabæk",
             "Start"
         ],
-        opprykk: ["Hønefoss", "Bryne"],
-        toppscorer: ["Frode Johnsen"],
-        cup: ["Vålerenga"]
+        opprykk: [ "Hønefoss", "Bryne" ],
+        toppscorer: [ "Frode Johnsen" ],
+        cup: [ "Vålerenga" ]
     },
     jan_tore: {
         tabell: [
@@ -115,9 +113,9 @@ var _pred2014 = exports.predictions2014 = {
             "Sandnes Ulf",
             "Sarpsborg 08"
         ],
-        opprykk: ["Tromsø", "Sandefjord"],
-        toppscorer: ["Alexander Søderlund"],
-        cup: ["Rosenborg"]
+        opprykk: [ "Tromsø", "Sandefjord" ],
+        toppscorer: [ "Alexander Søderlund" ],
+        cup: [ "Rosenborg" ]
     },
     oddgeir: {
         tabell: [
@@ -138,9 +136,9 @@ var _pred2014 = exports.predictions2014 = {
             "Sogndal",
             "Stabæk"
         ],
-        opprykk: ["Tromsø", "Hønefoss"],
-        toppscorer: ["Alexander Søderlund"],
-        cup: ["Brann"]
+        opprykk: [ "Tromsø", "Hønefoss" ],
+        toppscorer: [ "Alexander Søderlund" ],
+        cup: [ "Brann" ]
     },
     oddvar: {
         tabell: [
@@ -161,9 +159,9 @@ var _pred2014 = exports.predictions2014 = {
             "Sandnes Ulf",
             "Stabæk"
         ],
-        opprykk: ["Tromsø", "HamKam"],
-        toppscorer: ["Marvin Ogunjimi"],
-        cup: ["Bodø/Glimt"]
+        opprykk: [ "Tromsø", "HamKam" ],
+        toppscorer: [ "Marvin Ogunjimi" ],
+        cup: [ "Bodø/Glimt" ]
     },
     ole_erik: {
         tabell: [
@@ -184,9 +182,9 @@ var _pred2014 = exports.predictions2014 = {
             "Stabæk",
             "Sandnes Ulf"
         ],
-        opprykk: ["Tromsø" , "Sandefjord"],
-        toppscorer: ["Björn Bergmann Sigurdarson"],
-        cup: ["Molde"]
+        opprykk: [ "Tromsø", "Sandefjord" ],
+        toppscorer: [ "Björn Bergmann Sigurdarson" ],
+        cup: [ "Molde" ]
     },
     rikard: {
         tabell: [
@@ -207,9 +205,9 @@ var _pred2014 = exports.predictions2014 = {
             "Sarpsborg 08",
             "Sandnes Ulf"
         ],
-        opprykk: ["Tromsø", "Hønefoss"],
-        toppscorer: ["Fredrik Guldbrandsen"],
-        cup: ["Molde"]
+        opprykk: [ "Tromsø", "Hønefoss" ],
+        toppscorer: [ "Fredrik Guldbrandsen" ],
+        cup: [ "Molde" ]
     },
     svein_tore: {
         tabell: [
@@ -230,9 +228,9 @@ var _pred2014 = exports.predictions2014 = {
             "Sandnes Ulf",
             "Stabæk"
         ],
-        opprykk: ["Tromsø", "Ranheim"],
-        toppscorer: ["Björn Bergmann Sigurdarson"],
-        cup: ["Molde"]
+        opprykk: [ "Tromsø", "Ranheim" ],
+        toppscorer: [ "Björn Bergmann Sigurdarson" ],
+        cup: [ "Molde" ]
     },
     steinar: {
         tabell: [
@@ -253,9 +251,9 @@ var _pred2014 = exports.predictions2014 = {
             "Sandnes Ulf",
             "Start"
         ],
-        opprykk: ["Tromsø", "Fredrikstad"],
-        toppscorer: ["Riku Riski"],
-        cup: ["Vålerenga"]
+        opprykk: [ "Tromsø", "Fredrikstad" ],
+        toppscorer: [ "Riku Riski" ],
+        cup: [ "Vålerenga" ]
     },
     tore: {
         tabell: [
@@ -276,9 +274,9 @@ var _pred2014 = exports.predictions2014 = {
             "Sandnes Ulf",
             "Stabæk"
         ],
-        opprykk: ["Tromsø", "Fredrikstad"],
-        toppscorer: ["Fredrik Gulbrandsen"],
-        cup: ["Molde"]
+        opprykk: [ "Tromsø", "Fredrikstad" ],
+        toppscorer: [ "Fredrik Gulbrandsen" ],
+        cup: [ "Molde" ]
     },
     trond: {
         tabell: [
@@ -299,8 +297,8 @@ var _pred2014 = exports.predictions2014 = {
             "Vålerenga",
             "Stabæk"
         ],
-        opprykk: ["Hønefoss", "Tromsø"],
-        toppscorer: ["Alexander Søderlund"],
-        cup: ["Brann"]
+        opprykk: [ "Hønefoss", "Tromsø" ],
+        toppscorer: [ "Alexander Søderlund" ],
+        cup: [ "Brann" ]
     }
 };
