@@ -1,9 +1,10 @@
 # Tippekonkurranse
 
 A full-stack JavaScript-based web application,
-persisting data using [MongoDB][51],
-with server-side functional composition using [RQ][52],
-and keeping client-side somewhat tidy with [Backbone][53].
+using [Express][51],
+persisting data using [Mongoose][53],
+with server-side functional composition by [RQ][54],
+and keeping client-side somewhat tidy and sane with [Backbone][60].[Marionette][61].
 In production [here][1].
 
 [![Build Status](https://travis-ci.org/eirikt/tippekonkurranse.png?branch=master)](https://travis-ci.org/eirikt/tippekonkurranse)
@@ -31,13 +32,16 @@ In production [here][1].
 ## Version history/roadmap
 
 #### v1.3 : _Planned Q1 2015_
+* Backbone.Marionette
 * Multi-season handling with proper archiving
-* User admin
-* Admin UI for data management
-* Revisiting automatic reloading of web page (simple countdown timer, or real SPA instead of the HTTP refresh)
-* Multiple draggable windows (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
 * Show 'Gjeldende resultater' contextual to what round is actively chosen, as done with 'Trend'
 * Configurable strategy-based rules for calculating scores. The rules may differ from year to year ...
+* No more HTTP refresh, now real single page application (SPA)
+* A simple countdown timer for data refresh (forcing a GET)
+* Button for manual data refresh
+* User admin
+* Admin UI for data management
+* Multiple draggable windows, no more modals (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
 
 _Status: In progress_
 
@@ -52,7 +56,7 @@ _Status: Done_
 
 
 #### v1.2.4 : _Deployed 09.11.2014_
-* Refactorings: Cyclic complexity reduced to 5 (one 8-exception only ...)
+* Refactorings: Cyclic complexity reduced to 5 (a couple of silly 7-exceptions only ...)
 * Dependencies update
 * Multi-browser testing with Sauce Labs
 
@@ -295,13 +299,19 @@ SOFTWARE.
 [1]:  http://tippekonkurranse.herokuapp.com
 [10]: http://www.fotball.no/Landslag_og_toppfotball/Toppfotball/tippeligaen
 [11]: http://www.altomfotball.no
+
 [20]: https://www.digitalocean.com/community/articles/how-to-use-node-js-request-and-cheerio-to-set-up-simple-web-scraping
+
 [30]: https://www.heroku.com
 [31]: https://devcenter.heroku.com/articles/getting-started-with-nodejs
 [32]: https://devcenter.heroku.com/articles/custom-domains
 [35]: https://mongolab.com
-[40]: http://tiny.cc
+
 [50]: http://nodejs.org
-[51]: https://www.mongodb.org
-[52]: https://github.com/douglascrockford/RQ
-[53]: http://backbonejs.org
+[51]: http://expressjs.com
+[52]: https://www.mongodb.org
+[53]: http://mongoosejs.com
+[54]: https://github.com/douglascrockford/RQ
+
+[60]: http://backbonejs.org
+[61]: http://marionettejs.com

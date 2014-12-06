@@ -422,7 +422,7 @@ var env = process.env.NODE_ENV || "development",
                 year = tippekonkurranseData.date.getFullYear(),
                 previousRound = tippekonkurranseData.round - 1,
                 getPreviousRoundTippeligaData = curry(_getStoredTippeligaDataRequestor, year, previousRound),
-                addTippekonkurranseScores = curry(_addTippekonkurranseScoresRequestor, userPredictions),
+                addTippekonkurranseScores = curry(_addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
 
                 updatedScores = tippekonkurranseData.scores.scores,
 

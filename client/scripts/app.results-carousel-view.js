@@ -1,65 +1,140 @@
+// TODO: Rename to 'app.round-navigator-view.js'
 /* global define:false */
-define([
-        'jquery', 'underscore', 'backbone'
-    ],
-    function ($, _, Backbone) {
+define(
+    [ 'jquery', 'underscore', 'backbone', 'marionette' ],
+    function ($, _, Backbone, Marionette) {
         'use strict';
 
-        return Backbone.View.extend({
+        var Round = Backbone.Model,
 
-            template: _.template(
-                '<div id="scoresCarousel" class="x-large full-width-inline-list" style="margin-left:2rem;margin-top:1rem;"></div>'
-            ),
+            RoundCollection = Backbone.Collection.extend({
+                model: Round
+            }),
 
-            initialize: function () {
-                this.listenTo(this.collection, 'reset', this.render);
+            RightChevronView = Marionette.ItemView.extend({
+                tagName: 'span',
+                template: function () {
+                    return _.template('<span class="icon-chevron-right"></span>');
+                }
+            }),
+
+            SelectableRightChevronView = Marionette.ItemView.extend({
+                tagName: 'span',
+                template: function (model) {
+                    return _.template(
+                        '<a href="/#/scores/<%= args.year %>/<%= args.round %>"><span class="icon-chevron-right"></span></a>',
+                        { year: model.year, round: model.round },
+                        { variable: 'args' }
+                    );
+                }
+            }),
+
+            LeftChevronView = Marionette.ItemView.extend({
+                tagName: 'span',
+                template: function () {
+                    return _.template('<span class="icon-chevron-left"></span>');
+                }
+            }),
+
+            SelectableLeftChevronView = Marionette.ItemView.extend({
+                tagName: 'span',
+                template: function (model) {
+                    return _.template(
+                        '<a href="/#/scores/<%= args.year %>/<%= args.round %>"><span class="icon-chevron-left"></span></a>',
+                        { year: model.year, round: model.round },
+                        { variable: 'args' }
+                    );
+                }
+            }),
+
+            SelectableRoundView = Marionette.ItemView.extend({
+                tagName: 'span',
+                template: function (model) {
+                    return _.template(
+                        '<a href="/#/scores/<%= args.year %>/<%= args.round %>"><%= args.round %></a>',
+                        { year: model.year, round: model.round },
+                        { variable: 'args' }
+                    );
+                }
+            }),
+
+            SelectedRoundView = Marionette.ItemView.extend({
+                tagName: 'span',
+                template: function (model) {
+                    return _.template(
+                        '<strong><%= args.round %></strong>',
+                        { round: model.round },
+                        { variable: 'args' }
+                    );
+                }
+            }),
+
+            RoundView = Marionette.ItemView.extend({
+                tagName: 'span',
+                template: function (model) {
+                    return _.template(
+                        '<span style="color:#cccccc"><%= args.round %></span>',
+                        { round: model.round },
+                        { variable: 'args' }
+                    );
+                }
+            });
+
+        return Marionette.CompositeView.extend({
+            template: _.identity,
+            className: 'x-large full-width-inline-list',
+
+            // I don't quite see the complexity trouble with a few ifs ...
+            /* jshint -W074 */
+            getChildView: function (round) {
+                if (round.get('isLeftChevron')) {
+                    return round.get('isLink') ? SelectableLeftChevronView : LeftChevronView;
+                }
+                if (round.get('isRightChevron')) {
+                    return round.get('isLink') ? SelectableRightChevronView : RightChevronView;
+                }
+                if (round.get('isSelectedRound')) {
+                    return SelectedRoundView;
+                }
+                if (round.get('isSelectableRound')) {
+                    return SelectableRoundView;
+                }
+                return RoundView;
             },
 
-            _renderArrowLink: function (direction) {
-                if (direction === 'left') {
-                    if (this.round <= 1) {
-                        return '<span class="icon-chevron-left"></span>';
-                    } else {
-                        return '<a href="/#/scores/' + this.year + '/' + (this.round - 1) + '" class="icon-chevron-left"></a>';
-                    }
-                } else {
-                    if (this.round >= this.currentRound) {
-                        return '<span class="icon-chevron-right" style="padding-left:1.3rem;"></span>';
-                    } else {
-                        return '<a href="/#/scores/' + this.year + '/' + (this.round + 1) + '" class="icon-chevron-right" style="padding-left:1.3rem;"></a>';
-                    }
+            onBeforeRender: function () {
+                var roundCounter = 1;
+
+                this.year = parseInt(this.model.year, 10);
+                this.selectedRound = parseInt(this.model.round, 10);
+                this.currentYear = parseInt(this.model.currentYear, 10);
+                this.currentRound = parseInt(this.model.currentRound, 10);
+
+                this.collection = new RoundCollection();
+
+                this.collection.add(new Round({
+                        isLeftChevron: true,
+                        isLink: this.selectedRound > 1,
+                        year: this.year,
+                        round: this.selectedRound - 1
+                    })
+                );
+                for (; roundCounter <= 30; roundCounter += 1) {
+                    this.collection.add(new Round({
+                            isSelectedRound: roundCounter === this.selectedRound,
+                            isSelectableRound: roundCounter <= this.currentRound,
+                            year: this.year,
+                            round: roundCounter
+                        })
+                    );
                 }
-            },
-
-            _renderRoundLink: function (round) {
-                if (round === this.round) {
-                    return '<span style="padding-left:1.3rem;"><strong>' + round + '</strong></span>';
-
-                } else if (round > this.currentRound) {
-                    return '<span style="padding-left:1.3rem;color:#cccccc">' + round + '</span>';
-
-                } else {
-                    return '<a href="/#/scores/' + this.year + '/' + round + '" style="padding-left:1.3rem;">' + round + '</a>';
-                }
-            },
-
-            render: function () {
-                if (!this.year || !this.round) {
-                    this.year = parseInt(this.collection.year, 10);
-                    this.round = parseInt(this.collection.round, 10);
-                    //this.date = this.collection.date;
-                    this.currentYear = parseInt(this.collection.currentYear, 10);
-                    this.currentRound = parseInt(this.collection.currentRound, 10);
-                }
-
-                this.$el.empty().append(this.template());
-                this.$('#scoresCarousel').append(this._renderArrowLink('left'));
-                for (var round = 1; round <= 30; round += 1) {
-                    this.$('#scoresCarousel').append(this._renderRoundLink(round));
-                }
-                this.$('#scoresCarousel').append(this._renderArrowLink('right'));
-
-                return this;
+                this.collection.add(new Round({
+                        isRightChevron: true,
+                        isLink: this.selectedRound < 30 && this.selectedRound < this.currentRound,
+                        year: this.year,
+                        round: this.selectedRound + 1
+                    })
+                );
             }
         });
     }

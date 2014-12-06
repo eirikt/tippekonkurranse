@@ -48,7 +48,7 @@ module.exports = function (grunt) {
                     'echo Essential grunt tasks are:',
                     'echo   install:client   installs client resources via Bower',
                     'echo   test             installs, builds, and executes all Mocha tests',
-                    'echo   mongodb          starts a MongoDB instance using a local data folder (blocking command)',
+                    'echo   db               starts a MongoDB instance using a local data folder (blocking command)',
                     'echo   run              starts up local Node.js runtime                     (blocking command)'
                 ].join('&&')
             },
@@ -60,7 +60,7 @@ module.exports = function (grunt) {
                     'mkdir db'
                 ].join('&&')
             },
-            mongod: {
+            db: {
                 options: { stdout: true, stderr: true, failOnError: true },
                 command: 'mongod.exe --dbpath data/db'
             },
@@ -143,7 +143,7 @@ module.exports = function (grunt) {
                 //unused: true,
                 strict: true,
                 trailing: true,
-                maxparams: 12,
+                maxparams: 14,
                 maxdepth: 3,
                 maxstatements: 30,
                 maxcomplexity: 5,
@@ -232,6 +232,7 @@ module.exports = function (grunt) {
                     // Minified versions not available via Bower ...
                     'build/bower_components/requirejs/require.js': 'build/bower_components/requirejs/require.js',
                     'build/bower_components/backbone/backbone.js': 'build/bower_components/backbone/backbone.js',
+                    'build/bower_components/underscore/underscore.js': 'build/bower_components/underscore/underscore.js',
 
                     'build/scripts/fun.js': 'build/scripts/fun.js',
                     'build/scripts/comparators.js': 'build/scripts/comparators.js',

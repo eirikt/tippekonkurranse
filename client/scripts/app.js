@@ -1,27 +1,62 @@
-/* global define:false */
-/* jshint -W031 */
+/* global window:false, define:false */
+/* jshint -W093 */
 define([
-        'jquery', 'underscore', 'backbone', 'toastr',
-        'backbone.fetch-local-copy', 'app.router'],
+    'backbone', 'marionette',
+    'client-utils',
+    'app.models',
+    'app.result-collection', 'app.rating-history-collection',
+    'app.header-view', 'app.results-view', 'app.results-carousel-view', 'app.rating-history-view'
+], function (Backbone, Marionette,
+             Please,
+             AppModels,
+             CurrentScoresCollection, HistoricScoresCollection,
+             HeaderView, CurrentScoresView, RoundCarouselView, RatingHistoryView) {
+    'use strict';
 
-    function ($, _, Backbone, toastr, BackboneFetchLocalCopy, AppRouter) {
-        'use strict';
+    var app = new Marionette.Application(),
+        currentScores = new CurrentScoresCollection(),
+        historicScores = new HistoricScoresCollection();
 
-        $(document).ready(function () {
-            console.log('DOM ready! Application starting ...');
+    app.commands.setHandler('getTippekonkurranseScores', function (year, round) {
+        console.log('"getTippekonkurranseScores(' + year + ', ' + round + ')"');
+        currentScores.year = year;
+        currentScores.round = round;
+        currentScores.fetch();
+        //historicScores.fetch({ reset: true });
+    });
+    app.commands.setHandler('getTippekonkurranseScoresHistory', function (year, round) {
+        console.log('"getTippekonkurranseScoresHistory(' + year + ', ' + round + ')"');
+        historicScores.year = year;
+        historicScores.round = round;
+        historicScores.fetch();
+        //historicScores.fetch({ reset: true });
+    });
 
-            new AppRouter();
+    app.addRegions({
+        header: '#header',
+        mainContent: '#mainSection',
+        mainFooter: '#mainFooter'
+    });
 
-            Backbone.history.start({
-                pushState: false,
-                hashChange: true,
-                root: '/'
-            });
+    app.addInitializer(function () {
+        app.execute('getTippekonkurranseScores');
+    });
 
-            BackboneFetchLocalCopy.listenToServerConnectionDropouts([
-                '#offlineScoresNotification',
-                '#offlineCurrentResultsNotification'
-            ]);
-        });
-    }
-);
+    app.listenTo(currentScores, 'reset', function () {
+        console.log('"currentScores:reset"');
+        app.header.show(new HeaderView({ model: currentScores }));
+        app.mainContent.show(new CurrentScoresView({
+            model: new Backbone.Model(),
+            collection: currentScores
+        }));
+        app.mainFooter.show(new RoundCarouselView({ model: currentScores }));
+    });
+
+    app.listenTo(historicScores, 'reset', function () {
+        console.log('"historicScores:reset"');
+        app.mainContent.show(new RatingHistoryView({ collection: historicScores }));
+        app.mainFooter.empty();
+    });
+
+    return window.app = app;
+});

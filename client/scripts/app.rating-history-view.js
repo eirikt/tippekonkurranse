@@ -1,38 +1,76 @@
 /* global define:false, */
 
-define(['jquery', 'underscore', 'backbone'],
-    function ($, _, Backbone) {
+define([ 'jquery', 'underscore', 'backbone', 'marionette' ],
+    function ($, _, Backbone, Marionette) {
         'use strict';
 
-        return Backbone.View.extend({
+        return Marionette.ItemView.extend({
             jqplotId: 'jqplot',
             graphFilteringId: 'graphFiltering',
             graphHeight: 400,
             originalCollection: null,
-            graphFilteringTemplate: null,
+            //graphFilteringTemplate: null,
 
-            events: {
-                "click #graphSeriesFiltering": function (event) {
-                    var show = $($(event.target).get(0)).is(':checked'),
-                        userId = $($(event.target).get(0)).attr('name'),
-                        model = this.originalCollection.findWhere({ userId: userId });
-                    if (show) {
-                        this.collection.add(model);
-                    } else {
-                        this.collection.remove(model);
-                    }
-                }
+            template: false,
+
+            // TODO: Reactivate and fix
+            //events: {
+            //    "click #graphSeriesFiltering": function (event) {
+            //        var show = $($(event.target).get(0)).is(':checked'),
+            //            userId = $($(event.target).get(0)).attr('name'),
+            //            model = this.originalCollection.findWhere({ userId: userId });
+            //        if (show) {
+            //            this.collection.add(model);
+            //        } else {
+            //            this.collection.remove(model);
+            //        }
+            //    }
+            //},
+
+            onBeforeRender: function () {
+                //console.log('"onBeforeRender"');
+                this.originalCollection = this.collection.clone();
+                //this.graphFilteringTemplate = _.template(this._getUsersAsCheckboxes());
+                this.$el.empty();
+                this.$el.append('<div id="' + this.jqplotId + '">');
+                //this.$el.append('<div id="' + this.graphFilteringId + '" style="margin-top:2rem;margin-bottom:2rem;margin-left:8rem;">');
+
+                this.$('#' + this.jqplotId).css({ height: this.graphHeight + 'px' });
+            },
+            onRender: function () {
+                //console.log('"onRender"');
+            },
+            onBeforeDestroy: function () {
+                //console.log('"onBeforeDestroy"');
+            },
+            onDestroy: function () {
+                //console.log('"onDestroy"');
+            },
+            onShow: function () {
+                // react to when a view has been shown
+                //console.log('"onShow"');
+
+                // Graph
+                $.jqplot(this.jqplotId, this.collection.getJqPlotPlot(), this.getJqPlotConfig());
+
+                // Filtering options
+                //this.$('#' + this.graphFilteringId).empty().append(this.graphFilteringTemplate());
+
+                // Parent element modifications
+                var elTotalHeight = this.graphHeight + this.$('#' + this.graphFilteringId).height() + 10 + 'px';
+                this.$el.css({ height: elTotalHeight });
+            },
+            onDomRefresh: function () {
+                // manipulate the `el` here. it's already
+                // been rendered, and is full of the view's
+                // HTML, ready to go.
+                //console.log('"onDomRefresh"');
             },
 
-            initialize: function (options) {
-                this.year = options.year;
-                this.round = options.round;
-
-                this.listenTo(this.collection, 'reset', this.initAndRender);
-                this.listenTo(this.collection, 'add remove', this.immediateRender);
-            },
-
+            // TODO: Rewrite to CollectionView ...
+            // TODO: Restyle with nice overlay ...
             _getUsersAsCheckboxes: function () {
+                // TODO: Rewrite to using reduce ...
                 var checkBoxes = _.map(this.collection.pluck('userId'), function (userId) {
                     return '' +
                         '<div class="checkbox-inline">' +
@@ -47,6 +85,7 @@ define(['jquery', 'underscore', 'backbone'],
             },
 
             getJqPlotConfig: function () {
+                this.collection.round = parseInt(this.collection.round, 10);
                 return {
                     seriesDefaults: {
                         rendererOptions: {
@@ -65,8 +104,8 @@ define(['jquery', 'underscore', 'backbone'],
                         xaxis: {
                             label: 'Tippeligarunde',
                             min: 0,
-                            max: this.round + 4,
-                            numberTicks: this.round + 5
+                            max: this.collection.round + 4,
+                            numberTicks: this.collection.round + 5
                         },
                         yaxis: {
                             label: '&nbsp;&nbsp;&nbsp;&nbsp;Poeng',
@@ -87,31 +126,35 @@ define(['jquery', 'underscore', 'backbone'],
                 };
             },
 
-            initAndRender: function () {
-                this.originalCollection = this.collection.clone();
-                this.graphFilteringTemplate = _.template(this._getUsersAsCheckboxes());
-                this.$el.empty();
+            /*
+             initAndRender: function () {
+             this.originalCollection = this.collection.clone();
+             this.graphFilteringTemplate = _.template(this._getUsersAsCheckboxes());
+             this.$el.empty();
 
-                this.$el.append('<div id="' + this.jqplotId + '">');
-                this.$el.append('<div id="' + this.graphFilteringId + '" style="margin-top:2rem;margin-bottom:2rem;margin-left:8rem;">');
+             this.$el.append('<div id="' + this.jqplotId + '">');
+             this.$el.append('<div id="' + this.graphFilteringId + '" style="margin-top:2rem;margin-bottom:2rem;margin-left:8rem;">');
 
-                this.render();
-            },
+             this.render();
+             },
+             */
 
-            render: function () {
-                // Graph
-                this.$('#' + this.jqplotId).css({ height: this.graphHeight + 'px' });
-                $.jqplot(this.jqplotId, this.collection.getJqPlotPlot(), this.getJqPlotConfig());
+            /*
+             render: function () {
+             // Graph
+             this.$('#' + this.jqplotId).css({ height: this.graphHeight + 'px' });
+             $.jqplot(this.jqplotId, this.collection.getJqPlotPlot(), this.getJqPlotConfig());
 
-                // Filtering options
-                this.$('#' + this.graphFilteringId).empty().append(this.graphFilteringTemplate());
+             // Filtering options
+             this.$('#' + this.graphFilteringId).empty().append(this.graphFilteringTemplate());
 
-                // Parent element modifications
-                var elTotalHeight = this.graphHeight + this.$('#' + this.graphFilteringId).height() + 10 + 'px';
-                this.$el.css({ height: elTotalHeight });
+             // Parent element modifications
+             var elTotalHeight = this.graphHeight + this.$('#' + this.graphFilteringId).height() + 10 + 'px';
+             this.$el.css({ height: elTotalHeight });
 
-                return this;
-            },
+             return this;
+             },
+             */
 
             immediateRender: function () {
                 // Graph

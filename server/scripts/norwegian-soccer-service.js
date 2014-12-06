@@ -116,19 +116,19 @@ var __ = require("underscore"),
     _getCurrentTippeligaTableRequestory = exports.getCurrentTippeligaTable =
         RQ.sequence([
             rq.get(currentTippeligaTableUrl),
-            rq.do(parseTippeligaTable)
+            rq.then(parseTippeligaTable)
         ]),
 
     _getCurrentAdeccoligaTableRequestory = exports.getCurrentAdeccoligaTable =
         RQ.sequence([
             rq.get(currentAdeccoligaTableUrl),
-            rq.do(parseAdeccoligaTable)
+            rq.then(parseAdeccoligaTable)
         ]),
 
     _getCurrentTippeligaTopScorerRequestory = exports.getCurrentTippeligaTopScorer =
         RQ.sequence([
             rq.get(currentTippeligaToppscorerTableUrl),
-            rq.do(parseTippeligaTopScorerTable)
+            rq.then(parseTippeligaTopScorerTable)
         ]),
 
     _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
@@ -136,7 +136,7 @@ var __ = require("underscore"),
 // /Requestories
 
 
-// TODO: Establish MongoDB/Mongolab export/import routines and lean on them - then delete all below!
+// TODO: Establish MongoDB/Mongolab export/import routines and lean on them - then delete all crap below!
     _dataForRound201401 = exports.round201401 = {
         year: 2014,
         round: 1,

@@ -36,7 +36,7 @@ var env = process.env.NODE_ENV || "development",
             // TODO:
             //predictions = predictions[year][userId];
             if (year === 2014) {
-                response.status(200).json(predictions2014[userId]);
+                response.status(200).json(predictions2014[ userId ]);
 
             } else {
                 response.json(404);
@@ -72,6 +72,7 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
+// TODO: An obvious candidate for caching: e.g. with https://github.com/medikoo/memoize
     _handleRatingHistoryRequest = exports.handleRatingHistoryRequest =
         function (request, response) {
             "use strict";
@@ -81,12 +82,11 @@ var env = process.env.NODE_ENV || "development",
                 roundIndex,
                 data = {},
 
-                getHistoricTippekonkurranseScores = [],
+                getTippekonkurranseScoresHistory = [],
 
                 sortByElementIndex = function (elementIndex, args) {
                     return args.sort(comparators.arrayElementArithmeticAscending(elementIndex));
                 },
-            //sortByRound = rq.requestor(curry(sortByElementIndex, tippekonkurranse.roundIndex)),
                 sortByRound = rq.requestor(curry(sortByElementIndex, new TippekonkurranseData().indexOfRound)),
 
                 _dispatchAsJson = function (response, statusCode, data) {
@@ -96,7 +96,7 @@ var env = process.env.NODE_ENV || "development",
 
             // 1. Create array of requestors: all historic Tippeligakonkurranse scores
             for (roundIndex = 1; roundIndex <= round; roundIndex += 1) {
-                getHistoricTippekonkurranseScores.push(
+                getTippekonkurranseScoresHistory.push(
                     RQ.sequence([
                         curry(tippekonkurranse.getStoredTippeligaDataRequestor, year, roundIndex),
                         rq.requestor(tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping),
@@ -108,7 +108,7 @@ var env = process.env.NODE_ENV || "development",
 
             // 2. Then execute them ...
             RQ.sequence([
-                RQ.parallel(getHistoricTippekonkurranseScores),
+                RQ.parallel(getTippekonkurranseScoresHistory),
 
                 // 3. And manipulate them ...
                 sortByRound,
@@ -117,9 +117,9 @@ var env = process.env.NODE_ENV || "development",
                     /* Create processing-friendly data structure skeleton:
                      * var participants = { <userId> = { userId: {string}, ratings: [] }}
                      */
-                    var userIdArray = Object.keys(args[0][new TippekonkurranseData().indexOfScores].scores);
+                    var userIdArray = Object.keys(args[ 0 ][ new TippekonkurranseData().indexOfScores ].scores);
                     __.each(userIdArray, function (userId, index) {
-                        data[userId] = {userId: userId, ratings: []};
+                        data[ userId ] = { userId: userId, ratings: [] };
                         if (index >= userIdArray.length - 1) {
                             return requestion(args);
                         }
@@ -129,8 +129,8 @@ var env = process.env.NODE_ENV || "development",
                 function (requestion, args) {
                     // Process/build data structure
                     __.each(args, function (completeTippekonkurranseRoundData) {
-                        __.each(completeTippekonkurranseRoundData[new TippekonkurranseData().indexOfScores].scores, function (participantScores, userId) {
-                            data[userId].ratings.push(participantScores.rating);
+                        __.each(completeTippekonkurranseRoundData[ new TippekonkurranseData().indexOfScores ].scores, function (participantScores, userId) {
+                            data[ userId ].ratings.push(participantScores.rating);
                         });
                     });
                     return requestion(data);

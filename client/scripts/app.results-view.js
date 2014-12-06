@@ -1,12 +1,11 @@
+// TODO: Rename to 'app.scores-table-view.js' or 'app.rankings-view.js' or 'app.standings-view.js' or 'app.ratings-table-view.js'
 /* global define:false, wait:false, isTouchDevice:false */
 /* jshint -W106 */
-
 define([
-        "jquery", "underscore", "backbone", "bootstrap", "backbone.bootstrap.views", "moment", "moment.nb",
-        "app.models", "app.participant-score-view", "app.soccer-table-views",
-        "backbone.fetch-local-copy", "client-utils"
-    ],
-    function ($, _, Backbone, Bootstrap, BootstrapViews, Moment, Moment_nb, App, ParticipantScoreView, SoccerTableViews, BackboneFetchLocalCopy, Client) {
+        "jquery", "underscore", "backbone", "marionette", "bootstrap", "backbone.bootstrap.views", "moment", "moment.nb",
+        "app.models", "app.result", "app.participant-score-view", "app.soccer-table-views",
+        "backbone.fetch-local-copy" ],
+    function ($, _, Backbone, Marionette, Bootstrap, BootstrapViews, Moment, Moment_nb, App, ParticipantScore, ParticipantScoreView, SoccerTableViews, BackboneFetchLocalCopy) {
         "use strict";
 
         var CurrentResults = Backbone.Model.extend({
@@ -99,7 +98,7 @@ define([
                     });
                     this.model.set("currentAdeccoligaTable", prettyTabellView.render().$el.html(), { silent: true });
 
-                    // Pretty toppskårer presentation
+                    // Pretty toppscorer presentation
                     var toppscorer = this.model.get("currentTippeligaToppscorer");
                     toppscorer = _.reduce(toppscorer, function (result, toppscorer, index) {
                         return result += toppscorer + "<br/>";
@@ -120,43 +119,238 @@ define([
                 }
             });
 
+        var RankTrendView = Marionette.ItemView.extend({
+            tagName: 'span',
+            template: _.template(
+                '<span class="tendency-arrow"></span>' +
+                '<small>&nbsp;<%= args.rankDiff %></small>', null, { variable: 'args' }),
 
-        return Backbone.View.extend({
+            onBeforeRender: function () {
+                if (!this.model.get(ParticipantScore.previousRankPropertyName)) {
+                    return this;
+                }
+                var upwardTrend = this.model.get(ParticipantScore.previousRankPropertyName) - this.model.get(ParticipantScore.rankPropertyName),
+                    rankDiff = upwardTrend;
 
-            template: _.template('' +
-                '<table class="table table-condenced table-striped table-hover">' +
-                '<thead>' +
-                '<tr>' +
-                '  <th style="padding-left:2rem;width:3rem;"></th>' +
-                '  <th style="width:12rem;"></th>' +
-                '  <th style="width:8rem;"></th>' +
-                '  <th class="rating-history" colspan="2">' +
-                '    <a href="/#/ratinghistory/2014" type="button" class="btn btn-sm btn-success">' +
-                '      <span style="margin-right:1rem;" class="icon-line-chart"></span>Trend' +
-                '    </a>' +
-                '  </th>' +
-                '  <th class="current-results">' +
-                '    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>' +
-                '  </th>' +
-                '  <th style="text-align:center;color:darkgray;width:8rem;">Tabell</th>' +
-                '  <th style="text-align:center;color:darkgray;width:8rem;">Pall</th>' +
-                '  <th style="text-align:center;color:darkgray;width:9rem;">Nedrykk</th>' +
-                '  <th style="text-align:center;color:darkgray;width:9rem;">Toppsk.</th>' +
-                '  <th style="text-align:center;color:darkgray;width:9rem;">Opprykk</th>' +
-                '  <th style="text-align:center;color:darkgray;width:9rem;">Cup</th>' +
-                '</tr>' +
-                '</thead>' +
+                this.model.set('rankDiff', '');
+                if (rankDiff !== 0) {
+                    if (rankDiff > 0) {
+                        rankDiff = '+' + rankDiff;
+                    }
+                    this.model.set('rankDiff', rankDiff);
+                }
+            },
+            // I don't quite see the complexity trouble with a few ifs ...
+            /* jshint -W074 */
+            onRender: function () {
+                if (!this.model.get(ParticipantScore.previousRankPropertyName)) {
+                    return this;
+                }
+                var plusThreshold = 2,
+                    upwardTrend = this.model.get(ParticipantScore.previousRankPropertyName) - this.model.get(ParticipantScore.rankPropertyName),
+                    downwardTrend = this.model.get(ParticipantScore.rankPropertyName) - this.model.get(ParticipantScore.previousRankPropertyName),
+                    $tendency;
 
-                    // All participant data in here
-                '<tbody></tbody>' +
+                $tendency = this.$('span.tendency-arrow');
 
-                '</table>'
-            ),
+                if (upwardTrend >= plusThreshold) {
+                    $tendency.addClass('icon-up-plus');
+
+                } else if (upwardTrend > 0) {
+                    $tendency.addClass('icon-up');
+
+                } else if (downwardTrend >= plusThreshold) {
+                    $tendency.addClass('icon-down-plus');
+
+                } else if (downwardTrend > 0) {
+                    $tendency.addClass('icon-down');
+                }
+                $tendency.removeClass('tendency-arrow');
+            }
+        });
+
+
+        var RatingTrendView = Marionette.ItemView.extend({
+            tagName: 'span',
+            template: _.template('<small><%= args.ratingDiff %></small>', null, { variable: 'args' }),
+            onBeforeRender: function () {
+                if (!this.model.get(App.scoreModel.previousRatingPropertyName)) {
+                    return this;
+                }
+                this.model.set('ratingDiff', '');
+                var ratingDiff = this.model.get(App.scoreModel.ratingPropertyName) - this.model.get(App.scoreModel.previousRatingPropertyName);
+                if (ratingDiff !== 0) {
+                    if (ratingDiff > 0) {
+                        ratingDiff = '+' + ratingDiff;
+                    }
+                    this.model.set('ratingDiff', '(' + ratingDiff + 'p)');
+                }
+            }
+        });
+
+
+        /*
+         var oldView = Backbone.View.extend({
+         template: _.template('' +
+         '<table class="table table-condenced table-striped table-hover">' +
+         '<thead>' +
+         '<tr>' +
+         '  <th style="padding-left:2rem;width:3rem;"></th>' +
+         '  <th style="width:14rem;"></th>' +
+         '  <th style="width:8rem;"></th>' +
+         '  <th class="rating-history" colspan="2">' +
+         '    <a href="/#/ratinghistory/2014" type="button" class="btn btn-sm btn-success">' +
+         '      <span style="margin-right:1rem;" class="icon-line-chart"></span>Trend' +
+         '    </a>' +
+         '  </th>' +
+         '  <th class="current-results">' +
+         '    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>' +
+         '  </th>' +
+         '  <th style="text-align:center;color:darkgray;width:8rem;">Tabell</th>' +
+         '  <th style="text-align:center;color:darkgray;width:8rem;">Pall</th>' +
+         '  <th style="text-align:center;color:darkgray;width:9rem;">Nedrykk</th>' +
+         '  <th style="text-align:center;color:darkgray;width:9rem;">Toppsk.</th>' +
+         '  <th style="text-align:center;color:darkgray;width:9rem;">Opprykk</th>' +
+         '  <th style="text-align:center;color:darkgray;width:9rem;">Cup</th>' +
+         '</tr>' +
+         '</thead>' +
+
+         // All participant data in here
+         '<tbody></tbody>' +
+
+         '</table>'
+         ),
+
+         events: {
+         "click .current-results": function () {
+         this.bootstrapModalContainerView.resett();
+         this.currentResults.fetch({ reset: true });
+         }
+         },
+
+         currentResults: null,
+
+         bootstrapModalContainerView: null,
+         modalCurrentResultsView: null,
+
+         initialize: function () {
+         this.currentResults = new CurrentResults();
+         this.bootstrapModalContainerView = new BootstrapViews.ModalContainerView({
+         parentSelector: 'body',
+         id: 'currentResultsTable',
+         ariaLabelledBy: 'currentResultsLabel'
+         });
+         this.modalCurrentResultsView = new ModalCurrentResultsView({
+         model: this.currentResults
+         });
+         this.listenTo(this.collection, "reset", this.render);
+         },
+
+         render: function () {
+         var //self = this,
+         //numberOfParticipantsRendered = 0,
+         addParticipant = function ($el, participantScore) {
+         $el.append(new ParticipantScoreView({ model: participantScore.toJSON() }).render().el);
+         },
+         delayedAddParticipant = function (timeOutInMillis, $el, participantScore) {
+         var dfd = $.Deferred();
+         addParticipant($el, participantScore);
+         Client.wait(timeOutInMillis).then(function () {
+         dfd.resolve();
+         //numberOfParticipantsRendered += 1;
+         //if (numberOfParticipantsRendered >= self.collection.length) {
+         //    console.log("RENDERED");
+         //    self.trigger("rendered");
+         //}
+         });
+         return dfd.promise();
+         },
+         currentRound = this.collection.at(0).get("round");
+
+         this.$el.empty().append(this.template());
+
+         if (Client.isTouchDevice()) {
+         this.$("table").removeClass("table-hover");
+         }
+         if (currentRound) {
+         var href = this.$(".rating-history").find("a").attr("href");
+         this.$(".rating-history").find("a").attr("href", [ href, currentRound ].join("/"));
+         }
+
+         // Render all participant scores sequentially, one by one
+         var addingOfParticipantFuncs = [],
+         delayInMillis = 100,
+         $tbody = this.$("tbody"),
+         i,
+         sortedParticipant,
+         delayedParticipantFunc,
+         delayedAddingOfParticipantInTableFunc;
+
+         for (i = 0; i < this.collection.length; i += 1) {
+         // Underscore: Bind a function to an object, meaning that whenever the function is called, the value of this will be the object
+         delayedParticipantFunc = _.bind(delayedAddParticipant, this);
+
+         // Underscore: Partially apply a function by filling in any number of its arguments, without changing its dynamic this value.
+         // You may pass _ in your list of arguments to specify an argument that should not be pre-filled, but left open to supply at call-time.
+         sortedParticipant = this.collection.at(i);
+         delayedParticipantFunc = _.partial(delayedParticipantFunc, delayInMillis, $tbody, sortedParticipant);
+
+         addingOfParticipantFuncs.push(delayedParticipantFunc);
+         }
+
+         // Execute all these deferred functions sequentially
+         delayedAddingOfParticipantInTableFunc = addingOfParticipantFuncs[ 0 ]();
+         for (i = 0; i < addingOfParticipantFuncs.length; i += 1) {
+         delayedAddingOfParticipantInTableFunc = delayedAddingOfParticipantInTableFunc.then(addingOfParticipantFuncs[ i + 1 ]);
+         }
+
+         return this;
+         }
+         });
+         */
+
+
+        var viewTemplate = '' +
+            '<table class="table table-condensed table-striped table-hover">' +
+            '<thead>' +
+            '<tr>' +
+            '  <th style="padding-left:2rem;width:3rem;"></th>' +
+            '  <th style="width:14rem;"></th>' +
+            '  <th style="width:8rem;"></th>' +
+            '  <th class="rating-history" colspan="2">' +
+            '    <a href="/#/ratinghistory/<%= args.year %>/<%= args.round %>" type="button" class="btn btn-sm btn-success">' +
+            '      <span style="margin-right:1rem;" class="icon-line-chart"></span>Trend' +
+            '    </a>' +
+            '  </th>' +
+            '  <th class="current-results">' +
+            '    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>' +
+            '  </th>' +
+            '  <th style="text-align:center;color:darkgray;width:8rem;">Tabell</th>' +
+            '  <th style="text-align:center;color:darkgray;width:8rem;">Pall</th>' +
+            '  <th style="text-align:center;color:darkgray;width:9rem;">Nedrykk</th>' +
+            '  <th style="text-align:center;color:darkgray;width:9rem;">Toppsk.</th>' +
+            '  <th style="text-align:center;color:darkgray;width:9rem;">Opprykk</th>' +
+            '  <th style="text-align:center;color:darkgray;width:9rem;">Cup</th>' +
+            '</tr>' +
+            '</thead>' +
+
+                // All participant data goes here:
+            '<tbody></tbody>' +
+
+            '</table>';
+
+        return Marionette.CompositeView.extend({
+            template: function (model) {
+                return _.template(viewTemplate, model, { variable: 'args' });
+            },
+            childViewContainer: 'tbody',
+            childView: ParticipantScoreView,
 
             events: {
                 "click .current-results": function () {
-                    this.bootstrapModalContainerView.resett();
-                    this.currentResults.fetch({ reset: true });
+                    this.bootstrapModalContainerView.reset();
+                    //this.currentResults.fetch({ reset: true });
+                    this.currentResults.fetch();
                 }
             },
 
@@ -165,7 +359,43 @@ define([
             bootstrapModalContainerView: null,
             modalCurrentResultsView: null,
 
-            initialize: function () {
+
+            // called on initialize and after attachBuffer is called
+            initRenderBuffer: function () {
+                console.log('"rating-table-view:INITRENDERBUFFER"');
+                this.elBuffer = document.createDocumentFragment();
+            },
+
+            // The default implementation:
+            attachHtml: function (collectionView, childView, index) {
+                console.log('"rating-table-view:attachHtml"');
+                if (collectionView.isBuffering) {
+                    // buffering happens on reset events and initial renders
+                    // in order to reduce the number of inserts into the
+                    // document, which are expensive.
+                    collectionView.elBuffer.appendChild(childView.el);
+                    console.log('"rating-table-view:ATTACHHTML-BUFFERING"');
+                } else {
+                    // If we've already rendered the main collection, just
+                    // append the new children directly into the element.
+                    collectionView.$el.append(childView.el);
+                    console.log('"rating-table-view:ATTACHHTML-NOBUFFERING"');
+                }
+            },
+
+            // Called after all children have been appended into the elBuffer
+            attachBuffer: function (collectionView, buffer) {
+                console.log('"rating-table-view:ATTACHBUFFER"');
+                collectionView.$el.append(buffer);
+            },
+
+            onBeforeRender: function (childView) {
+                console.log('"rating-table-view:onBeforeRender"');
+                this.model.set('year', childView.collection.year);
+                this.model.set('round', childView.collection.round);
+            },
+            onRender: function (childView) {
+                console.log('"rating-table-view:onRender"');
                 this.currentResults = new CurrentResults();
                 this.bootstrapModalContainerView = new BootstrapViews.ModalContainerView({
                     parentSelector: 'body',
@@ -175,68 +405,38 @@ define([
                 this.modalCurrentResultsView = new ModalCurrentResultsView({
                     model: this.currentResults
                 });
-                this.listenTo(this.collection, "reset", this.render);
             },
+            onShow: function () {
+                console.log('"rating-table-view:onShow"');
+            },
+            onDomRefresh: function () {
+                console.log('"rating-table-view:onDomRefresh"');
+            },
+            onBeforeAddChild: function () {
+                console.log('"rating-table-view:onBeforeAddChild"');
+            },
+            onAddChild: function (childView) {
+                console.log('"rating-table-view:onAddChild"');
 
-            render: function () {
-                var //self = this,
-                //numberOfParticipantsRendered = 0,
-                    addParticipant = function ($el, participantScore) {
-                        $el.append(new ParticipantScoreView({ model: participantScore.toJSON() }).render().el);
-                    },
-                    delayedAddParticipant = function (timeOutInMillis, $el, participantScore) {
-                        var dfd = $.Deferred();
-                        addParticipant($el, participantScore);
-                        Client.wait(timeOutInMillis).then(function () {
-                            dfd.resolve();
-                            //numberOfParticipantsRendered += 1;
-                            //if (numberOfParticipantsRendered >= self.collection.length) {
-                            //    console.log("RENDERED");
-                            //    self.trigger("rendered");
-                            //}
-                        });
-                        return dfd.promise();
-                    },
-                    currentRound = this.collection.at(0).get("round");
+                // Add rating tendency marker
+                //childView.$('.rank-tendency').append(new RankTrendView({ model: childView.model }).render().el);
+                new RankTrendView({ el: childView.$('.rank-tendency'), model: childView.model }).render();
 
-                this.$el.empty().append(this.template());
-
-                if (Client.isTouchDevice()) {
-                    this.$("table").removeClass("table-hover");
-                }
-                if (currentRound) {
-                    var href = this.$(".rating-history").find("a").attr("href");
-                    this.$(".rating-history").find("a").attr("href", [ href, currentRound ].join("/"));
-                }
-
-                // Render all participant scores sequentially, one by one
-                var addingOfParticipantFuncs = [],
-                    delayInMillis = 175,
-                    $tbody = this.$("tbody"),
-                    i,
-                    sortedParticipant,
-                    delayedParticipantFunc,
-                    delayedAddingOfParticipantInTableFunc;
-
-                for (i = 0; i < this.collection.length; i += 1) {
-                    // Underscore: Bind a function to an object, meaning that whenever the function is called, the value of this will be the object
-                    delayedParticipantFunc = _.bind(delayedAddParticipant, this);
-
-                    // Underscore: Partially apply a function by filling in any number of its arguments, without changing its dynamic this value.
-                    // You may pass _ in your list of arguments to specify an argument that should not be pre-filled, but left open to supply at call-time.
-                    sortedParticipant = this.collection.at(i);
-                    delayedParticipantFunc = _.partial(delayedParticipantFunc, delayInMillis, $tbody, sortedParticipant);
-
-                    addingOfParticipantFuncs.push(delayedParticipantFunc);
-                }
-
-                // Execute all these deferred functions sequentially
-                delayedAddingOfParticipantInTableFunc = addingOfParticipantFuncs[ 0 ]();
-                for (i = 0; i < addingOfParticipantFuncs.length; i += 1) {
-                    delayedAddingOfParticipantInTableFunc = delayedAddingOfParticipantInTableFunc.then(addingOfParticipantFuncs[ i + 1 ]);
-                }
-
-                return this;
+                // Add sum tendency marker
+                //childView.$('.rating-tendency').append(new RatingTrendView({ model: childView.model }).render().el);
+                new RatingTrendView({ el: childView.$('.rating-tendency'), model: childView.model }).render();
+            },
+            onBeforeRemoveChild: function () {
+                console.log('"rating-table-view:onBeforeRemoveChild"');
+            },
+            onRemoveChild: function () {
+                console.log('"rating-table-view:onRemoveChild"');
+            },
+            onBeforeDestroy: function () {
+                console.log('"rating-table-view:onBeforeDestroy"');
+            },
+            onDestroy: function () {
+                console.log('"rating-table-view:onDestroy"');
             }
         });
     }

@@ -1,77 +1,8 @@
 /* global define:false */
 
-define([ 'jquery', 'underscore', 'backbone', 'bootstrap', 'backbone.bootstrap.views', 'app.models', 'app.result', 'app.soccer-table-views' ],
-    function ($, _, Backbone, Bootstrap, BootstrapViews, App, ParticipantScore, SoccerTableViews) {
+define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'backbone.bootstrap.views', 'app.models', 'app.result', 'app.soccer-table-views' ],
+    function ($, _, Backbone, Marionette, Bootstrap, BootstrapViews, App, ParticipantScore, SoccerTableViews) {
         'use strict';
-
-        var RankTrendView = Backbone.View.extend({
-            tagName: 'span',
-            template: _.template('' +
-                '<span class="tendency-arrow"></span>' +
-                '<small>&nbsp;<%= rankDiff %></small>'
-            ),
-            // Hmm, I really don't see any particular complexity problems with this one ...
-            /* jshint -W074 */
-            render: function () {
-                if (!this.model[ ParticipantScore.previousRankPropertyName ]) {
-                    return this;
-                }
-                var plusThreshold = 2,
-                    upwardTrend = this.model[ ParticipantScore.previousRankPropertyName ] - this.model[ ParticipantScore.rankPropertyName ],
-                    downwardTrend = this.model[ ParticipantScore.rankPropertyName ] - this.model[ ParticipantScore.previousRankPropertyName ],
-                    rankDiff = upwardTrend,
-                    $tendency;
-
-                this.model.rankDiff = '';
-                if (rankDiff !== 0) {
-                    if (rankDiff > 0) {
-                        rankDiff = '+' + rankDiff;
-                    }
-                    this.model.rankDiff = rankDiff;
-                }
-
-                this.$el.append(this.template(this.model));
-                $tendency = this.$('span.tendency-arrow');
-
-                if (upwardTrend >= plusThreshold) {
-                    $tendency.addClass('icon-up-plus');
-
-                } else if (upwardTrend > 0) {
-                    $tendency.addClass('icon-up');
-
-                } else if (downwardTrend >= plusThreshold) {
-                    $tendency.addClass('icon-down-plus');
-
-                } else if (downwardTrend > 0) {
-                    $tendency.addClass('icon-down');
-                }
-                $tendency.removeClass('tendency-arrow');
-
-                return this;
-            }
-        });
-
-
-        var RatingTrendView = Backbone.View.extend({
-            tagName: 'span',
-            template: _.template('<small><%= ratingDiff %></small>'),
-            render: function () {
-                if (!this.model[ App.scoreModel.previousRatingPropertyName ]) {
-                    return this;
-                }
-                var ratingDiff = this.model[ App.scoreModel.ratingPropertyName ] - this.model[ App.scoreModel.previousRatingPropertyName ];
-                this.model.ratingDiff = '';
-                if (ratingDiff !== 0) {
-                    if (ratingDiff > 0) {
-                        ratingDiff = '+' + ratingDiff;
-                    }
-                    this.model.ratingDiff = '(' + ratingDiff + 'p)';
-                }
-                this.$el.append(this.template(this.model));
-                return this;
-            }
-        });
-
 
         var PredictionsModel = Backbone.Model.extend({
             url: function () {
@@ -134,74 +65,167 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrap', 'backbone.bootstrap.vi
             }
         });
 
+        /*
+         var oldView = Backbone.View.extend({
+         tagName: 'tr',
+         template: _.template('' +
+         '<td style="padding-left:2rem;text-align:right;"><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantScore.rankPresentationPropertyName + ' %></span></td>' +
+         '<td><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantScore.namePropertyName + ' %></span></td>' +
+         '<td class="rank-tendency"></td>' +
+         '<td style="width:3rem;"></td>' +
+         '<td>' +
+         '  <span style="white-space:nowrap;">' +
+         '    <span style="font-weight:bold;font-size:larger;margin-right:.3rem;"><%= ' + App.scoreModel.ratingPropertyName + ' %></span>' +
+         '    <span class="rating-tendency"></span>' +
+         '  </span>' +
+         '</td>' +
+         '<td class="prediction">' +
+         '  <button type="button" class="btn btn-sm btn-primary" data-id="<%= ' + ParticipantScore.userIdPropertyName + ' %>" data-toggle="modal" data-target="#predictionsTable"><%= ' + ParticipantScore.namePropertyName + ' %>s tips</button>' +
+         '</td>' +
+         '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.tabellPropertyName + ' %></td>' +
+         '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.pallPropertyName + ' %></td>' +
+         '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.nedrykkPropertyName + ' %></td>' +
+         '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.toppscorerPropertyName + ' %></td>' +
+         '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.opprykkPropertyName + ' %></td>' +
+         '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.cupPropertyName + ' %></td>'
+         ),
 
-        return Backbone.View.extend({
+         events: {
+         "click .prediction": function () {
+         this.bootstrapModalContainerView.resett();
+         this.predictionsModel.fetch({ reset: true });
+         }
+         },
+         predictionsModel: null,
+
+         bootstrapModalContainerView: null,
+         modalPredictionsView: null,
+
+         initialize: function () {
+         this.predictionsModel = new PredictionsModel({ userId: this.model.userId, year: this.model.year });
+         this.bootstrapModalContainerView = new BootstrapViews.ModalContainerView({
+         parentSelector: 'body',
+         id: 'predictionsTable',
+         ariaLabelledBy: 'predictionsLabel'
+         });
+         this.modalPredictionsView = new BootstrapModalPredictionsView({
+         model: this.predictionsModel
+         });
+         },
+
+         render: function () {
+         this.$el.append(this.template(this.model));
+
+         // Add rating tendency marker
+         this.$('.rank-tendency').append(new RankTrendView({ model: this.model }).render().el);
+
+         // Add sum tendency marker
+         this.$('.rating-tendency').append(new RatingTrendView({ model: this.model }).render().el);
+
+         // Smoothly fades in content (default jQuery functionality) (OK)
+         this.$el.find('td').wrapInner($('<div>'));
+         this.$el.find('div').fadeIn('slow');
+
+         // TODO: with CSS3 animations please ...
+         // See: http://easings.net/nb
+         //this.$el.find('td').wrapInner('<div class="hidden"></div>');
+         //this.$el.find('div').removeClass('hidden').addClass('my-slide-in-effect');
+
+         return this;
+         }
+         });
+
+         var viewTemplate = '' +
+         '<td style="padding-left:2rem;text-align:right;"><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantScore.rankPresentationPropertyName + ' %></span></td>' +
+         '<td><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantScore.namePropertyName + ' %></span></td>' +
+         '<td class="rank-tendency"></td>' +
+         '<td style="width:3rem;"></td>' +
+         '<td>' +
+         '  <span style="white-space:nowrap;">' +
+         '    <span style="font-weight:bold;font-size:larger;margin-right:.3rem;"><%= ' + App.scoreModel.ratingPropertyName + ' %></span>' +
+         '    <span class="rating-tendency"></span>' +
+         '  </span>' +
+         '</td>' +
+         '<td class="prediction">' +
+         '  <button type="button" class="btn btn-sm btn-primary" data-id="<%= ' + ParticipantScore.userIdPropertyName + ' %>" data-toggle="modal" data-target="#predictionsTable"><%= ' + ParticipantScore.namePropertyName + ' %>s tips</button>' +
+         '</td>' +
+         '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.tabellPropertyName + ' %></td>' +
+         '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.pallPropertyName + ' %></td>' +
+         '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.nedrykkPropertyName + ' %></td>' +
+         '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.toppscorerPropertyName + ' %></td>' +
+         '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.opprykkPropertyName + ' %></td>' +
+         '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.cupPropertyName + ' %></td>';
+         */
+        var viewTemplate = '' +
+            '<td style="padding-left:2rem;text-align:right;">' +
+            '  <span style="font-weight:bold;font-size:larger;"><%= args.' + ParticipantScore.rankPresentationPropertyName + ' %></span>' +
+            '</td>' +
+            '<td>' +
+            '  <span style="font-weight:bold;font-size:larger;white-space:nowrap;"><%= args.' + ParticipantScore.namePropertyName + ' %></span>' +
+            '</td>' +
+            '<td class="rank-tendency"></td>' +
+            '<td style="width:3rem;"></td>' +
+            '<td>' +
+            '  <span style="white-space:nowrap;">' +
+            '    <span style="font-weight:bold;font-size:larger;margin-right:.3rem;"><%= args.' + App.scoreModel.ratingPropertyName + '%></span>' +
+            '    <span class="rating-tendency"></span>' +
+            '  </span>' +
+            '</td>' +
+            '<td class="prediction">' +
+            '  <button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable"><%= args.' + ParticipantScore.namePropertyName + ' %>s tips</button>' +
+            '</td>' +
+            '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.tabellPropertyName + ' %></td>' +
+            '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.pallPropertyName + ' %></td>' +
+            '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.nedrykkPropertyName + ' %></td>' +
+            '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.toppscorerPropertyName + ' %></td>' +
+            '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.opprykkPropertyName + ' %></td>' +
+            '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.cupPropertyName + ' %></td>';
+
+        return Marionette.ItemView.extend({
             tagName: 'tr',
-
-            template: _.template('' +
-                '<td style="padding-left:2rem;text-align:right;"><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantScore.rankPresentationPropertyName + ' %></span></td>' +
-                '<td><span style="font-weight:bold;font-size:larger;"><%= ' + ParticipantScore.namePropertyName + ' %></span></td>' +
-                '<td class="rank-tendency"></td>' +
-                '<td style="width:3rem;"></td>' +
-                '<td>' +
-                '  <span style="white-space:nowrap;">' +
-                '    <span style="font-weight:bold;font-size:larger;margin-right:.3rem;"><%= ' + App.scoreModel.ratingPropertyName + ' %></span>' +
-                '    <span class="rating-tendency"></span>' +
-                '  </span>' +
-                '</td>' +
-                '<td class="prediction">' +
-                '  <button type="button" class="btn btn-sm btn-primary" data-id="<%= ' + ParticipantScore.userIdPropertyName + ' %>" data-toggle="modal" data-target="#predictionsTable"><%= ' + ParticipantScore.namePropertyName + ' %>s tips</button>' +
-                '</td>' +
-                '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.tabellPropertyName + ' %></td>' +
-                '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.pallPropertyName + ' %></td>' +
-                '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.nedrykkPropertyName + ' %></td>' +
-                '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.toppscorerPropertyName + ' %></td>' +
-                '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.opprykkPropertyName + ' %></td>' +
-                '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.cupPropertyName + ' %></td>'
-            ),
-
+            template: function (model) {
+                return _.template(viewTemplate, model, { variable: 'args' });
+            },
+            predictionsModel: null,
+            bootstrapModalContainerView: null,
+            modalPredictionsView: null,
             events: {
                 "click .prediction": function () {
-                    this.bootstrapModalContainerView.resett();
+                    this.bootstrapModalContainerView.reset();
                     this.predictionsModel.fetch({ reset: true });
                 }
             },
-            predictionsModel: null,
+            onBeforeRender: function () {
+                console.log('"participant-rating-view:onBeforeRender"');
+            },
+            onRender: function () {
+                console.log('"participant-rating-view:onRender"');
 
-            bootstrapModalContainerView: null,
-            modalPredictionsView: null,
-
-            initialize: function () {
-                this.predictionsModel = new PredictionsModel({ userId: this.model.userId, year: this.model.year });
+                this.predictionsModel = new PredictionsModel({
+                    userId: this.model.get('userId'),
+                    year: this.model.get('year')
+                });
                 this.bootstrapModalContainerView = new BootstrapViews.ModalContainerView({
                     parentSelector: 'body',
                     id: 'predictionsTable',
                     ariaLabelledBy: 'predictionsLabel'
                 });
                 this.modalPredictionsView = new BootstrapModalPredictionsView({
+                    el: $('#predictionsTable'),
                     model: this.predictionsModel
                 });
             },
-
-            render: function () {
-                this.$el.append(this.template(this.model));
-
-                // Add rating tendency marker
-                this.$('.rank-tendency').append(new RankTrendView({ model: this.model }).render().el);
-
-                // Add sum tendency marker
-                this.$('.rating-tendency').append(new RatingTrendView({ model: this.model }).render().el);
-
-                // Smoothly fades in content (default jQuery functionality) (OK)
-                this.$el.find('td').wrapInner($('<div>'));
-                this.$el.find('div').fadeIn('slow');
-
-                // TODO: with CSS3 animations please ...
-                // See: http://easings.net/nb
-                //this.$el.find('td').wrapInner('<div class="hidden"></div>');
-                //this.$el.find('div').removeClass('hidden').addClass('my-slide-in-effect');
-
-                return this;
+            onBeforeDestroy: function () {
+                console.log('"participant-rating-view:onBeforeDestroy"');
+            },
+            onDestroy: function () {
+                console.log('"participant-rating-view:onDestroy"');
+            },
+            onShow: function () {
+                console.log('"participant-rating-view:onShow"');
+            },
+            onDomRefresh: function () {
+                console.log('"participant-rating-view:onDomRefresh"');
             }
         });
     }

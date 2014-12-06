@@ -7,6 +7,7 @@ require.config({
         'bootstrap': '../../build/bower_components/bootstrap/dist/js/bootstrap',
         'underscore': '../../build/bower_components/underscore/underscore',
         'backbone': '../../build/bower_components/backbone/backbone',
+        'marionette': '../../build/bower_components/marionette/lib/backbone.marionette',
         'moment': '../../build/bower_components/moment/moment',
         'moment.nb': '../../build/bower_components/moment/locale/nb',
         'toastr': '../../build/bower_components/toastr/toastr',
@@ -29,8 +30,8 @@ require.config({
         'backbone.bootstrap.views': '../../build/scripts/backbone.bootstrap.views',
         'client-utils': '../../build/scripts/client-utils',
 
-        // Client-side-only app libs (Router)
-        'app.router': '../../build/scripts/app.router',
+        // Client-side-only app libs (Controller/Router)
+        'app.controller': '../../build/scripts/app.controller',
 
         // Client-side-only app libs (Models)
         'app.result': '../../build/scripts/app.result',
@@ -45,17 +46,17 @@ require.config({
         'app.rating-history-view': '../../build/scripts/app.rating-history-view',
         'app.results-view': '../../build/scripts/app.results-view',
         'app.soccer-table-views': '../../build/scripts/app.soccer-table-views'
-    },
-    shim: {
-        'sinon': {
-            deps: [],
-            exports: 'sinon'
-        }//,
+    }//,
+    //shim: {
+        //'sinon': {
+        //    deps: [],
+        //    exports: 'sinon'
+        //},
         //'fakeServer': {
         //    deps: ['sinon'],
         //    exports: 'fakeServer'
         //}
-    }
+    //}
 });
 
 require([

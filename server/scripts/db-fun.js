@@ -6,10 +6,10 @@
 // Module dependencies, local
 var dbSchema = require("./db-schema"),
     soccerResultService = require("./norwegian-soccer-service"),
-    utils = require("./utils"),
+    utils = require("./../../shared/scripts/utils"),
 
 
-// TODO: Rather generic MongoDB requestor functions ...
+// TODO: Move generic MongoDB requestor functions here ...
     getTippeligaRound = exports.getTippeligaRound = function (requestion, year, round) {
         "use strict";
         // TODO: ...

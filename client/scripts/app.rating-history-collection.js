@@ -8,13 +8,11 @@ define([
     function ($, _, Backbone, Moment, Comparators, Str, App) {
         "use strict";
 
-        var ParticipantRatingHistory = Backbone.Model.extend({
-
-        }, {
+        var ParticipantRatingHistory = Backbone.Model.extend({}, {
             /** Sort by last element in rating, to suit jqPlot series/label presentations */
             comparable: function (model) {
                 var modelRatings = model.get("ratings");
-                return modelRatings[modelRatings.length - 1];
+                return modelRatings[ modelRatings.length - 1 ];
             },
             /** @see {@link http://www.jqplot.com|jqPlot} */
             toJqPlotSerie: function (model) {
@@ -23,9 +21,9 @@ define([
             /** @see {@link http://www.jqplot.com|jqPlot} */
             toJqPlotPlot: function (model) {
                 var roundAndRating = _.map(model.get("ratings"), function (zeroBasedRoundRating, index) {
-                    return [index + 1, zeroBasedRoundRating];
+                    return [ index + 1, zeroBasedRoundRating ];
                 });
-                roundAndRating.unshift([0, 1]); // Initial plot for all
+                roundAndRating.unshift([ 0, 1 ]); // Initial plot for all
                 return roundAndRating;
             }
         });
@@ -41,7 +39,7 @@ define([
                 }
             },
             url: function () {
-                return [App.resource.ratingHistory.baseUri, this.year, this.round].join("/");
+                return [ App.resource.ratingHistory.baseUri, this.year, this.round ].join("/");
             },
             comparator: function (model, otherModel) {
                 return Comparators.arithmeticAscending(this.model.comparable, model, otherModel);

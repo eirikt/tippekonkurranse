@@ -24,5 +24,4 @@ var mongoose = require("mongoose"),
     }),
 
 // Mongoose models
-    TeamStatus = exports.TeamStatus = mongoose.model("teamstatus", TeamStatusMongooseSchema),
     TippeligaRound = exports.TippeligaRound = mongoose.model("tippeligaround", TippeligaRoundMongooseSchema);

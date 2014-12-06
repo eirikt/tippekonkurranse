@@ -1015,7 +1015,12 @@ describe("Tippekonkurranse service", function () {
 
             inputArgs.tippeligaTopScorer = actualToppscorerTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.executeAndVerify(
+                addTippekonkurranseScores,
+                inputArgs.toArray(),
+                verify,
+                done
+            );
         });
     });
 });

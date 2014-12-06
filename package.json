@@ -1,6 +1,6 @@
 {
     "name": "Tippekonkurranse",
-    "version": "1.2.5",
+    "version": "1.2.7",
     "description": "A simple Node-based screen-scrapin' web application hosted on Heroku",
     "author": "Eirik Torske <eirik.torske@gmail.com>",
     "license": "MIT",
@@ -15,8 +15,8 @@
         "underscore": "~1.7.0",
         "underscore-contrib": "~0.3.0",
         "curry": "~1.2.0",
-        "mongodb": "~1.4.7",
-        "mongoose": "~3.8.17",
+        "mongodb": "~2.0.7",
+        "mongoose": "~3.9.5",
         "express": "~4.10.1",
         "request": "~2.48.0",
         "cheerio": "~0.17.0",

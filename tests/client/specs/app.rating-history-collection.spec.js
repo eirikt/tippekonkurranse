@@ -9,7 +9,7 @@ define([
     function (Chai, Sinon, $, _, Backbone, SharedRatingModel, RatingHistoryCollection) {
         "use strict";
 
-        describe("Tippekonkurranse rankings history collection", function () {
+        describe("Tippekonkurranse rating history collection", function () {
 
             var expect = Chai.expect,
                 sandbox,
@@ -80,7 +80,7 @@ define([
             });
 
 
-            it("should convert ratings history response to jqPlot data structure", function (done) {
+            it("should convert rating history response to jqPlot data structure", function (done) {
                 var collection = new RatingHistoryCollection({ year: 2014, round: 11 });
 
                 sandbox.server.respondWith("GET", /(.*)/, function (xhr, query) {

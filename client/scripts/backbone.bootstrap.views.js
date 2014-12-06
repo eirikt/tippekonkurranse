@@ -1,15 +1,14 @@
 /* global define:false */
-
-define([ 'jquery', 'underscore', 'backbone', 'bootstrap' ],
-    function ($, _, Backbone, Bootstrap) {
+define([ 'jquery', 'underscore', 'backbone' ],
+    function ($, _, Backbone) {
         'use strict';
 
         /** @see http://getbootstrap.com/javascript/#modals */
         var ModalContainerView = Backbone.View.extend({
+            tagName: 'div',
             className: 'modal fade',
             parentSelector: null,
             ariaLabelledBy: null,
-
             attributes: function () {
                 return {
                     id: this.id,
@@ -22,7 +21,7 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrap' ],
             initialize: function (attr) {
                 this.parentSelector = attr.parentSelector;
             },
-            resett: function () {
+            reset: function () {
                 $('#' + this.id).empty().remove();
                 $(this.parentSelector).append(this.el);
             }
