@@ -14,7 +14,6 @@ require.config({
 
         chai: '../../node_modules/chai/chai',
         sinon: '../../node_modules/sinon/lib/sinon',
-        //fakeServer: '../../node_modules/sinon/pkg/sinon/util/fake_server',
 
         // Shared util libs
         fun: '../../build/scripts/fun',
@@ -46,17 +45,7 @@ require.config({
         'app.rating-history-view': '../../build/scripts/app.rating-history-view',
         'app.results-view': '../../build/scripts/app.results-view',
         'app.soccer-table-views': '../../build/scripts/app.soccer-table-views'
-    }//,
-    //shim: {
-        //'sinon': {
-        //    deps: [],
-        //    exports: 'sinon'
-        //},
-        //'fakeServer': {
-        //    deps: ['sinon'],
-        //    exports: 'fakeServer'
-        //}
-    //}
+    }
 });
 
 require([

@@ -23,7 +23,7 @@ var __ = require("underscore"),
         "use strict";
         var currentTable = [],
             $ = cheerio.load(body, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false }),
-            rows = $($).find("tbody").find("tr");
+            rows = $("tbody").find("tr");
 
         __.each(rows, function (element) {
             var $cells = $(element).find("td"),
@@ -50,7 +50,7 @@ var __ = require("underscore"),
         "use strict";
         var currentTable = [],
             $ = cheerio.load(body, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false }),
-            rows = $($).find("tbody").find("tr");
+            rows = $("tbody").find("tr");
 
         __.each(rows, function (element) {
             var $cells = $(element).find("td"),
@@ -77,7 +77,7 @@ var __ = require("underscore"),
         "use strict";
         var toppscorers = [],
             $ = cheerio.load(body, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false }),
-            rows = $($).find("tbody").find("tr"),
+            rows = $("tbody").find("tr"),
             maxGoals = 0;
 
         __.each(rows, function (element, index) {
@@ -115,19 +115,19 @@ var __ = require("underscore"),
 // These requestories all returns "data generator" requestors => No forwarding of existing data ...
     _getCurrentTippeligaTableRequestory = exports.getCurrentTippeligaTable =
         RQ.sequence([
-            rq.get(currentTippeligaTableUrl),
+            rq.get('utf8', currentTippeligaTableUrl),
             rq.then(parseTippeligaTable)
         ]),
 
     _getCurrentAdeccoligaTableRequestory = exports.getCurrentAdeccoligaTable =
         RQ.sequence([
-            rq.get(currentAdeccoligaTableUrl),
+            rq.get('utf8', currentAdeccoligaTableUrl),
             rq.then(parseAdeccoligaTable)
         ]),
 
     _getCurrentTippeligaTopScorerRequestory = exports.getCurrentTippeligaTopScorer =
         RQ.sequence([
-            rq.get(currentTippeligaToppscorerTableUrl),
+            rq.get('utf8', currentTippeligaToppscorerTableUrl),
             rq.then(parseTippeligaTopScorerTable)
         ]),
 

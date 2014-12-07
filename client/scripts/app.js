@@ -24,7 +24,7 @@ define([
             //console.log('"getTippekonkurranseScores(' + year + ', ' + round + ')"');
             currentScores.year = year;
             currentScores.round = round;
-            currentScores.fetch({ reset: true });
+            currentScores.fetch();
         });
         app.commands.setHandler('getTippekonkurranseScoresHistory', function (year, round) {
             //console.log('"getTippekonkurranseScoresHistory(' + year + ', ' + round + ')"');

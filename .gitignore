@@ -1,16 +1,16 @@
 # Always
 .ssh
 
-# Ignore IDE stuff
+# IDE stuff
 .idea
 
-# Ignore local db (test) folder
+# Local db (test) folder
 data
 
-# Ignore local logs
+# Local logs
 *.log
 
-# Ignore derived/generated/transient project files/resources
+# Derived/generated/transient project files/resources
 client/scripts/fun.js
 client/scripts/string-extensions.js
 client/scripts/utils.js
@@ -20,4 +20,7 @@ client/bower_components
 node_modules
 build
 docs
+
+# Temp files
 howto.txt
+requestion.js

@@ -11,6 +11,7 @@ var RQ = require("./vendor/rq").RQ,
 
 // TODO: Move to 'rq-essentials-request.js'
     request = require("request"),
+    iconv = require("iconv-lite"),
 
 // Shortcuts
     _isArray = Array.isArray,
@@ -244,12 +245,13 @@ var RQ = require("./vendor/rq").RQ,
      * @see https://www.npmjs.org/package/request
      */
 // TODO: Move to 'rq-essentials-request.js'
-    _getRequestory = exports.get = function (uri) {
+    _getRequestory = exports.get = function (encoding, uri) {
         "use strict";
         return function requestor(requestion, args) {
             return request(uri, function (err, response, body) {
                 if (!err && response.statusCode === 200) {
-                    return requestion(body);
+                    var decodedBody = iconv.decode(new Buffer(body), encoding);
+                    return requestion(decodedBody);
 
                 } else {
                     if (!err) {
@@ -260,6 +262,8 @@ var RQ = require("./vendor/rq").RQ,
             });
         };
     },
+// TODO: Consider also having a non-currying version ...
+//_getRequestory = exports.get = function (uri, encoding) {
 
 
 ///////////////////////////////////////////////////////////
