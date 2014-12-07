@@ -23,7 +23,7 @@ In production [here][1].
 
 ## Scope
 * Screen-scraping norwegian soccer result web pages
-* Simple calculations
+* Calculating rating and rank
 * Simple multi-device-friendly presentation
 * Deployment to [Heroku][30]
 

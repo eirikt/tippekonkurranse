@@ -1,62 +1,64 @@
 /* global window:false, define:false */
 /* jshint -W093 */
 define([
-    'backbone', 'marionette',
-    'client-utils',
-    'app.models',
-    'app.result-collection', 'app.rating-history-collection',
-    'app.header-view', 'app.results-view', 'app.results-carousel-view', 'app.rating-history-view'
-], function (Backbone, Marionette,
-             Please,
-             AppModels,
-             CurrentScoresCollection, HistoricScoresCollection,
-             HeaderView, CurrentScoresView, RoundCarouselView, RatingHistoryView) {
-    'use strict';
+        'backbone', 'marionette',
+        'client-utils',
+        'app.models',
+        'app.result-collection', 'app.rating-history-collection',
+        'app.header-view', 'app.results-view', 'app.results-carousel-view', 'app.rating-history-view'
+    ],
+    function (Backbone, Marionette,
+              Please,
+              AppModels,
+              CurrentScoresCollection, HistoricScoresCollection,
+              HeaderView, CurrentScoresView, RoundCarouselView, RatingHistoryView) {
 
-    var app = new Marionette.Application(),
-        currentScores = new CurrentScoresCollection(),
-        historicScores = new HistoricScoresCollection();
+        'use strict';
 
-    app.commands.setHandler('getTippekonkurranseScores', function (year, round) {
-        console.log('"getTippekonkurranseScores(' + year + ', ' + round + ')"');
-        currentScores.year = year;
-        currentScores.round = round;
-        currentScores.fetch();
-        //historicScores.fetch({ reset: true });
-    });
-    app.commands.setHandler('getTippekonkurranseScoresHistory', function (year, round) {
-        console.log('"getTippekonkurranseScoresHistory(' + year + ', ' + round + ')"');
-        historicScores.year = year;
-        historicScores.round = round;
-        historicScores.fetch();
-        //historicScores.fetch({ reset: true });
-    });
+        var app = new Marionette.Application(),
 
-    app.addRegions({
-        header: '#header',
-        mainContent: '#mainSection',
-        mainFooter: '#mainFooter'
-    });
+            currentScores = new CurrentScoresCollection(),
+            historicScores = new HistoricScoresCollection();
 
-    app.addInitializer(function () {
-        app.execute('getTippekonkurranseScores');
-    });
+        app.commands.setHandler('getTippekonkurranseScores', function (year, round) {
+            //console.log('"getTippekonkurranseScores(' + year + ', ' + round + ')"');
+            currentScores.year = year;
+            currentScores.round = round;
+            currentScores.fetch({ reset: true });
+        });
+        app.commands.setHandler('getTippekonkurranseScoresHistory', function (year, round) {
+            //console.log('"getTippekonkurranseScoresHistory(' + year + ', ' + round + ')"');
+            historicScores.year = year;
+            historicScores.round = round;
+            historicScores.fetch({ reset: true });
+        });
 
-    app.listenTo(currentScores, 'reset', function () {
-        console.log('"currentScores:reset"');
-        app.header.show(new HeaderView({ model: currentScores }));
-        app.mainContent.show(new CurrentScoresView({
-            model: new Backbone.Model(),
-            collection: currentScores
-        }));
-        app.mainFooter.show(new RoundCarouselView({ model: currentScores }));
-    });
+        app.addRegions({
+            header: '#header',
+            mainContent: '#mainSection',
+            mainFooter: '#mainFooter'
+        });
 
-    app.listenTo(historicScores, 'reset', function () {
-        console.log('"historicScores:reset"');
-        app.mainContent.show(new RatingHistoryView({ collection: historicScores }));
-        app.mainFooter.empty();
-    });
+        app.addInitializer(function () {
+            app.execute('getTippekonkurranseScores');
+        });
 
-    return window.app = app;
-});
+        app.listenTo(currentScores, 'reset', function () {
+            //console.log('"currentScores:reset"');
+            app.header.show(new HeaderView({ model: currentScores }));
+            app.mainContent.show(new CurrentScoresView({
+                model: new Backbone.Model(),
+                collection: currentScores
+            }));
+            app.mainFooter.show(new RoundCarouselView({ model: currentScores }));
+        });
+
+        app.listenTo(historicScores, 'reset', function () {
+            //console.log('"historicScores:reset"');
+            app.mainContent.show(new RatingHistoryView({ collection: historicScores }));
+            app.mainFooter.empty();
+        });
+
+        return window.app = app;
+    }
+);

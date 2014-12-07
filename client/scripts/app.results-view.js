@@ -311,7 +311,6 @@ define([
 
 
         var viewTemplate = '' +
-            '<table class="table table-condensed table-striped table-hover">' +
             '<thead>' +
             '<tr>' +
             '  <th style="padding-left:2rem;width:3rem;"></th>' +
@@ -335,11 +334,11 @@ define([
             '</thead>' +
 
                 // All participant data goes here:
-            '<tbody></tbody>' +
-
-            '</table>';
+            '<tbody></tbody>';
 
         return Marionette.CompositeView.extend({
+            tagName: 'table',
+            className: 'table table-condensed table-striped table-hover',
             template: function (model) {
                 return _.template(viewTemplate, model, { variable: 'args' });
             },
@@ -349,7 +348,6 @@ define([
             events: {
                 "click .current-results": function () {
                     this.bootstrapModalContainerView.reset();
-                    //this.currentResults.fetch({ reset: true });
                     this.currentResults.fetch();
                 }
             },

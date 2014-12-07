@@ -83,7 +83,6 @@ require([ 'jqplot', 'backbone', 'marionette', 'app', 'app.controller', 'backbone
             appRoutes: {
                 'scores/current': 'showCurrentScores',
                 'scores/:year/:round': 'showScores',
-                //'ratinghistory/:year': 'showCurrentRatingHistory',
                 'ratinghistory/:year/:round': 'showRatingHistory'
             }
         });
@@ -95,10 +94,10 @@ require([ 'jqplot', 'backbone', 'marionette', 'app', 'app.controller', 'backbone
         });
 
         // TODO: Make this work again ...
-        //BackboneFetchLocalCopy.listenToServerConnectionDropouts([
-        //    '#offlineScoresNotification',
-        //    '#offlineCurrentResultsNotification'
-        //]);
+        BackboneFetchLocalCopy.listenToServerConnectionDropouts([
+            '#offlineScoresNotification',
+            '#offlineCurrentResultsNotification'
+        ]);
     }
 );
 

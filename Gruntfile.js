@@ -60,7 +60,7 @@ module.exports = function (grunt) {
                     'mkdir db'
                 ].join('&&')
             },
-            db: {
+            mongod: {
                 options: { stdout: true, stderr: true, failOnError: true },
                 command: 'mongod.exe --dbpath data/db'
             },
@@ -325,7 +325,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('help', [ 'shell:help' ]);
     grunt.registerTask('install:client', [ 'shell:install-client' ]);
-    grunt.registerTask('mongodb', [ 'shell:createDataDir', 'shell:mongod' ]);
+    grunt.registerTask('db', [ 'shell:createDataDir', 'shell:mongod' ]);
 
     grunt.registerTask('build:client', [ 'clean', 'copy:to-client', 'copy:to-build', 'uglify', 'cssmin' ]);
 

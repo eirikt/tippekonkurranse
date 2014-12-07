@@ -57,13 +57,13 @@ define([
                 // Empty $el
                 expect(ratingsView.$el).to.exist;
                 expect(ratingsView.$el.children().length).to.equal(0);
-                expect(ratingsView.$("table").length).to.equal(0);
+                expect(ratingsView.$("thead").length).to.equal(0);
 
                 ratingsView.render();
 
                 // Table rows
                 expect(ratingsView.$el).to.exist;
-                expect(ratingsView.$("table").length).to.be.equal(1);
+                expect(ratingsView.$("thead").length).to.be.equal(1);
                 expect(ratingsView.$("tr").length).to.be.equal(1);
 
                 // Headers
@@ -122,14 +122,14 @@ define([
                 // Empty $el
                 expect(ratingsView.$el).to.exist;
                 expect(ratingsView.$el.children().length).to.equal(0);
-                expect(ratingsView.$("table").length).to.equal(0);
+                expect(ratingsView.$("tbody").length).to.equal(0);
 
                 ratingsView.on("render", function () {
                     expect(ajaxSpy.calledOnce).to.be.true;
 
                     // Table rows
                     expect(ratingsView.$el).to.exist;
-                    expect(ratingsView.$("table").length).to.be.equal(1);
+                    expect(ratingsView.$("tbody").length).to.be.equal(1);
                     expect(ratingsView.$("tr").length).to.be.equal(2);
 
                     // Empty scores
@@ -313,13 +313,13 @@ define([
                 // Empty $el
                 expect(ratingsView.$el).to.exist;
                 expect(ratingsView.$el.children().length).to.equal(0);
-                expect(ratingsView.$("table").length).to.equal(0);
+                expect(ratingsView.$("tbody").length).to.equal(0);
 
                 ratingsView.on("render", function () {
 
                     // Table rows
                     expect(ratingsView.$el).to.exist;
-                    expect(ratingsView.$("table").length).to.be.equal(1);
+                    expect(ratingsView.$("tbody").length).to.be.equal(1);
                     var rows = ratingsView.$("tr");
                     //expect($(rows).length).to.be.equal(14);
                     expect(rows.length).to.be.equal(14);
