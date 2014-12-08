@@ -2,22 +2,22 @@
 /* global define:false, wait:false, isTouchDevice:false */
 /* jshint -W106 */
 define([
-        "jquery", "underscore", "backbone", "marionette", "bootstrap", "backbone.bootstrap.views", "moment", "moment.nb",
-        "app.models", "app.result", "app.participant-score-view", "app.soccer-table-views",
-        "backbone.fetch-local-copy" ],
+        'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'backbone.bootstrap.views', 'moment', 'moment.nb',
+        'app.models', 'app.result', 'app.participant-score-view', 'app.soccer-table-views',
+        'backbone.fetch-local-copy' ],
     function ($, _, Backbone, Marionette, Bootstrap, BootstrapViews, Moment, Moment_nb, App, ParticipantScore, ParticipantScoreView, SoccerTableViews, BackboneFetchLocalCopy) {
-        "use strict";
+        'use strict';
 
         var CurrentResults = Backbone.Model.extend({
-            urlRoot: [ App.resource.results.baseUri, App.resource.uri.element.current ].join("/")
+            urlRoot: [ App.resource.results.baseUri, App.resource.uri.element.current ].join('/')
         });
         _.extend(CurrentResults.prototype, App.nameable);
         _.extend(CurrentResults.prototype, BackboneFetchLocalCopy);
 
         var PrettyDateView = Backbone.View.extend({
                 initialize: function () {
-                    this.momentJsculture = this.model.culture || "en";
-                    this.momentJsDateFormat = this.model.format || "Do MMMM YYYY";
+                    this.momentJsculture = this.model.culture || 'en';
+                    this.momentJsDateFormat = this.model.format || 'Do MMMM YYYY';
                     Moment.lang(this.momentJsculture);
                     if (this.model instanceof Backbone.Model) {
                         this.model = this.model.toJSON();
@@ -64,54 +64,54 @@ define([
                     '</div>'
                 ),
                 initialize: function () {
-                    this.listenTo(this.model, "change error", this.render);
+                    this.listenTo(this.model, 'change error', this.render);
                 },
                 render: function () {
                     // Always clone model before manipulating it/altering state
                     this.model.clone();
 
                     // Meta-data for offline
-                    this.model.set("appName", this.model.name(), { silent: true });
-                    this.model.set("uri", this.model.urlRoot, { silent: true });
+                    this.model.set('appName', this.model.name(), { silent: true });
+                    this.model.set('uri', this.model.urlRoot, { silent: true });
 
                     // Pretty date presentation
                     var prettyDateView = new PrettyDateView({
                         model: {
-                            //preamble: "Tippeligarunde " + this.model.get("currentRound") + "&nbsp;&nbsp;|&nbsp;&nbsp;",
-                            date: this.model.get("currentDate"),
-                            culture: "nb"
+                            //preamble: 'Tippeligarunde ' + this.model.get('currentRound') + '&nbsp;&nbsp;|&nbsp;&nbsp;',
+                            date: this.model.get('currentDate'),
+                            culture: 'nb'
                         }
                     });
-                    this.model.set("currentDate", prettyDateView.render().el, { silent: true });
+                    this.model.set('currentDate', prettyDateView.render().el, { silent: true });
 
                     // Pretty tabell presentation
                     var prettyTabellView = new SoccerTableViews.SimpleTableView({
-                        model: this.model.get("currentTippeligaTable"),
-                        emphasizeFormat: "3+2"
+                        model: this.model.get('currentTippeligaTable'),
+                        emphasizeFormat: '3+2'
                     });
-                    this.model.set("currentTippeligaTable", prettyTabellView.render().$el.html(), { silent: true });
+                    this.model.set('currentTippeligaTable', prettyTabellView.render().$el.html(), { silent: true });
 
                     // Pretty tabell presentation
                     prettyTabellView = new SoccerTableViews.SimpleTableView({
-                        model: this.model.get("currentAdeccoligaTable"),
-                        emphasizeFormat: "2+0"
+                        model: this.model.get('currentAdeccoligaTable'),
+                        emphasizeFormat: '2+0'
                     });
-                    this.model.set("currentAdeccoligaTable", prettyTabellView.render().$el.html(), { silent: true });
+                    this.model.set('currentAdeccoligaTable', prettyTabellView.render().$el.html(), { silent: true });
 
                     // Pretty toppscorer presentation
-                    var toppscorer = this.model.get("currentTippeligaToppscorer");
+                    var toppscorer = this.model.get('currentTippeligaToppscorer');
                     toppscorer = _.reduce(toppscorer, function (result, toppscorer, index) {
-                        return result += toppscorer + "<br/>";
-                    }, "");
-                    this.model.set("currentTippeligaToppscorer", toppscorer, { silent: true });
+                        return result += toppscorer + '<br/>';
+                    }, '');
+                    this.model.set('currentTippeligaToppscorer', toppscorer, { silent: true });
 
                     // Pretty cup presentation
-                    var cupContenders = this.model.get("currentRemainingCupContenders");
+                    var cupContenders = this.model.get('currentRemainingCupContenders');
                     cupContenders = _.reduce(cupContenders, function (result, team, index) {
-                        //return index > 0 ? result += " og " + team : result += team;
-                        return result += team + "<br/>";
-                    }, "");
-                    this.model.set("currentRemainingCupContenders", cupContenders, { silent: true });
+                        //return index > 0 ? result += ' og ' + team : result += team;
+                        return result += team + '<br/>';
+                    }, '');
+                    this.model.set('currentRemainingCupContenders', cupContenders, { silent: true });
 
                     $('#currentResultsTable').append(this.template(this.model.toJSON()));
 
