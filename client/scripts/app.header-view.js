@@ -12,13 +12,13 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette' ],
                 'data-appname="Tippekonkurranse" data-uri="/api/scores/current" data-urititle="Denne stillingen er beregnet" ' +
                 'style="margin-left:.5rem;font-size:1.5rem;font-weight:bold;color:#ef8d15;">' +
                 '  </span>' +
-                '</h1>',
-
-            ratingHistoryTemplate = '' +
-                '<h1 style="white-space:nowrap;padding-bottom:2rem;">' +
-                '  <a href="/#/scores/current"><span style="padding-left:2rem;">Tippekonkurranse <%= year %></span></a>' +
-                '  <span style="font-size:2rem;color:#808080;">&nbsp;&nbsp;|&nbsp;&nbsp;poengtrend</span>' +
                 '</h1>';
+
+            //ratingHistoryTemplate = '' +
+            //    '<h1 style="white-space:nowrap;padding-bottom:2rem;">' +
+            //    '  <a href="/#/scores/current"><span style="padding-left:2rem;">Tippekonkurranse <%= year %></span></a>' +
+            //    '  <span style="font-size:2rem;color:#808080;">&nbsp;&nbsp;|&nbsp;&nbsp;poengtrend</span>' +
+            //    '</h1>';
 
         return Marionette.ItemView.extend({
             template: function (scores) {
@@ -27,8 +27,6 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette' ],
                     round: scores[0].round
                 }, { variable: 'args' });
             }
-
-            //)//,
             //initialize: function () {
             //    this.listenTo(this.collection, 'reset', this.render);
             //},

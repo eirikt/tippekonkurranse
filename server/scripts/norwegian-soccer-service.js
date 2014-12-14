@@ -115,19 +115,19 @@ var __ = require("underscore"),
 // These requestories all returns "data generator" requestors => No forwarding of existing data ...
     _getCurrentTippeligaTableRequestory = exports.getCurrentTippeligaTable =
         RQ.sequence([
-            rq.get('utf8', currentTippeligaTableUrl),
+            rq.get(currentTippeligaTableUrl),
             rq.then(parseTippeligaTable)
         ]),
 
     _getCurrentAdeccoligaTableRequestory = exports.getCurrentAdeccoligaTable =
         RQ.sequence([
-            rq.get('utf8', currentAdeccoligaTableUrl),
+            rq.get(currentAdeccoligaTableUrl),
             rq.then(parseAdeccoligaTable)
         ]),
 
     _getCurrentTippeligaTopScorerRequestory = exports.getCurrentTippeligaTopScorer =
         RQ.sequence([
-            rq.get('utf8', currentTippeligaToppscorerTableUrl),
+            rq.get(currentTippeligaToppscorerTableUrl),
             rq.then(parseTippeligaTopScorerTable)
         ]),
 

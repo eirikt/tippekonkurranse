@@ -20,6 +20,8 @@
              */
             _slice = Array.prototype.slice,
 
+            _map = Array.prototype.map,
+
             /**
              * @see http://underscorejs.org/#isArray
              */
@@ -75,6 +77,7 @@
 
         return {
             slice: _slice,
+            map: _map,
             isArray: _isArray,
             toArray: _toArray,
             curry: _curry

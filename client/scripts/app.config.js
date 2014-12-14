@@ -1,4 +1,4 @@
-/* global window:false */
+/* jshint -W031 */
 require.config({
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',
@@ -61,8 +61,8 @@ require([ 'jquery', 'toastr' ],
 
         // Toastr.js config (=> http://codeseven.github.io/toastr/demo.html)
         toastr.options = {
-            "positionClass": 'toast-top-full-width',
-            "timeOut": 6000
+            'positionClass': 'toast-top-full-width',
+            'timeOut': 6000
         };
 
         //$(document).ready(function () {
@@ -78,7 +78,7 @@ require([ 'jqplot', 'backbone', 'marionette', 'app', 'app.controller', 'backbone
 
         app.start();
 
-        var appRouter = new Marionette.AppRouter({
+        new Marionette.AppRouter({
             controller: clientSideRequestHandler,
             appRoutes: {
                 'scores/current': 'showCurrentScores',
@@ -105,7 +105,7 @@ require([ 'jqplot', 'backbone', 'marionette', 'app', 'app.controller', 'backbone
 ////require(['app', 'jqplot', 'jqplot.highlighter', 'jqplot.cursor', 'jqplot.dateAxisRenderer']);
 
 // Listen to window errors: remedy for Heroku instances sleeping/warm-up
-/* jshint -W073, -W074 */
+/* jshint -W073 */
 /*
  window.onerror = function (message, url, lineNumber) {
  "use strict";

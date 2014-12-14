@@ -226,8 +226,8 @@ var env = process.env.NODE_ENV || "development",
 
             // Override with stored Tippeliga data => for statistics/history/development ...
             if (!round && env === "development") {
-                if (root.overrideTippeligaDataWithRound) {
-                    round = root.overrideTippeligaDataWithRound;
+                if (root.app.overrideTippeligaDataWithRound) {
+                    round = root.app.overrideTippeligaDataWithRound;
                     console.warn(utils.logPreamble() + "Overriding current Tippeliga results with stored data from year=" + year + " and round=" + round);
                 }
             }
@@ -272,23 +272,38 @@ var env = process.env.NODE_ENV || "development",
         function (args) {
             "use strict";
             var tippekonkurranseData = new TippekonkurranseData(args);
-            if (!tippekonkurranseData.round) {
-                var allMatchRoundsPresentInCurrentTippeligaTable = __.keys(tippekonkurranseData.matchesCountGrouping);
-                tippekonkurranseData.round = Math.max.apply(null, allMatchRoundsPresentInCurrentTippeligaTable);
+            if (!args) {
+                throw new Error("Requestion argument array is missing - check your RQ.js setup");
             }
-            return tippekonkurranseData.toArray();
-        },
+            if (tippekonkurranseData.isLive) {
+                if (tippekonkurranseData.round) {
+                    throw new Error("Round is already set, it shouldn't be - it is the sole responsibility of this function");
 
-
-    _addCurrentRound = exports.addCurrentRound =
-        function (args) {
-            "use strict";
-            var tippekonkurranseData = new TippekonkurranseData(args);
-            if (!tippekonkurranseData.currentRound) {
-                // Historic data already set in 'getStoredTippeligaDataRequestory' function
-                if (tippekonkurranseData.isLive) {
-                    tippekonkurranseData.currentRound = tippekonkurranseData.round;
+                } else {
+                    var allMatchRoundsPresentInCurrentTippeligaTable = __.keys(tippekonkurranseData.matchesCountGrouping);
+                    tippekonkurranseData.round = Math.max.apply(null, allMatchRoundsPresentInCurrentTippeligaTable);
                 }
+
+                if (tippekonkurranseData.currentRound) {
+                    throw new Error("Current round is already set, it shouldn't be - it is the sole responsibility of this function");
+
+                } else {
+                    tippekonkurranseData.currentRound = tippekonkurranseData.round;
+                    // Current round is a dynamic value, nice to remember
+                    if (root.app.currentRound < tippekonkurranseData.currentRound) {
+                        root.app.currentRound = tippekonkurranseData.currentRound;
+                    }
+                }
+
+                //} else {
+                // Historic data already set in 'getStoredTippeligaDataRequestory' function
+                // TODO: Needed?
+                //if (!tippekonkurranseData.round) {
+                //    throw new Error("Round is not set, it should be");
+                //}
+                //if (!tippekonkurranseData.currentRound) {
+                //    throw new Error("Current round is not set, it should be");
+                //}
             }
             return tippekonkurranseData.toArray();
         },
@@ -379,8 +394,7 @@ var env = process.env.NODE_ENV || "development",
                 };
 
             __.each(__.keys(userPredictions), function (participant) {
-                var indexedTippeligaTable,
-                    tippekonkurranseData = new TippekonkurranseData(args);
+                var tippekonkurranseData = new TippekonkurranseData(args);
 
                 if (__.isEmpty(userPredictions[ participant ])) {
                     scoresRequestors.push(

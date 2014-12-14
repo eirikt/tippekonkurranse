@@ -12,6 +12,7 @@ var env = process.env.NODE_ENV || "development",
     tippekonkurranse = require("./tippekonkurranse"),
     predictions2014 = require("./tippekonkurranse-2014-user-predictions").predictions2014,
 
+// TODO: Isolate this as 'tippekonkurranse-2014-rules.js'
 // TODO: Promote this to a 'type'/'class', and move this to 'app.models.js' (like 'TippekonkurranseData')
     scoresStrategy2014 = {
         // 'exact' is permutation-like, 'present' is combination-like

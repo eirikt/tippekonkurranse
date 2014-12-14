@@ -84,8 +84,7 @@ define(
             template: _.identity,
             className: 'x-large full-width-inline-list',
 
-            // I don't quite see the complexity trouble with a few ifs ...
-            /* jshint -W074 */
+            // TODO: I don't quite see the complexity trouble with a few ifs ...
             getChildView: function (round) {
                 if (round.get('isLeftChevron')) {
                     return round.get('isLink') ? SelectableLeftChevronView : LeftChevronView;

@@ -156,35 +156,36 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'backbon
          '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.opprykkPropertyName + ' %></td>' +
          '<td style="color:darkgray;text-align:center;"><%= ' + App.scoreModel.cupPropertyName + ' %></td>';
          */
-        var viewTemplate = '' +
-            '<td style="padding-left:2rem;text-align:right;">' +
-            '  <span style="font-weight:bold;font-size:larger;"><%= args.' + ParticipantScore.rankPresentationPropertyName + ' %></span>' +
-            '</td>' +
-            '<td>' +
-            '  <span style="font-weight:bold;font-size:larger;white-space:nowrap;"><%= args.' + ParticipantScore.namePropertyName + ' %></span>' +
-            '</td>' +
-            '<td class="rank-tendency"></td>' +
-            '<td style="width:3rem;"></td>' +
-            '<td>' +
-            '  <span style="white-space:nowrap;">' +
-            '    <span style="font-weight:bold;font-size:larger;margin-right:.3rem;"><%= args.' + App.scoreModel.ratingPropertyName + '%></span>' +
-            '    <span class="rating-tendency"></span>' +
-            '  </span>' +
-            '</td>' +
-            '<td class="prediction">' +
-            '  <button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable"><%= args.' + ParticipantScore.namePropertyName + ' %>s tips</button>' +
-            '</td>' +
-            '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.tabellPropertyName + ' %></td>' +
-            '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.pallPropertyName + ' %></td>' +
-            '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.nedrykkPropertyName + ' %></td>' +
-            '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.toppscorerPropertyName + ' %></td>' +
-            '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.opprykkPropertyName + ' %></td>' +
-            '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.cupPropertyName + ' %></td>';
 
         return Marionette.ItemView.extend({
             tagName: 'tr',
             template: function (model) {
-                return _.template(viewTemplate, model, { variable: 'args' });
+                return _.template('' +
+                    '<td style="padding-left:2rem;text-align:right;">' +
+                    '  <span style="font-weight:bold;font-size:larger;"><%= args.' + ParticipantScore.rankPresentationPropertyName + ' %></span>' +
+                    '</td>' +
+                    '<td>' +
+                    '  <span style="font-weight:bold;font-size:larger;white-space:nowrap;"><%= args.' + ParticipantScore.namePropertyName + ' %></span>' +
+                    '</td>' +
+                    '<td class="rank-tendency"></td>' +
+                    '<td style="width:3rem;"></td>' +
+                    '<td>' +
+                    '  <span style="white-space:nowrap;">' +
+                    '    <span style="font-weight:bold;font-size:larger;margin-right:.3rem;"><%= args.' + App.scoreModel.ratingPropertyName + '%></span>' +
+                    '    <span class="rating-tendency"></span>' +
+                    '  </span>' +
+                    '</td>' +
+                    '<td class="prediction">' +
+                    '  <button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable"><%= args.' + ParticipantScore.namePropertyName + ' %>s tips</button>' +
+                    '</td>' +
+                    '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.tabellPropertyName + ' %></td>' +
+                    '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.pallPropertyName + ' %></td>' +
+                    '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.nedrykkPropertyName + ' %></td>' +
+                    '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.toppscorerPropertyName + ' %></td>' +
+                    '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.opprykkPropertyName + ' %></td>' +
+                    '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.cupPropertyName + ' %></td>',
+
+                    model, { variable: 'args' });
             },
             predictionsModel: null,
             bootstrapModalContainerView: null,

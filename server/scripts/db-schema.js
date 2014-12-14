@@ -1,4 +1,4 @@
-/* global require:false, console:false */
+/* global root:false, require:false, console:false */
 
 // Module dependencies, external
 var mongoose = require("mongoose"),

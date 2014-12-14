@@ -6,7 +6,7 @@
 // - http://vimeo.com/74294252
 ///////////////////////////////////////////////////////////
 
-// TODO: RQ.ja must be put in npm global repoMove to 'rq-essentials-request.js'
+// TODO: RQ.js must be put in npm global repo
 var RQ = require("./vendor/rq").RQ,
 
 // TODO: Move to 'rq-essentials-request.js'
@@ -235,6 +235,33 @@ var RQ = require("./vendor/rq").RQ,
     },
 
 
+/*
+ _memoizerRequestory = exports.memoize = function (cache, key, conditionalRefreshFunction) {
+ "use strict";
+ return function requestor(requestion, args) {
+ if (!cache[ key ]) {
+ cache[ key ] = {};
+ }
+ if (!cache[ key ].value || !conditionalRefreshFunction || conditionalRefreshFunction()) {
+ cache[ key ].value = _clone(args);
+ cache[ key ].numberOfHits = 0;
+ console.log(cache + "." + key + " cached!");
+ } else {
+ console.log(cache + "." + key + " NOT cached!");
+ }
+ return requestion(args);
+ };
+ },
+ */
+    _memoizerRequestory = exports.memoize = function () {
+        "use strict";
+        //return requestion(args);
+        return function requestor(requestion, args) {
+            return requestion(args, undefined);
+        };
+    },
+
+
     /**
      * Simple requestor factory for HTTP GET using the "request" library.
      *
@@ -246,6 +273,32 @@ var RQ = require("./vendor/rq").RQ,
      */
 // TODO: Move to 'rq-essentials-request.js'
     _getRequestory = exports.get = function (encoding, uri) {
+        "use strict";
+        if (arguments.length < 2) {
+            uri = encoding;
+            encoding = null;
+        }
+        return function requestor(requestion, args) {
+            return request(uri, function (err, response, body) {
+                var decodedBody;
+                if (!err && response.statusCode === 200) {
+                    if (encoding) {
+                        decodedBody = iconv.decode(new Buffer(body), encoding);
+                    } else {
+                        decodedBody = body;
+                    }
+                    return requestion(decodedBody);
+
+                } else {
+                    if (!err) {
+                        err = "Unexpected HTTP status code: " + response.statusCode + " (only status code 200 is supported)";
+                    }
+                    return requestion(undefined, err);
+                }
+            });
+        };
+    },
+    _getAndEncodeRequestory = exports.getEncoded = function (uri, encoding) {
         "use strict";
         return function requestor(requestion, args) {
             return request(uri, function (err, response, body) {
@@ -262,8 +315,6 @@ var RQ = require("./vendor/rq").RQ,
             });
         };
     },
-// TODO: Consider also having a non-currying version ...
-//_getRequestory = exports.get = function (uri, encoding) {
 
 
 ///////////////////////////////////////////////////////////

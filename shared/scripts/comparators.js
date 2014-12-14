@@ -34,7 +34,7 @@
 
             /**
              * Arithmetic comparators works for Numbers and Dates.
-             * In addition to the comparator (x<0<y) function, it returns the distance between the two arguments.
+             * In addition to the comparator (x < 0 < y) function, it returns the distance between the two arguments.
              * @private
              */
             _arithmeticAscendingValueComparator = function (value, otherValue) {
@@ -43,7 +43,7 @@
 
             /**
              * Arithmetic comparators works for Numbers and Dates.
-             * In addition to the comparator (x<0<y) function, it returns the distance between the two arguments.
+             * In addition to the comparator (x < 0 < y) function, it returns the distance between the two arguments.
              */
             _arithmeticAscendingComparator = function (comparableValueGetter, object, otherObject) {
                 return _arithmeticAscendingValueComparator(comparableValueGetter(object), comparableValueGetter(otherObject));
@@ -51,7 +51,7 @@
 
             /**
              * Arithmetic comparators works for Numbers and Dates.
-             * In addition to the comparator (x<0<y) function, it returns the distance between the two arguments.
+             * In addition to the comparator (x < 0 < y) function, it returns the distance between the two arguments.
              */
             _propertyArithmeticAscendingComparator = function (propertyGetter, propertyName, object, otherObject) {
                 if (typeof propertyName === 'function') {

@@ -1,4 +1,4 @@
-/* global define:false */
+/* global define:false, root:false */
 
 // Boilerplate for CommonJS and AMD support (no RequireJS shimming required)
 // => https://blog.codecentric.de/en/2014/02/cross-platform-javascript/
@@ -13,7 +13,7 @@
 /**
  * Just extract function out of here as you find a more suitable and precise location for them ...
  */
-    define([ 'underscore', 'moment' ], function (__, moment) {
+    define([ 'underscore', 'moment', './../../shared/scripts/fun' ], function (__, moment, fun) {
         'use strict';
 
         /**
@@ -118,6 +118,53 @@
                     }
                 }
                 return argIndexCompensator;
+            },
+
+            /**
+             * Preliminary
+             *
+             * @param round
+             * @returns {boolean|root.app.isCurrentYearCompleted|*}
+             */
+            _isCompletedRound = function (round) {
+                //console.log(_logPreamble() + "isCompletedRound(round=" + round + ", root.app.currentRound=" + root.app.currentRound + ", root.app.isCurrentYearCompleted=" + root.app.isCurrentYearCompleted + ")");
+                return round < root.app.currentRound || round === root.app.currentRound && root.app.isCurrentYearCompleted;
+            },
+
+            /***
+             * Preliminary
+             *
+             * @param cache
+             * @param writeCondition
+             * @param key
+             * @param data
+             * @returns {*}
+             */
+            _memoizationWriter = function (cache, writeCondition, key, data) {
+                if (!cache[ key ]) {
+                    cache[ key ] = {};
+                }
+                if (!writeCondition || (writeCondition && writeCondition())) {
+                    cache[ key ].value = __.clone(data);
+                    cache[ key ].numberOfHits = 0;
+                    console.log(_logPreamble() + "[key=" + key + "] CACHED (" + JSON.stringify(data) + ")");
+                } else {
+                    console.log(_logPreamble() + "[key=" + key + "] NOT CACHED (" + JSON.stringify(data) + ")");
+                }
+                return data;
+            },
+
+            _memoizationReader = function (cache, key) {
+                if (cache) {
+                    var cacheObj = cache[ key ];
+                    if (cacheObj) {
+                        cacheObj.numberOfHits += 1;
+                        console.log(_logPreamble() + "[key=" + key + "] read for the " + cacheObj.numberOfHits + ". time");
+                        return cacheObj.value;
+                    }
+                } else {
+                    console.log(_logPreamble() + "[key=" + key + "] not found");
+                }
             };
 
         return {
@@ -128,7 +175,14 @@
             getPresentPoints: _getPresentPoints,
             getDisplacementPoints: _getDisplacementPoints,
             maxDisplacementSumInPermutationOfLength: _maxDisplacementSumInPermutationOfLength,
-            mergeArgsIntoArray: _mergeArgsIntoArray
+
+            mergeArgsIntoArray: _mergeArgsIntoArray,
+
+            never: fun.curry(__.identity, false),
+            always: fun.curry(__.identity, true),
+            isCompletedRound: _isCompletedRound,
+            memoizationWriter: _memoizationWriter,
+            memoizationReader: _memoizationReader
         };
     }
 );

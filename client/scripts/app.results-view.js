@@ -54,7 +54,8 @@ define([
                     '          <td style="width:33%;vertical-align:top;">' +
                     '            <p>Toppskårer:</p>' +
                     '            <p><strong><%= currentTippeligaToppscorer %></strong></p>' +
-                    '            <p style="margin-top:2rem;">Fortsatt med i cupen:</p>' +
+                        //'            <p style="margin-top:2rem;">Fortsatt med i cupen:</p>' +
+                    '            <p style="margin-top:2rem;">Cupvinner 2014:</p>' +
                     '            <p><strong><%= currentRemainingCupContenders %></strong></p>' +
                     '          </td>' +
                     '        </tr>' +
@@ -140,8 +141,7 @@ define([
                     this.model.set('rankDiff', rankDiff);
                 }
             },
-            // I don't quite see the complexity trouble with a few ifs ...
-            /* jshint -W074 */
+            // TODO: I don't quite see the complexity trouble with a few ifs ...
             onRender: function () {
                 if (!this.model.get(ParticipantScore.previousRankPropertyName)) {
                     return this;
@@ -189,164 +189,43 @@ define([
         });
 
 
-        /*
-         var oldView = Backbone.View.extend({
-         template: _.template('' +
-         '<table class="table table-condenced table-striped table-hover">' +
-         '<thead>' +
-         '<tr>' +
-         '  <th style="padding-left:2rem;width:3rem;"></th>' +
-         '  <th style="width:14rem;"></th>' +
-         '  <th style="width:8rem;"></th>' +
-         '  <th class="rating-history" colspan="2">' +
-         '    <a href="/#/ratinghistory/2014" type="button" class="btn btn-sm btn-success">' +
-         '      <span style="margin-right:1rem;" class="icon-line-chart"></span>Trend' +
-         '    </a>' +
-         '  </th>' +
-         '  <th class="current-results">' +
-         '    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>' +
-         '  </th>' +
-         '  <th style="text-align:center;color:darkgray;width:8rem;">Tabell</th>' +
-         '  <th style="text-align:center;color:darkgray;width:8rem;">Pall</th>' +
-         '  <th style="text-align:center;color:darkgray;width:9rem;">Nedrykk</th>' +
-         '  <th style="text-align:center;color:darkgray;width:9rem;">Toppsk.</th>' +
-         '  <th style="text-align:center;color:darkgray;width:9rem;">Opprykk</th>' +
-         '  <th style="text-align:center;color:darkgray;width:9rem;">Cup</th>' +
-         '</tr>' +
-         '</thead>' +
-
-         // All participant data in here
-         '<tbody></tbody>' +
-
-         '</table>'
-         ),
-
-         events: {
-         "click .current-results": function () {
-         this.bootstrapModalContainerView.resett();
-         this.currentResults.fetch({ reset: true });
-         }
-         },
-
-         currentResults: null,
-
-         bootstrapModalContainerView: null,
-         modalCurrentResultsView: null,
-
-         initialize: function () {
-         this.currentResults = new CurrentResults();
-         this.bootstrapModalContainerView = new BootstrapViews.ModalContainerView({
-         parentSelector: 'body',
-         id: 'currentResultsTable',
-         ariaLabelledBy: 'currentResultsLabel'
-         });
-         this.modalCurrentResultsView = new ModalCurrentResultsView({
-         model: this.currentResults
-         });
-         this.listenTo(this.collection, "reset", this.render);
-         },
-
-         render: function () {
-         var //self = this,
-         //numberOfParticipantsRendered = 0,
-         addParticipant = function ($el, participantScore) {
-         $el.append(new ParticipantScoreView({ model: participantScore.toJSON() }).render().el);
-         },
-         delayedAddParticipant = function (timeOutInMillis, $el, participantScore) {
-         var dfd = $.Deferred();
-         addParticipant($el, participantScore);
-         Client.wait(timeOutInMillis).then(function () {
-         dfd.resolve();
-         //numberOfParticipantsRendered += 1;
-         //if (numberOfParticipantsRendered >= self.collection.length) {
-         //    console.log("RENDERED");
-         //    self.trigger("rendered");
-         //}
-         });
-         return dfd.promise();
-         },
-         currentRound = this.collection.at(0).get("round");
-
-         this.$el.empty().append(this.template());
-
-         if (Client.isTouchDevice()) {
-         this.$("table").removeClass("table-hover");
-         }
-         if (currentRound) {
-         var href = this.$(".rating-history").find("a").attr("href");
-         this.$(".rating-history").find("a").attr("href", [ href, currentRound ].join("/"));
-         }
-
-         // Render all participant scores sequentially, one by one
-         var addingOfParticipantFuncs = [],
-         delayInMillis = 100,
-         $tbody = this.$("tbody"),
-         i,
-         sortedParticipant,
-         delayedParticipantFunc,
-         delayedAddingOfParticipantInTableFunc;
-
-         for (i = 0; i < this.collection.length; i += 1) {
-         // Underscore: Bind a function to an object, meaning that whenever the function is called, the value of this will be the object
-         delayedParticipantFunc = _.bind(delayedAddParticipant, this);
-
-         // Underscore: Partially apply a function by filling in any number of its arguments, without changing its dynamic this value.
-         // You may pass _ in your list of arguments to specify an argument that should not be pre-filled, but left open to supply at call-time.
-         sortedParticipant = this.collection.at(i);
-         delayedParticipantFunc = _.partial(delayedParticipantFunc, delayInMillis, $tbody, sortedParticipant);
-
-         addingOfParticipantFuncs.push(delayedParticipantFunc);
-         }
-
-         // Execute all these deferred functions sequentially
-         delayedAddingOfParticipantInTableFunc = addingOfParticipantFuncs[ 0 ]();
-         for (i = 0; i < addingOfParticipantFuncs.length; i += 1) {
-         delayedAddingOfParticipantInTableFunc = delayedAddingOfParticipantInTableFunc.then(addingOfParticipantFuncs[ i + 1 ]);
-         }
-
-         return this;
-         }
-         });
-         */
-
-
-        var viewTemplate = '' +
-            '<thead>' +
-            '<tr>' +
-            '  <th style="padding-left:2rem;width:3rem;"></th>' +
-            '  <th style="width:14rem;"></th>' +
-            '  <th style="width:8rem;"></th>' +
-            '  <th class="rating-history" colspan="2">' +
-            '    <a href="/#/ratinghistory/<%= args.year %>/<%= args.round %>" type="button" class="btn btn-sm btn-success">' +
-            '      <span style="margin-right:1rem;" class="icon-line-chart"></span>Trend' +
-            '    </a>' +
-            '  </th>' +
-            '  <th class="current-results">' +
-            '    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>' +
-            '  </th>' +
-            '  <th style="text-align:center;color:darkgray;width:8rem;">Tabell</th>' +
-            '  <th style="text-align:center;color:darkgray;width:8rem;">Pall</th>' +
-            '  <th style="text-align:center;color:darkgray;width:9rem;">Nedrykk</th>' +
-            '  <th style="text-align:center;color:darkgray;width:9rem;">Toppsk.</th>' +
-            '  <th style="text-align:center;color:darkgray;width:9rem;">Opprykk</th>' +
-            '  <th style="text-align:center;color:darkgray;width:9rem;">Cup</th>' +
-            '</tr>' +
-            '</thead>' +
-
-                // All participant data goes here:
-            '<tbody></tbody>';
-
         return Marionette.CompositeView.extend({
             tagName: 'table',
             className: 'table table-condensed table-striped table-hover',
             template: function (model) {
-                return _.template(viewTemplate, model, { variable: 'args' });
+                return _.template('' +
+                    '<thead>' +
+                    '<tr>' +
+                    '  <th style="padding-left:2rem;width:3rem;"></th>' +
+                    '  <th style="width:14rem;"></th>' +
+                    '  <th style="width:8rem;"></th>' +
+                    '  <th class="rating-history" colspan="2">' +
+                    '    <a href="/#/ratinghistory/<%= args.year %>/<%= args.round %>" type="button" class="btn btn-sm btn-success">' +
+                    '      <span style="margin-right:1rem;" class="icon-line-chart"></span>Trend' +
+                    '    </a>' +
+                    '  </th>' +
+                    '  <th class="current-results">' +
+                    '    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>' +
+                    '  </th>' +
+                    '  <th style="text-align:center;color:darkgray;width:8rem;">Tabell</th>' +
+                    '  <th style="text-align:center;color:darkgray;width:8rem;">Pall</th>' +
+                    '  <th style="text-align:center;color:darkgray;width:9rem;">Nedrykk</th>' +
+                    '  <th style="text-align:center;color:darkgray;width:9rem;">Toppsk.</th>' +
+                    '  <th style="text-align:center;color:darkgray;width:9rem;">Opprykk</th>' +
+                    '  <th style="text-align:center;color:darkgray;width:9rem;">Cup</th>' +
+                    '</tr>' +
+                    '</thead>' +
+
+                        // All participant data goes here:
+                    '<tbody></tbody>',
+
+                    model, { variable: 'args' });
             },
             childViewContainer: 'tbody',
             childView: ParticipantScoreView,
 
             events: {
-                "click .current-results": function () {
+                'click .current-results': function () {
                     this.bootstrapModalContainerView.reset();
                     this.currentResults.fetch();
                 }
@@ -356,7 +235,6 @@ define([
 
             bootstrapModalContainerView: null,
             modalCurrentResultsView: null,
-
 
             // called on initialize and after attachBuffer is called
             initRenderBuffer: function () {
