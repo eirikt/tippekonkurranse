@@ -17,7 +17,7 @@ In production [here][1].
 
 <sub><sup>__Client-side__:</sup></sub> [![Dependency Status](https://www.versioneye.com/user/projects/54690c92950825928500000b/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54690c92950825928500000b)
 &nbsp;&nbsp;&nbsp;
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/eirikt.svg)](https://saucelabs.com/u/eirikt)
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/tippekonkurranse.svg)](https://saucelabs.com/u/tippekonkurranse)
 
 
 
