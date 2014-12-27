@@ -7,6 +7,10 @@ with server-side functional composition by [RQ][54],
 and keeping client-side somewhat tidy and sane with [Backbone][60].[Marionette][61].
 In production [here][1].
 
+#### Badge-o-rama
+
+[![License](http://img.shields.io/badge/license-MIT-yellow.svg?style=flat)](https://github.com/eirikt/tippekonkurranse/blob/master/README.md#license)
+
 [![Build Status](https://travis-ci.org/eirikt/tippekonkurranse.png?branch=master)](https://travis-ci.org/eirikt/tippekonkurranse)
 &nbsp;&nbsp;&nbsp;
 [![Codacy Badge](https://www.codacy.com/project/badge/4f9fda90eb834d27ae6cc2f539ae263c)](https://www.codacy.com/public/eiriktorske/tippekonkurranse)
@@ -272,7 +276,7 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 
 
 
-## License
+## [License](#license)
 The MIT License (MIT)
 
 Copyright (c) 2014 Eirik Torske
