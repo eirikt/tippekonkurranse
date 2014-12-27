@@ -19,12 +19,24 @@
              * @see https://github.com/loop-recur/FunctionalJS/blob/master/functional.js/
              */
             _slice = Array.prototype.slice,
-
             _map = Array.prototype.map,
 
-            /**
-             * @see http://underscorejs.org/#isArray
-             */
+            _isString = function (obj) {
+                return typeof obj === 'string' || obj instanceof String;
+            },
+
+            _isNumber = function (obj) {
+                throw new Error('not yet implemented');
+            },
+
+            _isDate = function (obj) {
+                throw new Error('not yet implemented');
+            },
+
+            _isFunction = function (obj) {
+                return obj && Object.prototype.toString.call(obj) === '[object Function]';
+            },
+
             _isArray = Array.isArray || function (obj) {
                     return Object.prototype.toString.call(obj) === '[object Array]';
                 },
@@ -78,6 +90,10 @@
         return {
             slice: _slice,
             map: _map,
+            isString: _isString,
+            isNumber: _isNumber,
+            isDate: _isDate,
+            isFunction: _isFunction,
             isArray: _isArray,
             toArray: _toArray,
             curry: _curry

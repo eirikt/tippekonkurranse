@@ -17,7 +17,7 @@ define([
 
             beforeEach(function () {
                 sandbox = Sinon.sandbox.create({
-                    properties: ["spy", "server"],
+                    properties: [ "spy", "server" ],
                     useFakeServer: true
                 });
                 sandbox.server.autoRespond = true;
@@ -30,7 +30,7 @@ define([
             });
 
 
-            it("should be able to create Tippekonkurranse rankings history collection", function () {
+            it("should be able to create Tippekonkurranse rating history collection", function () {
                 expect(new RatingHistoryCollection()).to.be.ok;
                 expect(new RatingHistoryCollection()).to.be.an("Object");
                 expect(new RatingHistoryCollection()).to.be.an.instanceof(Backbone.Collection);
@@ -40,25 +40,18 @@ define([
             it("should be initalized with a 'year' and 'round' property", function () {
                 expect(new RatingHistoryCollection().year).to.be.undefined;
                 expect(new RatingHistoryCollection().round).to.be.undefined;
-                expect(new RatingHistoryCollection({ year: 1492, round: 10 }).year).to.be.equal(1492);
-                expect(new RatingHistoryCollection({ year: 1492, round: 10 }).round).to.be.equal(10);
+                expect(new RatingHistoryCollection(null, { year: 1492, round: 10 }).year).to.be.equal(1492);
+                expect(new RatingHistoryCollection(null, { year: 1492, round: 10 }).round).to.be.equal(10);
             });
 
 
             it("should populate model via a fetch", function (done) {
-                var collection = new RatingHistoryCollection({ year: 2014, round: 3 });
+                var collection = new RatingHistoryCollection(null, { year: 2014, round: 3 });
 
                 sandbox.server.respondWith("GET", /(.*)/, function (xhr, query) {
                     ajaxSpy(xhr, query);
-                    if (query === [SharedRatingModel.resource.ratingHistory.baseUri, 2014, 3].join("/")) {
-                        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
-                            "metadata": { "year": 2015, "round": 2 },
-                            "scores": {
-                                "john": {
-                                    "tabell": 0, "pall": 0, "nedrykk": 0, "toppscorer": 0, "opprykk": 0, "cup": 0, "rating": 0, "previousRating": 0
-                                }
-                            }
-                        }));
+                    if (query === [ SharedRatingModel.resource.ratingHistory.baseUri, 2014, 3 ].join("/")) {
+                        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify([]));
 
                     } else {
                         throw new Error("Didn't expect " + query);
@@ -81,28 +74,28 @@ define([
 
 
             it("should convert rating history response to jqPlot data structure", function (done) {
-                var collection = new RatingHistoryCollection({ year: 2014, round: 11 });
+                var collection = new RatingHistoryCollection(null, { year: 2014, round: 11 });
 
                 sandbox.server.respondWith("GET", /(.*)/, function (xhr, query) {
                     console.log("query:" + query);
                     ajaxSpy(xhr, query);
-                    if (query === [SharedRatingModel.resource.ratingHistory.baseUri, 2014, 11].join("/")) {
+                    if (query === [ SharedRatingModel.resource.ratingHistory.baseUri, 2014, 11 ].join("/")) {
                         xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify([
                                 {
                                     userId: "oddvar",
-                                    ratings: [33, 44, 55, 33, 33, 44, 76, 82, 83, 85, 64, 23]
+                                    ratings: [ 33, 44, 55, 33, 33, 44, 76, 82, 83, 85, 64, 23 ]
                                 },
                                 {
                                     userId: "hans_bernhard",
-                                    ratings: [3, 4, 5, 3, 3, 4, 7, 8, 8, 8, 6, 6]
+                                    ratings: [ 3, 4, 5, 3, 3, 4, 7, 8, 8, 8, 6, 6 ]
                                 },
                                 {
                                     userId: "eirik",
-                                    ratings: [8, 23, 25, 34, 39, 41, 77, 88, 88, 89, 62, 64]
+                                    ratings: [ 8, 23, 25, 34, 39, 41, 77, 88, 88, 89, 62, 64 ]
                                 },
                                 {
                                     userId: "jan_tore",
-                                    ratings: [1, 10, 5, 9, 13, 11, 6, 3, 1, 1, 2, 4]
+                                    ratings: [ 1, 10, 5, 9, 13, 11, 6, 3, 1, 1, 2, 4 ]
                                 }
                             ]
                         ));
@@ -111,6 +104,10 @@ define([
                         throw new Error("Didn't expect " + query);
                     }
                     return true;
+                });
+
+                collection.once("sort", function () {
+                    var sorted = true;
                 });
 
                 collection.once("reset", function () {
@@ -130,21 +127,21 @@ define([
                     var jqPlotPlot = this.getJqPlotPlot();
                     expect(jqPlotPlot).to.be.an("Array");
                     expect(jqPlotPlot.length).to.be.equal(4);
-                    expect(jqPlotPlot[0]).to.be.deep.equal([
+                    expect(jqPlotPlot[ 0 ]).to.be.deep.equal([
                         // Jan Tore
-                        [0, 1],
-                        [1, 1],
-                        [2, 10],
-                        [3, 5],
-                        [4, 9],
-                        [5, 13],
-                        [6, 11],
-                        [7, 6],
-                        [8, 3],
-                        [9, 1],
-                        [10, 1],
-                        [11, 2],
-                        [12, 4]
+                        [ 0, 1 ],
+                        [ 1, 1 ],
+                        [ 2, 10 ],
+                        [ 3, 5 ],
+                        [ 4, 9 ],
+                        [ 5, 13 ],
+                        [ 6, 11 ],
+                        [ 7, 6 ],
+                        [ 8, 3 ],
+                        [ 9, 1 ],
+                        [ 10, 1 ],
+                        [ 11, 2 ],
+                        [ 12, 4 ]
                     ]);
 
                     done();

@@ -22,13 +22,13 @@ define([
             model: ParticipantScore,
 
             // Ascending rating comparator
-            sortByRatingThenByName: Comparators.backboneMultiAscending([
+            sortByRatingThenByName: Comparators.ascendingByBackboneProperty([
                 App.scoreModel.ratingPropertyName,
                 ParticipantScore.namePropertyName
             ]),
 
             // Ascending previous round rating comparator
-            sortByPreviousRatingThenByName: Comparators.backboneMultiAscending([
+            sortByPreviousRatingThenByName: Comparators.ascendingByBackboneProperty([
                 App.scoreModel.previousRatingPropertyName,
                 ParticipantScore.namePropertyName
             ]),

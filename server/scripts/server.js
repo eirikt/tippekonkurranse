@@ -1,5 +1,5 @@
 /* global root:false */
-/* jshint -W024 */
+/* jshint -W024, -W083 */
 
 // Environment
 var env = process.env.NODE_ENV || "development",
@@ -70,8 +70,14 @@ root.app = {
     numberOfRounds: 30,
     currentYear: 2014,                  // NB! To be set manually for now ...
     currentRound: null,
-    isCurrentYearCompleted: true        // NB! To be set manually for now ...
+    isCurrentYearCompleted: true,       // NB! To be set manually for now ...
     //isCurrentRoundCompleted = false,
+
+    isCompletedRound: function (round) {
+        "use strict";
+        console.log(utils.logPreamble() + "isCompletedRound(round=" + round + ", root.app.currentRound=" + root.app.currentRound + ", root.app.isCurrentYearCompleted=" + root.app.isCurrentYearCompleted + ")");
+        return round < root.app.currentRound || round === root.app.currentRound && root.app.isCurrentYearCompleted;
+    }
 };
 
 
@@ -81,7 +87,56 @@ root.app.cache = {
 };
 
 
-// Warm up
+// Find current round, and warm up
+
+/**
+ * TODO: This did not work out quite well, did it ...
+ *
+ * The function arity rules:
+ * If length of function arguments (f.length) is
+ *   0: just add the function
+ *   1: wrap it as a requestor
+ *   2: ...
+ *   3: curry it with round/'numberOfSequences', and then wrap it as a requestor
+ *   4: curry it with year and round/'numberOfSequences', and then wrap it as a requestor
+ *   5: n/a
+ *
+ * @see http://stackoverflow.com/questions/4138012/checks-how-many-arguments-a-function-takes-in-javascript
+ * @see https://github.com/fitzgen/wu.js/issues/16
+ */
+root.app.buildSequencesOf = function (requestorArray, numberOfSequences) {
+    "use strict";
+    var requestorSequences = [],
+        roundIndex = 1,
+        curriedRequestorArray;
+
+    for (; roundIndex <= numberOfSequences; roundIndex += 1) {
+        curriedRequestorArray = [];
+        requestorArray.forEach(function (fn) {
+            switch (fn.length) {
+                case 0:
+                    curriedRequestorArray.push(fn);
+                    break;
+                case 1:
+                    curriedRequestorArray.push(rq.requestor(fn));
+                    break;
+                case 2:
+                    throw new Error("2 arguments is not yet applicable to 'buildSequencesOf' function ...");
+                case 3:
+                    curriedRequestorArray.push(curry(fn, roundIndex));
+                    break;
+                case 4:
+                    curriedRequestorArray.push(curry(fn, root.app.currentYear, roundIndex));
+                    break;
+                default:
+                    throw new Error("More than 4 arguments is not supported by 'buildSequencesOf' function");
+            }
+        });
+        requestorSequences.push(RQ.sequence(curriedRequestorArray));
+    }
+    return requestorSequences;
+};
+
 // TODO: Cache all years, this year and all previous ones
 dbSchema.TippeligaRound.count({ year: root.app.currentYear }, function (err, count) {
     "use strict";
@@ -89,34 +144,33 @@ dbSchema.TippeligaRound.count({ year: root.app.currentYear }, function (err, cou
         console.error(utils.logPreamble() + "Tippeliga " + root.app.currentYear + " rounds count ERROR: " + err);
         return;
     }
+    root.app.currentRound = count;
+    if (count < 1) {
+        console.error(utils.logPreamble() + "Tippeliga " + root.app.currentYear + " has no rounds persisted ...");
+        return;
+    }
     console.log(utils.logPreamble() + "Tippeliga " + root.app.currentYear + " round " + count + " (read from db)");
     //console.log(utils.logPreamble() + "Warming up cache with round [1-" + count + "] ...");
     var cache = root.app.cache.ratingHistory,
         key = root.app.currentYear.toString() + count,
-        getTippekonkurranseScoresHistory = [],
         tippekonkurranseData = new TippekonkurranseData(),
         data = {},
         sortByElementIndex = function (elementIndex, args) {
-            return args.sort(comparators.arrayElementArithmeticAscending(elementIndex));
+
+            return args.sort(comparators.ascendingByArrayElement(elementIndex));
         },
         sortByRound = curry(sortByElementIndex, tippekonkurranseData.indexOfRound),
-        memoizeWrite = curry(utils.memoizationWriter, cache, utils.always, key),
-        roundIndex;
+        memoizeWrite = curry(utils.memoizationWriter, cache, utils.always, key);
 
-    // TODO: Cache all rounds 1-30, 1-29, 1-28 e.t.c. (not only 1-30) - by slicing the 'getTippekonkurranseScoresHistory' requestor
-    for (roundIndex = 1; roundIndex <= count; roundIndex += 1) {
-        console.log(utils.logPreamble() + "Caching rating history for round [1-" + roundIndex + "] ...");
-        getTippekonkurranseScoresHistory.push(
-            RQ.sequence([
-                curry(tippekonkurranse.getStoredTippeligaDataRequestor, root.app.currentYear, roundIndex),
-                rq.requestor(tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping),
-                rq.requestor(tippekonkurranse.addRound),
-                tippekonkurranse2014.addTippekonkurranseScores2014
-            ])
-        );
-    }
+    // TODO: Consider caching all rounds 1-30, 1-29, 1-28 e.t.c. (not only 1-30) - by slicing the 'getTippekonkurranseScoresHistory' requestor
+
     RQ.sequence([
-        RQ.parallel(getTippekonkurranseScoresHistory),
+        RQ.parallel(root.app.buildSequencesOf([
+            tippekonkurranse.getStoredTippeligaDataRequestor,
+            tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping,
+            tippekonkurranse.addRound,
+            tippekonkurranse2014.addTippekonkurranseScores2014
+        ], count)),
         rq.then(sortByRound),
         function (requestion, args) {
             var userIdArray = Object.keys(args[ 0 ][ tippekonkurranseData.indexOfScores ].scores);

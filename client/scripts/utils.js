@@ -13,7 +13,7 @@
 /**
  * Just extract function out of here as you find a more suitable and precise location for them ...
  */
-    define([ 'underscore', 'moment', './../../shared/scripts/fun' ], function (__, moment, fun) {
+    define([ 'underscore', 'moment', './fun' ], function (__, moment, fun) {
         'use strict';
 
         /**
@@ -120,17 +120,6 @@
                 return argIndexCompensator;
             },
 
-            /**
-             * Preliminary
-             *
-             * @param round
-             * @returns {boolean|root.app.isCurrentYearCompleted|*}
-             */
-            _isCompletedRound = function (round) {
-                //console.log(_logPreamble() + "isCompletedRound(round=" + round + ", root.app.currentRound=" + root.app.currentRound + ", root.app.isCurrentYearCompleted=" + root.app.isCurrentYearCompleted + ")");
-                return round < root.app.currentRound || round === root.app.currentRound && root.app.isCurrentYearCompleted;
-            },
-
             /***
              * Preliminary
              *
@@ -167,6 +156,7 @@
                 }
             };
 
+
         return {
             logPreamble: _logPreamble,
             mutablePropertyWithDefaultValue: _mutablePropertyWithDefaultValue,
@@ -180,7 +170,6 @@
 
             never: fun.curry(__.identity, false),
             always: fun.curry(__.identity, true),
-            isCompletedRound: _isCompletedRound,
             memoizationWriter: _memoizationWriter,
             memoizationReader: _memoizationReader
         };

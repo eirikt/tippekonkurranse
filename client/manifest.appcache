@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# v1.3.0-10101010101010101
+# v1.2.8
 
 CACHE:
 favicon.ico
@@ -25,21 +25,26 @@ bower_components/bootstrap/dist/js/bootstrap.min.js
 bower_components/toastr/toastr.min.js
 bower_components/jqplot-bower/dist/jquery.jqplot.min.js
 
+scripts/app.models.js
+scripts/comparators.js
 scripts/fun.js
 scripts/string-extensions.js
-scripts/comparators.js
+
 scripts/app.config.js
+scripts/app.controller.js
 scripts/app.js
-scripts/backbone.fetch-local-copy.js
-scripts/utils.js
-scripts/app.models.js
+scripts/app.header-view.js
+scripts/app.participant-score-view.js
+scripts/app.rating-history-view.js
 scripts/app.result.js
 scripts/app.result-collection.js
-
-scripts/backbone.bootstrap.views.js
+scripts/app.results-carousel-view.js
 scripts/app.results-view.js
 scripts/app.soccer-table-views.js
-scripts/app.participant-score-view.js
+scripts/backbone.bootstrap.views.js
+scripts/backbone.fetch-local-copy.js
+scripts/client-utils.js
+scripts/utils.js
 
 # Client-side persistent resource caching
 api/predictions/2014/einar

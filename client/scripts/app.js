@@ -2,13 +2,11 @@
 /* jshint -W093 */
 define([
         'backbone', 'marionette',
-        'client-utils',
         'app.models',
         'app.result-collection', 'app.rating-history-collection',
         'app.header-view', 'app.results-view', 'app.results-carousel-view', 'app.rating-history-view'
     ],
     function (Backbone, Marionette,
-              Please,
               AppModels,
               CurrentScoresCollection, HistoricScoresCollection,
               HeaderView, CurrentScoresView, RoundCarouselView, RatingHistoryView) {
@@ -21,13 +19,18 @@ define([
             historicScores = new HistoricScoresCollection();
 
         app.commands.setHandler('getTippekonkurranseScores', function (year, round) {
-            //console.log('"getTippekonkurranseScores(' + year + ', ' + round + ')"');
+            console.log('"getTippekonkurranseScores(' + year + ', ' + round + ')"');
+            if (!year || !round) {
+                year = 2014;
+                round = 30;
+                console.warn('Overriding year and round => "getTippekonkurranseScores(2014, 30)"');
+            }
             currentScores.year = year;
             currentScores.round = round;
             currentScores.fetch();
         });
         app.commands.setHandler('getTippekonkurranseScoresHistory', function (year, round) {
-            //console.log('"getTippekonkurranseScoresHistory(' + year + ', ' + round + ')"');
+            console.log('"getTippekonkurranseScoresHistory(' + year + ', ' + round + ')"');
             historicScores.year = year;
             historicScores.round = round;
             historicScores.fetch({ reset: true });

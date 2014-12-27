@@ -10,7 +10,7 @@ define([
 
         var ParticipantRatingHistory = Backbone.Model.extend({}, {
             /** Sort by last element in rating, to suit jqPlot series/label presentations */
-            comparable: function (model) {
+            sortCriteria: function (model) {
                 var modelRatings = model.get("ratings");
                 return modelRatings[ modelRatings.length - 1 ];
             },
@@ -30,9 +30,10 @@ define([
 
         return Backbone.Collection.extend({
             model: ParticipantRatingHistory,
-            rankingsHistory: true,
+            // TODO: Use?
+            //rankingsHistory: true,
 
-            initialize: function (options) {
+            initialize: function (models, options) {
                 if (options) {
                     this.year = options.year;
                     this.round = options.round;
@@ -41,9 +42,7 @@ define([
             url: function () {
                 return [ App.resource.ratingHistory.baseUri, this.year, this.round ].join("/");
             },
-            comparator: function (model, otherModel) {
-                return Comparators.arithmeticAscending(this.model.comparable, model, otherModel);
-            },
+            comparator: ParticipantRatingHistory.sortCriteria,
             getJqPlotSeries: function () {
                 return _.map(this.models, this.model.toJqPlotSerie);
             },

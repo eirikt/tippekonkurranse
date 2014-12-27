@@ -366,6 +366,7 @@ define([
             });
 
 
+            // TODO: ?
             it("should calculate and show rating trends from previous round");
         });
     }

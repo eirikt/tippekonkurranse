@@ -87,9 +87,7 @@ var env = process.env.NODE_ENV || "development",
                 dispatch = curry(_dispatchAsJson, response, 200),
 
                 tippekonkurranseData,
-                roundIndex,
                 data = {},
-                getTippekonkurranseScoresHistory = [],
 
                 sortByElementIndex,
                 sortByRound,
@@ -105,30 +103,21 @@ var env = process.env.NODE_ENV || "development",
             // 2. Prepare for data mining
             tippekonkurranseData = new TippekonkurranseData();
             sortByElementIndex = function (elementIndex, args) {
-                return args.sort(comparators.arrayElementArithmeticAscending(elementIndex));
+                return args.sort(comparators.ascendingByArrayElement(elementIndex));
             };
             sortByRound = curry(sortByElementIndex, tippekonkurranseData.indexOfRound);
-            memoizeWrite = curry(utils.memoizationWriter, cache, curry(utils.isCompletedRound, round), key);
+            memoizeWrite = curry(utils.memoizationWriter, cache, curry(root.app.isCompletedRound, round), key);
 
-            // 3. Create array of requestors: all historic Tippeligakonkurranse scores
-            //console.log("Creating requestors for historic scores ...");
-            for (roundIndex = 1; roundIndex <= round; roundIndex += 1) {
-                //console.log("Creating requestor " + roundIndex + " ...");
-                getTippekonkurranseScoresHistory.push(
-                    RQ.sequence([
-                        curry(tippekonkurranse.getStoredTippeligaDataRequestor, year, roundIndex),
-                        rq.requestor(tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping),
-                        rq.requestor(tippekonkurranse.addRound),
-                        tippekonkurranse2014.addTippekonkurranseScores2014
-                    ])
-                );
-            }
-
-            // 4. Then execute them ...
             return RQ.sequence([
-                RQ.parallel(getTippekonkurranseScoresHistory),
+                // 3. Create array of requestors: all historic Tippeligakonkurranse scores - and then execute and wait for all to finish
+                RQ.parallel(root.app.buildSequencesOf([
+                    tippekonkurranse.getStoredTippeligaDataRequestor,
+                    tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping,
+                    tippekonkurranse.addRound,
+                    tippekonkurranse2014.addTippekonkurranseScores2014
+                ], round)),
 
-                // 5. And manipulate them ...
+                // 4. And manipulate them ...
                 rq.then(sortByRound),
 
                 // TODO: Ugly! Rewrite with 'map' and 'partialFn' and ...
@@ -166,10 +155,10 @@ var env = process.env.NODE_ENV || "development",
                 // TODO: Consider including 'year' in response
                 rq.then(___.partialFn(__.map, __.identity)),
 
-                // 6. And remember them ...
+                // 5. And remember them ...
                 rq.then(memoizeWrite),
 
-                // 7. And finally dispatch them ...
+                // 6. And finally dispatch them ...
                 rq.then(dispatch)
 
             ])(rq.execute);

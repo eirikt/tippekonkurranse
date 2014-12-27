@@ -162,7 +162,7 @@ var RQ = require("./vendor/rq").RQ,
      */
     _terminatorRequestor = exports.terminator = function (g, requestion, args) {
         "use strict";
-        return requestion(g(args));
+        return requestion(g(args), undefined);
     },
 
 
@@ -177,7 +177,7 @@ var RQ = require("./vendor/rq").RQ,
         // Argument 'y' may come from other requestors => cloning arguments due to Object.freeze() in RQ
         //return requestion(g(_clone(y)));
 
-        return requestion(g(y));
+        return requestion(g(y), undefined);
     },
 
 
@@ -217,6 +217,7 @@ var RQ = require("./vendor/rq").RQ,
 
     /**
      * f(g) = F(fContinuation(g(x)))
+     * Catching exceptions, logging them, and terminating execution of requestors.
      *
      * A typical sequence requestor ...
      */
@@ -228,36 +229,9 @@ var RQ = require("./vendor/rq").RQ,
                 result = g(args);
                 return requestion(result, undefined);
             } catch (e) {
-                console.warn(e.message);
-                return requestion(result, e);
+                console.error(e.message);
+                return requestion(undefined, e);
             }
-        };
-    },
-
-
-/*
- _memoizerRequestory = exports.memoize = function (cache, key, conditionalRefreshFunction) {
- "use strict";
- return function requestor(requestion, args) {
- if (!cache[ key ]) {
- cache[ key ] = {};
- }
- if (!cache[ key ].value || !conditionalRefreshFunction || conditionalRefreshFunction()) {
- cache[ key ].value = _clone(args);
- cache[ key ].numberOfHits = 0;
- console.log(cache + "." + key + " cached!");
- } else {
- console.log(cache + "." + key + " NOT cached!");
- }
- return requestion(args);
- };
- },
- */
-    _memoizerRequestory = exports.memoize = function () {
-        "use strict";
-        //return requestion(args);
-        return function requestor(requestion, args) {
-            return requestion(args, undefined);
         };
     },
 
@@ -298,6 +272,8 @@ var RQ = require("./vendor/rq").RQ,
             });
         };
     },
+
+
     _getAndEncodeRequestory = exports.getEncoded = function (uri, encoding) {
         "use strict";
         return function requestor(requestion, args) {

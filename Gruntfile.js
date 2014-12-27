@@ -4,7 +4,7 @@ module.exports = function (grunt) {
     'use strict';
 
     // Test setup
-    var port = 9999,
+    var port = 1234,
         clientTestUri = '/tests/client/test.amd.html',
         clientTestUrl = 'http://127.0.0.1:' + port + clientTestUri;
 
@@ -107,7 +107,7 @@ module.exports = function (grunt) {
                 'package.json',
                 'bower.json',
                 'server/scripts/**/*.js', '!server/scripts/vendor/**/*.js',
-                'client/scripts/**/*.js', '!client/scripts/app.models.js', '!client/scripts/comparators.js', '!client/scripts/fun.js', '!client/scripts/string-extensions.js',
+                'client/scripts/**/*.js', '!client/scripts/app.models.js', '!client/scripts/comparators.js', '!client/scripts/fun.js', '!client/scripts/string-extensions.js', '!client/scripts/utils.js',
                 'shared/scripts/**/*.js',
                 'tests/**/*.js'
             ],
@@ -160,12 +160,12 @@ module.exports = function (grunt) {
                     reporter: 'spec'
                 },
                 src: [
-                    'tests/server/specs/string-extensions.spec.js',
+                    'tests/server/specs/app-models.spec.js',
                     'tests/server/specs/comparators.spec.js',
-                    'tests/server/specs/utils.spec.js',
-
-                    'tests/server/specs/app.models.spec.js',
-                    'tests/server/specs/tippekonkurranse.spec.js'
+                    'tests/server/specs/rq-fun.spec.js',
+                    'tests/server/specs/string-extensions.spec.js',
+                    'tests/server/specs/tippekonkurranse.spec.js',
+                    'tests/server/specs/utils.spec.js'
                 ]
             }
         },
@@ -189,10 +189,12 @@ module.exports = function (grunt) {
             },
             options: {
                 files: [
-                    'tests/server/specs/string-extensions.spec.js',
+                    'tests/server/specs/app-models.spec.js',
                     'tests/server/specs/comparators.spec.js',
-                    'tests/server/specs/utils.spec.js',
-                    'tests/server/specs/tippekonkurranse.spec.js'
+                    'tests/server/specs/rq-fun.spec.js',
+                    'tests/server/specs/string-extensions.spec.js',
+                    'tests/server/specs/tippekonkurranse.spec.js',
+                    'tests/server/specs/utils.spec.js'
                 ]
             }
         },
@@ -217,15 +219,16 @@ module.exports = function (grunt) {
                     testname: 'Tippekonkurranse',
                     tags: [ 'master' ],
                     browsers: [
-                        { platform: 'Windows 7', browserName: 'Chrome', version: '38' },
-                        { platform: 'Windows 7', browserName: 'Firefox', version: '33' },
-                        { platform: 'Windows 7', browserName: 'Safari', version: '5' },
-                        { platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' },
-                        { platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' },
-                        { platform: 'Windows 7', browserName: 'Internet Explorer', version: '9' },
-                        { platform: 'Windows 7', browserName: 'Internet Explorer', version: '8' },
-                        { platform: 'Windows 7', browserName: 'Internet Explorer', version: '7' },
-                        { platform: 'Windows XP', browserName: 'Internet Explorer', version: '6' }
+                        { platform: 'Windows 7', browserName: 'Chrome', version: '39' },                // OK
+                        { platform: 'Windows 7', browserName: 'Firefox', version: '33' },               // Test exceeded maximum duration after 180 seconds
+                        { platform: 'OS X 10.10', browserName: 'Safari', version: '8' },                // The Sauce VMs failed to start the browser or device For more info, please check https://docs.saucelabs.com/reference/troubleshooting-common-er
+                        { platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' }    // OK
+                        //{ platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' }    // Test exceeded maximum duration after 180 seconds
+                        //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '9' }
+                        //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '8' }
+                        //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '7' }
+                        //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '6' }
+                        //{ platform: 'Linux', browserName: 'Android', version: '4.4' }
                     ]
                 }
             }
@@ -247,6 +250,7 @@ module.exports = function (grunt) {
                     'build/scripts/app.models.js': 'build/scripts/app.models.js',
 
                     'build/scripts/app.config.js': 'build/scripts/app.config.js',
+                    'build/scripts/app.controller.js': 'build/scripts/app.controller.js',
                     'build/scripts/app.header-view.js': 'build/scripts/app.header-view.js',
                     'build/scripts/app.js': 'build/scripts/app.js',
                     'build/scripts/app.participant-score-view.js': 'build/scripts/app.participant-score-view.js',
@@ -254,8 +258,8 @@ module.exports = function (grunt) {
                     'build/scripts/app.rating-history-view.js': 'build/scripts/app.rating-history-view.js',
                     'build/scripts/app.result.js': 'build/scripts/app.result.js',
                     'build/scripts/app.result-collection.js': 'build/scripts/app.result-collection.js',
+                    'build/scripts/app.result-carousel-view.js': 'build/scripts/app.result-carousel-view.js',
                     'build/scripts/app.results-view.js': 'build/scripts/app.results-view.js',
-                    'build/scripts/app.router.js': 'build/scripts/app.router.js',
                     'build/scripts/app.soccer-table-views.js': 'build/scripts/app.soccer-table-views.js',
                     'build/scripts/backbone.bootstrap.views.js': 'build/scripts/backbone.bootstrap.views.js',
                     'build/scripts/backbone.fetch-local-copy.js': 'build/scripts/backbone.fetch-local-copy.js',
@@ -287,7 +291,7 @@ module.exports = function (grunt) {
             clientcode: {
                 files: [
                     // Ignore the copied in files (shared JavaScript app libs)
-                    'client/scripts/*.js', '!client/scripts/app.models.js', '!client/scripts/comparators.js', '!client/scripts/fun.js', '!client/scripts/string-extensions.js',
+                    'client/scripts/*.js', '!client/scripts/app.models.js', '!client/scripts/comparators.js', '!client/scripts/fun.js', '!client/scripts/string-extensions.js', '!client/scripts/utils.js',
                     'shared/scripts/*.js',
                     'client/styles/*.css',
                     'client/index.html',
@@ -332,14 +336,16 @@ module.exports = function (grunt) {
     grunt.registerTask('install:client', [ 'shell:install-client' ]);
     grunt.registerTask('db', [ 'shell:createDataDir', 'shell:mongod' ]);
 
-    grunt.registerTask('build:client', [ 'clean', 'copy:to-client', 'copy:to-build', 'uglify', 'cssmin' ]);
+    grunt.registerTask('build:development', [ 'clean', 'copy:to-client', 'copy:to-build' ]);
+    grunt.registerTask('build:client', [ 'build:development', 'uglify', 'cssmin' ]);
 
     grunt.registerTask('test:client', [ 'connect', 'shell:mocha-phantomjs' ]);
+    grunt.registerTask('test:client-development', [ 'build:development', 'test:client' ]);
     grunt.registerTask('test:client-watch', [ 'connect', 'watch' ]);
     grunt.registerTask('test:server', [ 'mochaTest' ]);
-    grunt.registerTask('coverage:server', [ 'mochacov:report' ]);
     grunt.registerTask('test', [ 'install:client', 'build:client', 'test:server', 'test:client' ]);
-    grunt.registerTask('test:saucelabs', [ 'connect', 'saucelabs-mocha' ]);
+    grunt.registerTask('test:sauce', [ 'connect', 'saucelabs-mocha' ]);
+    grunt.registerTask('coverage:server', [ 'mochacov:report' ]);
 
     grunt.registerTask('build:travis', [ 'test', 'saucelabs-mocha', /*'blanket_mocha',*/ 'mochacov:travis', 'jshint', 'jsdoc' ]);
 
