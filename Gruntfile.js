@@ -4,7 +4,7 @@ module.exports = function (grunt) {
     'use strict';
 
     // Test setup
-    var port = 1234,
+    var port = 9999,
         clientTestUri = '/tests/client/test.amd.html',
         clientTestUrl = 'http://127.0.0.1:' + port + clientTestUri;
 
@@ -55,7 +55,12 @@ module.exports = function (grunt) {
             createDataDir: {
                 options: { stdout: true, stderr: true, failOnError: false },
                 command: [
-                    'mkdir data',
+                    'mkdir data'
+                ].join('&&')
+            },
+            createDbDir: {
+                options: { stdout: true, stderr: true, failOnError: false },
+                command: [
                     'cd data',
                     'mkdir db'
                 ].join('&&')
@@ -214,15 +219,15 @@ module.exports = function (grunt) {
             all: {
                 options: {
                     urls: [ clientTestUrl ],
-                    build: process.env.TRAVIS_JOB_ID,
-                    concurrency: 2,
                     testname: 'Tippekonkurranse',
                     tags: [ 'master' ],
+                    build: process.env.TRAVIS_JOB_ID,
+                    concurrency: 2,
                     browsers: [
-                        { platform: 'Windows 7', browserName: 'Chrome', version: '39' },                // OK
-                        { platform: 'Windows 7', browserName: 'Firefox', version: '33' },               // Test exceeded maximum duration after 180 seconds
-                        { platform: 'OS X 10.10', browserName: 'Safari', version: '8' },                // The Sauce VMs failed to start the browser or device For more info, please check https://docs.saucelabs.com/reference/troubleshooting-common-er
-                        { platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' }    // OK
+                        { platform: 'Windows 7', browserName: 'Chrome', version: '39' }                // OK
+                        //{ platform: 'Windows 7', browserName: 'Firefox', version: '33' },               // Test exceeded maximum duration after 180 seconds
+                        //{ platform: 'OS X 10.10', browserName: 'Safari', version: '8' },                // The Sauce VMs failed to start the browser or device For more info, please check https://docs.saucelabs.com/reference/troubleshooting-common-er
+                        //{ platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' }    // OK
                         //{ platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' }    // Test exceeded maximum duration after 180 seconds
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '9' }
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '8' }
@@ -334,7 +339,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('help', [ 'shell:help' ]);
     grunt.registerTask('install:client', [ 'shell:install-client' ]);
-    grunt.registerTask('db', [ 'shell:createDataDir', 'shell:mongod' ]);
+    grunt.registerTask('db', [ 'shell:createDataDir', 'shell:createDbDir', 'shell:mongod' ]);
 
     grunt.registerTask('build:development', [ 'clean', 'copy:to-client', 'copy:to-build' ]);
     grunt.registerTask('build:client', [ 'build:development', 'uglify', 'cssmin' ]);

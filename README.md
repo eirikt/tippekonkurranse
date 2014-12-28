@@ -7,7 +7,7 @@ with server-side functional composition by [RQ][54],
 and keeping client-side somewhat tidy and sane with [Backbone][60].[Marionette][61].
 In production [here][1].
 
-#### Badge-o-rama
+##### Badge-o-rama ...
 
 [![License](http://img.shields.io/badge/license-MIT-yellow.svg?style=flat)](https://github.com/eirikt/tippekonkurranse/blob/master/README.md#license)
 
@@ -40,7 +40,7 @@ In production [here][1].
 * Multi-season handling with proper archiving
 * Show 'Gjeldende resultater' contextual to what round is actively chosen, as done with 'Trend'
 * Configurable strategy-based rules for calculating scores. The rules may differ from year to year ...
-* No more HTTP refresh, now real single page application (SPA)
+* No more HTTP refresh, now real SPA
 * A simple countdown timer for data refresh (forcing a GET)
 * Button for manual data refresh
 * User admin

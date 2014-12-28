@@ -13,23 +13,23 @@ var env = process.env.NODE_ENV || "development",
     path = require("path"),
     express = require("express"),
 
-// Module dependencies, local
-    dbSchema = require("./db-schema"),
-    initDb = require("./db-init"),
+// Module dependencies, local generic
     utils = require("./../../shared/scripts/utils"),
-    app = require("./../../shared/scripts/app.models"),
-    tippekonkurranseApi = require("./tippekonkurranse-api"),
-    tippekonkurranse = require("./tippekonkurranse"),
-
     comparators = require("./../../shared/scripts/comparators"),
     curry = require("./../../shared/scripts/fun").curry,
     RQ = require("./vendor/rq").RQ,
     rq = require("./rq-fun"),
-    TeamPlacement = require("./../../shared/scripts/app.models").TeamPlacement,
-    TippekonkurranseData = require("./../../shared/scripts/app.models").TippekonkurranseData,
-    predictions2014 = require("./tippekonkurranse-2014-user-predictions").predictions2014,
-    tippekonkurranse2014 = require("./tippekonkurranse-2014"),
 
+// Module dependencies, local application-specific
+    dbSchema = require("./db-schema"),
+    initDb = require("./db-init"),
+    app = require("./../../shared/scripts/app.models"),
+    TeamPlacement = app.TeamPlacement,
+    TippekonkurranseData = app.TippekonkurranseData,
+    tippekonkurranseApi = require("./tippekonkurranse-api"),
+    tippekonkurranse = require("./tippekonkurranse"),
+    tippekonkurranse2014 = require("./tippekonkurranse-2014"),
+    predictions2014 = require("./tippekonkurranse-2014-user-predictions").predictions2014,
 
 // The app server
     server = express(),

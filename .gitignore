@@ -5,7 +5,8 @@
 .idea
 
 # Local db (test) folder
-data
+data/backup
+data/db
 
 # Local logs
 *.log

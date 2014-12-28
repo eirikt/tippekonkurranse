@@ -19,12 +19,10 @@
              * JavaScript's default way of accessing object properties and array elements.
              *
              * @return The property with the given <code>propertyName</code> in the given object
-             * @private
              */
             _propertyGetter = function (propertyName, object) {
                 return object[ propertyName ];
             },
-
 
             /**
              * Backbone.js' way of accessing model properties, 'getters' and 'setters'.
@@ -35,16 +33,12 @@
                 return backboneModelObject.get(propertyName);
             },
 
-
             /**
-             * ...
-             *
              * @returns Comparator equal (being 0)
              */
             _alwaysEqualComparator = function (object, otherObject) {
                 return 0;
             },
-
 
             /**
              * Alphanumeric comparators works for Strings.
@@ -61,7 +55,6 @@
                 //return value.localeCompare(otherValue, 'no-NO');
             },
 
-
             /**
              * Arithmetic comparators works for Numbers and Dates.
              * In addition to the comparator (x < 0 < y) function, it returns the distance between the two arguments.
@@ -70,14 +63,15 @@
                 return value - otherValue;
             },
 
-
+            /**
+             * Wrapper around the two sorting scheme functions above.
+             */
             _typeAwareAscendingValueComparator = function (value, otherValue) {
                 if (F.isString(value)) {
                     return alphanumericAscendingValueComparator(value, otherValue);
                 }
                 return _arithmeticAscendingValueComparator(value, otherValue);
             },
-
 
             /**
              * Curry-friendly ascending comparator function.
@@ -95,7 +89,6 @@
                 }
                 return compareResult;
             }.autoCurry(),
-
 
             /**
              * Multi-property ascending comparator function.
@@ -117,7 +110,6 @@
                 }
                 return ascendingComparator(object, otherObject);
             }.autoCurry();
-
 
         return {
             // "Private" functions exported for specification/testing purposes.
