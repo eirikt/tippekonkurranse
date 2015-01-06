@@ -3,12 +3,9 @@ require.config({
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',
         'bootstrap': '../bower_components/bootstrap/dist/js/bootstrap.min',
-        //'underscore': '../bower_components/underscore/underscore.min',
         'underscore': '../bower_components/underscore/underscore',
-        //'backbone': '../bower_components/backbone/backbone.min',
         'backbone': '../bower_components/backbone/backbone',
-        //'marionette': '../bower_components/marionette/lib/backbone.marionette.min',
-        'marionette': '../bower_components/marionette/lib/backbone.marionette',
+        'marionette': '../bower_components/marionette/lib/backbone.marionette.min',
         'moment': '../bower_components/moment/min/moment.min',
         'moment.nb': '../bower_components/moment/locale/nb',
         'toastr': '../bower_components/toastr/toastr.min',
@@ -93,7 +90,6 @@ require([ 'jqplot', 'backbone', 'marionette', 'app', 'app.controller', 'backbone
             root: '/'
         });
 
-        // TODO: Make this work again ...
         BackboneFetchLocalCopy.listenToServerConnectionDropouts([
             '#offlineScoresNotification',
             '#offlineCurrentResultsNotification'

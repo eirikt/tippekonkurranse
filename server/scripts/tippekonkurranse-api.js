@@ -16,11 +16,8 @@ var env = process.env.NODE_ENV || "development",
     rq = require("./rq-fun"),
 
 // Module dependencies, local application-specific
-    TeamPlacement = require("./../../shared/scripts/app.models").TeamPlacement,
     TippekonkurranseData = require("./../../shared/scripts/app.models").TippekonkurranseData,
     tippekonkurranse = require("./tippekonkurranse"),
-    predictions2014 = require("./tippekonkurranse-2014-user-predictions").predictions2014,
-    tippekonkurranse2014 = require("./tippekonkurranse-2014"),
 
 
 ////////////////////////////////////////
@@ -32,12 +29,11 @@ var env = process.env.NODE_ENV || "development",
             "use strict";
 
             var year = parseInt(request.params.year, 10),
-                userId = request.params.userId;
+                userId = request.params.userId,
+                predictions = tippekonkurranse.predictions[ year ][ userId ];
 
-            // TODO:
-            //predictions = predictions[year][userId];
-            if (year === 2014) {
-                response.status(200).json(predictions2014[ userId ]);
+            if (predictions) {
+                response.status(200).json(predictions);
 
             } else {
                 response.json(404);
@@ -59,25 +55,37 @@ var env = process.env.NODE_ENV || "development",
     _handleScoresRequest = exports.handleScoresRequest =
         function (request, response) {
             "use strict";
-            RQ.sequence([
-                tippekonkurranse.retrieveTippeligaData(request),
-                rq.requestor(tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping),
-                rq.requestor(tippekonkurranse.addRound),
-                tippekonkurranse2014.addTippekonkurranseScores2014,
-                tippekonkurranse2014.addPreviousMatchRoundRatingToEachParticipant2014,
-                rq.requestor(tippekonkurranse.addMetadataToScores),
-                rq.requestor(curry(tippekonkurranse.dispatchScoresToClientForPresentation, response)),
-                rq.requestor(tippekonkurranse.storeTippeligaRoundMatchData)
-            ])(rq.execute);
+            var year = request.params.year,
+                rulesOfTheYear = tippekonkurranse.rules[ year ],
+                predictionsOfTheYear = tippekonkurranse.predictions[ year ];
+
+            if (rulesOfTheYear && predictionsOfTheYear) {
+                RQ.sequence([
+                    tippekonkurranse.retrieveTippeligaData(request),
+                    rq.requestor(tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping),
+                    rq.requestor(tippekonkurranse.addRound),
+                    curry(tippekonkurranse.addTippekonkurranseScoresRequestor, predictionsOfTheYear, rulesOfTheYear),
+                    curry(tippekonkurranse.addPreviousMatchRoundRatingToEachParticipantRequestor, predictionsOfTheYear, rulesOfTheYear),
+                    rq.requestor(tippekonkurranse.addMetadataToScores),
+                    rq.requestor(curry(tippekonkurranse.dispatchScoresToClientForPresentation, response)),
+                    rq.requestor(tippekonkurranse.storeTippeligaRoundMatchData)
+                ])
+                (rq.execute);
+
+            } else {
+                response.json(404);
+            }
         },
 
 
     _handleRatingHistoryRequest = exports.handleRatingHistoryRequest =
         function (request, response) {
             "use strict";
-            var year = parseInt(request.params.year, 10),
-                round = parseInt(request.params.round, 10),
-                key = year.toString() + round,
+            var year = request.params.year,
+                round = request.params.round,
+                key = year + round,
+                rulesOfTheYear = tippekonkurranse.rules[ year ],
+                predictionsOfTheYear = tippekonkurranse.predictions[ year ],
 
                 cache = root.app.cache.ratingHistory,
                 memoizedValue = utils.memoizationReader(cache, key),
@@ -89,9 +97,12 @@ var env = process.env.NODE_ENV || "development",
                 tippekonkurranseData,
                 data = {},
 
+                getTippekonkurranseScoresHistory = [],
+                roundIndex = 1,
+
                 sortByElementIndex,
                 sortByRound,
-                memoizeWrite;
+                memoizedWrite;
 
             //console.log(utils.logPreamble + "handleRatingHistoryRequest:: year=" + year + ", round=" + round);
 
@@ -101,21 +112,30 @@ var env = process.env.NODE_ENV || "development",
             }
 
             // 2. Prepare for data mining
+            year = parseInt(year, 10);
+            round = parseInt(round, 10);
             tippekonkurranseData = new TippekonkurranseData();
             sortByElementIndex = function (elementIndex, args) {
                 return args.sort(comparators.ascendingByArrayElement(elementIndex));
             };
             sortByRound = curry(sortByElementIndex, tippekonkurranseData.indexOfRound);
-            memoizeWrite = curry(utils.memoizationWriter, cache, curry(root.app.isCompletedRound, round), key);
+            memoizedWrite = curry(utils.memoizationWriter, cache, curry(root.app.isCurrentRoundCompleted, round), key);
 
-            return RQ.sequence([
-                // 3. Create array of requestors: all historic Tippeligakonkurranse scores - and then execute and wait for all to finish
-                RQ.parallel(root.app.buildSequencesOf([
-                    tippekonkurranse.getStoredTippeligaDataRequestor,
-                    tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping,
-                    tippekonkurranse.addRound,
-                    tippekonkurranse2014.addTippekonkurranseScores2014
-                ], round)),
+            // 3. Create array of requestors: all historic Tippeligakonkurranse scores - and then execute and wait for all to finish
+            for (; roundIndex <= round; roundIndex += 1) {
+                getTippekonkurranseScoresHistory.push(
+                    RQ.sequence([
+                        curry(tippekonkurranse.getStoredTippeligaDataRequestor, year, roundIndex),
+                        rq.requestor(tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping),
+                        rq.requestor(tippekonkurranse.addRound),
+                        curry(tippekonkurranse.addTippekonkurranseScoresRequestor, predictionsOfTheYear, rulesOfTheYear)
+                    ])
+                );
+            }
+
+            // 2. Then execute them ...
+            RQ.sequence([
+                RQ.parallel(getTippekonkurranseScoresHistory),
 
                 // 4. And manipulate them ...
                 rq.then(sortByRound),
@@ -156,10 +176,11 @@ var env = process.env.NODE_ENV || "development",
                 rq.then(___.partialFn(__.map, __.identity)),
 
                 // 5. And remember them ...
-                rq.then(memoizeWrite),
+                rq.then(memoizedWrite),
 
                 // 6. And finally dispatch them ...
                 rq.then(dispatch)
 
-            ])(rq.execute);
+            ])
+            (rq.execute);
         };

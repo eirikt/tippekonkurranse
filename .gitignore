@@ -12,16 +12,15 @@ data/db
 *.log
 
 # Derived/generated/transient project files/resources
+client/bower_components
+client/scripts/app.models.js
+client/scripts/comparators.js
 client/scripts/fun.js
 client/scripts/string-extensions.js
 client/scripts/utils.js
-client/scripts/comparators.js
-client/scripts/app.models.js
-client/bower_components
-node_modules
 build
 docs
+node_modules
 
 # Temp files
 howto.txt
-requestion.js

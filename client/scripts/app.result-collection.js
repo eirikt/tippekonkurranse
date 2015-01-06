@@ -33,18 +33,34 @@ define([
                 ParticipantScore.namePropertyName
             ]),
 
+            initialYear: null,
+            initialRound: null,
             year: null,
             round: null,
+            currentYear: null,
+            currentRound: null,
 
-            initialize: function (options) {
+            initialize: function (models, options) {
                 // Default comparator
                 this.comparator = this.sortByRatingThenByName;
 
+                if (options && options.initialYear) {
+                    this.initialYear = options.initialYear;
+                }
+                if (options && options.initialRound) {
+                    this.initialRound = options.initialRound;
+                }
                 if (options && options.year) {
                     this.year = options.year;
                 }
                 if (options && options.round) {
                     this.round = options.round;
+                }
+                if (options && options.currentYear) {
+                    this.currentYear = options.currentYear;
+                }
+                if (options && options.currentRound) {
+                    this.currentRound = options.currentRound;
                 }
             },
 
@@ -104,12 +120,16 @@ define([
 
             url: function () {
                 if (this.year && this.round) {
-                    return [this.defaultBaseUri, this.year, this.round].join("/");
+                    return [ this.defaultBaseUri, this.year, this.round ].join("/");
                 }
-                return [this.defaultBaseUri, this.defaultResource].join("/");
+                return [ this.defaultBaseUri, this.defaultResource ].join("/");
             },
 
             parse: function (response) {
+                if (response === 404) {
+                    //this.trigger('error', 404);
+                    return this.models;
+                }
                 this.year = response.metadata.year;
                 this.round = response.metadata.round;
                 this.date = response.metadata.date;
@@ -118,7 +138,7 @@ define([
 
                 for (var participant in response.scores) {
                     if (response.scores.hasOwnProperty(participant)) {
-                        var participantScore = new this.model(response.scores[participant]);
+                        var participantScore = new this.model(response.scores[ participant ]);
                         participantScore.set(ParticipantScore.userIdPropertyName, participant, { silent: true });
                         participantScore.set(ParticipantScore.namePropertyName, participant.unSnakify().toTitleCase(), { silent: true });
                         participantScore.set(ParticipantScore.yearPropertyName, response.metadata.year, { silent: true });

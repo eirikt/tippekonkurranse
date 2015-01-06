@@ -121,13 +121,7 @@
             },
 
             /***
-             * Preliminary
-             *
-             * @param cache
-             * @param writeCondition
-             * @param key
-             * @param data
-             * @returns {*}
+             * TODO: Preliminary ...
              */
             _memoizationWriter = function (cache, writeCondition, key, data) {
                 if (!cache[ key ]) {
@@ -143,6 +137,9 @@
                 return data;
             },
 
+            /***
+             * TODO: Preliminary ...
+             */
             _memoizationReader = function (cache, key) {
                 if (cache) {
                     var cacheObj = cache[ key ];

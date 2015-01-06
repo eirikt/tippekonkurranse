@@ -1,7 +1,5 @@
-/* global exports:false */
 /* jshint -W106 */
-
-var _predictions2014 = exports.predictions2014 = {
+var _predictions2014 = exports.predictions = {
     einar: {
         tabell: [
             "Rosenborg",

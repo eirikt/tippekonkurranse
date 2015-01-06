@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# v1.2.8
+# v1.3.0-alpha.1
 
 CACHE:
 favicon.ico
@@ -38,7 +38,7 @@ scripts/app.participant-score-view.js
 scripts/app.rating-history-view.js
 scripts/app.result.js
 scripts/app.result-collection.js
-scripts/app.results-carousel-view.js
+scripts/app.navigator-view.js
 scripts/app.results-view.js
 scripts/app.soccer-table-views.js
 scripts/backbone.bootstrap.views.js

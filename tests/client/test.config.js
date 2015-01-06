@@ -12,14 +12,14 @@ require.config({
         'moment.nb': '../../build/bower_components/moment/locale/nb',
         'toastr': '../../build/bower_components/toastr/toastr',
 
-        chai: '../../node_modules/chai/chai',
-        sinon: '../../node_modules/sinon/lib/sinon',
+        'chai': '../../node_modules/chai/chai',
+        'sinon': '../../node_modules/sinon/lib/sinon',
 
         // Shared util libs
-        fun: '../../build/scripts/fun',
+        'fun': '../../build/scripts/fun',
         'string-extensions': '../../build/scripts/string-extensions',
-        utils: '../../build/scripts/utils',
-        comparators: '../../build/scripts/comparators',
+        'utils': '../../build/scripts/utils',
+        'comparators': '../../build/scripts/comparators',
 
         // Shared app libs
         'app.models': '../../build/scripts/app.models',
@@ -41,6 +41,7 @@ require.config({
 
         // Client-side-only app libs (Views)
         'app.header-view': '../../build/scripts/app.header-view',
+        'app.navigator-view': '../../build/scripts/app.navigator-view',
         'app.participant-score-view': '../../build/scripts/app.participant-score-view',
         'app.rating-history-view': '../../build/scripts/app.rating-history-view',
         'app.results-view': '../../build/scripts/app.results-view',
@@ -49,16 +50,16 @@ require.config({
 });
 
 require([
-        'specs/test.spec.js',
-        'specs/string-extensions.amd.spec.js',
-        'specs/utils.amd.spec.js',
-        'specs/comparators.amd.spec.js',
+        'specs/test.spec.js'//,
+        //'specs/string-extensions.amd.spec.js',
+        //'specs/utils.amd.spec.js',
+        //'specs/comparators.amd.spec.js',
 
-        'specs/client-utils.spec.js',
+        //'specs/client-utils.spec.js',
 
-        'specs/app.scores-collection.spec.js',
-        'specs/app.rating-history-collection.spec.js',
-        'specs/app.rating-view.spec.js'
+        //'specs/app.scores-collection.spec.js',
+        //'specs/app.rating-history-collection.spec.js',
+        //'specs/app.rating-view.spec.js'
     ],
 
     function () {
@@ -71,6 +72,7 @@ require([
             window.mochaResults = runner.stats;
             window.mochaResults.reports = failedTests;
         });
+
         runner.on('fail', function (test, err) {
             failedTests.push({
                 name: test.title,

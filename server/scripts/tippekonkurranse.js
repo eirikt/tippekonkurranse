@@ -18,6 +18,21 @@ var env = process.env.NODE_ENV || "development",
     dbSchema = require("./db-schema"),
     TippekonkurranseData = require("./../../shared/scripts/app.models").TippekonkurranseData,
     appModels = require("./../../shared/scripts/app.models"),
+    tippekonkurranse = require("./tippekonkurranse"),
+    predictions2014 = require("./tippekonkurranse-2014-user-predictions").predictions,
+    predictions2015 = require("./tippekonkurranse-2015-user-predictions").predictions,
+    rules2014 = require("./tippekonkurranse-2014-rules").rules,
+    rules2015 = require("./tippekonkurranse-2015-rules").rules,
+
+    _predictions = exports.predictions = {
+        2014: predictions2014,
+        2015: predictions2015
+    },
+
+    _rules = exports.rules = {
+        2014: rules2014,
+        2015: rules2015
+    },
 
 
     _calculateTippeligaScores = function (strategy, participantObj, tippeligaTable) {
@@ -316,6 +331,9 @@ var env = process.env.NODE_ENV || "development",
 
             if (!userPredictions || (__.isEmpty(userPredictions))) {
                 throw new Error("User predictions are missing - cannot calculate Tippekonkurranse scores");
+            }
+            if (!scoresStrategy || (__.isEmpty(scoresStrategy))) {
+                throw new Error("Rules are missing - cannot calculate Tippekonkurranse scores");
             }
             if (!requestion) {
                 throw new Error("Requestion argument is missing - check your RQ.js setup");

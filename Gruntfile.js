@@ -150,8 +150,8 @@ module.exports = function (grunt) {
                 trailing: true,
                 maxparams: 14,
                 maxdepth: 3,
-                maxstatements: 30,
-                maxcomplexity: 20, // TODO: Sigh, let us start all over again, target should be 5 or thereabout ...
+                //maxstatements: 30,    // Default: ...
+                maxcomplexity: 10, // TODO: Sigh, let us start all over again, target should be 5 or thereabout ...
                 //maxlen: 180,
 
                 laxcomma: true
@@ -263,7 +263,7 @@ module.exports = function (grunt) {
                     'build/scripts/app.rating-history-view.js': 'build/scripts/app.rating-history-view.js',
                     'build/scripts/app.result.js': 'build/scripts/app.result.js',
                     'build/scripts/app.result-collection.js': 'build/scripts/app.result-collection.js',
-                    'build/scripts/app.result-carousel-view.js': 'build/scripts/app.result-carousel-view.js',
+                    'build/scripts/app.navigator-view.js': 'build/scripts/app.navigator-view.js',
                     'build/scripts/app.results-view.js': 'build/scripts/app.results-view.js',
                     'build/scripts/app.soccer-table-views.js': 'build/scripts/app.soccer-table-views.js',
                     'build/scripts/backbone.bootstrap.views.js': 'build/scripts/backbone.bootstrap.views.js',
@@ -352,7 +352,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test:sauce', [ 'connect', 'saucelabs-mocha' ]);
     grunt.registerTask('coverage:server', [ 'mochacov:report' ]);
 
-    grunt.registerTask('build:travis', [ 'test', 'saucelabs-mocha', /*'blanket_mocha',*/ 'mochacov:travis', 'jshint', 'jsdoc' ]);
+    grunt.registerTask('build:travis', [ 'test', /*'saucelabs-mocha',*/ /*'blanket_mocha',*/ 'mochacov:travis', 'jshint', 'jsdoc' ]);
 
     grunt.registerTask('deploy:development', [ 'env:dev', 'install:client', 'copy:to-client', 'shell:run' ]);
     grunt.registerTask('deploy:local', [ 'env:prod', 'install:client', 'build:client', 'shell:run' ]);

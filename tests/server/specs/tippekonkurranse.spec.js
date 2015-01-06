@@ -16,76 +16,10 @@ var __ = require("underscore"),
     addRound = require("../../../server/scripts/tippekonkurranse").addRound,
     addTippekonkurranseScoresRequestor = require("../../../server/scripts/tippekonkurranse").addTippekonkurranseScoresRequestor,
 
-// TODO: Promote this to a 'type'/'class', and move this to 'app.models.js' (like 'TippekonkurranseData')
-    scoresStrategy = {
-        tabellScoresStrategy: {
-            //target: 'tippeligatabell',
-            //strategy: 'displacement',
-            //number: 16,
-            polarity: '+',
-            weight: 1
-        },
-        pall1ScoreStrategy: {
-            //target: 'tippeligatabell',
-            //strategy: 'match',
-            //number: 1,
-            polarity: '-',
-            weight: 1
-        },
-        pall2ScoreStrategy: {
-            //target: 'tippeligatabell',
-            //strategy: 'match',
-            //number: 2,
-            polarity: '-',
-            weight: 1
-        },
-        pall3ScoreStrategy: {
-            //target: 'tippeligatabell',
-            //strategy: 'match',
-            //number: 3,
-            polarity: '-',
-            weight: 1
-        },
-        pallBonusScoreStrategy: {
-            //target: 'tippeligatabell',
-            //strategy: 'match',
-            //number: [ 1, 2, 3 ],
-            polarity: '-',
-            weight: 1
-        },
-        nedrykkScoreStrategy: {
-            //target: 'tippeligatabell',
-            //strategy: 'present',
-            //number: [ 15, 16 ],
-            polarity: '-',
-            weight: 1
-        },
-        toppscorerScoreStrategy: {
-            //target: 'toppskårer',
-            //strategy: 'in',
-            //number: 1,
-            polarity: '-',
-            weight: 1
-        },
-        opprykkScoreStrategy: {
-            //target: 'adeccoligatabell',
-            //strategy: 'present',
-            //number: [ 1, 2 ],
-            polarity: '-',
-            weight: 1
-        },
-        cupScoreStrategy: {
-            //target: 'cup',
-            //strategy: 'in',
-            //number: 1,
-            polarity: '-',
-            weight: 1
-        }//,
-        //ratingStrategy: {
-        //    strategy: 'sum'
-        //}
-    },
-    addTippekonkurranseScores2014 = curry(addTippekonkurranseScoresRequestor, require("../../../server/scripts/tippekonkurranse-2014-user-predictions").predictions2014, scoresStrategy),
+    predictions2014 = require("../../../server/scripts/tippekonkurranse").predictions[ 2014 ],
+    rules2014 = require("../../../server/scripts/tippekonkurranse").rules[ 2014 ],
+
+    addTippekonkurranseScores2014 = curry(addTippekonkurranseScoresRequestor, predictions2014, rules2014),
 
     expectDefaultGlobalStatePreserved = function () {
         "use strict";
@@ -197,7 +131,7 @@ describe("Tippekonkurranse", function () {
             var userPredictions = {
                     john: null
                 },
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 verify = function (args) {
                     expect(args).to.exist;
                     expect(args).to.be.an.object;
@@ -233,7 +167,7 @@ describe("Tippekonkurranse", function () {
             var userPredictions = {
                     john: {}
                 },
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 verify = function (args) {
                     expect(args).to.exist;
                     expect(args).to.be.an.object;
@@ -271,7 +205,7 @@ describe("Tippekonkurranse", function () {
                         tabell: null
                     }
                 },
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 verify = function (args) {
                     expect(args).to.exist;
                     expect(args).to.be.an.object;
@@ -312,7 +246,7 @@ describe("Tippekonkurranse", function () {
                         cup: []
                     }
                 },
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 verify = function (args) {
                     expect(args).to.exist;
                     expect(args).to.be.an.object;
@@ -370,7 +304,7 @@ describe("Tippekonkurranse", function () {
 
          args[ TippekonkurranseData.indexOfTippeligaTable ] = actualTable;
 
-         addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy);//, requestion, args);
+         addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules);//, requestion, args);
 
          //try {
          //    addTippekonkurranseScores();
@@ -433,7 +367,7 @@ describe("Tippekonkurranse", function () {
                     { name: "Tromsø", no: 15, matches: 30 },
                     { name: "Hønefoss", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -491,7 +425,7 @@ describe("Tippekonkurranse", function () {
                     { name: "Tromsø", no: 15, matches: 30 },
                     { name: "Hønefoss", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -545,7 +479,7 @@ describe("Tippekonkurranse", function () {
                     { name: "Tromsø", no: 15, matches: 30 },
                     { name: "Hønefoss", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -599,7 +533,7 @@ describe("Tippekonkurranse", function () {
                     { name: "Tromsø", no: 15, matches: 30 },
                     { name: "Hønefoss", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -637,7 +571,7 @@ describe("Tippekonkurranse", function () {
                 },
                 reversedClonedPredictionTable = JSON.parse(JSON.stringify(userPredictions.john.tabell)).reverse(),
                 reversedTable = [],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -702,7 +636,7 @@ describe("Tippekonkurranse", function () {
                     { name: "TeamA", no: 15, matches: 30 },
                     { name: "TeamB", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -759,7 +693,7 @@ describe("Tippekonkurranse", function () {
                     { name: "TeamB", no: 15, matches: 30 },
                     { name: "TeamA", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -816,7 +750,7 @@ describe("Tippekonkurranse", function () {
                     { name: "TeamA", no: 15, matches: 30 },
                     { name: "N", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -873,7 +807,7 @@ describe("Tippekonkurranse", function () {
                     { name: "TeamB", no: 15, matches: 30 },
                     { name: "N", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -904,7 +838,7 @@ describe("Tippekonkurranse", function () {
                     new TeamPlacement("C", 3, 30),
                     new TeamPlacement("D", 4, 30)
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -932,7 +866,7 @@ describe("Tippekonkurranse", function () {
                     { name: "Some other team", no: 3, matches: 3 },
                     { name: "And one more team", no: 4, matches: 3 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -960,7 +894,7 @@ describe("Tippekonkurranse", function () {
                     { name: "TeamC", no: 3, matches: 3 },
                     { name: "And one more team", no: 4, matches: 3 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -988,7 +922,7 @@ describe("Tippekonkurranse", function () {
                     { name: "TeamA", no: 3, matches: 3 },
                     { name: "And one more team", no: 4, matches: 3 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -1014,7 +948,7 @@ describe("Tippekonkurranse", function () {
                     }
                 },
                 actualToppscorerTable = [ "Mr. T" ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -1037,7 +971,7 @@ describe("Tippekonkurranse", function () {
                     }
                 },
                 actualToppscorerTable = [ "Mr. A", "Mr. B" ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
@@ -1060,7 +994,7 @@ describe("Tippekonkurranse", function () {
                     }
                 },
                 actualToppscorerTable = [ "Mr. A", "Mr. T" ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);

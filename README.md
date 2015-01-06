@@ -46,6 +46,7 @@ In production [here][1].
 * User admin
 * Admin UI for data management
 * Multiple draggable windows, no more modals (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
+* Remove all local static JSON data backup
 
 _Status: In progress_
 

@@ -54,8 +54,7 @@ define([
                     '          <td style="width:33%;vertical-align:top;">' +
                     '            <p>Toppskårer:</p>' +
                     '            <p><strong><%= currentTippeligaToppscorer %></strong></p>' +
-                        //'            <p style="margin-top:2rem;">Fortsatt med i cupen:</p>' +
-                    '            <p style="margin-top:2rem;">Cupvinner 2014:</p>' +
+                    '            <p style="margin-top:2rem;">Fortsatt med i cupen / Cupvinner 2014:</p>' +
                     '            <p><strong><%= currentRemainingCupContenders %></strong></p>' +
                     '          </td>' +
                     '        </tr>' +
@@ -141,7 +140,7 @@ define([
                     this.model.set('rankDiff', rankDiff);
                 }
             },
-            // TODO: I don't quite see the complexity trouble with a few ifs ...
+            // TODO: Hmm, I don't quite see any complexity issue with a few ifs, JSHint ...
             onRender: function () {
                 if (!this.model.get(ParticipantScore.previousRankPropertyName)) {
                     return this;
@@ -238,40 +237,40 @@ define([
 
             // called on initialize and after attachBuffer is called
             initRenderBuffer: function () {
-                console.log('"rating-table-view:INITRENDERBUFFER"');
+                //console.log('"rating-table-view:INITRENDERBUFFER"');
                 this.elBuffer = document.createDocumentFragment();
             },
 
             // The default implementation:
             attachHtml: function (collectionView, childView, index) {
-                console.log('"rating-table-view:attachHtml"');
+                //console.log('"rating-table-view:attachHtml"');
                 if (collectionView.isBuffering) {
+                    //console.log('"rating-table-view:ATTACHHTML-BUFFERING"');
                     // buffering happens on reset events and initial renders
                     // in order to reduce the number of inserts into the
                     // document, which are expensive.
                     collectionView.elBuffer.appendChild(childView.el);
-                    console.log('"rating-table-view:ATTACHHTML-BUFFERING"');
                 } else {
+                    //console.log('"rating-table-view:ATTACHHTML-NOBUFFERING"');
                     // If we've already rendered the main collection, just
                     // append the new children directly into the element.
                     collectionView.$el.append(childView.el);
-                    console.log('"rating-table-view:ATTACHHTML-NOBUFFERING"');
                 }
             },
 
             // Called after all children have been appended into the elBuffer
             attachBuffer: function (collectionView, buffer) {
-                console.log('"rating-table-view:ATTACHBUFFER"');
+                //console.log('"rating-table-view:ATTACHBUFFER"');
                 collectionView.$el.append(buffer);
             },
 
             onBeforeRender: function (childView) {
-                console.log('"rating-table-view:onBeforeRender"');
+                //console.log('"rating-table-view:onBeforeRender"');
                 this.model.set('year', childView.collection.year);
                 this.model.set('round', childView.collection.round);
             },
             onRender: function (childView) {
-                console.log('"rating-table-view:onRender"');
+                //console.log('"rating-table-view:onRender"');
                 this.currentResults = new CurrentResults();
                 this.bootstrapModalContainerView = new BootstrapViews.ModalContainerView({
                     parentSelector: 'body',
@@ -282,38 +281,36 @@ define([
                     model: this.currentResults
                 });
             },
-            onShow: function () {
-                console.log('"rating-table-view:onShow"');
-            },
-            onDomRefresh: function () {
-                console.log('"rating-table-view:onDomRefresh"');
-            },
-            onBeforeAddChild: function () {
-                console.log('"rating-table-view:onBeforeAddChild"');
-            },
+            //onShow: function () {
+            //    console.log('"rating-table-view:onShow"');
+            //},
+            //onDomRefresh: function () {
+            //    console.log('"rating-table-view:onDomRefresh"');
+            //},
+            //onBeforeAddChild: function () {
+            //    console.log('"rating-table-view:onBeforeAddChild"');
+            //},
             onAddChild: function (childView) {
-                console.log('"rating-table-view:onAddChild"');
+                //console.log('"rating-table-view:onAddChild"');
 
-                // Add rating tendency marker
-                //childView.$('.rank-tendency').append(new RankTrendView({ model: childView.model }).render().el);
+                // Add rank tendency marker
                 new RankTrendView({ el: childView.$('.rank-tendency'), model: childView.model }).render();
 
-                // Add sum tendency marker
-                //childView.$('.rating-tendency').append(new RatingTrendView({ model: childView.model }).render().el);
+                // Add rating tendency marker
                 new RatingTrendView({ el: childView.$('.rating-tendency'), model: childView.model }).render();
-            },
-            onBeforeRemoveChild: function () {
-                console.log('"rating-table-view:onBeforeRemoveChild"');
-            },
-            onRemoveChild: function () {
-                console.log('"rating-table-view:onRemoveChild"');
-            },
-            onBeforeDestroy: function () {
-                console.log('"rating-table-view:onBeforeDestroy"');
-            },
-            onDestroy: function () {
-                console.log('"rating-table-view:onDestroy"');
             }
+            //onBeforeRemoveChild: function () {
+            //    console.log('"rating-table-view:onBeforeRemoveChild"');
+            //},
+            //onRemoveChild: function () {
+            //    console.log('"rating-table-view:onRemoveChild"');
+            //},
+            //onBeforeDestroy: function () {
+            //    console.log('"rating-table-view:onBeforeDestroy"');
+            //},
+            //onDestroy: function () {
+            //    console.log('"rating-table-view:onDestroy"');
+            //}
         });
     }
 );

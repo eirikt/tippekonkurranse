@@ -47,7 +47,7 @@
              * @see http://caniuse.com/#search=local
              * @returns The comparator (x < 0 < y) value
              */
-            alphanumericAscendingValueComparator = function (value, otherValue) {
+            _alphanumericAscendingValueComparator = function (value, otherValue) {
                 return value.localeCompare(otherValue);
                 // TODO: Locale-sensitivity and more ...
                 //return value.localeCompare(otherValue, 'nb');
@@ -68,7 +68,7 @@
              */
             _typeAwareAscendingValueComparator = function (value, otherValue) {
                 if (F.isString(value)) {
-                    return alphanumericAscendingValueComparator(value, otherValue);
+                    return _alphanumericAscendingValueComparator(value, otherValue);
                 }
                 return _arithmeticAscendingValueComparator(value, otherValue);
             },
@@ -116,7 +116,7 @@
             _propertyGetter: _propertyGetter,
             _backbonePropertyGetter: _backbonePropertyGetter,
             _arithmeticAscendingValue: _arithmeticAscendingValueComparator,
-            _alphanumericAscendingValue: alphanumericAscendingValueComparator,
+            _alphanumericAscendingValue: _alphanumericAscendingValueComparator,
             _alwaysEqual: _alwaysEqualComparator,
             // /"Private" functions
 

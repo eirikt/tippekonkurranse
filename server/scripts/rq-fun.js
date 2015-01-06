@@ -6,7 +6,7 @@
 // - http://vimeo.com/74294252
 ///////////////////////////////////////////////////////////
 
-// TODO: RQ.js must be put in npm global repo
+// TODO: RQ.js must be put in npm global repo, somebody ...
 var RQ = require("./vendor/rq").RQ,
 
 // TODO: Move to 'rq-essentials-request.js'
