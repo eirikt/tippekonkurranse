@@ -229,10 +229,10 @@ module.exports = function (grunt) {
                         { platform: 'OS X 10.10', browserName: 'Safari', version: '8' },              // The Sauce VMs failed to start the browser or device For more info, please check https://docs.saucelabs.com/reference/troubleshooting-common-er
                         { platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' }, // OK
                         { platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' },   // Test exceeded maximum duration after 180 seconds
-                        { platform: 'Windows 7', browserName: 'Internet Explorer', version: '9' },
-                        { platform: 'Windows 7', browserName: 'Internet Explorer', version: '8' },
-                        { platform: 'Windows XP', browserName: 'Internet Explorer', version: '7' },
-                        { platform: 'Windows XP', browserName: 'Internet Explorer', version: '6' },
+                        //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '9' },
+                        //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '8' },
+                        //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '7' },
+                        //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '6' },
                         { platform: 'Linux', browserName: 'Android', version: '4.4' }
                     ]
                 }
