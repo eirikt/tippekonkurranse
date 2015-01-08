@@ -45,7 +45,7 @@
         "mocha-phantomjs": "~3.5.1",
         "chai": "~1.10.0",
         "chai-jquery": "~2.0.0",
-        "sinon": "~1.12.2"
+        "sinon": "~1.11.1"
     },
     "scripts": {
         "postinstall": "echo postinstall time; ./node_modules/grunt-cli/bin/grunt deploy:heroku",
