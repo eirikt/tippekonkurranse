@@ -86,10 +86,8 @@ var __ = require("underscore"),
                 goals = $($cells[ 3 ]).html();
 
             // Launder ...
-            // => max two spaces in name ...
-            player = player
-                .replace("&nbsp;", " ")
-                .replace("&nbsp;", " ");
+            // => max three spaces in name ...
+            player = player.replace("&nbsp;", " ").replace("&nbsp;", " ").replace("&nbsp;", " ");
 
             // Normalize ...
 
@@ -112,7 +110,7 @@ var __ = require("underscore"),
 // Public functions
 //////////////////////////////////////////////
 
-// These requestories all returns "data generator" requestors => No forwarding of existing data ...
+// These are "data generator" requestors => No forwarding of existing data ...
     _getCurrentTippeligaTableRequestory = exports.getCurrentTippeligaTable =
         RQ.sequence([
             rq.get(currentTippeligaTableUrl),
@@ -132,5 +130,21 @@ var __ = require("underscore"),
         ]),
 
     _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
-        rq.return([ "Molde" ]);
-// /Requestories
+        rq.return([
+            "Bodø/Glimt",
+            "Haugesund",
+            "Lillestrøm",
+            "Mjøndalen",
+            "Molde",
+            "Odd",
+            "Rosenborg",
+            "Sandefjord",
+            "Sarpsborg 08",
+            "Stabæk",
+            "Start",
+            "Strømsgodset",
+            "Tromsø", "Viking",
+            "Vålerenga",
+            "Aalesund"
+        ]);
+// /Requestors

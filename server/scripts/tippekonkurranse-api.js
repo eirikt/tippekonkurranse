@@ -44,6 +44,8 @@ var env = process.env.NODE_ENV || "development",
     _handleResultsRequest = exports.handleResultsRequest =
         function (request, response) {
             "use strict";
+            var year = request.params.year;
+
             RQ.sequence([
                 tippekonkurranse.retrieveTippeligaData(request),
                 rq.requestor(curry(tippekonkurranse.dispatchResultsToClientForPresentation, response)),

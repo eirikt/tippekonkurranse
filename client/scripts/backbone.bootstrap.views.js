@@ -20,6 +20,8 @@ define([ 'jquery', 'underscore', 'backbone' ],
             },
             initialize: function (attr) {
                 this.parentSelector = attr.parentSelector;
+                this.id = attr.id;
+                this.ariaLabelledBy = attr.ariaLabelledBy;
             },
             reset: function () {
                 $('#' + this.id).empty().remove();

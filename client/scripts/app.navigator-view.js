@@ -114,7 +114,7 @@ define(
 
                 if (this.model.get("isSeason")) {
 
-                    // Match seasons navigation
+                    // Seasonal navigation
                     this.collection.add(new Model({
                         isEnabled: this.activeYear > this.initialYear,
                         isActive: null, // N/A
@@ -143,7 +143,7 @@ define(
 
                 } else {
 
-                    // Match rounds navigation
+                    // Match round navigation
                     this.collection.add(new Model({
                             isEnabled: this.activeRound > 1,
                             isActive: null, // N/A

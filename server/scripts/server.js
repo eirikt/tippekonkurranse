@@ -97,7 +97,7 @@ if (env === "development") {
 // Find current round, and warm up
 
 /**
- * TODO: This did not work out quite well, did it ...
+ * TODO: This didn't work out especially well, did it ...
  *
  * The (very app-specific) function arity rules:
  * If length of function arguments (f.length) is

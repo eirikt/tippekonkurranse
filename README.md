@@ -35,7 +35,7 @@ In production [here][1].
 
 ## Version history/roadmap
 
-#### v1.3 : _Planned Q1 2015_
+#### v1.3.0 : _Planned Q1 2015_
 * Backbone.Marionette
 * Multi-season handling with proper archiving
 * Show 'Gjeldende resultater' contextual to what round is actively chosen, as done with 'Trend'
