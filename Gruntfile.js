@@ -225,10 +225,10 @@ module.exports = function (grunt) {
                     concurrency: 2,
                     browsers: [
                         { platform: 'Windows 7', browserName: 'Chrome', version: '39' }                // OK
-                        //{ platform: 'Windows 7', browserName: 'Firefox', version: '33' },               // Test exceeded maximum duration after 180 seconds
-                        //{ platform: 'OS X 10.10', browserName: 'Safari', version: '8' },                // The Sauce VMs failed to start the browser or device For more info, please check https://docs.saucelabs.com/reference/troubleshooting-common-er
-                        //{ platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' }    // OK
-                        //{ platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' }    // Test exceeded maximum duration after 180 seconds
+                        //{ platform: 'Windows 7', browserName: 'Firefox', version: '33' },              // Test exceeded maximum duration after 180 seconds
+                        //{ platform: 'OS X 10.10', browserName: 'Safari', version: '8' },               // The Sauce VMs failed to start the browser or device For more info, please check https://docs.saucelabs.com/reference/troubleshooting-common-er
+                        //{ platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' }   // OK
+                        //{ platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' }     // Test exceeded maximum duration after 180 seconds
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '9' }
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '8' }
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '7' }
@@ -352,7 +352,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test:sauce', [ 'connect', 'saucelabs-mocha' ]);
     grunt.registerTask('coverage:server', [ 'mochacov:report' ]);
 
-    grunt.registerTask('build:travis', [ 'test', /*'saucelabs-mocha',*/ /*'blanket_mocha',*/ 'mochacov:travis', 'jshint', 'jsdoc' ]);
+    grunt.registerTask('build:travis', [ 'test', 'saucelabs-mocha', /*'blanket_mocha',*/ 'mochacov:travis', 'jshint', 'jsdoc' ]);
 
     grunt.registerTask('deploy:development', [ 'env:dev', 'install:client', 'copy:to-client', 'shell:run' ]);
     grunt.registerTask('deploy:local', [ 'env:prod', 'install:client', 'build:client', 'shell:run' ]);
