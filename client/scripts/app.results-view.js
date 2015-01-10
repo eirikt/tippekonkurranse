@@ -3,9 +3,10 @@
 /* jshint -W106 */
 define([
         'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'backbone.bootstrap.views', 'moment', 'moment.nb',
-        'app.models', 'app.result', 'app.participant-score-view', 'app.soccer-table-views',
-        'backbone.fetch-local-copy' ],
-    function ($, _, Backbone, Marionette, Bootstrap, BootstrapViews, Moment, Moment_nb, App, ParticipantScore, ParticipantScoreView, SoccerTableViews, BackboneFetchLocalCopy) {
+        'backbone.fetch-local-copy', 'client-utils',
+        'app.models', 'app.result', 'app.participant-score-view', 'app.soccer-table-views'
+    ],
+    function ($, _, Backbone, Marionette, Bootstrap, BootstrapViews, Moment, Moment_nb, BackboneFetchLocalCopy, utils, App, ParticipantScore, ParticipantScoreView, SoccerTableViews) {
         'use strict';
 
         var CurrentResults = Backbone.Model.extend({
@@ -28,18 +29,12 @@ define([
         _.extend(CurrentResults.prototype, BackboneFetchLocalCopy);
 
 
-        var PrettyDateView = Backbone.View.extend({
-                initialize: function () {
+        var PrettyDateView = Marionette.ItemView.extend({
+                render: function () {
                     this.momentJsculture = this.model.culture || 'en';
                     this.momentJsDateFormat = this.model.format || 'Do MMMM YYYY';
-                    Moment.lang(this.momentJsculture);
-                    if (this.model instanceof Backbone.Model) {
-                        this.model = this.model.toJSON();
-                    }
-                },
-                render: function () {
-                    this.el = new Moment(this.model.date).format(this.momentJsDateFormat);
-                    return this;
+                    Moment.locale(this.momentJsculture);
+                    return new Moment(this.model.date).format(this.momentJsDateFormat);
                 }
             }),
 
@@ -103,7 +98,7 @@ define([
                             culture: 'nb'
                         }
                     });
-                    this.model.set('currentDate', prettyDateView.render().el, { silent: true });
+                    this.model.set('currentDate', prettyDateView.render(), { silent: true });
 
                     // Pretty tabell presentation
                     prettyTabellView = new SoccerTableViews.SimpleTableView({

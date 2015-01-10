@@ -36,7 +36,8 @@ var env = process.env.NODE_ENV || "development",
                 response.status(200).json(predictions);
 
             } else {
-                response.json(404);
+                console.error("Predictions are missing for year " + year);
+                response.status(404).send("Predictions are missing for year " + year);
             }
         },
 
@@ -71,11 +72,11 @@ var env = process.env.NODE_ENV || "development",
                     rq.requestor(tippekonkurranse.addMetadataToScores),
                     rq.requestor(curry(tippekonkurranse.dispatchScoresToClientForPresentation, response)),
                     rq.requestor(tippekonkurranse.storeTippeligaRoundMatchData)
-                ])
-                (rq.execute);
+                ])(rq.execute);
 
             } else {
-                response.json(404);
+                console.error("Rules and/or predictions are missing for year " + year);
+                response.status(404).send("Rules and/or predictions are missing for year " + year);
             }
         },
 
@@ -94,7 +95,7 @@ var env = process.env.NODE_ENV || "development",
                 _dispatchAsJson = function (response, statusCode, data) {
                     response.status(statusCode).json(data);
                 },
-                dispatch = curry(_dispatchAsJson, response, 200),
+                dispatchTheResults = curry(_dispatchAsJson, response, 200),
 
                 tippekonkurranseData,
                 data = {},
@@ -104,13 +105,13 @@ var env = process.env.NODE_ENV || "development",
 
                 sortByElementIndex,
                 sortByRound,
-                memoizedWrite;
+                cacheTheResults;
 
-            //console.log(utils.logPreamble + "handleRatingHistoryRequest:: year=" + year + ", round=" + round);
+            //console.log(utils.logPreamble + "handleRatingHistoryRequest:: year=" + year + ", round=" + round + ", key=" + key + ", root.app.isCurrentRoundCompleted=" + root.app.isCurrentRoundCompleted);
 
             // 1. Any cached value?
             if (memoizedValue) {
-                return dispatch(memoizedValue);
+                return dispatchTheResults(memoizedValue);
             }
 
             // 2. Prepare for data mining
@@ -121,7 +122,7 @@ var env = process.env.NODE_ENV || "development",
                 return args.sort(comparators.ascendingByArrayElement(elementIndex));
             };
             sortByRound = curry(sortByElementIndex, tippekonkurranseData.indexOfRound);
-            memoizedWrite = curry(utils.memoizationWriter, cache, curry(root.app.isCurrentRoundCompleted, round), key);
+            cacheTheResults = curry(utils.memoizationWriter, cache, curry(root.app.isRoundCompleted, year, round), key);
 
             // 3. Create array of requestors: all historic Tippeligakonkurranse scores - and then execute and wait for all to finish
             for (; roundIndex <= round; roundIndex += 1) {
@@ -167,7 +168,7 @@ var env = process.env.NODE_ENV || "development",
                     return requestion(data);
                 },
 
-                /* Create/Transform from:
+                /* Create/Transform from processing-friendly data structure:
                  * var participants = [{ <userId> = { userId: {string}, ratings: [] }}]
                  * to JqPlot-friendly data structure:
                  * var participants = [{ userId: {string}, ratings: [] }]
@@ -177,12 +178,9 @@ var env = process.env.NODE_ENV || "development",
                 // TODO: Consider including 'year' in response
                 rq.then(___.partialFn(__.map, __.identity)),
 
-                // 5. And remember them ...
-                rq.then(memoizedWrite),
+                rq.then(cacheTheResults),
 
-                // 6. And finally dispatch them ...
-                rq.then(dispatch)
+                rq.then(dispatchTheResults)
 
-            ])
-            (rq.execute);
+            ])(rq.execute);
         };

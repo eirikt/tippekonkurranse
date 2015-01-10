@@ -1,5 +1,5 @@
 /* global define:false */
-define(["jquery", "underscore", "backbone", "moment", "toastr"],
+define([ "jquery", "underscore", "backbone", "moment", "toastr" ],
     function ($, _, Backbone, Moment, toastr) {
         "use strict";
 
@@ -39,7 +39,7 @@ define(["jquery", "underscore", "backbone", "moment", "toastr"],
          */
         var _serverConnectionListener = function (appNameDataElementName, appUriDataElementName, appUriTitleDataElementName, culture, elementSelector) {
             var self = this,
-                elementSelectors = _.isArray(elementSelector) ? elementSelector : [elementSelector],
+                elementSelectors = _.isArray(elementSelector) ? elementSelector : [ elementSelector ],
                 momentJsCulture = culture || "en";
 
             Backbone.Events.on("onserverconnection", function (originUri) {
@@ -64,20 +64,20 @@ define(["jquery", "underscore", "backbone", "moment", "toastr"],
 
                 Backbone.Events.on("onnoserverconnection", function (originUri) {
                     _.each($(elementSelector), function (el) {
-                        var appName = el.dataset[appNameDataElementName],
-                            appUri = el.dataset[appUriDataElementName],
-                            appUriName = el.dataset[appUriTitleDataElementName],
+                        var appName = el.dataset[ appNameDataElementName ],
+                            appUri = el.dataset[ appUriDataElementName ],
+                            appUriName = el.dataset[ appUriTitleDataElementName ],
                             ageString = self.getResourceAge(appName, appUri, momentJsCulture),
                             msg = null;
 
                         if (culture === "nb") {
                             if (ageString) {
                                 msg = "(" +
-                                    "NB! " + appUriName + " " +
-                                    "<em>" +
-                                    self.getResourceAge(appName, appUri, momentJsCulture) +
-                                    "</em>" +
-                                    ")";
+                                "NB! " + appUriName + " " +
+                                "<em>" +
+                                self.getResourceAge(appName, appUri, momentJsCulture) +
+                                "</em>" +
+                                ")";
                             } else {
                                 msg = "<em>(NB! Ingen kontakt med server, og ingen mellomlagrede data tilgjengelig heller ...</em>)";
                             }
@@ -91,6 +91,7 @@ define(["jquery", "underscore", "backbone", "moment", "toastr"],
                 });
             });
         };
+
 
         /**
          * <p>
@@ -135,9 +136,9 @@ define(["jquery", "underscore", "backbone", "moment", "toastr"],
                     prettyTimestamp = null;
                 if (timestamp) {
                     if (culture) {
-                        Moment.lang(culture);
+                        Moment.locale(culture);
                     } else {
-                        Moment.lang("en"); // Reset Moment.js culture to default (just to be sure)
+                        Moment.locale("en"); // Reset Moment.js culture to default (just to be sure)
                     }
                     prettyTimestamp = new Moment(timestamp).fromNow();
                 }
@@ -173,7 +174,7 @@ define(["jquery", "underscore", "backbone", "moment", "toastr"],
                     throw new Error("Only Backbone.Model and Backbone.Collection constructor functions are supported");
                 }
 
-                xhr.done(function (data) {
+                xhr.done(function (data, textStatus, jqXHR) {
                     if (window.localStorage) {
                         window.localStorage.setItem(currentScoreResourceKey, JSON.stringify(data));
                         window.localStorage.setItem(resourceTimestampCacheKey, Date.now());
@@ -181,9 +182,10 @@ define(["jquery", "underscore", "backbone", "moment", "toastr"],
                     }
                     Backbone.Events.trigger("onserverconnection", url);
                 });
-                xhr.fail(function () {
+
+                xhr.fail(function (jqXHR, textStatus, errorThrown) {
                     if (window.localStorage) {
-                        Moment.lang("en"); // Reset Moment.js culture (just to be sure, log messages in english ...)
+                        Moment.locale("en"); // Reset Moment.js culture (just to be sure, log messages in english ...)
                         var cacheAge = new Date(JSON.parse(window.localStorage.getItem(resourceTimestampCacheKey))),
                             prettyCacheAge = new Moment(cacheAge).fromNow(),
                             cachedItem = window.localStorage.getItem(currentScoreResourceKey);
@@ -203,7 +205,19 @@ define(["jquery", "underscore", "backbone", "moment", "toastr"],
                             console.warn("Resource '" + url + "' not available - not even in cache ...");
                         }
                     }
-                    Backbone.Events.trigger("onnoserverconnection", url);
+                    if (jqXHR.status === 404) {
+                        if (isBackboneModel) {
+                            self.set(self.parse(jqXHR.status));
+                        } else if (isBackboneCollection) {
+                            self.reset(self.parse(jqXHR.status));
+                        } else {
+                            throw new Error("Only Backbone.Model and Backbone.Collection constructor functions are supported");
+                        }
+                        Backbone.Events.trigger("onserverconnection", url);
+
+                    } else {
+                        Backbone.Events.trigger("onnoserverconnection", url);
+                    }
                 });
             },
 

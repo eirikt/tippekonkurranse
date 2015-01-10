@@ -68,14 +68,26 @@ server.listen(port, function () {
 
 // Global state
 root.app = {
-    numberOfRounds: 30,             // NB! To be set manually for now ...
-    currentYear: 2015,              // NB! To be set manually for now ...
+    numberOfRounds: 30,                         // NB! To be set manually for now ...
+
+    initialYear: 2014,                          // NB! To be set manually for now ...
+    initialRound: 1,                            // NB! To be set manually for now ...
+    //activeYear: null,                         // N/A
+    //activeRound: null,                        // N/A
+    currentYear: 2015,                          // NB! To be set manually for now ...
     currentRound: null,
-    isCurrentYearCompleted: false,  // NB! To be set manually for now ...
+
+    isCurrentYearCompleted: false,              // NB! To be set manually for now ...
     isCurrentRoundCompleted: function (round) {
         "use strict";
-        console.log(utils.logPreamble() + "isCurrentRoundCompleted(round=" + round + ", root.app.currentRound=" + root.app.currentRound + ", root.app.isCurrentYearCompleted=" + root.app.isCurrentYearCompleted + ")");
-        return round < root.app.currentRound || round === root.app.currentRound && root.app.isCurrentYearCompleted;
+        return (round < root.app.currentRound) ||
+            (round <= root.app.currentRound && root.app.isCurrentYearCompleted);
+    },
+    isRoundCompleted: function (year, round) {
+        "use strict";
+        return year < root.app.currentYear ||
+            ( year <= root.app.currentYear && round < root.app.currentRound) ||
+            ( year <= root.app.currentYear && root.app.isCurrentYearCompleted && round <= root.app.currentRound);
     }
 };
 
@@ -87,11 +99,11 @@ root.app.cache = {
 
 
 // Development tweaks ...
-if (env === "development") {
-    // Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
-    root.overrideTippeligaDataWithYear = 2014;
+//if (env === "development") {
+//    // Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
+//    root.overrideTippeligaDataWithYear = 2014;
 //    root.overrideTippeligaDataWithRound = 20;
-}
+//}
 
 
 // Find current round, and warm up

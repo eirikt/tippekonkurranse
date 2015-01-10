@@ -30,9 +30,6 @@ define([
 
         return Backbone.Collection.extend({
             model: ParticipantRatingHistory,
-            // TODO: Use?
-            //rankingsHistory: true,
-
             initialize: function (models, options) {
                 if (options) {
                     this.year = options.year;

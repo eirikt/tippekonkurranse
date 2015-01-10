@@ -1,5 +1,18 @@
 /* jshint -W031 */
+
 require.config({
+
+    // TODO: Check this:
+    //baseUrl: '.',
+
+    // TODO: RequireJS HTTP caching issue:
+    // Development solution : Use Chrome and e.g. https://chrome.google.com/webstore/detail/cppjkneekbjaeellbfkmgnhonkkjfpdn
+    // Production solution  : http://stackoverflow.com/questions/8315088/prevent-requirejs-from-caching-required-scripts
+    //    ...not the approved answer, but below using 'baseUrl': https://groups.google.com/forum/#!msg/requirejs/3E9dP_BSQoY/36ut2Gtko7cJ
+
+    // RequireJS 'hack' for forcing fetching a new version each request, works poorly with Chrome breakpoints though ...
+    //urlArgs: 'bust=' +  (new Date()).getTime(),
+
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',
         'bootstrap': '../bower_components/bootstrap/dist/js/bootstrap.min',

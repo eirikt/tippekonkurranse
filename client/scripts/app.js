@@ -14,7 +14,7 @@ define([
 
         var app = new Marionette.Application(),
 
-            appNavigationModel = new Backbone.Model({
+            appModel = new Backbone.Model({
                 initialYear: 2014,
                 initialRound: 1,
                 year: 2015,
@@ -25,25 +25,28 @@ define([
             scores = new ScoresCollection(),
             historicScores = new HistoricScoresCollection();
 
+
         app.commands.setHandler('getTippekonkurranseScores', function (year, round) {
             console.log('command::getTippekonkurranseScores(' + year + ', ' + round + ')');
             if (!year) {
-                year = appNavigationModel.get("currentYear");
+                year = appModel.get('currentYear');
             }
             if (!round) {
-                round = appNavigationModel.get("currentRound");
+                round = appModel.get('currentRound');
             }
+            scores.reset(null, { silent: true });
             scores.year = year;
             scores.round = round;
             scores.fetch();
         });
 
         app.commands.setHandler('getTippekonkurranseScoresHistory', function (year, round) {
-            //console.log('command::getTippekonkurranseScoresHistory(' + year + ', ' + round + ')');
+            console.log('command::getTippekonkurranseScoresHistory(' + year + ', ' + round + ')');
             historicScores.year = year;
             historicScores.round = round;
             historicScores.fetch({ reset: true });
         });
+
 
         app.addRegions({
             header: '#header',
@@ -52,11 +55,12 @@ define([
             navigatorFooter2: '#footer2'
         });
 
+
         app.listenTo(scores, 'reset', function () {
             //console.log('event::scores:reset');
             if (scores.models.length > 0) {
-                appNavigationModel.set("year", parseInt(scores.year, 10));
-                appNavigationModel.set("round", parseInt(scores.round, 10));
+                appModel.set("year", parseInt(scores.year, 10));
+                appModel.set("round", parseInt(scores.round, 10));
 
                 app.mainContent.show(new CurrentScoresView({
                     model: new Backbone.Model(),
@@ -64,30 +68,39 @@ define([
                 }));
 
             } else {
-                appNavigationModel.set("year", 2015);
-                appNavigationModel.set("round", 0);
+                appModel.set('year', 2015);
+                appModel.set('round', 0);
 
                 app.mainContent.empty();
             }
-            var seasonNavigation = appNavigationModel.clone();
-            var matchRoundNavigation = appNavigationModel.clone();
-            seasonNavigation.set("isSeason", true, { silent: true });
+            var seasonNavigation = appModel.clone();
+            var matchRoundNavigation = appModel.clone();
+            seasonNavigation.set('isSeason', true, { silent: true });
 
-            app.header.show(new HeaderView({ model: appNavigationModel }));
+            app.header.show(new HeaderView({ model: appModel }));
             app.navigatorFooter1.show(new NavigatorView({ model: matchRoundNavigation }));
             app.navigatorFooter2.show(new NavigatorView({ model: seasonNavigation }));
         });
 
         app.listenTo(historicScores, 'reset', function () {
             //console.log('event::historicScores:reset');
+            var ratingHistoryAppModel = appModel.clone();
+
+            ratingHistoryAppModel.set('year', historicScores.year);
+            ratingHistoryAppModel.set('round', historicScores.round);
+            ratingHistoryAppModel.set('isRatingHistory', true);
+
+            app.header.show(new HeaderView({ model: ratingHistoryAppModel }));
             app.mainContent.show(new RatingHistoryView({ collection: historicScores }));
             app.navigatorFooter1.empty();
             app.navigatorFooter2.empty();
         });
 
+
         app.addInitializer(function () {
             app.execute('getTippekonkurranseScores');
         });
+
 
         return app;
     }

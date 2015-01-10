@@ -157,17 +157,20 @@ var env = process.env.NODE_ENV || "development",
 
                 } else {
                     // TODO: Revisit logic, seems a bit strange!
-                    // TODO: I tillegg, hvis Adeccoliga spiller runder mens Tippeliga ikke gjør det så blir ikke runden oppdatert ...
+                    // TODO: Liten svakhet: Hvis Adeccoliga spiller runder mens Tippeliga ikke gjør det så blir ikke runden oppdatert ...
 
                     dbCount = dbMatchesCount[ round ].length;
                     if (currentRoundCount < dbCount) {
-                        logMsg += " already stored with " + dbCount + " teams - current data has " + currentRoundCount + " teams";
+                        logMsg += " is already stored with " + dbCount + " teams - current data has " + currentRoundCount + " teams";
                         console.log(logMsg + " => no need for updating db with new results");
 
+                    } else if (root.app.isRoundCompleted(year, round)) {
+                        logMsg += " is completed => no need for updating db with new results";
+                        console.log(logMsg);
+
                     } else {
-                        // TODO: No need for saving if round is a historic one (this round < latest stored round)
                         method = "UPDATE";
-                        logMsg += " already stored with " + dbCount + " teams - current data has " + currentRoundCount + " teams";
+                        logMsg += " is already stored with " + dbCount + " teams - current data has " + currentRoundCount + " teams";
                     }
                 }
             }
@@ -203,7 +206,7 @@ var env = process.env.NODE_ENV || "development",
                                 return requestion(undefined, err);
                             }
                             if (!tippeligaRound) {
-                                // TODO: Do something a bit more clever! Return custom requestion error? Redirect to latest completed round?
+                                // TODO: Do something a bit more clever! Return custom requestion error? Redirect to latest completed round? That quash thing ...?
                                 return requestion(undefined, "No data for round"); // => Blank screen ...
                             }
                             var tippekonkurranseData = new TippekonkurranseData();
