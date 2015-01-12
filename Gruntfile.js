@@ -91,8 +91,15 @@ module.exports = function (grunt) {
             },
             'to-build': {
                 files: [
-                    { expand: true, cwd: 'client', src: [ '**' ], dest: 'build' },
-                    { expand: true, cwd: 'shared', src: [ '**' ], dest: 'build' }
+                    { expand: true, cwd: 'client', src: '*', dest: 'build', filter: 'isFile' },
+                    { expand: true, cwd: 'client', src: 'images/*', dest: 'build' },
+                    { expand: true, cwd: 'client', src: 'styles/*', dest: 'build' },
+                    { expand: true, cwd: 'client/bower_components', src: [ '**/*.css' ], dest: 'build/bower_components' },
+                    { expand: true, cwd: 'client/bower_components', src: [ '**/fonts/*' ], dest: 'build/bower_components' },
+                    // These are under RequireJS control, version folder added:
+                    { expand: true, cwd: 'shared', src: [ '**' ], dest: 'build/<%= pkg.version %>/scripts' },
+                    { expand: true, cwd: 'client/scripts', src: [ '**' ], dest: 'build/<%= pkg.version %>/scripts' },
+                    { expand: true, cwd: 'client/bower_components', src: [ '**' ], dest: 'build/<%= pkg.version %>/bower_components' }
                 ]
             }
         },
@@ -143,9 +150,9 @@ module.exports = function (grunt) {
                 nonbsp: true,
                 nonew: true,
                 plusplus: true,
-                //qoutmark: true, // Not forcing consistent use of 'single' or 'double' as of now ...
+                //qoutmark: true,   // Not forcing consistent use of 'single' or 'double' as of now ...
                 undef: true,
-                //unused: true,
+                //unused: true,     // Don't know how to avoid this ...
                 strict: true,
                 trailing: true,
                 maxparams: 14,
@@ -243,32 +250,32 @@ module.exports = function (grunt) {
             myUglifyTask: {
                 files: {
                     // Minified versions not available via Bower ...
-                    'build/bower_components/requirejs/require.js': 'build/bower_components/requirejs/require.js',
-                    'build/bower_components/backbone/backbone.js': 'build/bower_components/backbone/backbone.js',
-                    'build/bower_components/underscore/underscore.js': 'build/bower_components/underscore/underscore.js',
+                    'build/<%= pkg.version %>/bower_components/requirejs/require.js': 'build/<%= pkg.version %>/bower_components/requirejs/require.js',
+                    'build/<%= pkg.version %>/bower_components/backbone/backbone.js': 'build/<%= pkg.version %>/bower_components/backbone/backbone.js',
+                    'build/<%= pkg.version %>/bower_components/underscore/underscore.js': 'build/<%= pkg.version %>/bower_components/underscore/underscore.js',
 
-                    'build/scripts/fun.js': 'build/scripts/fun.js',
-                    'build/scripts/comparators.js': 'build/scripts/comparators.js',
-                    'build/scripts/string-extensions.js': 'build/scripts/string-extensions.js',
-                    'build/scripts/utils.js': 'build/scripts/utils.js',
+                    'build/<%= pkg.version %>/scripts/fun.js': 'build/<%= pkg.version %>/scripts/fun.js',
+                    'build/<%= pkg.version %>/scripts/comparators.js': 'build/<%= pkg.version %>/scripts/comparators.js',
+                    'build/<%= pkg.version %>/scripts/string-extensions.js': 'build/<%= pkg.version %>/scripts/string-extensions.js',
+                    'build/<%= pkg.version %>/scripts/utils.js': 'build/<%= pkg.version %>/scripts/utils.js',
 
-                    'build/scripts/app.models.js': 'build/scripts/app.models.js',
+                    'build/<%= pkg.version %>/scripts/app.models.js': 'build/<%= pkg.version %>/scripts/app.models.js',
 
-                    'build/scripts/app.config.js': 'build/scripts/app.config.js',
-                    'build/scripts/app.controller.js': 'build/scripts/app.controller.js',
-                    'build/scripts/app.header-view.js': 'build/scripts/app.header-view.js',
-                    'build/scripts/app.js': 'build/scripts/app.js',
-                    'build/scripts/app.participant-score-view.js': 'build/scripts/app.participant-score-view.js',
-                    'build/scripts/app.rating-history-collection.js': 'build/scripts/app.rating-history-collection.js',
-                    'build/scripts/app.rating-history-view.js': 'build/scripts/app.rating-history-view.js',
-                    'build/scripts/app.result.js': 'build/scripts/app.result.js',
-                    'build/scripts/app.result-collection.js': 'build/scripts/app.result-collection.js',
-                    'build/scripts/app.navigator-view.js': 'build/scripts/app.navigator-view.js',
-                    'build/scripts/app.results-view.js': 'build/scripts/app.results-view.js',
-                    'build/scripts/app.soccer-table-views.js': 'build/scripts/app.soccer-table-views.js',
-                    'build/scripts/backbone.bootstrap.views.js': 'build/scripts/backbone.bootstrap.views.js',
-                    'build/scripts/backbone.fetch-local-copy.js': 'build/scripts/backbone.fetch-local-copy.js',
-                    'build/scripts/client-utils.js': 'build/scripts/client-utils.js'
+                    'build/<%= pkg.version %>/scripts/app.config.js': 'build/<%= pkg.version %>/scripts/app.config.js',
+                    'build/<%= pkg.version %>/scripts/app.controller.js': 'build/<%= pkg.version %>/scripts/app.controller.js',
+                    'build/<%= pkg.version %>/scripts/app.header-view.js': 'build/<%= pkg.version %>/scripts/app.header-view.js',
+                    'build/<%= pkg.version %>/scripts/app.js': 'build/<%= pkg.version %>/scripts/app.js',
+                    'build/<%= pkg.version %>/scripts/app.participant-score-view.js': 'build/<%= pkg.version %>/scripts/app.participant-score-view.js',
+                    'build/<%= pkg.version %>/scripts/app.rating-history-collection.js': 'build/<%= pkg.version %>/scripts/app.rating-history-collection.js',
+                    'build/<%= pkg.version %>/scripts/app.rating-history-view.js': 'build/<%= pkg.version %>/scripts/app.rating-history-view.js',
+                    'build/<%= pkg.version %>/scripts/app.result.js': 'build/<%= pkg.version %>/scripts/app.result.js',
+                    'build/<%= pkg.version %>/scripts/app.result-collection.js': 'build/<%= pkg.version %>/scripts/app.result-collection.js',
+                    'build/<%= pkg.version %>/scripts/app.navigator-view.js': 'build/<%= pkg.version %>/scripts/app.navigator-view.js',
+                    'build/<%= pkg.version %>/scripts/app.results-view.js': 'build/<%= pkg.version %>/scripts/app.results-view.js',
+                    'build/<%= pkg.version %>/scripts/app.soccer-table-views.js': 'build/<%= pkg.version %>/scripts/app.soccer-table-views.js',
+                    'build/<%= pkg.version %>/scripts/backbone.bootstrap.views.js': 'build/<%= pkg.version %>/scripts/backbone.bootstrap.views.js',
+                    'build/<%= pkg.version %>/scripts/backbone.fetch-local-copy.js': 'build/<%= pkg.version %>/scripts/backbone.fetch-local-copy.js',
+                    'build/<%= pkg.version %>/scripts/client-utils.js': 'build/<%= pkg.version %>/scripts/client-utils.js'
                 }
             }
         },

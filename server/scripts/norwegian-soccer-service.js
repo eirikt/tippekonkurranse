@@ -129,6 +129,9 @@ var __ = require("underscore"),
             rq.then(parseTippeligaTopScorerTable)
         ]),
 
+    /**
+     * Solved manually: Just remove the teams one after another whenever they screw up ...
+     */
     _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
         rq.return([
             "Bodø/Glimt",
@@ -145,6 +148,22 @@ var __ = require("underscore"),
             "Strømsgodset",
             "Tromsø", "Viking",
             "Vålerenga",
-            "Aalesund"
+            "Aalesund",
+            "Brann",
+            "Bryne",
+            "Bærum",
+            "Follo",
+            "Fredrikstad",
+            "Hødd",
+            "Hønefoss",
+            "Jerv",
+            "Kristiansund BK",
+            "Levanger",
+            "Nest-Sotra",
+            "Ranheim",
+            "Sandnes Ulf",
+            "Sogndal",
+            "Strømmen",
+            "Åsane"
         ]);
 // /Requestors

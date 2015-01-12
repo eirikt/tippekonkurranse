@@ -62,7 +62,11 @@ server.get([ app.resource.scores.baseUri, app.resource.uri.element.current ].joi
 // Start HTTP server
 server.listen(port, function () {
     "use strict";
-    console.log(utils.logPreamble() + app.name + ", Node.js Express server listening on port %d in %s mode", port, env);
+    if (env === "development") {
+        console.log(utils.logPreamble() + app.name + ", Node.js Express server listening on port %d in %s mode, root path:", port, env, path.join(applicationRootAbsolutePath, developmentWebRootRelativePath));
+    } else {
+        console.log(utils.logPreamble() + app.name + ", Node.js Express server listening on port %d in %s mode, root path:", port, env, path.join(applicationRootAbsolutePath, productionWebRootRelativePath));
+    }
 });
 
 
@@ -99,126 +103,96 @@ root.app.cache = {
 
 
 // Development tweaks ...
-//if (env === "development") {
-//    // Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
-//    root.overrideTippeligaDataWithYear = 2014;
-//    root.overrideTippeligaDataWithRound = 20;
-//}
+if (env === "development") {
+    // Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
+    root.overrideTippeligaDataWithYear = root.app.currentYear;
+    //root.overrideTippeligaDataWithRound = 1;
+}
 
 
-// Find current round, and warm up
-
-/**
- * TODO: This didn't work out especially well, did it ...
- *
- * The (very app-specific) function arity rules:
- * If length of function arguments (f.length) is
- *   0: just add the function
- *   1: wrap it as a requestor
- *   2: ... ?
- *   3: curry it with round/'numberOfSequences', and then wrap it as a requestor
- *   4: curry it with year and round/'numberOfSequences', and then wrap it as a requestor
- *   5: n/a
- *
- * @see http://stackoverflow.com/questions/4138012/checks-how-many-arguments-a-function-takes-in-javascript
- * @see https://github.com/fitzgen/wu.js/issues/16
- */
-/*
- root.app.buildSequencesOf = function (requestorArray, numberOfSequences) {
- "use strict";
- var requestorSequences = [],
- roundIndex = 1,
- curriedRequestorArray;
-
- for (; roundIndex <= numberOfSequences; roundIndex += 1) {
- curriedRequestorArray = [];
- requestorArray.forEach(function (fn) {
- switch (fn.length) {
- case 0:
- curriedRequestorArray.push(fn);
- break;
- case 1:
- curriedRequestorArray.push(rq.requestor(fn));
- break;
- case 2:
- //throw new Error("2 arguments is not yet applicable to 'buildSequencesOf' function ...");
- curriedRequestorArray.push(fn);
- break;
- case 3:
- curriedRequestorArray.push(curry(fn, roundIndex));
- break;
- case 4:
- curriedRequestorArray.push(curry(fn, root.app.currentYear, roundIndex));
- break;
- default:
- throw new Error("More than 4 arguments is not supported by 'buildSequencesOf' function");
- }
- });
- requestorSequences.push(RQ.sequence(curriedRequestorArray));
- }
- return requestorSequences;
- };
- */
 
 
-/*
- // TODO: Cache all years, this year and all previous ones
- dbSchema.TippeligaRound.count({ year: root.app.currentYear }, function (err, count) {
- "use strict";
- if (err) {
- console.error(utils.logPreamble() + "Tippeliga " + root.app.currentYear + " rounds count ERROR: " + err);
- return;
- }
- root.app.currentRound = count;
- if (count < 1) {
- console.error(utils.logPreamble() + "Tippeliga " + root.app.currentYear + " has no rounds persisted ...");
- return;
- }
- console.log(utils.logPreamble() + "Tippeliga " + root.app.currentYear + " round " + count + " (read from db)");
- //console.log(utils.logPreamble() + "Warming up cache with round [1-" + count + "] ...");
- var cache = root.app.cache.ratingHistory,
- key = root.app.currentYear.toString() + count,
- tippekonkurranseData = new TippekonkurranseData(),
- data = {},
- sortByElementIndex = function (elementIndex, args) {
+// Warm up cache: Rating history for initial year/previous year/2014
+// TODO: Cache all years, this year and all previous ones
+dbSchema.TippeligaRound.count({ year: root.app.initialYear }, function (err, count) {
+    "use strict";
+    if (err) {
+        console.error(utils.logPreamble() + "Tippeliga " + root.app.initialYear + " rounds count ERROR: " + err);
+        return;
+    }
+    if (count < 1) {
+        console.error(utils.logPreamble() + "Tippeliga " + root.app.initialYear + " has no rounds persisted ...");
+        return;
+    }
+    console.log(utils.logPreamble() + "Warming up cache: Rating history for " + root.app.initialYear + ", round #1 - #" + count + " ...");
+    var cache = root.app.cache.ratingHistory,
+        key,
+        tippekonkurranseData = new TippekonkurranseData(),
+        data = {},
+        sortByElementIndex = function (elementIndex, args) {
+            return args.sort(comparators.ascendingByArrayElement(elementIndex));
+        },
+        sortByRound = curry(sortByElementIndex, tippekonkurranseData.indexOfRound),
+        cacheTheResults,
 
- return args.sort(comparators.ascendingByArrayElement(elementIndex));
- },
- sortByRound = curry(sortByElementIndex, tippekonkurranseData.indexOfRound),
- memoizeWrite = curry(utils.memoizationWriter, cache, utils.always, key);
+        getMatchRoundRatingHistory,
+        getTippekonkurranseScoresHistory,
+        matchRoundIndex,
+        roundIndex,
+        lastRound,
+        lastRoundCounter = count;
 
- // TODO: Consider caching all rounds 1-30, 1-29, 1-28 e.t.c. (not only 1-30) - by slicing the 'getTippekonkurranseScoresHistory' requestor
+    console.log(utils.logPreamble() + "Caching: Rating history, starting ...");
+    getMatchRoundRatingHistory = [];
+    for (matchRoundIndex = 1; matchRoundIndex <= root.app.numberOfRounds; matchRoundIndex += 1) {
+        lastRound = (count - matchRoundIndex + 1);
+        key = root.app.initialYear.toString() + lastRound;
+        cacheTheResults = curry(utils.memoizationWriter, false, cache, utils.always, key);
+        getTippekonkurranseScoresHistory = [];
 
- RQ.sequence([
- RQ.parallel(root.app.buildSequencesOf([
- tippekonkurranse.getStoredTippeligaDataRequestor,
- tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping,
- tippekonkurranse.addRound,
- curry(tippekonkurranse.addTippekonkurranseScoresRequestor, tippekonkurranse.predictions[ 2014 ], tippekonkurranse.rules[ 2014 ]),
- ], count)),
- rq.then(sortByRound),
- function (requestion, args) {
- var userIdArray = Object.keys(args[ 0 ][ tippekonkurranseData.indexOfScores ].scores);
- __.each(userIdArray, function (userId, index) {
- data[ userId ] = { userId: userId, ratings: [] };
- if (index >= userIdArray.length - 1) {
- return requestion(args);
- }
- });
- },
- function (requestion, args) {
- __.each(args, function (completeTippekonkurranseRoundData) {
- __.each(completeTippekonkurranseRoundData[ tippekonkurranseData.indexOfScores ].scores, function (participantScores, userId) {
- data[ userId ].ratings.push(participantScores.rating);
- });
- });
- return requestion(data);
- },
- rq.then(___.partialFn(__.map, __.identity)),
- rq.then(memoizeWrite),
- rq.then(function () {
- console.log(utils.logPreamble() + "Caching rating history completed ...");
- })
- ])(rq.execute);
- });
- */
+        console.log(utils.logPreamble() + "Caching: Adding job: Rating history for " + root.app.initialYear + ", round 1-" + lastRound + " ...");
+        for (roundIndex = 1; roundIndex <= lastRound; roundIndex += 1) {
+            getTippekonkurranseScoresHistory.push(
+                RQ.sequence([
+                    curry(tippekonkurranse.getStoredTippeligaDataRequestor, root.app.initialYear, roundIndex),
+                    rq.requestor(tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping),
+                    rq.requestor(tippekonkurranse.addRound),
+                    curry(tippekonkurranse.addTippekonkurranseScoresRequestor, tippekonkurranse.predictions[ root.app.initialYear ], tippekonkurranse.rules[ root.app.initialYear ])
+                ])
+            );
+        }
+        getMatchRoundRatingHistory.push(
+            RQ.sequence([
+                RQ.parallel(getTippekonkurranseScoresHistory),
+                rq.then(sortByRound),
+                function (requestion, args) {
+                    var userIdArray = Object.keys(args[ 0 ][ tippekonkurranseData.indexOfScores ].scores);
+                    __.each(userIdArray, function (userId, index) {
+                        data[ userId ] = { userId: userId, ratings: [] };
+                        if (index >= userIdArray.length - 1) {
+                            return requestion(args);
+                        }
+                    });
+                },
+                function (requestion, args) {
+                    __.each(args, function (completeTippekonkurranseRoundData) {
+                        __.each(completeTippekonkurranseRoundData[ tippekonkurranseData.indexOfScores ].scores, function (participantScores, userId) {
+                            data[ userId ].ratings.push(participantScores.rating);
+                        });
+                    });
+                    return requestion(data);
+                },
+                rq.then(___.partialFn(__.map, __.identity)),
+                rq.then(cacheTheResults),
+                rq.then(function () {
+                    console.log(utils.logPreamble() + "Caching: Rating history for " + root.app.initialYear + ", round 1-" + lastRoundCounter + " completed");
+                    lastRoundCounter -= 1;
+                })
+            ])
+        );
+    }
+
+    RQ.sequence(getMatchRoundRatingHistory)(rq.execute);
+    // TODO: Try
+    //RQ.parallel(getMatchRoundRatingHistory)(rq.execute);
+});

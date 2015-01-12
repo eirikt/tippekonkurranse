@@ -59,8 +59,8 @@ define([
         app.listenTo(scores, 'reset', function () {
             //console.log('event::scores:reset');
             if (scores.models.length > 0) {
-                appModel.set("year", parseInt(scores.year, 10));
-                appModel.set("round", parseInt(scores.round, 10));
+                appModel.set('year', parseInt(scores.year, 10));
+                appModel.set('round', parseInt(scores.round, 10));
 
                 app.mainContent.show(new CurrentScoresView({
                     model: new Backbone.Model(),

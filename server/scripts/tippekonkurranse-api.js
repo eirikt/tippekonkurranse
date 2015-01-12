@@ -107,9 +107,7 @@ var env = process.env.NODE_ENV || "development",
                 sortByRound,
                 cacheTheResults;
 
-            //console.log(utils.logPreamble + "handleRatingHistoryRequest:: year=" + year + ", round=" + round + ", key=" + key + ", root.app.isCurrentRoundCompleted=" + root.app.isCurrentRoundCompleted);
-
-            // 1. Any cached value?
+            // 1. Any cached value already?
             if (memoizedValue) {
                 return dispatchTheResults(memoizedValue);
             }
@@ -122,7 +120,7 @@ var env = process.env.NODE_ENV || "development",
                 return args.sort(comparators.ascendingByArrayElement(elementIndex));
             };
             sortByRound = curry(sortByElementIndex, tippekonkurranseData.indexOfRound);
-            cacheTheResults = curry(utils.memoizationWriter, cache, curry(root.app.isRoundCompleted, year, round), key);
+            cacheTheResults = curry(utils.memoizationWriter, true, cache, curry(root.app.isRoundCompleted, year, round), key);
 
             // 3. Create array of requestors: all historic Tippeligakonkurranse scores - and then execute and wait for all to finish
             for (; roundIndex <= round; roundIndex += 1) {
@@ -136,11 +134,11 @@ var env = process.env.NODE_ENV || "development",
                 );
             }
 
-            // 2. Then execute them ...
+            // 4. Then execute them ...
             RQ.sequence([
                 RQ.parallel(getTippekonkurranseScoresHistory),
 
-                // 4. And manipulate them ...
+                // 5. And manipulate them ...
                 rq.then(sortByRound),
 
                 // TODO: Ugly! Rewrite with 'map' and 'partialFn' and ...
@@ -179,7 +177,6 @@ var env = process.env.NODE_ENV || "development",
                 rq.then(___.partialFn(__.map, __.identity)),
 
                 rq.then(cacheTheResults),
-
                 rq.then(dispatchTheResults)
 
             ])(rq.execute);

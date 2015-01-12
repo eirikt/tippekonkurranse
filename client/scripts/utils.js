@@ -123,16 +123,24 @@
             /***
              * TODO: Preliminary ...
              */
-            _memoizationWriter = function (cache, writeCondition, key, data) {
+            _memoizationWriter = function (logContent, cache, writeCondition, key, data) {
                 if (!cache[ key ]) {
                     cache[ key ] = {};
                 }
                 if (!writeCondition || (writeCondition && writeCondition())) {
                     cache[ key ].value = __.clone(data);
                     cache[ key ].numberOfHits = 0;
-                    console.log(_logPreamble() + "[key=" + key + "] CACHED (" + JSON.stringify(data) + ")");
+                    if (logContent) {
+                        console.log(_logPreamble() + "[key=" + key + "] CACHED (" + JSON.stringify(data) + ")");
+                    }else{
+                        console.log(_logPreamble() + "[key=" + key + "] CACHED");
+                    }
                 } else {
-                    console.log(_logPreamble() + "[key=" + key + "] NOT CACHED (" + JSON.stringify(data) + ")");
+                    if (logContent) {
+                        console.log(_logPreamble() + "[key=" + key + "] NOT CACHED (" + JSON.stringify(data) + ")");
+                    }else{
+                        console.log(_logPreamble() + "[key=" + key + "] NOT CACHED");
+                    }
                 }
                 return data;
             },

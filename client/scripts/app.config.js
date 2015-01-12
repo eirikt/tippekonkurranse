@@ -1,17 +1,20 @@
 /* jshint -W031 */
-
 require.config({
 
-    // TODO: Check this:
-    //baseUrl: '.',
+    // RequireJS HTTP Cache issue:
 
-    // TODO: RequireJS HTTP caching issue:
     // Development solution : Use Chrome and e.g. https://chrome.google.com/webstore/detail/cppjkneekbjaeellbfkmgnhonkkjfpdn
-    // Production solution  : http://stackoverflow.com/questions/8315088/prevent-requirejs-from-caching-required-scripts
-    //    ...not the approved answer, but below using 'baseUrl': https://groups.google.com/forum/#!msg/requirejs/3E9dP_BSQoY/36ut2Gtko7cJ
-
     // RequireJS 'hack' for forcing fetching a new version each request, works poorly with Chrome breakpoints though ...
     //urlArgs: 'bust=' +  (new Date()).getTime(),
+
+    // Production solution  : http://stackoverflow.com/questions/8315088/prevent-requirejs-from-caching-required-scripts
+    //    ...not the approved answer, but below using 'baseUrl': https://groups.google.com/forum/#!msg/requirejs/3E9dP_BSQoY/36ut2Gtko7cJ
+    // Implemented in this application
+
+    // Development ('grunt deploy:development' and IDE execution):
+    //baseUrl: 'scripts',
+    // Standard:
+    baseUrl: '1.3.0-alpha.6/scripts',
 
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',
@@ -27,42 +30,9 @@ require.config({
         //'jqplot.highlighter': '../bower_components/jqplot-bower/dist/plugins/jqplot.highlighter.min',
         //'jqplot.cursor': '../bower_components/jqplot-bower/dist/plugins/jqplot.cursor.min',
         //'jqplot.dateAxisRenderer': '../bower_components/jqplot-bower/dist/plugins/jqplot.dateAxisRenderer.min'
-    },
-    shim: {
-        underscore: {
-            exports: '_'
-        },
-        backbone: {
-            deps: [ 'jquery', 'underscore' ],
-            exports: 'Backbone'
-        },
-        marionette: {
-            deps: [ 'backbone' ],
-            exports: 'Backbone.Marionette'
-        },
-        bootstrap: {
-            deps: [ 'jquery' ],
-            exports: 'Bootstrap'
-        },
-        jqplot: {
-            deps: [ 'jquery' ],
-            exports: 'jqplot'
-        }//,
-        //'jqplot.highlighter': {
-        //    deps: ['jquery', 'jqplot'],
-        //    exports: 'jqplot.highlighter'
-        //},
-        //'jqplot.cursor': {
-        //    deps: ['jquery', 'jqplot'],
-        //    exports: 'jqplot.cursor'
-        //},
-        //'jqplot.dateAxisRenderer': {
-        //    deps: ['jquery', 'jqplot'],
-        //    exports: 'jqplot.dateAxisRenderer'
-        //}
-    },
-    deps: [ 'jquery', 'underscore' ]
+    }
 });
+
 
 // Application configuration
 require([ 'jquery', 'toastr' ],
@@ -75,11 +45,12 @@ require([ 'jquery', 'toastr' ],
             'timeOut': 6000
         };
 
-        //$(document).ready(function () {
-        //    console.log('DOM ready!');
-        //});
+        $(document).ready(function () {
+            console.log('DOM ready!');
+        });
     }
 );
+
 
 // Application start
 require([ 'jqplot', 'backbone', 'marionette', 'app', 'app.controller', 'backbone.fetch-local-copy' ],
@@ -110,11 +81,8 @@ require([ 'jqplot', 'backbone', 'marionette', 'app', 'app.controller', 'backbone
     }
 );
 
-//require(['app', 'jqplot']);
-////require(['app', 'jqplot', 'jqplot.highlighter', 'jqplot.cursor', 'jqplot.dateAxisRenderer']);
 
 // Listen to window errors: remedy for Heroku instances sleeping/warm-up
-/* jshint -W073 */
 /*
  window.onerror = function (message, url, lineNumber) {
  "use strict";
