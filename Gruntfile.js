@@ -91,15 +91,13 @@ module.exports = function (grunt) {
             },
             'to-build': {
                 files: [
-                    { expand: true, cwd: 'client', src: '*', dest: 'build', filter: 'isFile' },
-                    { expand: true, cwd: 'client', src: 'images/*', dest: 'build' },
-                    { expand: true, cwd: 'client', src: 'styles/*', dest: 'build' },
-                    { expand: true, cwd: 'client/bower_components', src: [ '**/*.css' ], dest: 'build/bower_components' },
-                    { expand: true, cwd: 'client/bower_components', src: [ '**/fonts/*' ], dest: 'build/bower_components' },
+                    { expand: true, cwd: 'client', src: [ '**' ], dest: 'build' },
+                    { expand: true, cwd: 'shared', src: [ '**' ], dest: 'build' },
+
                     // These are under RequireJS control, version folder added:
                     { expand: true, cwd: 'shared', src: [ '**' ], dest: 'build/<%= pkg.version %>/scripts' },
-                    { expand: true, cwd: 'client/scripts', src: [ '**' ], dest: 'build/<%= pkg.version %>/scripts' },
-                    { expand: true, cwd: 'client/bower_components', src: [ '**' ], dest: 'build/<%= pkg.version %>/bower_components' }
+                    { expand: true, cwd: 'client/bower_components', src: [ '**' ], dest: 'build/<%= pkg.version %>/bower_components' },
+                    { expand: true, cwd: 'client/scripts', src: [ '**' ], dest: 'build/<%= pkg.version %>/scripts' }
                 ]
             }
         },
