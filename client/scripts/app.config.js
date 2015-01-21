@@ -14,7 +14,7 @@ require.config({
     // Development ('grunt deploy:development' and IDE execution):
     //baseUrl: 'scripts',
     // Standard:
-    baseUrl: '1.3.0-alpha.6/scripts',
+    baseUrl: '1.3.0-alpha.7/scripts',
 
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',
@@ -47,6 +47,25 @@ require([ 'jquery', 'toastr' ],
 
         $(document).ready(function () {
             console.log('DOM ready!');
+
+            // DEMO
+            /*
+             $(document.body).on("click", ".delete", function (evt) {
+             evt.preventDefault();
+             $(this).closest("li").remove();
+             });
+
+             $(".append").click(function () {
+             $("<li>New item</li>").insertAfter($(".items").children()[ 2 ]);
+             });
+             */
+
+            // Workaround for Webkit bug: force scroll height to be recomputed after the transition ends, not only when it starts
+            $(".items").on("webkitTransitionEnd", function () {
+                $(this).hide().offset();
+                $(this).show();
+            });
+            // /DEMO
         });
     }
 );
@@ -82,8 +101,8 @@ require([ 'jqplot', 'backbone', 'marionette', 'app', 'app.controller', 'backbone
 );
 
 
-// Listen to window errors: remedy for Heroku instances sleeping/warm-up
 /*
+ // Listen to window errors: remedy for Heroku instances sleeping/warm-up
  window.onerror = function (message, url, lineNumber) {
  "use strict";
  var initialNumberOfReloads = 1,

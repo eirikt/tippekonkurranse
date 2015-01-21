@@ -105,6 +105,41 @@ var __ = require("underscore"),
         return toppscorers;
     },
 
+    currentRemainingCupContenders = [
+        "Bodø/Glimt",
+        "Haugesund",
+        "Lillestrøm",
+        "Mjøndalen",
+        "Molde",
+        "Odd",
+        "Rosenborg",
+        "Sandefjord",
+        "Sarpsborg 08",
+        "Stabæk",
+        "Start",
+        "Strømsgodset",
+        "Tromsø", "Viking",
+        "Vålerenga",
+        "Aalesund",
+
+        "Brann",
+        "Bryne",
+        "Bærum",
+        "Follo",
+        "Fredrikstad",
+        "Hødd",
+        "Hønefoss",
+        "Jerv",
+        "Kristiansund BK",
+        "Levanger",
+        "Nest-Sotra",
+        "Ranheim",
+        "Sandnes Ulf",
+        "Sogndal",
+        "Strømmen",
+        "Åsane"
+    ],
+
 
 //////////////////////////////////////////////
 // Public functions
@@ -133,37 +168,5 @@ var __ = require("underscore"),
      * Solved manually: Just remove the teams one after another whenever they screw up ...
      */
     _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
-        rq.return([
-            "Bodø/Glimt",
-            "Haugesund",
-            "Lillestrøm",
-            "Mjøndalen",
-            "Molde",
-            "Odd",
-            "Rosenborg",
-            "Sandefjord",
-            "Sarpsborg 08",
-            "Stabæk",
-            "Start",
-            "Strømsgodset",
-            "Tromsø", "Viking",
-            "Vålerenga",
-            "Aalesund",
-            "Brann",
-            "Bryne",
-            "Bærum",
-            "Follo",
-            "Fredrikstad",
-            "Hødd",
-            "Hønefoss",
-            "Jerv",
-            "Kristiansund BK",
-            "Levanger",
-            "Nest-Sotra",
-            "Ranheim",
-            "Sandnes Ulf",
-            "Sogndal",
-            "Strømmen",
-            "Åsane"
-        ]);
+        rq.return(currentRemainingCupContenders);
 // /Requestors
