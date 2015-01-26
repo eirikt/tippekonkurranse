@@ -40,7 +40,7 @@ var env = process.env.NODE_ENV || "development",
         var tableScore, pallScore, pallBonusScore, nedrykkScore, indexedTippeligaTable;
 
         if (__.isEmpty(participantObj.tabell)) {
-            console.warn("'Tabell' property is missing");
+            console.warn(utils.logPreamble() + "'Tabell' property is missing");
             return [ 1000, 1000, 1000, 1000 ];
         }
 
@@ -57,7 +57,7 @@ var env = process.env.NODE_ENV || "development",
                         predictedTeamPlacing,
                         actualTeamPlacing);
             } catch (e) {
-                var errorMessage = "Unable to calculate scores for team '" + participantObj.tabell[ index ] + "' for participant '" + participantObj.name + "' - probably illegal data format";
+                var errorMessage = utils.logPreamble() + "Unable to calculate scores for team '" + participantObj.tabell[ index ] + "' for participant '" + participantObj.name + "' - probably illegal data format";
                 console.warn(errorMessage);
                 throw new Error(errorMessage);
             }
@@ -88,7 +88,7 @@ var env = process.env.NODE_ENV || "development",
     _calculateOpprykkScores = function (strategy, participantObj, adeccoligaTable) {
         "use strict";
         if (__.isEmpty(participantObj.opprykk)) {
-            console.warn("'Opprykk' property is missing");
+            console.warn(utils.logPreamble() + "'Opprykk' property is missing");
             return 1000;
         }
         return utils.getPresentPoints(strategy.opprykkScoreStrategy.polarity, strategy.opprykkScoreStrategy.weight,
@@ -101,7 +101,7 @@ var env = process.env.NODE_ENV || "development",
     _calculateToppscorerScores = function (strategy, participantObj, tippeligaToppscorer) {
         "use strict";
         if (__.isEmpty(participantObj.toppscorer)) {
-            console.warn("'Toppscorer' property is missing");
+            console.warn(utils.logPreamble() + "'Toppscorer' property is missing");
             return 1000;
         }
         return utils.getPresentPoints(strategy.toppscorerScoreStrategy.polarity, strategy.toppscorerScoreStrategy.weight,
@@ -114,7 +114,7 @@ var env = process.env.NODE_ENV || "development",
     _calculateCupScores = function (strategy, participantObj, remainingCupContenders) {
         "use strict";
         if (__.isEmpty(participantObj.cup)) {
-            console.warn("'Cup' property is missing");
+            console.warn(utils.logPreamble() + "'Cup' property is missing");
             return 1000;
         }
         return utils.getPresentPoints(strategy.cupScoreStrategy.polarity, strategy.cupScoreStrategy.weight,

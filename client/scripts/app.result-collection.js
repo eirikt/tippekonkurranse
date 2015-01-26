@@ -127,7 +127,6 @@ define([
 
             parse: function (response) {
                 if (response === 404) {
-                    //this.trigger('error', 404);
                     return this.models;
                 }
                 this.year = response.metadata.year;

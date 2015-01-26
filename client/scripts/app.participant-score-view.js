@@ -66,31 +66,34 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'backbon
 
         return Marionette.ItemView.extend({
             tagName: 'tr',
+            className: 'participant current-scores',
             template: function (model) {
                 return _.template('' +
-                    '<td style="padding-left:2rem;text-align:right;">' +
-                    '  <span style="font-weight:bold;font-size:larger;"><%= args.' + ParticipantScore.rankPresentationPropertyName + ' %></span>' +
+                    '<td style="padding-left:2rem;">' +
+                    '  <div class="rank strong"><%= args.' + ParticipantScore.rankPresentationPropertyName + ' %></div>' +
                     '</td>' +
                     '<td>' +
-                    '  <span style="font-weight:bold;font-size:larger;white-space:nowrap;"><%= args.' + ParticipantScore.namePropertyName + ' %></span>' +
+                    '  <div class="strong" style="white-space:nowrap;"><%= args.' + ParticipantScore.namePropertyName + ' %></div>' +
                     '</td>' +
-                    '<td class="rank-tendency"></td>' +
-                    '<td style="width:3rem;"></td>' +
+                    '<td><div class="rank-tendency"></div></td>' +
+                    '<td style="width:3rem;"><div></div></td>' +
                     '<td>' +
-                    '  <span style="white-space:nowrap;">' +
-                    '    <span style="font-weight:bold;font-size:larger;margin-right:.3rem;"><%= args.' + App.scoreModel.ratingPropertyName + '%></span>' +
-                    '    <span class="rating-tendency"></span>' +
-                    '  </span>' +
+                    '  <div>' +
+                    '    <span style="white-space:nowrap;">' +
+                    '      <span class="strong" style="margin-right:.3rem;"><%= args.' + App.scoreModel.ratingPropertyName + '%></span>' +
+                    '      <span class="rating-tendency"></span>' +
+                    '    </span>' +
+                    '  </div>' +
                     '</td>' +
                     '<td class="prediction">' +
                     '  <button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable"><%= args.' + ParticipantScore.namePropertyName + ' %>s tips</button>' +
                     '</td>' +
-                    '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.tabellPropertyName + ' %></td>' +
-                    '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.pallPropertyName + ' %></td>' +
-                    '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.nedrykkPropertyName + ' %></td>' +
-                    '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.toppscorerPropertyName + ' %></td>' +
-                    '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.opprykkPropertyName + ' %></td>' +
-                    '<td style="color:darkgray;text-align:center;"><%= args.' + App.scoreModel.cupPropertyName + ' %></td>',
+                    '<td style="color:darkgray;text-align:center;"><div><%= args.' + App.scoreModel.tabellPropertyName + ' %></div></td>' +
+                    '<td style="color:darkgray;text-align:center;"><div><%= args.' + App.scoreModel.pallPropertyName + ' %></div></td>' +
+                    '<td style="color:darkgray;text-align:center;"><div><%= args.' + App.scoreModel.nedrykkPropertyName + ' %></div></td>' +
+                    '<td style="color:darkgray;text-align:center;"><div><%= args.' + App.scoreModel.toppscorerPropertyName + ' %></div></td>' +
+                    '<td style="color:darkgray;text-align:center;"><div><%= args.' + App.scoreModel.opprykkPropertyName + ' %></div></td>' +
+                    '<td style="color:darkgray;text-align:center;"><div><%= args.' + App.scoreModel.cupPropertyName + ' %></div></td>',
 
                     model, { variable: 'args' });
             },

@@ -65,7 +65,85 @@ h2, .h2 {
     font-size: x-large;
 }
 
-/* Flexbox: http://css-tricks.com/snippets/css/a-guide-to-flexbox */
+.strong {
+    font-size: larger;
+    font-weight: bold;
+}
+
+.current-scores {
+    color: #333;
+}
+
+.outdated-scores {
+    color: #ddd;
+}
+
+/**
+ *  Module           :
+ *  Portable/reusable:
+ *  Dependencies     :
+ *  Resources        :
+ ******************************************************************************/
+@-webkit-keyframes blank-to-current-fadein {
+    0% {
+        color: #fff;
+    }
+    100% {
+        color: #333;
+    }
+}
+
+@keyframes blank-to-current-fadein {
+    0% {
+        color: #fff;
+    }
+    100% {
+        color: #333;
+    }
+}
+
+.blank-to-current-fadein {
+    -webkit-animation-name: blank-to-current-fadein;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: ease-out;
+}
+
+@-webkit-keyframes outdated-to-current-fadein {
+    0% {
+        color: #ddd;
+    }
+    100% {
+        color: #333;
+    }
+}
+
+/**
+ *  Module           :
+ *  Portable/reusable:
+ *  Dependencies     :
+ *  Resources        :
+ ******************************************************************************/
+@keyframes outdated-to-current-fadein {
+    0% {
+        color: #ddd;
+    }
+    100% {
+        color: #333;
+    }
+}
+
+.outdated-to-current-fadein {
+    -webkit-animation-name: outdated-to-current-fadein;
+    -webkit-animation-duration: 0.8s;
+    -webkit-animation-timing-function: ease-out;
+}
+
+/**
+ *  Module           :
+ *  Portable/reusable: Yes
+ *  Dependencies     : -
+ *  Resources        : Flexbox: http://css-tricks.com/snippets/css/a-guide-to-flexbox
+ ******************************************************************************/
 .full-width-inline-list {
     display: -webkit-flex;
     display: flex;

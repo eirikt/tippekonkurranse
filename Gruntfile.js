@@ -46,8 +46,8 @@ module.exports = function (grunt) {
                     'echo #######################################',
                     'echo.',
                     'echo Essential grunt tasks are:',
-                    'echo   install:client   installs client resources via Bower',
-                    'echo   test             installs, builds, and executes all Mocha tests',
+                    'echo   install:client   installs client resources via Bower                 (requires Git in path)',
+                    'echo   test             installs, builds, and executes all Mocha tests      (using PhantomJS)',
                     'echo   db               starts a MongoDB instance using a local data folder (blocking command)',
                     'echo   run              starts up local Node.js runtime                     (blocking command)'
                 ].join('&&')
@@ -97,7 +97,8 @@ module.exports = function (grunt) {
                     // These are under RequireJS control, version folder added:
                     { expand: true, cwd: 'shared', src: [ '**' ], dest: 'build/<%= pkg.version %>/scripts' },
                     { expand: true, cwd: 'client/bower_components', src: [ '**' ], dest: 'build/<%= pkg.version %>/bower_components' },
-                    { expand: true, cwd: 'client/scripts', src: [ '**' ], dest: 'build/<%= pkg.version %>/scripts' }
+                    { expand: true, cwd: 'client/scripts', src: [ '**' ], dest: 'build/<%= pkg.version %>/scripts' },
+                    { expand: true, cwd: 'client/styles', src: [ '**' ], dest: 'build/<%= pkg.version %>/styles' }
                 ]
             }
         },
@@ -230,15 +231,15 @@ module.exports = function (grunt) {
                     concurrency: 2,
                     browsers: [
                         { platform: 'Windows 7', browserName: 'Chrome', version: '39' },              // OK
-                        //{ platform: 'Windows 7', browserName: 'Firefox', version: '35' },             // Test exceeded maximum duration after 180 seconds
-                        { platform: 'OS X 10.10', browserName: 'Safari', version: '8' },              // The Sauce VMs failed to start the browser or device For more info, please check https://docs.saucelabs.com/reference/troubleshooting-common-er
+                        { platform: 'Windows 7', browserName: 'Firefox', version: '35' },             // Fails ...
+                        { platform: 'OS X 10.10', browserName: 'Safari', version: '8' },              // OK
                         { platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' }, // OK
-                        { platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' },   // Test exceeded maximum duration after 180 seconds
+                        { platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' },   // OK
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '9' },
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '8' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '7' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '6' },
-                        { platform: 'Linux', browserName: 'Android', version: '4.4' }
+                        { platform: 'Linux', browserName: 'Android', version: '4.4' }                 // OK
                     ]
                 }
             }

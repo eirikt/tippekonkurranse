@@ -80,8 +80,9 @@ define(
             });
 
         return Marionette.CollectionView.extend({
-            template: _.identity,
+            tagName: 'div',
             className: 'x-large full-width-inline-list',
+            template: _.identity,
 
             // TODO: Hmm, I don't quite see any complexity issue with a few ifs, JSHint ...
             getChildView: function (roundOrYear) {

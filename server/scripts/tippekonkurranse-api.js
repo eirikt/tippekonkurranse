@@ -36,7 +36,7 @@ var env = process.env.NODE_ENV || "development",
                 response.status(200).json(predictions);
 
             } else {
-                console.error("Predictions are missing for year " + year);
+                console.error(utils.logPreamble() + "Predictions are missing for year " + year);
                 response.status(404).send("Predictions are missing for year " + year);
             }
         },
@@ -75,7 +75,7 @@ var env = process.env.NODE_ENV || "development",
                 ])(rq.execute);
 
             } else {
-                console.error("Rules and/or predictions are missing for year " + year);
+                console.error(utils.logPreamble() + "Rules and/or predictions are missing for year " + year);
                 response.status(404).send("Rules and/or predictions are missing for year " + year);
             }
         },

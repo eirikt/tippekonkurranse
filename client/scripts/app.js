@@ -1,11 +1,13 @@
 /* global define:false */
 define([
-        'backbone', 'marionette',
+        'underscore', 'backbone', 'marionette',
+        'client-utils',
         'app.models',
         'app.result-collection', 'app.rating-history-collection',
         'app.header-view', 'app.results-view', 'app.navigator-view', 'app.rating-history-view'
     ],
-    function (Backbone, Marionette,
+    function (_, Backbone, Marionette,
+              Please,
               AppModels,
               ScoresCollection, HistoricScoresCollection,
               HeaderView, CurrentScoresView, NavigatorView, RatingHistoryView) {
@@ -22,12 +24,16 @@ define([
                 currentYear: 2015,
                 currentRound: 1
             }),
+
             scores = new ScoresCollection(),
-            historicScores = new HistoricScoresCollection();
+            currentScores = new ScoresCollection(),
+
+            historicScores = new HistoricScoresCollection(),
+            currentHistoricScores = new HistoricScoresCollection();
 
 
         app.commands.setHandler('getTippekonkurranseScores', function (year, round) {
-            console.log('command::getTippekonkurranseScores(' + year + ', ' + round + ')');
+            //console.log('command::getTippekonkurranseScores(' + year + ', ' + round + ')');
             if (!year) {
                 year = appModel.get('currentYear');
             }
@@ -37,13 +43,16 @@ define([
             scores.reset(null, { silent: true });
             scores.year = year;
             scores.round = round;
+
             scores.fetch();
         });
 
+
         app.commands.setHandler('getTippekonkurranseScoresHistory', function (year, round) {
-            console.log('command::getTippekonkurranseScoresHistory(' + year + ', ' + round + ')');
+            //console.log('command::getTippekonkurranseScoresHistory(' + year + ', ' + round + ')');
             historicScores.year = year;
             historicScores.round = round;
+
             historicScores.fetch({ reset: true });
         });
 
@@ -57,14 +66,13 @@ define([
 
 
         app.listenTo(scores, 'reset', function () {
-            //console.log('event::scores:reset');
             if (scores.models.length > 0) {
-                appModel.set('year', parseInt(scores.year, 10));
-                appModel.set('round', parseInt(scores.round, 10));
+                appModel.set('year', scores.year);
+                appModel.set('round', scores.round);
 
                 app.mainContent.show(new CurrentScoresView({
-                    model: new Backbone.Model(),
-                    collection: scores
+                    model: appModel.clone(),
+                    collection: currentScores
                 }));
 
             } else {
@@ -73,14 +81,62 @@ define([
 
                 app.mainContent.empty();
             }
-            var seasonNavigation = appModel.clone();
+
             var matchRoundNavigation = appModel.clone();
+
+            var seasonNavigation = appModel.clone();
             seasonNavigation.set('isSeason', true, { silent: true });
 
             app.header.show(new HeaderView({ model: appModel }));
             app.navigatorFooter1.show(new NavigatorView({ model: matchRoundNavigation }));
             app.navigatorFooter2.show(new NavigatorView({ model: seasonNavigation }));
+
+            currentScores = scores.clone();
         });
+
+
+        app.listenTo(scores, 'reset', function () {
+            var _delayedRelocationOfParticipant = function (timeOutInMillis, participantToRemove, participantToAdd) {
+                var dfd = $.Deferred();
+                Please.wait(timeOutInMillis).then(function () {
+                    //if (participantToRemove) {
+                    //    console.log("Relocating participant (" + participantToRemove.get("name") + " | " + participantToAdd.get("name") + ")");
+                    //} else {
+                    //    console.log("No participant to relocate ...");
+                    //}
+                    app.mainContent.currentView.collection.remove(participantToRemove);
+                    app.mainContent.currentView.collection.add(participantToAdd);
+                    dfd.resolve();
+                });
+                return dfd.promise();
+            };
+
+            if (app.mainContent.hasView()) {
+                var i,
+                    addingOfParticipantFuncs = [],
+                    delayInMillis = 250,
+                    delayedRelocatingOfParticipantFunc,
+                    delayedParticipantRelocationFunc;
+
+                for (i = 0; i < scores.size(); i += 1) {
+                    var participantToAdd = scores.at(i),
+                        participantToRemove = app.mainContent.currentView.collection.findWhere({ userId: participantToAdd.get("userId") });
+
+                    delayedRelocatingOfParticipantFunc = _.bind(_delayedRelocationOfParticipant, this);
+                    delayedRelocatingOfParticipantFunc = _.partial(delayedRelocatingOfParticipantFunc, delayInMillis, participantToRemove, participantToAdd);
+                    addingOfParticipantFuncs.push(delayedRelocatingOfParticipantFunc);
+                }
+                // Execute all these deferred functions sequentially
+                if (scores.size() > 0) {
+                    delayedParticipantRelocationFunc = addingOfParticipantFuncs[ 0 ]();
+                    for (i = 0; i < addingOfParticipantFuncs.length; i += 1) {
+                        //console.log("#" + i + " " + delayedParticipantRelocationFunc);
+                        delayedParticipantRelocationFunc = delayedParticipantRelocationFunc.then(addingOfParticipantFuncs[ i + 1 ]);
+                    }
+                }
+            }
+        });
+
 
         app.listenTo(historicScores, 'reset', function () {
             //console.log('event::historicScores:reset');

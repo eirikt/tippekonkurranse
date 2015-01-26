@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# v1.3.0-alpha.7
+# v1.3.0-alpha.8
 
 CACHE:
 favicon.ico
@@ -8,7 +8,6 @@ bower_components/bootstrap/dist/css/bootstrap.min.css
 bower_components/fontawesome/css/font-awesome.min.css
 bower_components/toastr/toastr.min.css
 bower_components/jqplot-bower/dist/jquery.jqplot.min.css
-styles/animations.css
 styles/main.css
 
 bower_components/fontawesome/fonts/fontawesome-webfont.woff

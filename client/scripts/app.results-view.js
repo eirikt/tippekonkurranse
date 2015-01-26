@@ -161,7 +161,8 @@ define([
                     if (!this.model.get(ParticipantScore.previousRankPropertyName)) {
                         return this;
                     }
-                    var plusThreshold = 2,
+                    // TODO: Adjust/Set this threshold based on round - the round should be included in the model provided
+                    var plusThreshold = 3,
                         upwardTrend = this.model.get(ParticipantScore.previousRankPropertyName) - this.model.get(ParticipantScore.rankPropertyName),
                         downwardTrend = this.model.get(ParticipantScore.rankPropertyName) - this.model.get(ParticipantScore.previousRankPropertyName),
                         $tendency;
@@ -206,32 +207,35 @@ define([
 
         return Marionette.CompositeView.extend({
             tagName: 'table',
-            className: 'table table-condensed table-striped table-hover',
+            className: 'participants table table-striped table-hover table-condensed',
             template: function (model) {
                 return _.template('' +
                     '<thead>' +
                     '<tr>' +
-                    '  <th style="padding-left:2rem;width:3rem;"></th>' +
-                    '  <th style="width:14rem;"></th>' +
-                    '  <th style="width:8rem;"></th>' +
+                    '  <th style="width:4rem;"><div style="width:4rem;"></div></th>' +
+                    '  <th style="width:14rem;"><div></div></th>' +
+                    '  <th style="width:8rem;"><div></div></th>' +
                     '  <th class="rating-history" colspan="2">' +
-                    '    <a href="/#/ratinghistory/<%= args.year %>/<%= args.round %>" type="button" class="btn btn-sm btn-success">' +
-                    '      <span style="margin-right:1rem;" class="icon-line-chart"></span>Trend' +
-                    '    </a>' +
+                    '    <div>' +
+                    '      <a href="/#/ratinghistory/<%= args.year %>/<%= args.round %>" type="button" class="btn btn-sm btn-success">' +
+                    '        <span style="margin-right:1rem;" class="icon-line-chart"></span>Trend' +
+                    '      </a>' +
+                    '    </div>' +
                     '  </th>' +
                     '  <th class="current-results">' +
-                    '    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>' +
+                    '    <div>' +
+                    '      <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>' +
+                    '    </div>' +
                     '  </th>' +
-                    '  <th style="text-align:center;color:darkgray;width:8rem;">Tabell</th>' +
-                    '  <th style="text-align:center;color:darkgray;width:8rem;">Pall</th>' +
-                    '  <th style="text-align:center;color:darkgray;width:9rem;">Nedrykk</th>' +
-                    '  <th style="text-align:center;color:darkgray;width:9rem;">Toppsk.</th>' +
-                    '  <th style="text-align:center;color:darkgray;width:9rem;">Opprykk</th>' +
-                    '  <th style="text-align:center;color:darkgray;width:9rem;">Cup</th>' +
+                    '  <th style="text-align:center;color:darkgray;width:8rem;"><div>Tabell</div></th>' +
+                    '  <th style="text-align:center;color:darkgray;width:8rem;"><div>Pall</div></th>' +
+                    '  <th style="text-align:center;color:darkgray;width:9rem;"><div>Nedrykk</div></th>' +
+                    '  <th style="text-align:center;color:darkgray;width:9rem;"><div>Toppsk.</div></th>' +
+                    '  <th style="text-align:center;color:darkgray;width:9rem;"><div>Opprykk</div></th>' +
+                    '  <th style="text-align:center;color:darkgray;width:9rem;"><div>Cup</div></th>' +
                     '</tr>' +
                     '</thead>' +
 
-                        // All participant data goes here:
                     '<tbody></tbody>',
 
                     model, { variable: 'args' });
@@ -251,43 +255,62 @@ define([
             bootstrapModalContainerView: null,
             modalCurrentResultsView: null,
 
-            //// called on initialize and after attachBuffer is called
-            //initRenderBuffer: function () {
-            //    //console.log('"rating-table-view:INITRENDERBUFFER"');
-            //    this.elBuffer = document.createDocumentFragment();
-            //},
-
-            //// The default implementation:
-            //attachHtml: function (collectionView, childView, index) {
-            //    //console.log('"rating-table-view:attachHtml"');
-            //    if (collectionView.isBuffering) {
-            //        //console.log('"rating-table-view:ATTACHHTML-BUFFERING"');
-            //        // buffering happens on reset events and initial renders
-            //        // in order to reduce the number of inserts into the
-            //        // document, which are expensive.
-            //        collectionView.elBuffer.appendChild(childView.el);
-            //    } else {
-            //        //console.log('"rating-table-view:ATTACHHTML-NOBUFFERING"');
-            //        // If we've already rendered the main collection, just
-            //        // append the new children directly into the element.
-            //        collectionView.$el.append(childView.el);
-            //    }
-            //},
-
-            //// Called after all children have been appended into the elBuffer
-            //attachBuffer: function (collectionView, buffer) {
-            //    //console.log('"rating-table-view:ATTACHBUFFER"');
-            //    collectionView.$el.append(buffer);
-            //},
-
-            onBeforeRender: function (childView) {
-                //console.log('"rating-table-view:onBeforeRender"');
-                this.model.set('year', childView.collection.year);
-                this.model.set('round', childView.collection.round);
+            // No buffering! Rather animations ...
+            initRenderBuffer: function () {
+                //console.log('"rating-table-view:initRenderBuffer (NOTHING)"');
             },
-            onRender: function (childView) {
+            // Special handling of child views
+            // NB! 'index' argument cannot be used, probably due to special re-rendering of last collection in 'app.js'
+            attachHtml: function (collectionView, childView, index) {
+                //console.log('"rating-table-view:attachHtml"');
+                var self = this,
+                    participantContainer = collectionView.$(collectionView.childViewContainer).first(),
+                    isRelocatingParticipants = function () {
+                        return self.isBuffering === false && self.children.length === 13;
+                    };
+                if (isRelocatingParticipants()) {
+                    childView.$el.addClass('outdated-to-current-fadein');
+                    var $lastCurrent = collectionView.$('.current-scores');
+                    if ($lastCurrent.length === 0) {
+                        // The collection is always sorted (by rating then name) - always put the first participant on top
+                        childView.$el.prependTo(participantContainer);
+                    } else {
+                        childView.$el.insertAfter($lastCurrent.last());
+                    }
+
+                } else {
+                    // The collection is always sorted (by rating then name) - if populating from scratch, just append the participants to the view container
+                    if (!this.isBuffering) {
+                        // Meaning NOT just re-rendering previous collection in a 'outdated'/blurry ('.outdated-scores') fashion ...
+                        childView.$el.addClass('blank-to-current-fadein');
+                    }
+                    childView.$el.appendTo(participantContainer);
+                }
+            },
+            onBeforeRender: function () {
+                //console.log('"rating-table-view:onBeforeRender"');
+            },
+            onBeforeAddChild: function (childView) {
+                //console.log('"rating-table-view:onBeforeAddChild"');
+            },
+            onAddChild: function (childView) {
+                //console.log('"rating-table-view:onAddChild"');
+
+                // Add rank tendency marker
+                new RankTrendView({ el: childView.$('.rank-tendency'), model: childView.model }).render();
+
+                // Add rating tendency marker
+                new RatingTrendView({ el: childView.$('.rating-tendency'), model: childView.model }).render();
+            },
+            onBeforeRemoveChild: function (childView) {
+                //console.log('"rating-table-view:onBeforeRemoveChild"');
+            },
+            onRemoveChild: function (childView) {
+                //console.log('"rating-table-view:onRemoveChild"');
+            },
+            onRender: function (collectionView) {
                 //console.log('"rating-table-view:onRender"');
-                this.currentResults = new CurrentResults(childView.model.get('year'), childView.model.get('round'));
+                this.currentResults = new CurrentResults(collectionView.model.get('year'), collectionView.model.get('round'));
                 this.bootstrapModalContainerView = new BootstrapViews.ModalContainerView({
                     parentSelector: 'body',
                     id: 'currentResultsTable',
@@ -297,36 +320,30 @@ define([
                     model: this.currentResults
                 });
             },
-            //onShow: function () {
-            //    console.log('"rating-table-view:onShow"');
-            //},
-            //onDomRefresh: function () {
-            //    console.log('"rating-table-view:onDomRefresh"');
-            //},
-            //onBeforeAddChild: function () {
-            //    console.log('"rating-table-view:onBeforeAddChild"');
-            //},
-            onAddChild: function (childView) {
-                //console.log('"rating-table-view:onAddChild"');
+            onShow: function (collectionView) {
+                //console.log('"rating-table-view:onShow"');
+                var participants = collectionView.$el.find('.participant'),
+                    gold = collectionView.$el.find('.icon-trophy-gold'),
+                    silver = collectionView.$el.find('.icon-trophy-silver'),
+                    bronze = collectionView.$el.find('.icon-trophy-bronze'),
+                    rank = collectionView.$el.find('.rank');
 
-                // Add rank tendency marker
-                new RankTrendView({ el: childView.$('.rank-tendency'), model: childView.model }).render();
-
-                // Add rating tendency marker
-                new RatingTrendView({ el: childView.$('.rating-tendency'), model: childView.model }).render();
+                participants.removeClass('current-scores');
+                participants.addClass('outdated-scores');
+                gold.removeClass('icon-trophy-gold');
+                silver.removeClass('icon-trophy-silver');
+                bronze.removeClass('icon-trophy-bronze');
+                rank.empty();
+            },
+            onDomRefresh: function (collectionView) {
+                //console.log('"rating-table-view:onDomRefresh"');
+            },
+            onBeforeDestroy: function () {
+                //console.log('"rating-table-view:onBeforeDestroy"');
+            },
+            onDestroy: function () {
+                //console.log('"rating-table-view:onDestroy"');
             }
-            //onBeforeRemoveChild: function () {
-            //    console.log('"rating-table-view:onBeforeRemoveChild"');
-            //},
-            //onRemoveChild: function () {
-            //    console.log('"rating-table-view:onRemoveChild"');
-            //},
-            //onBeforeDestroy: function () {
-            //    console.log('"rating-table-view:onBeforeDestroy"');
-            //},
-            //onDestroy: function () {
-            //    console.log('"rating-table-view:onDestroy"');
-            //}
         });
     }
 );

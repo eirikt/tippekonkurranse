@@ -5,7 +5,7 @@ using [Express][51],
 persisting data using [Mongoose][53],
 with server-side functional composition by [RQ][54],
 and keeping client-side somewhat tidy and sane with [Backbone][60].[Marionette][61].
-In production [here][1].
+Hosted [here][1].
 
 ##### Badge-o-rama ...
 
@@ -36,17 +36,17 @@ In production [here][1].
 ## Version history/roadmap
 
 #### v1.3.0 : _Planned Q1 2015_
-* Backbone.Marionette
 * Multi-season handling with proper archiving
 * Show 'Gjeldende resultater' contextual to what round is actively chosen, as done with 'Trend'
 * Configurable strategy-based rules for calculating scores. The rules may differ from year to year ...
 * No more HTTP refresh, now real SPA
-* A simple countdown timer for data refresh (forcing a GET)
-* Button for manual data refresh
-* User admin
-* Admin UI for data management
-* Multiple draggable windows, no more modals (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
-* Remove all local static JSON data backup
+* ~~A simple countdown timer for data refresh (forcing a GET)~~
+* ~~Button for manual data refresh~~
+* ~~User admin~~
+* ~~Admin UI for data management~~
+* ~~Multiple draggable windows, no more modals (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css~~
+* Remove all JSON file backup, leave it to MongoDB
+* Backbone.Marionette
 
 _Status: In progress_
 
