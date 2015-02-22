@@ -267,6 +267,7 @@ var RQ = require("./vendor/rq").RQ,
                     if (!err) {
                         err = "Unexpected HTTP status code: " + response.statusCode + " (only status code 200 is supported)";
                     }
+                    console.error('[' + new Date().toISOString() + ' rq-fun::get] ' + err);
                     return requestion(undefined, err);
                 }
             });
@@ -286,6 +287,7 @@ var RQ = require("./vendor/rq").RQ,
                     if (!err) {
                         err = "Unexpected HTTP status code: " + response.statusCode + " (only status code 200 is supported)";
                     }
+                    console.error('[' + new Date().toISOString() + ' rq-fun::get] ' + err);
                     return requestion(undefined, err);
                 }
             });

@@ -13,7 +13,11 @@ var env = process.env.NODE_ENV || "development",
     curry = require("./../../shared/scripts/fun").curry,
     utils = require("./../../shared/scripts/utils"),
     RQ = require("./vendor/rq").RQ,
+    sequence = RQ.sequence,
+    parallel = RQ.parallel,
     rq = require("./rq-fun"),
+    then = rq.then,
+    go = rq.execute,
 
 // Module dependencies, local application-specific
     TippekonkurranseData = require("./../../shared/scripts/app.models").TippekonkurranseData,
@@ -45,34 +49,59 @@ var env = process.env.NODE_ENV || "development",
     _handleResultsRequest = exports.handleResultsRequest =
         function (request, response) {
             "use strict";
-            var year = request.params.year;
+            var getData = tippekonkurranse.retrieveTippeligaData(request),
+                dispatchForPresentation = curry(tippekonkurranse.dispatchResultsToClientForPresentation, response),
+                storeData = tippekonkurranse.storeTippeligaRoundMatchData;
 
-            RQ.sequence([
-                tippekonkurranse.retrieveTippeligaData(request),
-                rq.requestor(curry(tippekonkurranse.dispatchResultsToClientForPresentation, response)),
-                rq.requestor(tippekonkurranse.storeTippeligaRoundMatchData)
-            ])(rq.execute);
+            sequence([
+                getData,
+                then(dispatchForPresentation),
+                then(storeData)
+            ])(go);
         },
 
 
     _handleScoresRequest = exports.handleScoresRequest =
         function (request, response) {
             "use strict";
-            var year = request.params.year,
+            var year = request.params.year || root.app.currentYear,
+                round = request.params.round || root.app.currentRound,
                 rulesOfTheYear = tippekonkurranse.rules[ year ],
-                predictionsOfTheYear = tippekonkurranse.predictions[ year ];
+                predictionsOfTheYear = tippekonkurranse.predictions[ year ],
+
+                getData = tippekonkurranse.retrieveTippeligaData(request),
+                thenAddScores = curry(tippekonkurranse.addTippekonkurranseScoresRequestor, predictionsOfTheYear, rulesOfTheYear),
+                thenAddPreviousScores = curry(tippekonkurranse.addPreviousMatchRoundRatingToEachParticipantRequestor, predictionsOfTheYear, rulesOfTheYear),
+                dispatchScoresForPresentation = curry(tippekonkurranse.dispatchScoresToClientForPresentation, response),
+                storeData = tippekonkurranse.storeTippeligaRoundMatchData;
 
             if (rulesOfTheYear && predictionsOfTheYear) {
-                RQ.sequence([
-                    tippekonkurranse.retrieveTippeligaData(request),
-                    rq.requestor(tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping),
-                    rq.requestor(tippekonkurranse.addRound),
-                    curry(tippekonkurranse.addTippekonkurranseScoresRequestor, predictionsOfTheYear, rulesOfTheYear),
-                    curry(tippekonkurranse.addPreviousMatchRoundRatingToEachParticipantRequestor, predictionsOfTheYear, rulesOfTheYear),
-                    rq.requestor(tippekonkurranse.addMetadataToScores),
-                    rq.requestor(curry(tippekonkurranse.dispatchScoresToClientForPresentation, response)),
-                    rq.requestor(tippekonkurranse.storeTippeligaRoundMatchData)
-                ])(rq.execute);
+                if (root.app.isYearStarted(round, year) && rulesOfTheYear && predictionsOfTheYear) {
+                    sequence([
+                        getData,
+                        then(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
+                        then(tippekonkurranse.addRound),
+                        thenAddScores,
+                        thenAddPreviousScores,
+                        then(tippekonkurranse.addMetadataToScores),
+                        then(dispatchScoresForPresentation),
+                        then(storeData)
+                    ])(go);
+
+                } else {
+                    console.error(utils.logPreamble() + "Season " + year + " is not yet started");
+                    //response.status(404).send("Season " + year + " is not yet started");
+                    sequence([
+                        getData,
+                        then(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
+                        then(tippekonkurranse.addRound),
+                        thenAddScores,
+                        thenAddPreviousScores,
+                        then(tippekonkurranse.addMetadataToScores),
+                        then(dispatchScoresForPresentation)//,
+                        //then(storeData)
+                    ])(go);
+                }
 
             } else {
                 console.error(utils.logPreamble() + "Rules and/or predictions are missing for year " + year);
@@ -120,26 +149,26 @@ var env = process.env.NODE_ENV || "development",
                 return args.sort(comparators.ascendingByArrayElement(elementIndex));
             };
             sortByRound = curry(sortByElementIndex, tippekonkurranseData.indexOfRound);
-            cacheTheResults = curry(utils.memoizationWriter, true, cache, curry(root.app.isRoundCompleted, year, round), key);
+            cacheTheResults = curry(utils.memoizationWriter, true, cache, curry(root.app.isRoundCompleted, round, year), key);
 
             // 3. Create array of requestors: all historic Tippeligakonkurranse scores - and then execute and wait for all to finish
             for (; roundIndex <= round; roundIndex += 1) {
                 getTippekonkurranseScoresHistory.push(
-                    RQ.sequence([
+                    sequence([
                         curry(tippekonkurranse.getStoredTippeligaDataRequestor, year, roundIndex),
-                        rq.requestor(tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping),
-                        rq.requestor(tippekonkurranse.addRound),
+                        then(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
+                        then(tippekonkurranse.addRound),
                         curry(tippekonkurranse.addTippekonkurranseScoresRequestor, predictionsOfTheYear, rulesOfTheYear)
                     ])
                 );
             }
 
             // 4. Then execute them ...
-            RQ.sequence([
-                RQ.parallel(getTippekonkurranseScoresHistory),
+            sequence([
+                parallel(getTippekonkurranseScoresHistory),
 
                 // 5. And manipulate them ...
-                rq.then(sortByRound),
+                then(sortByRound),
 
                 // TODO: Ugly! Rewrite with 'map' and 'partialFn' and ...
                 function (requestion, args) {
@@ -174,10 +203,10 @@ var env = process.env.NODE_ENV || "development",
                  * 'partialFn' is just for switching the argument ordering in Underscore's 'map' function, which is all wrong.
                  */
                 // TODO: Consider including 'year' in response
-                rq.then(___.partialFn(__.map, __.identity)),
+                then(___.partialFn(__.map, __.identity)),
 
-                rq.then(cacheTheResults),
-                rq.then(dispatchTheResults)
+                then(cacheTheResults),
+                then(dispatchTheResults)
 
-            ])(rq.execute);
+            ])(go);
         };

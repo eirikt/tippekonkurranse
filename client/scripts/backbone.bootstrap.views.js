@@ -9,6 +9,7 @@ define([ 'jquery', 'underscore', 'backbone' ],
             className: 'modal fade',
             parentSelector: null,
             ariaLabelledBy: null,
+
             attributes: function () {
                 return {
                     id: this.id,

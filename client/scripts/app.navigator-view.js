@@ -22,8 +22,7 @@ define(
                 template: function (model) {
                     return _.template(
                         '<a href="/#/scores/<%= args.year %>/<%= args.round %>"><span class="icon-chevron-right"></span></a>',
-                        { year: model.year, round: model.round },
-                        { variable: 'args' }
+                        model, { variable: 'args' }
                     );
                 }
             }),
@@ -40,8 +39,7 @@ define(
                 template: function (model) {
                     return _.template(
                         '<a href="/#/scores/<%= args.year %>/<%= args.round %>"><span class="icon-chevron-left"></span></a>',
-                        { year: model.year, round: model.round },
-                        { variable: 'args' }
+                        model, { variable: 'args' }
                     );
                 }
             }),
@@ -51,8 +49,7 @@ define(
                 template: function (model) {
                     return _.template(
                         '<a href="/#/scores/<%= args.year %>/<%= args.round %>"><%= args.index %></a>',
-                        { year: model.year, round: model.round, index: model.index },
-                        { variable: 'args' }
+                        model, { variable: 'args' }
                     );
                 }
             }),
@@ -62,8 +59,7 @@ define(
                 template: function (model) {
                     return _.template(
                         '<strong><%= args.index %></strong>',
-                        { index: model.index },
-                        { variable: 'args' }
+                        model, { variable: 'args' }
                     );
                 }
             }),
@@ -73,8 +69,7 @@ define(
                 template: function (model) {
                     return _.template(
                         '<span style="color:#cccccc"><%= args.index %></span>',
-                        { index: model.index },
-                        { variable: 'args' }
+                        model, { variable: 'args' }
                     );
                 }
             });
@@ -165,7 +160,7 @@ define(
                         );
                     }
                     this.collection.add(new Model({
-                            isEnabled: this.activeRound > 1 && this.activeRound < 30 && (this.activeYear < this.currentYear || this.activeRound < this.currentRound),
+                            isEnabled: this.activeRound >= 1 && this.activeRound < 30 && (this.activeYear < this.currentYear || this.activeRound < this.currentRound),
                             isActive: null, // N/A
                             year: this.activeYear,
                             round: this.activeRound + 1,

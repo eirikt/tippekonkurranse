@@ -20,7 +20,7 @@ var env = process.env.NODE_ENV || "development",
     utils = require("./../../shared/scripts/utils"),
     comparators = require("./../../shared/scripts/comparators"),
     curry = require("./../../shared/scripts/fun").curry,
-    //rq = require("./rq-fun"),
+//rq = require("./rq-fun"),
 
 // Module dependencies, local application-specific
     dbSchema = require("./db-schema"),
@@ -75,22 +75,45 @@ root.app = {
 
     initialYear: 2014,                          // NB! To be set manually for now ...
     initialRound: 1,                            // NB! To be set manually for now ...
-    //activeYear: null,                         // N/A (this kind of state => only on clients)
-    //activeRound: null,                        // N/A (this kind of state => only on clients)
-    currentYear: 2015,                          // NB! To be set manually for now ...
+    //activeYear: null,                         // N/A (this kind of state => only on clients - designated there as 'year')
+    //activeRound: null,                        // N/A (this kind of state => only on clients - designated there as 'round')
+    currentYear: new Date().getFullYear(),
     currentRound: null,
 
-    isCurrentYearCompleted: false,              // NB! To be set manually for now ...
-    isCurrentRoundCompleted: function (round) {
+    isYearStarted: function (round, year) {
         "use strict";
-        return (round < root.app.currentRound) ||
-            (round <= root.app.currentRound && root.app.isCurrentYearCompleted);
+        var roundNumber, yearNumber;
+        try {
+            roundNumber = parseInt(round, 10);
+            yearNumber = parseInt(year, 10);
+        } catch (e) {
+            return false;
+        }
+        if (!roundNumber || !yearNumber) {
+            return false;
+        }
+        if (yearNumber > root.app.currentYear) {
+            return false;
+        }
+        return true;
     },
-    isRoundCompleted: function (year, round) {
+    isCurrentYearCompleted: false,              // NB! To be set manually for now ...
+    /*
+     isCurrentRoundCompleted: function (round) {
+     "use strict";
+     return round < root.app.currentRound ||
+     (round <= root.app.currentRound && root.app.isCurrentYearCompleted);
+     },
+     */
+    isRoundCompleted: function (round, year) {
         "use strict";
+        if (!year) {
+            return round < root.app.currentRound ||
+                (round <= root.app.currentRound && root.app.isCurrentYearCompleted);
+        }
         return year < root.app.currentYear ||
             ( year <= root.app.currentYear && round < root.app.currentRound) ||
-            ( year <= root.app.currentYear && root.app.isCurrentYearCompleted && round <= root.app.currentRound);
+            ( year <= root.app.currentYear && round <= root.app.currentRound && root.app.isCurrentYearCompleted );
     }
 };
 
@@ -153,7 +176,7 @@ if (env === "development") {
  getTippekonkurranseScoresHistory.push(
  RQ.sequence([
  curry(tippekonkurranse.getStoredTippeligaDataRequestor, root.app.initialYear, roundIndex),
- rq.requestor(tippekonkurranse.addTeamAndNumberOfMatchesPlayedGrouping),
+ rq.requestor(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
  rq.requestor(tippekonkurranse.addRound),
  curry(tippekonkurranse.addTippekonkurranseScoresRequestor, tippekonkurranse.predictions[ root.app.initialYear ], tippekonkurranse.rules[ root.app.initialYear ])
  ])

@@ -94,6 +94,8 @@
                 Object.defineProperty(this, 'name', utils.immutablePropertyWithDefaultValue(teamName));
                 Object.defineProperty(this, 'no', utils.immutablePropertyWithDefaultValue(placement));
                 Object.defineProperty(this, 'matches', utils.immutablePropertyWithDefaultValue(numberOfMatchesPlayed));
+
+                Object.seal(this);
             },
 
 
@@ -129,9 +131,9 @@
                     Object.defineProperty(this, 'tippeligaTopScorer', utils.mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'adeccoligaTable', utils.mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'remainingCupContenders', utils.mutablePropertyWithDefaultValue(null));
-                    Object.defineProperty(this, 'round', utils.mutablePropertyWithDefaultValue(null));
+                    Object.defineProperty(this, 'round', utils.mutablePropertyWithDefaultValue(0));
                     Object.defineProperty(this, 'date', utils.mutablePropertyWithDefaultValue(null));
-                    Object.defineProperty(this, 'currentRound', utils.mutablePropertyWithDefaultValue(null));
+                    Object.defineProperty(this, 'currentRound', utils.mutablePropertyWithDefaultValue(0));
                     Object.defineProperty(this, 'currentDate', utils.mutablePropertyWithDefaultValue(new Date()));
                     Object.defineProperty(this, 'matchesCountGrouping', utils.mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'scores', utils.mutablePropertyWithDefaultValue(null));

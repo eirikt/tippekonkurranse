@@ -64,6 +64,43 @@ define([
                 }
             },
 
+            url: function () {
+                if (this.year && this.round) {
+                    return [ this.defaultBaseUri, this.year, this.round ].join("/");
+                }
+                return [ this.defaultBaseUri, this.defaultResource ].join("/");
+            },
+
+            parse: function (response) {
+                if (response === 404) {
+                    return this.models;
+                }
+                this.year = response.metadata.year;
+                this.round = response.metadata.round;
+                this.date = response.metadata.date;
+                this.currentYear = response.metadata.currentYear;
+                this.currentRound = response.metadata.currentRound;
+
+                for (var participant in response.scores) {
+                    if (response.scores.hasOwnProperty(participant)) {
+                        var participantScore = new this.model(response.scores[ participant ]);
+                        participantScore.set(ParticipantScore.userIdPropertyName, participant, { silent: true });
+                        participantScore.set(ParticipantScore.namePropertyName, participant.unSnakify().toTitleCase(), { silent: true });
+                        participantScore.set(ParticipantScore.yearPropertyName, response.metadata.year, { silent: true });
+                        participantScore.set(ParticipantScore.roundPropertyName, response.metadata.round, { silent: true });
+                        participantScore.set("hasPredictions", response.metadata.hasPredictions[ participant ], { silent: true });
+
+                        this.add(participantScore, { silent: true });
+                    }
+                }
+                if (response.metadata.round > 1) {
+                    this._setPreviousRank();
+                }
+                this._setRank();
+
+                return this.models;
+            },
+
             /** Set previous match round rank for participants (tendency tracking) */
             _setPreviousRank: function () {
                 this.comparator = this.sortByPreviousRatingThenByName;
@@ -116,42 +153,6 @@ define([
                     }
                     participant.set(ParticipantScore.rankPropertyName, rank, { silent: true });
                 });
-            },
-
-            url: function () {
-                if (this.year && this.round) {
-                    return [ this.defaultBaseUri, this.year, this.round ].join("/");
-                }
-                return [ this.defaultBaseUri, this.defaultResource ].join("/");
-            },
-
-            parse: function (response) {
-                if (response === 404) {
-                    return this.models;
-                }
-                this.year = response.metadata.year;
-                this.round = response.metadata.round;
-                this.date = response.metadata.date;
-                this.currentYear = response.metadata.currentYear;
-                this.currentRound = response.metadata.currentRound;
-
-                for (var participant in response.scores) {
-                    if (response.scores.hasOwnProperty(participant)) {
-                        var participantScore = new this.model(response.scores[ participant ]);
-                        participantScore.set(ParticipantScore.userIdPropertyName, participant, { silent: true });
-                        participantScore.set(ParticipantScore.namePropertyName, participant.unSnakify().toTitleCase(), { silent: true });
-                        participantScore.set(ParticipantScore.yearPropertyName, response.metadata.year, { silent: true });
-                        participantScore.set(ParticipantScore.roundPropertyName, response.metadata.round, { silent: true });
-
-                        this.add(participantScore, { silent: true });
-                    }
-                }
-                if (response.metadata.round > 1) {
-                    this._setPreviousRank();
-                }
-                this._setRank();
-
-                return this.models;
             }
         });
 

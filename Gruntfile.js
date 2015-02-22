@@ -155,7 +155,7 @@ module.exports = function (grunt) {
                 strict: true,
                 trailing: true,
                 maxparams: 14,
-                maxdepth: 3,
+                maxdepth: 4,
                 maxstatements: 30, // Default: ...
                 maxcomplexity: 30, // TODO: Sigh, let us start all over again, target should be 5 or thereabout ...
                 //maxlen: 180,

@@ -16,13 +16,13 @@ var env = process.env.NODE_ENV || "development",
 // Module dependencies, local application-specific
     norwegianSoccerLeagueService = require("./norwegian-soccer-service"),
     dbSchema = require("./db-schema"),
-    TippekonkurranseData = require("./../../shared/scripts/app.models").TippekonkurranseData,
     appModels = require("./../../shared/scripts/app.models"),
-    tippekonkurranse = require("./tippekonkurranse"),
     predictions2014 = require("./tippekonkurranse-2014-user-predictions").predictions,
     predictions2015 = require("./tippekonkurranse-2015-user-predictions").predictions,
     rules2014 = require("./tippekonkurranse-2014-rules").rules,
     rules2015 = require("./tippekonkurranse-2015-rules").rules,
+
+    TippekonkurranseData = appModels.TippekonkurranseData,
 
     _predictions = exports.predictions = {
         2014: predictions2014,
@@ -40,7 +40,7 @@ var env = process.env.NODE_ENV || "development",
         var tableScore, pallScore, pallBonusScore, nedrykkScore, indexedTippeligaTable;
 
         if (__.isEmpty(participantObj.tabell)) {
-            console.warn(utils.logPreamble() + "'Tabell' property is missing");
+            console.warn(utils.logPreamble() + "'Tabell' property is missing, returning 1000 points for all predictions ...");
             return [ 1000, 1000, 1000, 1000 ];
         }
 
@@ -164,7 +164,7 @@ var env = process.env.NODE_ENV || "development",
                         logMsg += " is already stored with " + dbCount + " teams - current data has " + currentRoundCount + " teams";
                         console.log(logMsg + " => no need for updating db with new results");
 
-                    } else if (root.app.isRoundCompleted(year, round)) {
+                    } else if (root.app.isRoundCompleted(round, year)) {
                         logMsg += " is completed => no need for updating db with new results";
                         console.log(logMsg);
 
@@ -203,28 +203,37 @@ var env = process.env.NODE_ENV || "development",
                     dbSchema.TippeligaRound.findOne({ year: year, round: round }).exec(
                         function (err, tippeligaRound) {
                             if (err) {
-                                return requestion(undefined, err);
+                                return requestion(undefined, err); // => Blank screen ...
                             }
-                            if (!tippeligaRound) {
-                                // TODO: Do something a bit more clever! Return custom requestion error? Redirect to latest completed round? That quash thing ...?
-                                return requestion(undefined, "No data for round"); // => Blank screen ...
-                            }
+
                             var tippekonkurranseData = new TippekonkurranseData();
 
                             tippekonkurranseData.isLive = false;
-
-                            tippekonkurranseData.tippeligaTable = tippeligaRound.tippeliga;
-                            tippekonkurranseData.tippeligaTopScorer = tippeligaRound.toppscorer;
-                            tippekonkurranseData.adeccoligaTable = tippeligaRound.adeccoliga;
-                            tippekonkurranseData.remainingCupContenders = tippeligaRound.remainingCupContenders;
-
-                            tippekonkurranseData.round = tippeligaRound.round;
-                            tippekonkurranseData.date = tippeligaRound.date;
-                            tippekonkurranseData.currentRound = allTippeligaRounds.length;
-                            tippekonkurranseData.currentDate = new Date();
-
                             tippekonkurranseData.matchesCountGrouping = null;
                             tippekonkurranseData.scores = null;
+
+                            if (tippeligaRound) {
+                                tippekonkurranseData.tippeligaTable = tippeligaRound.tippeliga;
+                                tippekonkurranseData.tippeligaTopScorer = tippeligaRound.toppscorer;
+                                tippekonkurranseData.adeccoligaTable = tippeligaRound.adeccoliga;
+                                tippekonkurranseData.remainingCupContenders = tippeligaRound.remainingCupContenders;
+
+                                tippekonkurranseData.round = tippeligaRound.round;
+                                tippekonkurranseData.date = tippeligaRound.date;
+                                tippekonkurranseData.currentRound = allTippeligaRounds.length;
+                                //tippekonkurranseData.currentDate = new Date();
+
+                            } else {
+                                //tippekonkurranseData.tippeligaTable = null;
+                                //tippekonkurranseData.tippeligaTopScorer = null;
+                                //tippekonkurranseData.adeccoligaTable = null;
+                                //tippekonkurranseData.remainingCupContenders = null;
+
+                                //tippekonkurranseData.round = 0;
+                                tippekonkurranseData.date = new Date(); // Cannot be null
+                                //tippekonkurranseData.currentRound = 0;
+                                //tippekonkurranseData.currentDate = new Date();
+                            }
 
                             return requestion(tippekonkurranseData.toArray());
                         }
@@ -237,7 +246,7 @@ var env = process.env.NODE_ENV || "development",
     _retrieveTippeligaDataRequestory = exports.retrieveTippeligaData =
         function (request) {
             "use strict";
-            var year = request.params.year || new Date().getFullYear(),
+            var year = request.params.year || root.app.currentYear,
                 round = request.params.round,
                 now,
                 tippekonkurranseData;
@@ -278,7 +287,7 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
-    _addTeamAndNumberOfMatchesPlayedGrouping = exports.addTeamAndNumberOfMatchesPlayedGrouping =
+    _addGroupingOfTeamAndNumberOfMatchesPlayed = exports.addGroupingOfTeamAndNumberOfMatchesPlayed =
         function (args) {
             "use strict";
             var tippekonkurranseData = new TippekonkurranseData(args);
@@ -328,10 +337,11 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
+// TODO: This function is close to unreadable / unmanageable ... the truth is in there somewhere
+// TODO: Get rid of the requestion argument somehow
     _addTippekonkurranseScoresRequestor = exports.addTippekonkurranseScoresRequestor =
         function (userPredictions, scoresStrategy, requestion, args) {
             "use strict";
-
             if (!userPredictions || (__.isEmpty(userPredictions))) {
                 throw new Error("User predictions are missing - cannot calculate Tippekonkurranse scores");
             }
@@ -450,6 +460,7 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
+// TODO: Get rid of the requestion argument somehow
     _addPreviousMatchRoundRatingToEachParticipantRequestor = exports.addPreviousMatchRoundRatingToEachParticipantRequestor =
         function (userPredictions, scoresStrategy, requestion, args) {
             "use strict";
@@ -470,7 +481,7 @@ var env = process.env.NODE_ENV || "development",
             } else {
                 return RQ.sequence([
                     getPreviousRoundTippeligaData,
-                    rq.requestor(_addTeamAndNumberOfMatchesPlayedGrouping),
+                    rq.requestor(_addGroupingOfTeamAndNumberOfMatchesPlayed),
                     rq.requestor(_addRound),
                     addTippekonkurranseScores,
                     function (requestion, args) {
@@ -491,15 +502,23 @@ var env = process.env.NODE_ENV || "development",
     _addMetadataToScores = exports.addMetadataToScores =
         function (args) {
             "use strict";
-            var tippekonkurranseData = new TippekonkurranseData(args);
+            var tippekonkurranseData = new TippekonkurranseData(args),
+                hasPredictions = {};
+
             tippekonkurranseData.scores.metadata = {
                 live: tippekonkurranseData.liveData,
                 year: tippekonkurranseData.date.getFullYear(),
                 round: tippekonkurranseData.round,
-                date: tippekonkurranseData.date,
                 currentYear: tippekonkurranseData.currentYear,
                 currentRound: tippekonkurranseData.currentRound
             };
+
+            // Is user's predictions in place?
+            __.each(_predictions[ tippekonkurranseData.scores.metadata.year ], function (participantPredictions, participant) {
+                hasPredictions[ participant ] = participantPredictions.tabell.length > 0;
+            });
+            tippekonkurranseData.scores.metadata.hasPredictions = hasPredictions;
+
             return tippekonkurranseData.toArray();
         },
 
@@ -552,5 +571,5 @@ var env = process.env.NODE_ENV || "development",
                         .exec(conditionallyStoreTippeligaRound);
                 }
             }
-            return args;
+            return tippekonkurranseData.toArray();
         };

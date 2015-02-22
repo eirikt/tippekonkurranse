@@ -59,7 +59,7 @@ h2, .h2 {
 }
 
 /**
- * Other classes
+ * Generic classes
  */
 .x-large {
     font-size: x-large;
@@ -70,6 +70,283 @@ h2, .h2 {
     font-weight: bold;
 }
 
+/**
+ * View-specific classes :: Scores
+ */
+.scores-table {
+    display: -webkit-flex;
+    display: flex;
+
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+.scores-table-row {
+    height: 3.5rem;
+    border-bottom: 1px solid #ddd;
+
+    display: -webkit-flex;
+    display: flex;
+
+    -webkit-justify-content: space-between;
+    -ms-justify-content: space-between;
+    justify-content: space-between;
+
+    -webkit-align-items: center;
+    -ms-align-items: center;
+    align-items: center;
+
+    -webkit-align-content: center;
+    -ms-align-content: center;
+    align-content: center;
+
+    /*-webkit-transition: all 1s linear 0s;*/
+    /*transition: all 1s linear 0s;*/
+}
+
+.scores-table-row:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.scores-table-row:not(:first-child):hover {
+    background: #eee;
+}
+
+.scores-table-header-row {
+    font-weight: bold;
+    color: darkgray;
+}
+
+.rank {
+    /*width: 3rem;*/
+    /*width: 5.5rem;*/
+    text-align: right;
+    padding-right: .8rem;
+
+    -webkit-order: 1;
+    -ms-order: 1;
+    order: 1;
+
+    -webkit-flex-grow: 1;
+    -ms-flex-grow: 1;
+    flex-grow: 1;
+
+    -webkit-flex-basis: 0;
+    -ms-flex-basis: 0;
+    flex-basis: 0;
+
+    -webkit-align-self: center;
+    -ms-align-self: center;
+    align-self: center;
+}
+
+.name {
+    /*width: 14rem;*/
+    text-align: left;
+
+    -webkit-order: 4;
+    -ms-order: 2;
+    order: 2;
+
+    -webkit-flex-grow: 4;
+    -ms-flex-grow: 4;
+    flex-grow: 4;
+
+    -webkit-flex-basis: 0;
+    -ms-flex-basis: 0;
+    flex-basis: 0;
+
+    -webkit-align-self: center;
+    -ms-align-self: center;
+    align-self: center;
+}
+
+.rank-trend {
+    /*width: 8rem;*/
+    text-align: left;
+
+    -webkit-order: 3;
+    -ms-order: 3;
+    order: 3;
+
+    -webkit-flex-grow: 2;
+    -ms-flex-grow: 2;
+    flex-grow: 2;
+
+    -webkit-flex-basis: 0;
+    -ms-flex-basis: 0;
+    flex-basis: 0;
+
+    -webkit-align-self: center;
+    -ms-align-self: center;
+    align-self: center;
+}
+
+.rating {
+    text-align: right;
+    padding-right: .6rem;
+
+    -webkit-order: 4;
+    -ms-order: 4;
+    order: 4;
+
+    -webkit-flex-grow: 1;
+    -ms-flex-grow: 1;
+    flex-grow: 1;
+
+    -webkit-flex-basis: 0;
+    -ms-flex-basis: 0;
+    flex-basis: 0;
+}
+
+.rating-trend {
+    text-align: left;
+
+    -webkit-order: 5;
+    -ms-order: 5;
+    order: 5;
+
+    -webkit-flex-grow: 1;
+    -ms-flex-grow: 1;
+    flex-grow: 1;
+
+    -webkit-flex-basis: 0;
+    -ms-flex-basis: 0;
+    flex-basis: 0;
+}
+
+.prediction {
+    text-align: center;
+
+    -webkit-order: 6;
+    -ms-order: 6;
+    order: 6;
+
+    -webkit-flex-grow: 8;
+    -ms-flex-grow: 8;
+    flex-grow: 8;
+
+    -webkit-flex-basis: 0;
+    -ms-flex-basis: 0;
+    flex-basis: 0;
+}
+
+.tabell-score {
+    /*width: 8rem;*/
+    text-align: center;
+
+    -webkit-order: 7;
+    -ms-order: 7;
+    order: 7;
+
+    -webkit-flex-grow: 2;
+    -ms-flex-grow: 2;
+    flex-grow: 2;
+
+    -webkit-flex-basis: 0;
+    -ms-flex-basis: 0;
+    flex-basis: 0;
+}
+
+.pall-score {
+    /*width: 8rem;*/
+    text-align: center;
+
+    -webkit-order: 8;
+    -ms-order: 8;
+    order: 8;
+
+    -webkit-flex-grow: 2;
+    -ms-flex-grow: 2;
+    flex-grow: 2;
+
+    -webkit-flex-basis: 0;
+    -ms-flex-basis: 0;
+    flex-basis: 0;
+}
+
+.nedrykk-score {
+    /*width: 9rem;*/
+    text-align: center;
+
+    -webkit-order: 9;
+    -ms-order: 9;
+    order: 9;
+
+    -webkit-flex-grow: 2;
+    -ms-flex-grow: 2;
+    flex-grow: 2;
+
+    -webkit-flex-basis: 0;
+    -ms-flex-basis: 0;
+    flex-basis: 0;
+}
+
+.toppscorer-score {
+    /*width: 9rem;*/
+    text-align: center;
+
+    -webkit-order: 10;
+    -ms-order: 10;
+    order: 10;
+
+    -webkit-flex-grow: 2;
+    -ms-flex-grow: 2;
+    flex-grow: 2;
+
+    -webkit-flex-basis: 0;
+    -ms-flex-basis: 0;
+    flex-basis: 0;
+}
+
+.opprykk-score {
+    /*width: 9rem;*/
+    text-align: center;
+
+    -webkit-order: 11;
+    -ms-order: 11;
+    order: 11;
+
+    -webkit-flex-grow: 2;
+    -ms-flex-grow: 2;
+    flex-grow: 2;
+
+    -webkit-flex-basis: 0;
+    -ms-flex-basis: 0;
+    flex-basis: 0;
+}
+
+.cup-score {
+    /*width: 9rem;*/
+    text-align: center;
+
+    -webkit-order: 12;
+    -ms-order: 12;
+    order: 12;
+
+    -webkit-flex-grow: 2;
+    -ms-flex-grow: 2;
+    flex-grow: 2;
+
+    -webkit-flex-basis: 0;
+    -ms-flex-basis: 0;
+    flex-basis: 0;
+}
+
+/**
+ * Element-specific styles
+ */
+#footer1 {
+    margin-top: 2rem;
+}
+
+/**
+ *  Module            : ...
+ *  Portable/reusable :
+ *  Dependencies      :
+ *  Resources         :
+ ******************************************************************************/
 .current-scores {
     color: #333;
 }
@@ -78,12 +355,6 @@ h2, .h2 {
     color: #ddd;
 }
 
-/**
- *  Module           :
- *  Portable/reusable:
- *  Dependencies     :
- *  Resources        :
- ******************************************************************************/
 @-webkit-keyframes blank-to-current-fadein {
     0% {
         color: #fff;
@@ -106,8 +377,17 @@ h2, .h2 {
     -webkit-animation-name: blank-to-current-fadein;
     -webkit-animation-duration: 1s;
     -webkit-animation-timing-function: ease-out;
+    animation-name: blank-to-current-fadein;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
 }
 
+/**
+ *  Module            : ...
+ *  Portable/reusable :
+ *  Dependencies      :
+ *  Resources         :
+ ******************************************************************************/
 @-webkit-keyframes outdated-to-current-fadein {
     0% {
         color: #ddd;
@@ -117,12 +397,6 @@ h2, .h2 {
     }
 }
 
-/**
- *  Module           :
- *  Portable/reusable:
- *  Dependencies     :
- *  Resources        :
- ******************************************************************************/
 @keyframes outdated-to-current-fadein {
     0% {
         color: #ddd;
@@ -136,52 +410,34 @@ h2, .h2 {
     -webkit-animation-name: outdated-to-current-fadein;
     -webkit-animation-duration: 0.8s;
     -webkit-animation-timing-function: ease-out;
+    animation-name: outdated-to-current-fadein;
+    animation-duration: 0.8s;
+    animation-timing-function: ease-out;
 }
 
 /**
- *  Module           :
- *  Portable/reusable: Yes
- *  Dependencies     : -
- *  Resources        : Flexbox: http://css-tricks.com/snippets/css/a-guide-to-flexbox
+ *  Module            : ...
+ *  Portable/reusable : Yes
+ *  Dependencies      : -
+ *  Resources         : Flexbox: http://css-tricks.com/snippets/css/a-guide-to-flexbox
  ******************************************************************************/
 .full-width-inline-list {
     display: -webkit-flex;
     display: flex;
-    -webkit-flex-direction: row;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -webkit-flex-wrap: wrap;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -webkit-flex: 0 1 auto;
-    -ms-flex: 0 1 auto;
-    flex: 0 1 auto;
+
     -webkit-justify-content: space-between;
     -ms-justify-content: space-between;
     justify-content: space-between;
-    -webkit-align-items: flex-start;
-    -ms-align-items: flex-start;
-    align-items: flex-start;
+
     padding-left: 1.5rem;
     padding-right: 1.5rem;
 }
 
 /**
- * Specific element manipulations
- */
-#fullscreen {
-    margin-right: 4rem;
-    -o-transform: translate(2.5rem, -2rem);
-    -moz-transform: translate(2.5rem, -2rem);
-    -webkit-transform: translate(2.5rem, -2rem);
-    -ms-transform: translate(2.5rem, -2rem);
-}
-
-/**
- *  Module           : Font Awesome icons
- *  Portable/reusable: Yes
- *  Dependencies     : "bootstrap.css", "font-awesome.css"
- *  Resources        : http://fontawesome.io/icons/
+ *  Module            : Font Awesome icons
+ *  Portable/reusable : Yes
+ *  Dependencies      : "bootstrap.css", "font-awesome.css"
+ *  Resources         : http://fontawesome.io/icons/
  *
  *  Example:
  *      <a href="mylinkedinpage" class="icon-up"></a>
@@ -260,10 +516,10 @@ h2, .h2 {
 }
 
 /**
- *  Module           : Debug
- *  Portable/reusable: Yes
- *  Dependencies     : -
- *  Resources        : -
+ *  Module            : Debug
+ *  Portable/reusable : Yes
+ *  Dependencies      : -
+ *  Resources         : -
  ******************************************************************************/
 /*
 div {

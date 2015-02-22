@@ -24,7 +24,7 @@ var __ = require("underscore"),
     expectDefaultGlobalStatePreserved = function () {
         "use strict";
         expect(root.currentRound).is.null;
-        expect(root.isCurrentRoundCompleted).is.false;
+        //expect(root.isCurrentRoundCompleted).is.false;
     };
 
 
@@ -47,7 +47,7 @@ describe("Tippekonkurranse", function () {
             // Global state
             root.currentYear = new Date().getFullYear();
             root.currentRound = null;
-            root.isCurrentRoundCompleted = false;
+            //root.isCurrentRoundCompleted = false;
         });
 
 
