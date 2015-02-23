@@ -70,7 +70,7 @@ define(
                     this.model.set(App.scoreModel.opprykkPropertyName, prettyOpprykk, { silent: true });
                 },
                 onRender: function () {
-                    $('#predictionsTable').append(this.template(this.model.toJSON()));
+                    this.$('#predictionsTable').append(this.template(this.model.toJSON()));
                 }
             }),
 
@@ -122,8 +122,8 @@ define(
                             tippeligaSeasonHasStarted = window.app.model.get("currentTippeligaSeasonHasStarted");
 
                         return tippeligaSeasonHasStarted
-                            ? "<span style='color:red;'>Ingen tips mottatt ennå. Tippeligaen startet " + new Moment(tippeligaSeasonStartDate).fromNow() + "!!</span>"
-                            : "<span>Ingen tips mottatt ennå. Tippeligaen starter " + new Moment(tippeligaSeasonStartDate).fromNow() + ". Just saying ...</span>";
+                            ? "<span style='color:red;'>Tippetips ikke mottatt! Tippeligaen startet " + new Moment(tippeligaSeasonStartDate).fromNow() + "!!</span>"
+                            : "<span>Årets tippetips ikke mottatt ennå";
                     }
                 }
             }),

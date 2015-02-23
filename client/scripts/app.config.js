@@ -14,7 +14,7 @@ require.config({
     // Development ('grunt [run|deploy:development]' and IDE execution):
     //baseUrl: 'scripts',
     // Standard:
-    baseUrl: '1.3.0-alpha.9/scripts',
+    baseUrl: '1.3.0-alpha.10/scripts',
 
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',
@@ -25,48 +25,54 @@ require.config({
         'moment': '../bower_components/moment/min/moment.min',
         'moment.nb': '../bower_components/moment/locale/nb',
         'toastr': '../bower_components/toastr/toastr.min',
-        'jqplot': '../bower_components/jqplot-bower/dist/jquery.jqplot'
+        'jqplot': '../bower_components/jqplot-bower/dist/jquery.jqplot',
+        'jquery.countdown': '../bower_components/jquery.countdown/dist/jquery.countdown.min'
         // TODO: Make the jqplot cursor work ...
         //'jqplot.highlighter': '../bower_components/jqplot-bower/dist/plugins/jqplot.highlighter.min',
         //'jqplot.cursor': '../bower_components/jqplot-bower/dist/plugins/jqplot.cursor.min',
         //'jqplot.dateAxisRenderer': '../bower_components/jqplot-bower/dist/plugins/jqplot.dateAxisRenderer.min'
+    },
+    config: {
+        moment: {
+            noGlobal: true
+        }
     }
 });
 
 
 // Application configuration
-require([ 'jquery', 'toastr' ],
-    function ($, toastr) {
+require([ 'jquery', 'toastr', 'jquery.countdown' ],
+    function ($, Toastr, $countdown) {
         'use strict';
 
         // Toastr.js config (=> http://codeseven.github.io/toastr/demo.html)
-        toastr.options = {
+        Toastr.options = {
             'positionClass': 'toast-top-full-width',
             'timeOut': 6000
         };
 
         /*
-        $(document).ready(function () {
-            console.log('DOM ready!');
+         $(document).ready(function () {
+         console.log('DOM ready!');
 
-            $('#animTest').on('click', function () {
-                //alert("click!");
-                var partipipant2 = $(".participant").get(1);
-                //$(partipipant2).addClass('two-to-five');
-                $(partipipant2).animate({
-                    //width: "70%",
-                    //opacity: 0.4,
-                    //marginLeft: "0.6in",
-                    //fontSize: "3em",
-                    //borderWidth: "10px",
-                    //"-webkit-order": 5,
-                    order: 5
-                }, "slow");
-                //$(partipipant2).css("-webkit-order", 5);
-                //$(partipipant2).css("order", 5);
-            });
-        });
-        */
+         $('#animTest').on('click', function () {
+         //alert("click!");
+         var partipipant2 = $(".participant").get(1);
+         //$(partipipant2).addClass('two-to-five');
+         $(partipipant2).animate({
+         //width: "70%",
+         //opacity: 0.4,
+         //marginLeft: "0.6in",
+         //fontSize: "3em",
+         //borderWidth: "10px",
+         //"-webkit-order": 5,
+         order: 5
+         }, "slow");
+         //$(partipipant2).css("-webkit-order", 5);
+         //$(partipipant2).css("order", 5);
+         });
+         });
+         */
     }
 );
 

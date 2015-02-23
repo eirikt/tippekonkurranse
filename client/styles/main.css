@@ -19,7 +19,7 @@ body {
     font-family: 'Open Sans Condensed', 'Arial Narrow', sans-serif;
     font-weight: 400;
     font-size: 15px;
-    color: #333;
+    color: #808080;
 }
 
 hr {
@@ -59,6 +59,17 @@ h2, .h2 {
 }
 
 /**
+ * Element-specific styles
+ */
+#header {
+    margin-top: 16px;
+}
+
+#footer1 {
+    margin-top: 2rem;
+}
+
+/**
  * Generic classes
  */
 .x-large {
@@ -68,6 +79,35 @@ h2, .h2 {
 .strong {
     font-size: larger;
     font-weight: bold;
+}
+
+.dimmed {
+    color: #d3d3d3;
+}
+
+.contrast {
+    color: #f96e00;
+}
+
+/**
+ * View-specific classes :: Header
+ */
+.heading {
+    padding-left: 2rem;
+    font-size: 36px;
+    white-space: nowrap;
+}
+
+.heading-extra {
+    font-size: 20px;
+}
+
+.countdown {
+    padding-top: 16px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    font-size: 22px;
+    white-space: nowrap;
 }
 
 /**
@@ -332,13 +372,6 @@ h2, .h2 {
     -webkit-flex-basis: 0;
     -ms-flex-basis: 0;
     flex-basis: 0;
-}
-
-/**
- * Element-specific styles
- */
-#footer1 {
-    margin-top: 2rem;
 }
 
 /**

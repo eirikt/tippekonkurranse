@@ -1,28 +1,29 @@
 /* global define:false */
-define([ 'jquery', 'underscore', 'backbone', 'marionette' ],
-    function ($, _, Backbone, Marionette) {
+define([ 'jquery', 'underscore', 'moment', 'backbone', 'marionette' ],
+    function ($, _, Moment, Backbone, Marionette) {
         'use strict';
 
         return Marionette.ItemView.extend({
             tagName: 'div',
-
+            className: 'clearfix',
             template: function (scores) {
                 var scoresTemplate = '' +
-                    '<h1 style="white-space:nowrap;">' +
-                    '  <a href="/#/scores/current"><span style="padding-left:2rem;">Tippekonkurranse <%= args.year %></span></a>' +
-                    '  <span style="font-size:2rem;color:#808080;">&nbsp;|&nbsp;&nbsp;runde&nbsp;<%= args.round %></span>' +
-                    '  <span style="font-size:2rem;color:#d3d3d3;">av 30</span>' +
+                    '  <span class="heading"><a href="/#/scores/current">Tippekonkurranse <%= args.year %></a></span>' +
+                    '  <span class="heading-extra">&nbsp;&nbsp;|&nbsp;&nbsp;runde&nbsp;<%= args.round %></span>' +
+                    '  <span class="dimmed heading-extra">&nbsp;av 30</span>' +
                     '  <span id="offlineScoresNotification" class="hidden" ' +
                     'data-appname="Tippekonkurranse" data-uri="/api/scores/current" data-urititle="Denne stillingen er beregnet" ' +
-                    'style="margin-left:.5rem;font-size:1.5rem;font-weight:bold;color:#ef8d15;">' +
-                    '  </span>' +
-                    '</h1>';
+                    'style="margin-left:.5rem;font-size:1.5rem;font-weight:bold;color:#ef8d15;"></span>' +
+                    '<div class="countdown pull-right">' +
+                    '  <span><em>Til seriestart:&nbsp;</em></span>' +
+                    '  <span id="countdown"></span>' +
+                    '</div>';
 
                 var ratingHistoryTemplate = '' +
-                    '<h1 style="white-space:nowrap;padding-bottom:2rem;">' +
-                    '  <a href="/#/scores/current"><span style="padding-left:2rem;">Tippekonkurranse <%= args.year %></span></a>' +
-                    '  <span style="font-size:2rem;color:#808080;">&nbsp;&nbsp;|&nbsp;&nbsp;poengtrend</span>' +
-                    '</h1>';
+                    '<div>' +
+                    '  <span class="heading"><a href="/#/scores/current">Tippekonkurranse <%= args.year %></a></span>' +
+                    '  <span class="heading-extra">&nbsp;&nbsp;|&nbsp;&nbsp;poengtrend</span>' +
+                    '</div>';
 
                 if (scores.isRatingHistory) {
                     return _.template(ratingHistoryTemplate, {
@@ -35,6 +36,16 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette' ],
                         round: scores ? scores.round : '?'
                     }, { variable: 'args' });
                 }
+            },
+            onRender: function () {
+                this.$('#countdown').countdown(window.app.model.get('currentTippeligaSeasonStartDate'), function (event) {
+                    $(this).html(event.strftime(
+                        '<span class="contrast"><strong>%w</strong></span> uker ' +
+                        '<span class="contrast"><strong>%d</strong></span> dager ' +
+                        '<span class="contrast"><strong>%H</strong></span> timer ' +
+                        '<span class="contrast"><strong>%M</strong></span> minutter ' +
+                        '<span class="contrast"><strong>%S</strong></span> sekunder'));
+                });
             }
         });
     }
