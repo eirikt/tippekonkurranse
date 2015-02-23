@@ -231,15 +231,15 @@ module.exports = function (grunt) {
                     concurrency: 2,
                     browsers: [
                         { platform: 'Windows 7', browserName: 'Chrome', version: '39' },              // OK
-                        { platform: 'Windows 7', browserName: 'Firefox', version: '35' },             // Fails ...
-                        { platform: 'OS X 10.10', browserName: 'Safari', version: '8' },              // OK
-                        { platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' }, // OK
-                        { platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' },   // OK
+                        //{ platform: 'Windows 7', browserName: 'Firefox', version: '35' },             // Fails ...
+                        //{ platform: 'OS X 10.10', browserName: 'Safari', version: '8' },              // OK
+                        //{ platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' }, // OK
+                        //{ platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' },   // OK
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '9' },
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '8' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '7' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '6' },
-                        { platform: 'Linux', browserName: 'Android', version: '4.4' }                 // OK
+                        //{ platform: 'Linux', browserName: 'Android', version: '4.4' }                 // OK
                     ]
                 }
             }
@@ -264,13 +264,16 @@ module.exports = function (grunt) {
                     'build/<%= pkg.version %>/scripts/app.controller.js': 'build/<%= pkg.version %>/scripts/app.controller.js',
                     'build/<%= pkg.version %>/scripts/app.header-view.js': 'build/<%= pkg.version %>/scripts/app.header-view.js',
                     'build/<%= pkg.version %>/scripts/app.js': 'build/<%= pkg.version %>/scripts/app.js',
-                    'build/<%= pkg.version %>/scripts/app.participant-score-view.js': 'build/<%= pkg.version %>/scripts/app.participant-score-view.js',
+                    'build/<%= pkg.version %>/scripts/app.navigator-view.js': 'build/<%= pkg.version %>/scripts/app.navigator-view.js',
+                    'build/<%= pkg.version %>/scripts/app.pre-season-participant-row-view.js': 'build/<%= pkg.version %>/scripts/app.pre-season-participant-row-view.js',
+                    'build/<%= pkg.version %>/scripts/app.pre-season-table-view.js': 'build/<%= pkg.version %>/scripts/app.pre-season-table-view.js',
                     'build/<%= pkg.version %>/scripts/app.rating-history-collection.js': 'build/<%= pkg.version %>/scripts/app.rating-history-collection.js',
                     'build/<%= pkg.version %>/scripts/app.rating-history-view.js': 'build/<%= pkg.version %>/scripts/app.rating-history-view.js',
                     'build/<%= pkg.version %>/scripts/app.result.js': 'build/<%= pkg.version %>/scripts/app.result.js',
                     'build/<%= pkg.version %>/scripts/app.result-collection.js': 'build/<%= pkg.version %>/scripts/app.result-collection.js',
-                    'build/<%= pkg.version %>/scripts/app.navigator-view.js': 'build/<%= pkg.version %>/scripts/app.navigator-view.js',
-                    'build/<%= pkg.version %>/scripts/app.results-view.js': 'build/<%= pkg.version %>/scripts/app.results-view.js',
+                    'build/<%= pkg.version %>/scripts/app.scores-header-row-view.js': 'build/<%= pkg.version %>/scripts/app.scores-header-row-view.js',
+                    'build/<%= pkg.version %>/scripts/app.scores-participant-row-view.js': 'build/<%= pkg.version %>/scripts/app.scores-participant-row-view.js',
+                    'build/<%= pkg.version %>/scripts/app.scores-table-view.js': 'build/<%= pkg.version %>/scripts/app.scores-table-view.js',
                     'build/<%= pkg.version %>/scripts/app.soccer-table-views.js': 'build/<%= pkg.version %>/scripts/app.soccer-table-views.js',
                     'build/<%= pkg.version %>/scripts/backbone.bootstrap.views.js': 'build/<%= pkg.version %>/scripts/backbone.bootstrap.views.js',
                     'build/<%= pkg.version %>/scripts/backbone.fetch-local-copy.js': 'build/<%= pkg.version %>/scripts/backbone.fetch-local-copy.js',

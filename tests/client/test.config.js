@@ -42,9 +42,12 @@ require.config({
         // Client-side-only app libs (Views)
         'app.header-view': '../../build/scripts/app.header-view',
         'app.navigator-view': '../../build/scripts/app.navigator-view',
-        'app.participant-score-view': '../../build/scripts/app.participant-score-view',
+        'app.pre-season-participant-row-view': '../../build/scripts/app.pre-season-participant-row-view',
+        'app.pre-season-table-view': '../../build/scripts/app.pre-season-table-view',
         'app.rating-history-view': '../../build/scripts/app.rating-history-view',
-        'app.results-view': '../../build/scripts/app.results-view',
+        'app.scores-header-row-view': '../../build/scripts/app.scores-header-row-view',
+        'app.scores-participant-row-view': '../../build/scripts/app.scores-participant-row-view',
+        'app.scores-table-view': '../../build/scripts/app.scores-table-view',
         'app.soccer-table-views': '../../build/scripts/app.soccer-table-views'
     }
 });
