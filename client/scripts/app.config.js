@@ -14,7 +14,7 @@ require.config({
     // Development ('grunt [run|deploy:development]' and IDE execution):
     //baseUrl: 'scripts',
     // Standard:
-    baseUrl: '1.3.0-alpha.10/scripts',
+    baseUrl: '1.3.0-alpha.11/scripts',
 
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',

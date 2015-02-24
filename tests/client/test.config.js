@@ -53,10 +53,10 @@ require.config({
 });
 
 require([
-        'specs/test.spec.js',
-        'specs/string-extensions.amd.spec.js',
-        'specs/utils.amd.spec.js',
-        'specs/comparators.amd.spec.js'//,
+        'specs/test.spec.js'//,
+        //'specs/string-extensions.amd.spec.js',
+        //'specs/utils.amd.spec.js',
+        //'specs/comparators.amd.spec.js',
 
         //'specs/client-utils.spec.js',
 

@@ -96,7 +96,12 @@ module.exports = function (grunt) {
 
                     // These are under RequireJS control, version folder added:
                     { expand: true, cwd: 'shared', src: [ '**' ], dest: 'build/<%= pkg.version %>/scripts' },
-                    { expand: true, cwd: 'client/bower_components', src: [ '**' ], dest: 'build/<%= pkg.version %>/bower_components' },
+                    {
+                        expand: true,
+                        cwd: 'client/bower_components',
+                        src: [ '**' ],
+                        dest: 'build/<%= pkg.version %>/bower_components'
+                    },
                     { expand: true, cwd: 'client/scripts', src: [ '**' ], dest: 'build/<%= pkg.version %>/scripts' },
                     { expand: true, cwd: 'client/styles', src: [ '**' ], dest: 'build/<%= pkg.version %>/styles' }
                 ]
@@ -230,16 +235,16 @@ module.exports = function (grunt) {
                     build: process.env.TRAVIS_JOB_ID,
                     concurrency: 2,
                     browsers: [
-                        { platform: 'Windows 7', browserName: 'Chrome', version: '39' },              // OK
-                        //{ platform: 'Windows 7', browserName: 'Firefox', version: '35' },             // Fails ...
-                        //{ platform: 'OS X 10.10', browserName: 'Safari', version: '8' },              // OK
-                        //{ platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' }, // OK
-                        //{ platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' },   // OK
+                        { platform: 'Windows 7', browserName: 'Chrome', version: '40' }//,
+                        //{ platform: 'Windows 7', browserName: 'Firefox', version: '35' },
+                        //{ platform: 'OS X 10.10', browserName: 'Safari', version: '8' },
+                        //{ platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' },
+                        //{ platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' },
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '9' },
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '8' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '7' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '6' },
-                        //{ platform: 'Linux', browserName: 'Android', version: '4.4' }                 // OK
+                        //{ platform: 'Linux', browserName: 'Android', version: '4.4' }
                     ]
                 }
             }

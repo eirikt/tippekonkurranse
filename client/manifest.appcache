@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# v1.3.0-alpha.10
+# v1.3.0-alpha.11
 
 CACHE:
 favicon.ico
@@ -23,6 +23,7 @@ bower_components/moment/locale/nb.js
 bower_components/bootstrap/dist/js/bootstrap.min.js
 bower_components/toastr/toastr.min.js
 bower_components/jqplot-bower/dist/jquery.jqplot.min.js
+bower_components/jquery.countdown/dist/jquery.countdown.min.js
 
 scripts/app.models.js
 scripts/comparators.js
@@ -31,14 +32,18 @@ scripts/string-extensions.js
 
 scripts/app.config.js
 scripts/app.controller.js
-scripts/app.js
 scripts/app.header-view.js
-scripts/app.participant-score-view.js
+scripts/app.js
+scripts/app.navigator-view.js
+scripts/app.pre-season-participant-row-view.js
+scripts/app.pre-season-table-view.js
+scripts/app.rating-history-collection.js
 scripts/app.rating-history-view.js
 scripts/app.result.js
 scripts/app.result-collection.js
-scripts/app.navigator-view.js
-scripts/app.results-view.js
+scripts/app.scores-header-row-view.js
+scripts/app.scores-participant-row-view.js
+scripts/app.scores-table-view.js
 scripts/app.soccer-table-views.js
 scripts/backbone.bootstrap.views.js
 scripts/backbone.fetch-local-copy.js
@@ -59,6 +64,19 @@ api/predictions/2014/svein_tore
 api/predictions/2014/steinar
 api/predictions/2014/tore
 api/predictions/2014/trond
+api/predictions/2015/einar
+api/predictions/2015/eirik
+api/predictions/2015/geir
+api/predictions/2015/hans_bernhard
+api/predictions/2015/jan_tore
+api/predictions/2015/oddgeir
+api/predictions/2015/oddvar
+api/predictions/2015/ole_erik
+api/predictions/2015/rikard
+api/predictions/2015/svein_tore
+api/predictions/2015/steinar
+api/predictions/2015/tore
+api/predictions/2015/trond
 
 NETWORK:
 *

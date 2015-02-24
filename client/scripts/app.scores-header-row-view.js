@@ -88,7 +88,7 @@ define(
 
                     } else {
                         return _.template(
-                            '<span>Opprykk</span>',
+                            '<span>Pall</span>',
                             model, { variable: 'args' });
                     }
                 }
