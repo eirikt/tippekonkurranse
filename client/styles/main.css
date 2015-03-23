@@ -478,6 +478,7 @@ h2, .h2 {
 .icon-check::before {
     font-family: FontAwesome, sans-serif;
     content: "\f00c";
+    color: green;
 }
 
 .icon-line-chart::before {

@@ -56,10 +56,26 @@ var _predictions2015 = exports.predictions = {
         cup: []
     },
     svein_tore: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            "Molde",
+            "Rosenborg",
+            "Vålerenga",
+            "Strømsgodset",
+            "Viking",
+            "Lillestrøm",
+            "Aalesund",
+            "Haugesund",
+            "Stabæk",
+            "Tromsø",
+            "Sarpsborg 08",
+            "Mjøndalen",
+            "Sandefjord",
+            "Bodø/Glimt",
+            "Start"
+        ],
+        opprykk: [ "Brann", "Sogndal" ],
+        toppscorer: [ "Ola Williams Kamara" ],
+        cup: [ "Molde" ]
     },
     steinar: {
         tabell: [],

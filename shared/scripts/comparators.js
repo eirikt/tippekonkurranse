@@ -24,6 +24,7 @@
                 return object[ propertyName ];
             },
 
+
             /**
              * Backbone.js' way of accessing model properties, 'getters' and 'setters'.
              *
@@ -33,6 +34,7 @@
                 return backboneModelObject.get(propertyName);
             },
 
+
             /**
              * @returns Comparator equal (being 0)
              */
@@ -40,20 +42,19 @@
                 return 0;
             },
 
+
             /**
              * Alphanumeric comparators works for Strings.
              * The support for comparator distance is not yet fully supported.
              *
              * @see http://caniuse.com/#search=local
+             * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare
              * @returns The comparator (x < 0 < y) value
              */
-            _alphanumericAscendingValueComparator = function (value, otherValue) {
-                return value.localeCompare(otherValue);
-                // TODO: Locale-sensitivity and more ...
-                //return value.localeCompare(otherValue, 'nb');
-                //return value.localeCompare(otherValue, 'no-no');
-                //return value.localeCompare(otherValue, 'no-NO');
-            },
+            _alphanumericAscendingValueComparator = function (locale, options, value, otherValue) {
+                return value.localeCompare(otherValue, locale, options);
+            }.autoCurry(),
+
 
             /**
              * Arithmetic comparators works for Numbers and Dates.
@@ -63,15 +64,17 @@
                 return value - otherValue;
             },
 
+
             /**
              * Wrapper around the two sorting scheme functions above.
              */
-            _typeAwareAscendingValueComparator = function (value, otherValue) {
+            _typeAwareAscendingValueComparator = function (locale, options, value, otherValue) {
                 if (F.isString(value)) {
-                    return _alphanumericAscendingValueComparator(value, otherValue);
+                    return _alphanumericAscendingValueComparator(locale, options, value, otherValue);
                 }
                 return _arithmeticAscendingValueComparator(value, otherValue);
-            },
+            }.autoCurry(),
+
 
             /**
              * Curry-friendly ascending comparator function.
@@ -82,48 +85,60 @@
              * @param object {Object} object to be compared
              * @param otherObject {Object} object to be compared against
              */
-            _chainable_AscendingComparator = function (propertyGetter, nextComparator, propertyName, object, otherObject) {
-                var compareResult = _typeAwareAscendingValueComparator(propertyGetter(propertyName, object), propertyGetter(propertyName, otherObject));
+            _chainable_AscendingComparator = function (locale, options, propertyGetter, nextComparator, propertyName, object, otherObject) {
+                var compareResult = _typeAwareAscendingValueComparator(locale, options, propertyGetter(propertyName, object), propertyGetter(propertyName, otherObject));
                 if (!compareResult) {
                     return nextComparator(object, otherObject);
                 }
                 return compareResult;
             }.autoCurry(),
 
+
             /**
              * Multi-property ascending comparator function.
              *
+             * @param locale {String} TODO: ...
+             * @param options {Object} TODO: ...
              * @param propertyGetter {Function} Function for obtaining properties from the objects being compared
              * @param propertyNameArray {[String]} Ordered names of the object properties to be compared
              * @param object {Object} object to be compared
              * @param otherObject {Object} object to be compared against
              */
-            _ascendingComparator = function (propertyGetter, propertyNameArray, object, otherObject) {
+            _ascendingComparator = function (locale, options, propertyGetter, propertyNameArray, object, otherObject) {
                 var propertyArray = F.isArray(propertyNameArray) ? propertyNameArray : [ propertyNameArray ],
                     propertyName, i, ascendingComparator;
 
                 propertyName = propertyArray[ propertyArray.length - 1 ];
-                ascendingComparator = _chainable_AscendingComparator(propertyGetter, _alwaysEqualComparator, propertyName);
+                ascendingComparator = _chainable_AscendingComparator(locale, options, propertyGetter, _alwaysEqualComparator, propertyName);
                 for (i = propertyArray.length - 2; i >= 0; i -= 1) {
                     propertyName = propertyArray[ i ];
-                    ascendingComparator = _chainable_AscendingComparator(propertyGetter, ascendingComparator, propertyName);
+                    ascendingComparator = _chainable_AscendingComparator(locale, options, propertyGetter, ascendingComparator, propertyName);
                 }
                 return ascendingComparator(object, otherObject);
-            }.autoCurry();
+            }.autoCurry(),
+
+
+        // TODO: Move to application config
+            norwegianLocale = 'nb-NO',
+
+        // TODO: Move to application config
+            norwegianCompareOptions = { usage: 'sort', sensitivity: 'variant' };
+
 
         return {
             // "Private" functions exported for specification/testing purposes.
             _propertyGetter: _propertyGetter,
             _backbonePropertyGetter: _backbonePropertyGetter,
             _arithmeticAscendingValue: _arithmeticAscendingValueComparator,
-            _alphanumericAscendingValue: _alphanumericAscendingValueComparator,
+            _alphanumericAscendingValue: _alphanumericAscendingValueComparator(norwegianLocale, norwegianCompareOptions),
             _alwaysEqual: _alwaysEqualComparator,
             // /"Private" functions
 
             // Public API
-            ascendingByProperty: _ascendingComparator(_propertyGetter),
-            ascendingByArrayElement: _ascendingComparator(_propertyGetter),
-            ascendingByBackboneProperty: _ascendingComparator(_backbonePropertyGetter)
+            // TODO: Move locale config to application
+            ascendingByProperty: _ascendingComparator(norwegianLocale, norwegianCompareOptions, _propertyGetter),
+            ascendingByArrayElement: _ascendingComparator(norwegianLocale, norwegianCompareOptions, _propertyGetter),
+            ascendingByBackboneProperty: _ascendingComparator(norwegianLocale, norwegianCompareOptions, _backbonePropertyGetter)
         };
     }
 );

@@ -340,12 +340,12 @@ var env = process.env.NODE_ENV || "development",
 // TODO: This function is close to unreadable / unmanageable ... the truth is in there somewhere
 // TODO: Get rid of the requestion argument somehow
     _addTippekonkurranseScoresRequestor = exports.addTippekonkurranseScoresRequestor =
-        function (userPredictions, scoresStrategy, requestion, args) {
+        function (userPredictions, rules, requestion, args) {
             "use strict";
             if (!userPredictions || (__.isEmpty(userPredictions))) {
                 throw new Error("User predictions are missing - cannot calculate Tippekonkurranse scores");
             }
-            if (!scoresStrategy || (__.isEmpty(scoresStrategy))) {
+            if (!rules || (__.isEmpty(rules))) {
                 throw new Error("Rules are missing - cannot calculate Tippekonkurranse scores");
             }
             if (!requestion) {
@@ -440,10 +440,10 @@ var env = process.env.NODE_ENV || "development",
                     scoresRequestors.push(
                         RQ.sequence([
                             RQ.parallel([
-                                rq.requestor(curry(_calculateTippeligaScores, scoresStrategy, userPredictions[ participant ], tippekonkurranseData.tippeligaTable)),
-                                rq.requestor(curry(_calculateToppscorerScores, scoresStrategy, userPredictions[ participant ], tippekonkurranseData.tippeligaTopScorer)),
-                                rq.requestor(curry(_calculateOpprykkScores, scoresStrategy, userPredictions[ participant ], tippekonkurranseData.adeccoligaTable)),
-                                rq.requestor(curry(_calculateCupScores, scoresStrategy, userPredictions[ participant ], tippekonkurranseData.remainingCupContenders))
+                                rq.requestor(curry(_calculateTippeligaScores, rules, userPredictions[ participant ], tippekonkurranseData.tippeligaTable)),
+                                rq.requestor(curry(_calculateToppscorerScores, rules, userPredictions[ participant ], tippekonkurranseData.tippeligaTopScorer)),
+                                rq.requestor(curry(_calculateOpprykkScores, rules, userPredictions[ participant ], tippekonkurranseData.adeccoligaTable)),
+                                rq.requestor(curry(_calculateCupScores, rules, userPredictions[ participant ], tippekonkurranseData.remainingCupContenders))
                             ]),
                             curry(_sum, ratingIndex),
                             rq.requestor(curry(_currentStandingUpdate, currentStanding, participant))

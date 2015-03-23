@@ -113,17 +113,19 @@ define(
                 className: 'prediction',
                 template: function (model) {
                     if (model.hasPredictions) {
-                        return _.template(
-                            '<button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable"><%= args.' + ParticipantScore.namePropertyName + ' %>s tips</button>',
-                            model, { variable: 'args' }
-                        );
+                        //return _.template(
+                        //    '<button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable"><%= args.' + ParticipantScore.namePropertyName + ' %>s tips</button>',
+                        //    model, { variable: 'args' }
+                        //);
+                        return "<span class='icon-check' style='padding-left:6rem;'></span>";
+
                     } else {
                         var tippeligaSeasonStartDate = window.app.model.get("currentTippeligaSeasonStartDate"),
                             tippeligaSeasonHasStarted = window.app.model.get("currentTippeligaSeasonHasStarted");
 
                         return tippeligaSeasonHasStarted
-                            ? "<span style='color:red;'>Tippetips ikke mottatt! Tippeligaen startet " + new Moment(tippeligaSeasonStartDate).fromNow() + "!!</span>"
-                            : "<span>Årets tippetips ikke mottatt ennå";
+                            ? "<span style='color:red;padding-left:6rem;'>Tippetips ikke mottatt! Tippeligaen startet " + new Moment(tippeligaSeasonStartDate).fromNow() + "!!</span>"
+                            : "<span style='padding-left:6rem;'>Årets tippetips ikke mottatt ennå";
                     }
                 }
             }),

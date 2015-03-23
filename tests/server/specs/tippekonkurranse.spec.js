@@ -19,7 +19,11 @@ var __ = require("underscore"),
     predictions2014 = require("../../../server/scripts/tippekonkurranse").predictions[ 2014 ],
     rules2014 = require("../../../server/scripts/tippekonkurranse").rules[ 2014 ],
 
+    predictions2015 = require("../../../server/scripts/tippekonkurranse").predictions[ 2015 ],
+    rules2015 = require("../../../server/scripts/tippekonkurranse").rules[ 2015 ],
+
     addTippekonkurranseScores2014 = curry(addTippekonkurranseScoresRequestor, predictions2014, rules2014),
+    addTippekonkurranseScores2015 = curry(addTippekonkurranseScoresRequestor, predictions2015, rules2015),
 
     expectDefaultGlobalStatePreserved = function () {
         "use strict";
@@ -823,7 +827,7 @@ describe("Tippekonkurranse", function () {
 
     describe("'Opprykk' bonus point calculations", function () {
 
-        it("should give -1 if both teams exist in prediction, exact order", function (done) {
+        it("2014: should give -1 if both teams exist in prediction, exact order", function (done) {
             var userPredictions = {
                     john: {
                         tabell: null,
@@ -850,8 +854,7 @@ describe("Tippekonkurranse", function () {
             rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
-
-        it("should give -1 if both teams exist in prediction, whatever order", function (done) {
+        it("2014: should give -1 if both teams exist in prediction, whatever order", function (done) {
             var userPredictions = {
                     john: {
                         tabell: null,
@@ -879,7 +882,7 @@ describe("Tippekonkurranse", function () {
         });
 
 
-        it("should give nothing if only one team exist in prediction, whatever order 1", function (done) {
+        it("2014: should give nothing if only one team exist in prediction, whatever order 1", function (done) {
             var userPredictions = {
                     john: {
                         tabell: null,
@@ -907,7 +910,7 @@ describe("Tippekonkurranse", function () {
         });
 
 
-        it("should give nothing if only one team exist in prediction, whatever order 2", function (done) {
+        it("2014: should give nothing if only one team exist in prediction, whatever order 2", function (done) {
             var userPredictions = {
                     john: {
                         tabell: null,
@@ -938,7 +941,7 @@ describe("Tippekonkurranse", function () {
 
     describe("'Toppscorer' bonus point calculations", function () {
 
-        it("should give -1 if toppscorer is correct", function (done) {
+        it("2014: should give -1 if toppscorer is correct", function (done) {
             var userPredictions = {
                     john: {
                         tabell: null,
@@ -961,7 +964,30 @@ describe("Tippekonkurranse", function () {
         });
 
 
-        it("should give 0 if toppscorer is not present in toppscorer collection (more than one toppscorer)", function (done) {
+        it("2015: should give -5 if toppscorer is correct", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: null,
+                        toppscorer: [ "Mr. T" ],
+                        opprykk: null,
+                        cup: null
+                    }
+                },
+                actualToppscorerTable = [ "Mr. T" ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2015),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.toppscorer).to.equal(-5);
+                };
+
+            inputArgs.tippeligaTopScorer = actualToppscorerTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("2014: should give 0 if toppscorer is not present in toppscorer collection (more than one toppscorer)", function (done) {
             var userPredictions = {
                     john: {
                         tabell: null,
@@ -984,7 +1010,30 @@ describe("Tippekonkurranse", function () {
         });
 
 
-        it("should give 0 if toppscorer is not present in toppscorer collection (more than one toppscorer)", function (done) {
+        it("2015: should give 0 if toppscorer is not present in toppscorer collection (more than one toppscorer)", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: null,
+                        toppscorer: [ "Mr. T" ],
+                        opprykk: null,
+                        cup: null
+                    }
+                },
+                actualToppscorerTable = [ "Mr. A", "Mr. B" ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2015),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.toppscorer).to.equal(0);
+                };
+
+            inputArgs.tippeligaTopScorer = actualToppscorerTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("2014: should give -1 if toppscorer is present in toppscorer collection (more than one toppscorer)", function (done) {
             var userPredictions = {
                     john: {
                         tabell: null,
@@ -1003,12 +1052,30 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTopScorer = actualToppscorerTable;
 
-            rq.executeAndVerify(
-                addTippekonkurranseScores,
-                inputArgs.toArray(),
-                verify,
-                done
-            );
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("2015: should give -5 if toppscorer is present in toppscorer collection (more than one toppscorer)", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: null,
+                        toppscorer: [ "Mr. T" ],
+                        opprykk: null,
+                        cup: null
+                    }
+                },
+                actualToppscorerTable = [ "Mr. A", "Mr. T" ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2015),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.toppscorer).to.equal(-5);
+                };
+
+            inputArgs.tippeligaTopScorer = actualToppscorerTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
     });
 });

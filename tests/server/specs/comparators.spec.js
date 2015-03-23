@@ -26,15 +26,33 @@ describe("Comparators", function () {
                 expect(_.partial(alphanumericComparator, 0, 0)).to.throw(TypeError);
             });
 
+            // Below 0 is "greater-than", above 0 is "less-than"
             it("should sort Strings", function () {
                 expect(alphanumericComparator("a", "a")).to.be.equal(0);
-                //expect(alphanumericComparator("d", "D")).to.be.above(0); // TODO: Case-sensitivity requires some more config ...
-
+                expect(alphanumericComparator("d", "d")).to.be.equal(0);
                 expect(alphanumericComparator("a", "d")).to.be.below(0);
                 expect(alphanumericComparator("A", "D")).to.be.below(0);
-
                 expect(alphanumericComparator("d", "a")).to.be.above(0);
                 expect(alphanumericComparator("D", "A")).to.be.above(0);
+            });
+
+            // Below 0 is "greater-than", above 0 is "less-than"
+            it("should sort Strings, case sensitive", function () {
+                expect(alphanumericComparator("D", "d")).to.be.below(0);
+                expect(alphanumericComparator("d", "D")).to.be.above(0);
+            });
+
+            // Below 0 is "greater-than", above 0 is "less-than"
+            it("should sort Strings, diacritics sensitive", function () {
+                expect(alphanumericComparator("æ", "æ")).to.be.equal(0);
+                expect(alphanumericComparator("Ø", "Ø")).to.be.equal(0);
+                expect(alphanumericComparator("g", "ø")).to.be.below(0);
+                expect(alphanumericComparator("å", "y")).to.be.above(0);
+                expect(alphanumericComparator("æ", "ø")).to.be.below(0);
+                expect(alphanumericComparator("ø", "æ")).to.be.above(0);
+                expect(alphanumericComparator("å", "æ")).to.be.below(0); // TODO: ??
+                expect(alphanumericComparator("æ", "å")).to.be.above(0); // TODO: ??
+                expect(alphanumericComparator("ø", "å")).to.be.above(0); // TODO: ??
             });
 
             it("should throw error if Dates", function () {
@@ -306,7 +324,7 @@ describe("Comparators", function () {
                     myDateProperty: later
                 },
 
-                coll = new Backbone.Collection([ model3, model5, model7, model1, model6, model4, model2 ], { comparator: myComparator });
+                coll = new Backbone.Collection([ model3, model4, model5, model7, model1, model6, model2 ], { comparator: myComparator });
 
             expect(coll.at(0).get("myId")).to.be.equal("1");
             expect(coll.at(1).get("myId")).to.be.equal("2");

@@ -72,9 +72,9 @@ describe("TippekonkurranseData constructor function / objects", function () {
         //expect(tippekonkurranseData.year).to.be.a.property;
         //expect(tippekonkurranseData.year).to.be.null;
         expect(tippekonkurranseData.currentRound).to.be.a.property;
-        expect(tippekonkurranseData.currentRound).to.be.null;
+        expect(tippekonkurranseData.currentRound).to.be.equal(0);
         expect(tippekonkurranseData.round).to.be.a.property;
-        expect(tippekonkurranseData.round).to.be.null;
+        expect(tippekonkurranseData.round).to.be.equal(0);
         expect(tippekonkurranseData.currentDate).to.be.a.property;
         expect(tippekonkurranseData.currentDate).to.be.above(new Date().setSeconds(new Date().getSeconds() - 1));
         expect(tippekonkurranseData.date).to.be.a.property;

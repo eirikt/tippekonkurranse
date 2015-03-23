@@ -14,7 +14,7 @@ require.config({
     // Development ('grunt [run|deploy:development]' and IDE execution):
     //baseUrl: 'scripts',
     // Standard:
-    baseUrl: '1.3.0-alpha.11/scripts',
+    baseUrl: '1.3.0-beta.1/scripts',
 
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',
@@ -31,6 +31,12 @@ require.config({
         //'jqplot.highlighter': '../bower_components/jqplot-bower/dist/plugins/jqplot.highlighter.min',
         //'jqplot.cursor': '../bower_components/jqplot-bower/dist/plugins/jqplot.cursor.min',
         //'jqplot.dateAxisRenderer': '../bower_components/jqplot-bower/dist/plugins/jqplot.dateAxisRenderer.min'
+    },
+    shim: {
+        jqplot: {
+            deps: [ 'jquery' ],
+            exports: 'jqplot'
+        }
     },
     config: {
         moment: {
