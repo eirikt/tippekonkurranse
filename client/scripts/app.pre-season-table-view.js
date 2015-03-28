@@ -3,6 +3,7 @@
 define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment', 'moment.nb',
         'backbone.fetch-local-copy', 'client-utils', 'backbone.bootstrap.views',
         'app.models', 'app.scores-header-row-view', 'app.pre-season-participant-row-view', 'app.soccer-table-views' ],
+
     function ($, _, Backbone, Marionette, Bootstrap, Moment, Moment_nb, BackboneFetchLocalCopy, utils, BootstrapViews, App, HeaderRowView, ParticipantRowView, SoccerTableViews) {
 
         'use strict';
@@ -93,7 +94,7 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
                     // Pretty tabell presentation
                     prettyTabellView = new SoccerTableViews.SimpleTableView({
                         model: this.model.get('currentTippeligaTable'),
-                        emphasizeFormat: '3+2'
+                        emphasizeFormat: '3+0'
                     });
                     this.model.set('currentTippeligaTable', prettyTabellView.render().$el.html(), { silent: true });
 

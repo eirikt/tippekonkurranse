@@ -49,13 +49,15 @@ h2, .h2 {
 #currentResultsTable .modal-content {
     width: 625px;
     margin-top: 75px;
-    background-image: linear-gradient(to bottom right, #ffffff 0%, #f96e00 50%);
+    color:black;
+    background-image: linear-gradient(to bottom right, #ffffff 0%, #61c100 50%);
 }
 
 #predictionsTable .modal-content {
     width: 340px;
     margin-top: 75px;
-    background-image: linear-gradient(to bottom right, #ffffff 0%, #f96e00 75%);
+    color:black;
+    background-image: linear-gradient(to bottom right, #ffffff 0%, #01f944 75%);
 }
 
 /**

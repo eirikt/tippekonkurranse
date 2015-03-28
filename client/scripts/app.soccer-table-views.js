@@ -1,6 +1,6 @@
 /* global define:false */
 
-define(["jquery", "underscore", "backbone"],
+define([ "jquery", "underscore", "backbone" ],
     function ($, _, Backbone) {
         "use strict";
 
@@ -15,12 +15,13 @@ define(["jquery", "underscore", "backbone"],
         var SimpleTableView = Backbone.View.extend({
             // TODO: tagName does not seem to work!?
             //tagName: "table",
+            //className: "simple-table",
 
             numberOfRowsInTable: 15,
             defaultEmphasizeFormat: "0+0",
 
             initialize: function () {
-                this.emphasizeFormat = _.toArray(arguments)[0].emphasizeFormat || this.defaultEmphasizeFormat;
+                this.emphasizeFormat = _.toArray(arguments)[ 0 ].emphasizeFormat || this.defaultEmphasizeFormat;
                 if (this.model instanceof Backbone.Model) {
                     this.model = this.model.toJSON();
                 } else if (_.isArray(this.model)) {
@@ -40,15 +41,20 @@ define(["jquery", "underscore", "backbone"],
                 if (team && team.matches) {
                     return '' +
                         '<tr>' +
-                        '  <td style="color:#5c5c5c;font-weight:bold;text-align:right;">' + team.no + '.&nbsp;</td>' +
-                        '  <td style="color:#5c5c5c;font-weight:bold;">(' + team.matches + ')&nbsp;</td>' +
-                        '  <td style="color:#5c5c5c;font-weight:bold;">' + team.name + '</td>' +
+                        //'  <td style="font-weight:bold;text-align:right;">' + team.no + '.&nbsp;</td>' +
+                        //'  <td style="font-weight:bold;">(' + team.matches + ')&nbsp;</td>' +
+                        //'  <td style="font-weight:bold;">' + team.name + '</td>' +
+                        '  <td class="">' + team.no + '.&nbsp;</td>' +
+                        '  <td class="">(' + team.matches + ')&nbsp;</td>' +
+                        '  <td class="">' + team.name + '</td>' +
                         '</tr>';
                 } else {
                     return '' +
                         '<tr>' +
-                        '  <td style="color:#5c5c5c;font-weight:bold;text-align:right;">' + team.no + '.&nbsp;</td>' +
-                        '  <td style="color:#5c5c5c;font-weight:bold;">' + team.name + '</td>' +
+                        //'  <td style="font-weight:bold;text-align:right;">' + team.no + '.&nbsp;</td>' +
+                        //'  <td style="font-weight:bold;">' + team.name + '</td>' +
+                        '  <td class="">' + team.no + '.&nbsp;</td>' +
+                        '  <td class="">' + team.name + '</td>' +
                         '</tr>';
                 }
             },
@@ -71,8 +77,8 @@ define(["jquery", "underscore", "backbone"],
             render: function () {
                 var self = this,
                     teamEmphasizeArray = this.emphasizeFormat.split("+", 2),
-                    numberOfTeamsToEmphasizeAtStart = parseInt(teamEmphasizeArray[0], 10),
-                    numberOfTeamsToEmphasizeAtEnd = parseInt(teamEmphasizeArray[1], 10);
+                    numberOfTeamsToEmphasizeAtStart = parseInt(teamEmphasizeArray[ 0 ], 10),
+                    numberOfTeamsToEmphasizeAtEnd = parseInt(teamEmphasizeArray[ 1 ], 10);
 
                 this.$el.empty();
                 _.each(this.model, function (team, index) {
@@ -84,7 +90,9 @@ define(["jquery", "underscore", "backbone"],
                         self.$el.append(self.getNormalTableRow(team));
                     }
                 });
+
                 this.$el.wrapInner("<table/>");
+
                 return this;
             }
         });

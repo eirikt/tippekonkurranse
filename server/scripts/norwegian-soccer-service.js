@@ -134,6 +134,8 @@ var __ = require("underscore"),
      * Solved manually: Just remove the teams one after another whenever they screw up ...
      */
     _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
+        rq.return(["Alle"]);
+        /*
         rq.return([
             "Bodø/Glimt",
             "Haugesund",
@@ -168,3 +170,4 @@ var __ = require("underscore"),
             "Strømmen",
             "Åsane"
         ]);
+        */

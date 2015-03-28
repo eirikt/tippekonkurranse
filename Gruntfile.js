@@ -137,6 +137,7 @@ module.exports = function (grunt) {
                 browser: true,
                 jquery: true,
                 node: true,
+                mocha: true,
 
                 bitwise: true,
                 camelcase: true,
@@ -235,8 +236,8 @@ module.exports = function (grunt) {
                     build: process.env.TRAVIS_JOB_ID,
                     concurrency: 2,
                     browsers: [
-                        { platform: 'Windows 7', browserName: 'Chrome', version: '40' }//,
-                        //{ platform: 'Windows 7', browserName: 'Firefox', version: '35' },
+                        { platform: 'Windows 7', browserName: 'Chrome', version: '41' }//,
+                        //{ platform: 'Windows 7', browserName: 'Firefox', version: '36' },
                         //{ platform: 'OS X 10.10', browserName: 'Safari', version: '8' },
                         //{ platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' },
                         //{ platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' },
@@ -273,8 +274,7 @@ module.exports = function (grunt) {
                     'build/<%= pkg.version %>/scripts/app.pre-season-participant-row-view.js': 'build/<%= pkg.version %>/scripts/app.pre-season-participant-row-view.js',
                     'build/<%= pkg.version %>/scripts/app.pre-season-table-view.js': 'build/<%= pkg.version %>/scripts/app.pre-season-table-view.js',
                     'build/<%= pkg.version %>/scripts/app.rating-history-collection.js': 'build/<%= pkg.version %>/scripts/app.rating-history-collection.js',
-                    'build/<%= pkg.version %>/scripts/app.rating-history-view.js': 'build/<%= pkg.version %>/scripts/app.rating-history-view.js',
-                    'build/<%= pkg.version %>/scripts/app.result.js': 'build/<%= pkg.version %>/scripts/app.result.js',
+                    'build/<%= pkg.version %>/scripts/app.rating-history-view.js': 'build/<%= pkg.version %>/scripts/app.rating-history-view.js', 'build/<%= pkg.version %>/scripts/app.result.js': 'build/<%= pkg.version %>/scripts/app.result.js',
                     'build/<%= pkg.version %>/scripts/app.result-collection.js': 'build/<%= pkg.version %>/scripts/app.result-collection.js',
                     'build/<%= pkg.version %>/scripts/app.scores-header-row-view.js': 'build/<%= pkg.version %>/scripts/app.scores-header-row-view.js',
                     'build/<%= pkg.version %>/scripts/app.scores-participant-row-view.js': 'build/<%= pkg.version %>/scripts/app.scores-participant-row-view.js',

@@ -56,13 +56,14 @@ require([
         'specs/test.spec.js',
         'specs/string-extensions.amd.spec.js',
         'specs/utils.amd.spec.js',
-        'specs/comparators.amd.spec.js'//,
+        'specs/comparators.amd.spec.js',
 
-        //'specs/client-utils.spec.js',
+        'specs/client-utils.spec.js',
 
-        //'specs/app.scores-collection.spec.js',
-        //'specs/app.rating-history-collection.spec.js',
-        //'specs/app.rating-view.spec.js'
+        'specs/app.scores-collection.spec.js',
+        'specs/app.rating-history-collection.spec.js'//,
+        // TODO: Activate ASAP
+        //'specs/app.scores-table-view.spec.js'
     ],
 
     function () {
