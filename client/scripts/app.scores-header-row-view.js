@@ -1,6 +1,6 @@
 /* global define:false */
 define(
-    [ 'jquery', 'underscore', 'backbone', 'marionette', 'app.models', 'app.result' ],
+    ['jquery', 'underscore', 'backbone', 'marionette', 'app.models', 'app.result'],
     function ($, _, Backbone, Marionette, App, ParticipantScore) {
         'use strict';
 
@@ -160,30 +160,30 @@ define(
             className: 'participant current-scores scores-table-row',
 
             getChildView: function (model) {
-                switch (model.get("column")) {
-                    case 1:
+                switch (model.get("columnType")) {
+                    case "rank":
                         return RankHeadingView;
-                    case 2:
+                    case "name":
                         return NameHeadingView;
-                    case 3:
+                    case "rankTrend":
                         return RankTrendHeadingView;
-                    case 4:
+                    case "rating":
                         return RatingHeadingView;
-                    case 5:
+                    case "ratingTrend":
                         return RatingTrendHeadingView;
-                    case 6:
+                    case "prediction":
                         return PredictionHeadingView;
-                    case 7:
+                    case "tabell":
                         return TabellScoreHeadingView;
-                    case 8:
+                    case "pall":
                         return PallScoreHeadingView;
-                    case 9:
+                    case "nedrykk":
                         return NedrykkScoreHeadingView;
-                    case 10:
+                    case "toppscorer":
                         return ToppscorerScoreHeadingView;
-                    case 11:
+                    case "opprykk":
                         return OpprykkScoreHeadingView;
-                    case 12:
+                    case "cup":
                         return CupScoreHeadingView;
                     default:
                         throw new Error("No heading row cell view declared for cell column #" + model.get("column"));
@@ -191,63 +191,68 @@ define(
             },
 
             onBeforeRender: function (collectionView) {
+                var year = collectionView.model.get(ParticipantScore.yearPropertyName),
+                    round = collectionView.model.get(ParticipantScore.roundPropertyName),
+                    hideContent = collectionView.model.get("hasNoData");
+
                 this.collection = new Collection();
 
-                // Match round navigation
                 this.collection.add(new Model({
-                        column: 1
+                        columnType: "rank"
                     })
                 );
                 this.collection.add(new Model({
-                        column: 2
+                        columnType: "name"
                     })
                 );
                 this.collection.add(new Model({
-                        column: 3
+                        columnType: "rankTrend"
                     })
                 );
                 this.collection.add(new Model({
-                        column: 4,
-                        year: collectionView.model.get(ParticipantScore.yearPropertyName),
-                        round: collectionView.model.get(ParticipantScore.roundPropertyName),
+                        columnType: "rating",
+                        year: year,
+                        round: round,
+                        hideContent: hideContent
+                    })
+                );
+                this.collection.add(new Model({
+                        columnType: "ratingTrend"
+                    })
+                );
+                this.collection.add(new Model({
+                        columnType: "prediction"
+                    })
+                );
+                this.collection.add(new Model({
+                        columnType: "tabell",
                         hideContent: collectionView.model.get("hasNoData")
                     })
                 );
                 this.collection.add(new Model({
-                        column: 5
+                        columnType: "pall",
+                        hideContent: collectionView.model.get("hasNoData")
                     })
                 );
+                if (year === 2014) {
+                    this.collection.add(new Model({
+                            columnType: "nedrykk",
+                            hideContent: collectionView.model.get("hasNoData")
+                        })
+                    );
+                }
                 this.collection.add(new Model({
-                        column: 6
-                    })
-                );
-                this.collection.add(new Model({
-                        column: 7,
+                        columnType: "toppscorer",
                         hideContent: collectionView.model.get("hasNoData")
                     })
                 );
                 this.collection.add(new Model({
-                        column: 8,
+                        columnType: "opprykk",
                         hideContent: collectionView.model.get("hasNoData")
                     })
                 );
                 this.collection.add(new Model({
-                        column: 9,
-                        hideContent: collectionView.model.get("hasNoData")
-                    })
-                );
-                this.collection.add(new Model({
-                        column: 10,
-                        hideContent: collectionView.model.get("hasNoData")
-                    })
-                );
-                this.collection.add(new Model({
-                        column: 11,
-                        hideContent: collectionView.model.get("hasNoData")
-                    })
-                );
-                this.collection.add(new Model({
-                        column: 12,
+                        columnType: "cup",
                         hideContent: collectionView.model.get("hasNoData")
                     })
                 );

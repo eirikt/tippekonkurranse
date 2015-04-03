@@ -596,7 +596,7 @@ describe("Tippekonkurranse", function () {
 
     describe("'Nedrykk' bonus point calculations", function () {
 
-        it("should give -1 if both teams exist in prediction, exact order", function (done) {
+        it("should give -1 if both teams exist in prediction, exact order (2014 only)", function (done) {
             var userPredictions = {
                     john: {
                         tabell: [
@@ -653,7 +653,64 @@ describe("Tippekonkurranse", function () {
         });
 
 
-        it("should give -1 if both teams exist in prediction, whatever order", function (done) {
+        it("should give nothing if both teams exist in prediction, exact order (2015 and onwards)", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: [
+                            "N",
+                            "M",
+                            "L",
+                            "K",
+                            "J",
+                            "I",
+                            "H",
+                            "G",
+                            "F",
+                            "E",
+                            "D",
+                            "C",
+                            "B",
+                            "A",
+                            "TeamA",
+                            "TeamB"
+                        ],
+                        opprykk: null,
+                        toppscorer: null,
+                        cup: null
+                    }
+                },
+                actualNedrykkTable = [
+                    { name: "A", no: 1, matches: 30 },
+                    { name: "B", no: 2, matches: 30 },
+                    { name: "C", no: 3, matches: 30 },
+                    { name: "D", no: 4, matches: 30 },
+                    { name: "E", no: 5, matches: 30 },
+                    { name: "F", no: 6, matches: 30 },
+                    { name: "G", no: 7, matches: 30 },
+                    { name: "H", no: 8, matches: 30 },
+                    { name: "I", no: 9, matches: 30 },
+                    { name: "J", no: 10, matches: 30 },
+                    { name: "K", no: 11, matches: 30 },
+                    { name: "L", no: 12, matches: 30 },
+                    { name: "M", no: 13, matches: 30 },
+                    { name: "N", no: 14, matches: 30 },
+                    { name: "TeamA", no: 15, matches: 30 },
+                    { name: "TeamB", no: 16, matches: 30 }
+                ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2015),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.nedrykk).to.equal(0);
+                };
+
+            inputArgs.tippeligaTable = actualNedrykkTable;
+
+            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("should give -1 if both teams exist in prediction, whatever order (2014 only)", function (done) {
             var userPredictions = {
                     john: {
                         tabell: [
@@ -811,7 +868,7 @@ describe("Tippekonkurranse", function () {
                     { name: "TeamB", no: 15, matches: 30 },
                     { name: "N", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2015),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);

@@ -36,11 +36,11 @@ define(
                     '          </td>' +
                     '          <td style="vertical-align:top;padding-left:4rem;">' +
                     '            <p>Toppskårer:</p>' +
-                    '            <p><strong><%= ' + App.scoreModel.toppscorerPropertyName + ' %></strong></p>' +
+                    //'            <p><strong><%= ' + App.scoreModel.toppscorerPropertyName + ' %></strong></p>' +
                     '            <p style="margin-top:4rem;">Opprykk:</p>' +
                     '            <p><strong><%= ' + App.scoreModel.opprykkPropertyName + ' %></strong></p>' +
                     '            <p style="margin-top:4rem;">Cupmester:</p>' +
-                    '            <p><strong><%= ' + App.scoreModel.cupPropertyName + ' %></strong></p>' +
+                    //'            <p><strong><%= ' + App.scoreModel.cupPropertyName + ' %></strong></p>' +
                     '          </td>' +
                     '        </tr>' +
                     '      </table>' +
@@ -58,7 +58,7 @@ define(
                     // Pretty tabell presentation
                     var prettyTabellView = new SoccerTableViews.SimpleTableView({
                         model: this.model.get(App.scoreModel.tabellPropertyName),
-                        emphasizeFormat: '3+2'
+                        emphasizeFormat: '3+0'
                     });
                     this.model.set(App.scoreModel.tabellPropertyName, prettyTabellView.render().$el.html(), { silent: true });
 

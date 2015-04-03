@@ -27,9 +27,9 @@ var __ = require("underscore"),
 
         __.each(rows, function (element) {
             var $cells = $(element).find("td"),
-                no = $($cells[ 0 ]).html(),
+                no = $($cells[0]).html(),
                 team = $cells.find("a").first().html(),
-                matches = $($cells[ 2 ]).html();
+                matches = $($cells[2]).html();
 
             // Launder ...
             no = no.substring(0, no.length - 1);
@@ -54,9 +54,9 @@ var __ = require("underscore"),
 
         __.each(rows, function (element) {
             var $cells = $(element).find("td"),
-                no = $($cells[ 0 ]).html(),
+                no = $($cells[0]).html(),
                 team = $cells.find("a").first().html(),
-                matches = $($cells[ 2 ]).html();
+                matches = $($cells[2]).html();
 
             // Launder ...
             no = no.substring(0, no.length - 1);
@@ -83,7 +83,7 @@ var __ = require("underscore"),
         __.each(rows, function (element, index) {
             var $cells = $(element).find("td"),
                 player = $cells.find("a").first().html(),
-                goals = $($cells[ 3 ]).html();
+                goals = $($cells[3]).html();
 
             // Launder ...
             // => max three spaces in name ...
@@ -125,17 +125,14 @@ var __ = require("underscore"),
 
     _getCurrentTippeligaTopScorerRequestory = exports.getCurrentTippeligaTopScorer =
         RQ.sequence([
-            rq.return(["Alle"]) // :-)
-            //rq.get(currentTippeligaToppscorerTableUrl),
-            //rq.then(parseTippeligaTopScorerTable)
+            rq.get(currentTippeligaToppscorerTableUrl),
+            rq.then(parseTippeligaTopScorerTable)
         ]),
 
     /**
      * Solved manually: Just remove the teams one after another whenever they screw up ...
      */
     _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
-        rq.return(["Alle"]);
-        /*
         rq.return([
             "Bodø/Glimt",
             "Haugesund",
@@ -170,4 +167,3 @@ var __ = require("underscore"),
             "Strømmen",
             "Åsane"
         ]);
-        */

@@ -41,7 +41,7 @@ var env = process.env.NODE_ENV || "development",
 
         if (__.isEmpty(participantObj.tabell)) {
             console.warn(utils.logPreamble() + "'Tabell' property is missing, returning 1000 points for all predictions ...");
-            return [ 1000, 1000, 1000, 1000 ];
+            return [1000, 1000, 1000, 1000];
         }
 
         // Create associative array with team name as key, by extracting 'name'
@@ -51,13 +51,13 @@ var env = process.env.NODE_ENV || "development",
         tableScore = __.reduce(participantObj.tabell, function (memo, teamName, index) {
             try {
                 var predictedTeamPlacing = index + 1,
-                    actualTeamPlacing = indexedTippeligaTable[ teamName ].no;
+                    actualTeamPlacing = indexedTippeligaTable[teamName].no;
 
                 return memo + utils.getDisplacementPoints(strategy.tabellScoresStrategy.polarity, strategy.tabellScoresStrategy.weight,
                         predictedTeamPlacing,
                         actualTeamPlacing);
             } catch (e) {
-                var errorMessage = utils.logPreamble() + "Unable to calculate scores for team '" + participantObj.tabell[ index ] + "' for participant '" + participantObj.name + "' - probably illegal data format";
+                var errorMessage = utils.logPreamble() + "Unable to calculate scores for team '" + participantObj.tabell[index] + "' for participant '" + participantObj.name + "' - probably illegal data format";
                 console.warn(errorMessage);
                 throw new Error(errorMessage);
             }
@@ -65,23 +65,23 @@ var env = process.env.NODE_ENV || "development",
 
         pallScore =
             utils.getMatchPoints(strategy.pall1ScoreStrategy.polarity, strategy.pall1ScoreStrategy.weight,
-                participantObj.tabell[ 0 ], tippeligaTable[ 0 ].name) +
+                participantObj.tabell[0], tippeligaTable[0].name) +
             utils.getMatchPoints(strategy.pall2ScoreStrategy.polarity, strategy.pall2ScoreStrategy.weight,
-                participantObj.tabell[ 1 ], tippeligaTable[ 1 ].name) +
+                participantObj.tabell[1], tippeligaTable[1].name) +
             utils.getMatchPoints(strategy.pall3ScoreStrategy.polarity, strategy.pall3ScoreStrategy.weight,
-                participantObj.tabell[ 2 ], tippeligaTable[ 2 ].name);
+                participantObj.tabell[2], tippeligaTable[2].name);
 
         pallBonusScore = utils.getMatchPoints(strategy.pallBonusScoreStrategy.polarity, strategy.pallBonusScoreStrategy.weight,
-            [ participantObj.tabell[ 0 ], participantObj.tabell[ 1 ], participantObj.tabell[ 2 ] ],
-            [ tippeligaTable[ 0 ].name, tippeligaTable[ 1 ].name, tippeligaTable[ 2 ].name ]
+            [participantObj.tabell[0], participantObj.tabell[1], participantObj.tabell[2]],
+            [tippeligaTable[0].name, tippeligaTable[1].name, tippeligaTable[2].name]
         );
 
         nedrykkScore = utils.getPresentPoints(strategy.nedrykkScoreStrategy.polarity, strategy.nedrykkScoreStrategy.weight,
-            [ participantObj.tabell[ 14 ], participantObj.tabell[ 15 ] ],
-            [ tippeligaTable[ 14 ].name, tippeligaTable[ 15 ].name ]
+            [participantObj.tabell[14], participantObj.tabell[15]],
+            [tippeligaTable[14].name, tippeligaTable[15].name]
         );
 
-        return [ tableScore, pallScore, pallBonusScore, nedrykkScore ];
+        return [tableScore, pallScore, pallBonusScore, nedrykkScore];
     },
 
 
@@ -92,8 +92,8 @@ var env = process.env.NODE_ENV || "development",
             return 1000;
         }
         return utils.getPresentPoints(strategy.opprykkScoreStrategy.polarity, strategy.opprykkScoreStrategy.weight,
-            [ participantObj.opprykk[ 0 ], participantObj.opprykk[ 1 ] ],
-            [ adeccoligaTable[ 0 ].name, adeccoligaTable[ 1 ].name ]
+            [participantObj.opprykk[0], participantObj.opprykk[1]],
+            [adeccoligaTable[0].name, adeccoligaTable[1].name]
         );
     },
 
@@ -105,7 +105,7 @@ var env = process.env.NODE_ENV || "development",
             return 1000;
         }
         return utils.getPresentPoints(strategy.toppscorerScoreStrategy.polarity, strategy.toppscorerScoreStrategy.weight,
-            participantObj.toppscorer[ 0 ],
+            participantObj.toppscorer[0],
             tippeligaToppscorer
         );
     },
@@ -118,7 +118,7 @@ var env = process.env.NODE_ENV || "development",
             return 1000;
         }
         return utils.getPresentPoints(strategy.cupScoreStrategy.polarity, strategy.cupScoreStrategy.weight,
-            participantObj.cup[ 0 ],
+            participantObj.cup[0],
             remainingCupContenders
         );
     },
@@ -151,7 +151,7 @@ var env = process.env.NODE_ENV || "development",
                 tippeligaResults = storedTippeligaRound.tippeliga;
                 dbMatchesCount = __.groupBy(tippeligaResults, "matches");
 
-                if (!dbMatchesCount[ round ]) {
+                if (!dbMatchesCount[round]) {
                     method = "CREATE";
                     logMsg += " is not yet stored";
 
@@ -159,7 +159,7 @@ var env = process.env.NODE_ENV || "development",
                     // TODO: Revisit logic, seems a bit strange!
                     // TODO: Liten svakhet: Hvis Adeccoliga spiller runder mens Tippeliga ikke gjør det så blir ikke runden oppdatert ...
 
-                    dbCount = dbMatchesCount[ round ].length;
+                    dbCount = dbMatchesCount[round].length;
                     if (currentRoundCount < dbCount) {
                         logMsg += " is already stored with " + dbCount + " teams - current data has " + currentRoundCount + " teams";
                         console.log(logMsg + " => no need for updating db with new results");
@@ -382,14 +382,14 @@ var env = process.env.NODE_ENV || "development",
                         rq.requestor(curry(populateScores, opprykkScoreIndex)),
                         rq.requestor(curry(populateScores, cupScoreIndex)),
                         rq.requestor(function () {
-                            scores[ ratingIndex ] =
-                                scores[ tabellScoreIndex ] +
-                                scores[ pallScoreIndex ] +
-                                scores[ pallBonusScoreIndex ] +
-                                scores[ nedrykkScoreIndex ] +
-                                scores[ toppscorerScoreIndex ] +
-                                scores[ opprykkScoreIndex ] +
-                                scores[ cupScoreIndex ];
+                            scores[ratingIndex] =
+                                scores[tabellScoreIndex] +
+                                scores[pallScoreIndex] +
+                                scores[pallBonusScoreIndex] +
+                                scores[nedrykkScoreIndex] +
+                                scores[toppscorerScoreIndex] +
+                                scores[opprykkScoreIndex] +
+                                scores[cupScoreIndex];
 
                             return requestion(scores);
                         })
@@ -397,22 +397,22 @@ var env = process.env.NODE_ENV || "development",
                 },
 
                 _defaultCurrentStandingUpdate = function (currentStanding, participant) {
-                    currentStanding[ participant ] =
+                    currentStanding[participant] =
                         appModels.scoreModel.createObjectWith(
                             1000, 1000, 1000, 1000, 1000, 1000, 1000
                         );
                 },
 
                 _currentStandingUpdate = function (currentStanding, participant, scores) {
-                    currentStanding[ participant ] =
+                    currentStanding[participant] =
                         appModels.scoreModel.createObjectWith(
-                            scores[ tabellScoreIndex ],
-                            scores[ pallScoreIndex ] + scores[ pallBonusScoreIndex ],
-                            scores[ nedrykkScoreIndex ],
-                            scores[ toppscorerScoreIndex ],
-                            scores[ opprykkScoreIndex ],
-                            scores[ cupScoreIndex ],
-                            scores[ ratingIndex ]
+                            scores[tabellScoreIndex],
+                            scores[pallScoreIndex] + scores[pallBonusScoreIndex],
+                            scores[nedrykkScoreIndex],
+                            scores[toppscorerScoreIndex],
+                            scores[opprykkScoreIndex],
+                            scores[cupScoreIndex],
+                            scores[ratingIndex]
                         );
                 },
 
@@ -428,22 +428,22 @@ var env = process.env.NODE_ENV || "development",
             __.each(__.keys(userPredictions), function (participant) {
                 var tippekonkurranseData = new TippekonkurranseData(args);
 
-                if (__.isEmpty(userPredictions[ participant ])) {
+                if (__.isEmpty(userPredictions[participant])) {
                     scoresRequestors.push(
                         rq.requestor(curry(_defaultCurrentStandingUpdate, currentStanding, participant))
                     );
 
                 } else {
                     // Key as property, nice to have
-                    userPredictions[ participant ].name = participant;
+                    userPredictions[participant].name = participant;
 
                     scoresRequestors.push(
                         RQ.sequence([
                             RQ.parallel([
-                                rq.requestor(curry(_calculateTippeligaScores, rules, userPredictions[ participant ], tippekonkurranseData.tippeligaTable)),
-                                rq.requestor(curry(_calculateToppscorerScores, rules, userPredictions[ participant ], tippekonkurranseData.tippeligaTopScorer)),
-                                rq.requestor(curry(_calculateOpprykkScores, rules, userPredictions[ participant ], tippekonkurranseData.adeccoligaTable)),
-                                rq.requestor(curry(_calculateCupScores, rules, userPredictions[ participant ], tippekonkurranseData.remainingCupContenders))
+                                rq.requestor(curry(_calculateTippeligaScores, rules, userPredictions[participant], tippekonkurranseData.tippeligaTable)),
+                                rq.requestor(curry(_calculateToppscorerScores, rules, userPredictions[participant], tippekonkurranseData.tippeligaTopScorer)),
+                                rq.requestor(curry(_calculateOpprykkScores, rules, userPredictions[participant], tippekonkurranseData.adeccoligaTable)),
+                                rq.requestor(curry(_calculateCupScores, rules, userPredictions[participant], tippekonkurranseData.remainingCupContenders))
                             ]),
                             curry(_sum, ratingIndex),
                             rq.requestor(curry(_currentStandingUpdate, currentStanding, participant))
@@ -486,7 +486,7 @@ var env = process.env.NODE_ENV || "development",
                     addTippekonkurranseScores,
                     function (requestion, args) {
                         __.each(__.keys(updatedScores), function (participant) {
-                            updatedScores[ participant ][ appModels.scoreModel.previousRatingPropertyName ] = args[ tippekonkurranseData.indexOfScores ].scores[ participant ][ appModels.scoreModel.ratingPropertyName ];
+                            updatedScores[participant][appModels.scoreModel.previousRatingPropertyName] = args[tippekonkurranseData.indexOfScores].scores[participant][appModels.scoreModel.ratingPropertyName];
                         });
                         return requestion();
                     },
@@ -514,8 +514,8 @@ var env = process.env.NODE_ENV || "development",
             };
 
             // Is user's predictions in place?
-            __.each(_predictions[ tippekonkurranseData.scores.metadata.year ], function (participantPredictions, participant) {
-                hasPredictions[ participant ] = participantPredictions.tabell.length > 0;
+            __.each(_predictions[tippekonkurranseData.scores.metadata.year], function (participantPredictions, participant) {
+                hasPredictions[participant] = participantPredictions.tabell.length > 0;
             });
             tippekonkurranseData.scores.metadata.hasPredictions = hasPredictions;
 
@@ -556,7 +556,7 @@ var env = process.env.NODE_ENV || "development",
             for (var round in tippekonkurranseData.matchesCountGrouping) {
                 if (tippekonkurranseData.matchesCountGrouping.hasOwnProperty(round)) {
                     var roundNo = parseInt(round, 10),
-                        currentMatchCountInRound = tippekonkurranseData.matchesCountGrouping[ round ].length,
+                        currentMatchCountInRound = tippekonkurranseData.matchesCountGrouping[round].length,
                         conditionallyStoreTippeligaRound = curry(_storeTippeligaRound,
                             tippekonkurranseData.tippeligaTable,
                             tippekonkurranseData.tippeligaTopScorer,

@@ -38,10 +38,27 @@ var _predictions2015 = exports.predictions = {
         cup: []
     },
     oddvar: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            "Molde",
+            "Rosenborg",
+            "Strømsgodset",
+            "Vålerenga",
+            "Haugesund",
+            "Odd",
+            "Viking",
+            "Tromsø",
+            "Sarpsborg 08",
+            "Aalesund",
+            "Stabæk",
+            "Lillestrøm",
+            "Bodø/Glimt",
+            "Start",
+            "Sandefjord",
+            "Mjøndalen"
+        ],
+        opprykk: ["Sogndal", "Fredrikstad"],
+        toppscorer: ["Deshorn Brown"],
+        cup: ["Rosenborg"]
     },
     ole_erik: {
         tabell: [],
@@ -61,6 +78,7 @@ var _predictions2015 = exports.predictions = {
             "Rosenborg",
             "Vålerenga",
             "Strømsgodset",
+            "Odd",
             "Viking",
             "Lillestrøm",
             "Aalesund",
@@ -73,9 +91,9 @@ var _predictions2015 = exports.predictions = {
             "Bodø/Glimt",
             "Start"
         ],
-        opprykk: [ "Brann", "Sogndal" ],
-        toppscorer: [ "Ola Williams Kamara" ],
-        cup: [ "Molde" ]
+        opprykk: ["Brann", "Sogndal"],
+        toppscorer: ["Ola Williams Kamara"],
+        cup: ["Molde"]
     },
     steinar: {
         tabell: [],

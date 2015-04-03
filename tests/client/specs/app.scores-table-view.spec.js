@@ -19,7 +19,7 @@ define([
 
             beforeEach(function () {
                 sandbox = Sinon.sandbox.create({
-                    properties: [ "spy", "server" ],
+                    properties: ["spy", "server"],
                     useFakeServer: true
                 });
                 sandbox.server.autoRespond = true;
@@ -34,7 +34,7 @@ define([
 
 
             it("should be a Marionette CollectionView", function () {
-                var ratingsView = new RatingsView({ collection: new RatingModelCollection() });
+                var ratingsView = new RatingsView({collection: new RatingModelCollection()});
                 expect(ratingsView).to.exist;
                 expect(ratingsView).to.be.an.instanceof(Marionette.CollectionView);
             });
@@ -45,36 +45,7 @@ define([
             });
 
 
-            it("should render a flexbox with header div of order 0", function (done) {
-                sandbox.server.respondWith("GET", /(.*)/, function (xhr, query) {
-                    console.log("query:" + query);
-                    ajaxSpy(xhr, query);
-                    if (query === [ SharedRatingModel.resources.scores.baseUri, SharedRatingModel.resources.uri.element.current ].join("/")) {
-                        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
-                            "metadata": {
-                                "year": 2017,
-                                "round": 22,
-                                "hasPredictions": {}
-                            },
-                            "scores": {
-                                "john": {
-                                    "tabell": 0,
-                                    "pall": 0,
-                                    "nedrykk": 0,
-                                    "toppscorer": 0,
-                                    "opprykk": 0,
-                                    "cup": 0,
-                                    "rating": 0,
-                                    "previousRating": 0
-                                }
-                            }
-                        }));
-                    } else {
-                        throw new Error("Didn't expect " + query);
-                    }
-                    return true;
-                });
-
+            it("should render a flexbox reflecting a collection", function () {
                 var ratingCollection = new RatingModelCollection(),
                     ratingsView = new RatingsView({
                         // Uncomment if viewing it (with the help of a breakpoint) in 'test.amd.html'
@@ -83,69 +54,155 @@ define([
                         collection: ratingCollection
                     });
 
-                Backbone.listenTo(ratingCollection, "reset", ratingsView.render);
+                // Empty $el
+                expect(ratingsView.$el).to.exist;
+                expect(ratingsView.$el.children().length).to.equal(0);
 
-                ratingsView.on("render", function () {
-                    expect(ajaxSpy.calledOnce).to.be.true;
+                ratingsView.render();
 
-                    // Fasit: "<div class="participant current-scores scores-table-row"><div class="rank strong"><span class="icon-trophy-gold"></span></div><div class="name strong">John</div><div class="rank-trend"><span class="tendency-arrow"></span><small>&nbsp;</small></div><div class="rating strong">0</div><div class="rating-trend"><small></small></div><div class="prediction"><button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable">Johns tips</button></div><div class="tabell-score">0</div><div class="pall-score">0</div><div class="nedrykk-score">0</div><div class="toppscorer-score">0</div><div class="opprykk-score">0</div><div class="cup-score">0</div></div>"
-                    // TODO: ...
-                    /* OLD
-                     // Empty $el
-                     expect(ratingsView.$el).to.exist;
-                     expect(ratingsView.$el.children().length).to.equal(0);
-                     expect(ratingsView.$("thead").length).to.equal(0);
-
-                     ratingsView.render();
-
-                     // Table rows
-                     expect(ratingsView.$el).to.exist;
-                     expect(ratingsView.$("thead").length).to.be.equal(1);
-                     expect(ratingsView.$("tr").length).to.be.equal(1);
-
-                     // Headers
-                     expect(ratingsView.$("th").length).to.be.equal(11);
-                     expect($(ratingsView.$("th")[ 0 ]).html()).to.be.equal("");
-                     expect($(ratingsView.$("th")[ 1 ]).html()).to.be.equal("");
-                     expect($(ratingsView.$("th")[ 2 ]).html()).to.be.equal("");
-                     expect($(ratingsView.$("th")[ 3 ]).find(".icon-line-chart")).to.exist;
-                     expect($(ratingsView.$("th")[ 3 ]).find("a").html()).to.have.string("Trend");
-                     expect($(ratingsView.$("th")[ 4 ]).find("button").html()).to.be.equal("Gjeldende resultater");
-                     expect($(ratingsView.$("th")[ 5 ]).html()).to.be.equal("Tabell");
-                     expect($(ratingsView.$("th")[ 6 ]).html()).to.be.equal("Pall");
-                     expect($(ratingsView.$("th")[ 7 ]).html()).to.be.equal("Nedrykk");
-                     expect($(ratingsView.$("th")[ 8 ]).html()).to.be.equal("Toppsk.");
-                     expect($(ratingsView.$("th")[ 9 ]).html()).to.be.equal("Opprykk");
-                     expect($(ratingsView.$("th")[ 10 ]).html()).to.be.equal("Cup");
-                     */
-
-                    done();
-                });
-
-                ratingCollection.fetch();
+                // Still empty $el
+                expect(ratingsView.$el).to.exist;
+                expect(ratingsView.$el.children().length).to.equal(0);
             });
 
 
-            it("should render a default scores row", function (done) {
+            it("should render a default row", function () {
+                var ratingCollection = new RatingModelCollection(),
+                    ratingsView = new RatingsView({
+                        // Uncomment if viewing it (with the help of a breakpoint) in 'test.amd.html'
+                        //el: "#content",
+                        model: new Backbone.Model(),
+                        collection: ratingCollection
+                    });
+
+                // Empty $el
+                expect(ratingsView.$el).to.exist;
+                expect(ratingsView.$el.children().length).to.equal(0);
+
+                ratingsView.render();
+
+                // Client-side responsibility: Add nothing
+                ratingsView.collection.unshift();
+
+                // Table header row
+                expect(ratingsView.$("div.participant").length).to.be.equal(0);
+
+                // Table header row cells
+                expect(ratingsView.$("div.participant").children().length).to.equal(0);
+
+
+                // Client-side responsibility: Add empty model => header row
+                ratingsView.collection.unshift(new Backbone.Model({}));
+
+                // Table header row
+                expect(ratingsView.$("div.participant").length).to.be.equal(1);
+
+                // Table header row cells
+                expect(ratingsView.$("div.participant").children().length).to.equal(11);
+
+                // Table header row
+                expect(ratingsView.$("div.participant").length).to.be.equal(1);
+
+                // Table header row cells
+                expect(ratingsView.$("div.participant").children().length).to.equal(11);
+                expect(ratingsView.$("div.participant").find("div.scores-table-header-row").length).to.be.equal(5);
+
+                expect(ratingsView.$("div.rank").html()).to.be.equal("");
+                expect(ratingsView.$("div.name").html()).to.be.equal("");
+                expect(ratingsView.$("div.rank-trend").html()).to.be.equal("");
+
+                expect(ratingsView.$("div.rating").find("a.btn").length).to.equal(1);
+                expect(ratingsView.$("div.rating").find("a.btn > span.icon-line-chart").length).to.equal(1);
+                expect(ratingsView.$("div.rating").find("a.btn").html()).to.contain("Trend");
+
+                expect(ratingsView.$("div.rating-trend").html()).to.be.equal("");
+
+                expect(ratingsView.$("div.current-results").find("button.btn").length).to.equal(1);
+                expect(ratingsView.$("div.current-results").find("button.btn").html()).to.be.equal("Gjeldende resultater");
+
+                expect(ratingsView.$("div.tabell-score > span").html()).to.be.equal("Tabell");
+                expect(ratingsView.$("div.pall-score > span").html()).to.be.equal("Pall");
+                expect(ratingsView.$("div.toppscorer-score > span").html()).to.be.equal("Toppsk.");
+                expect(ratingsView.$("div.opprykk-score > span").html()).to.be.equal("Opprykk");
+                expect(ratingsView.$("div.cup-score > span").html()).to.be.equal("Cup");
+            });
+
+
+            it("should render a flexbox table with header row", function () {
+                var ratingCollection = new RatingModelCollection(),
+                    ratingsView = new RatingsView({
+                        // Uncomment if viewing it (with the help of a breakpoint) in 'test.amd.html'
+                        //el: "#content",
+                        model: new Backbone.Model(),
+                        collection: ratingCollection
+                    });
+
+                // Empty $el
+                expect(ratingsView.$el).to.exist;
+                expect(ratingsView.$el.children().length).to.equal(0);
+
+                ratingsView.render();
+
+                // Client-side responsibility: Add app model as header row (missing 'rating' property)
+                ratingsView.collection.unshift(new Backbone.Model({
+                    initialYear: 2014,
+                    initialRound: 1,
+                    year: null,
+                    round: null,
+                    currentYear: null,
+                    currentRound: null,
+                    currentTippeligaSeasonStartDate: null,
+                    currentTippeligaSeasonHasStarted: null
+                }));
+
+                // Table header row
+                expect(ratingsView.$("div.participant").length).to.be.equal(1);
+
+                // Table header row cells
+                expect(ratingsView.$("div.participant").children().length).to.equal(11);
+                expect(ratingsView.$("div.participant").find("div.scores-table-header-row").length).to.be.equal(5);
+
+                expect(ratingsView.$("div.rank").html()).to.be.equal("");
+                expect(ratingsView.$("div.name").html()).to.be.equal("");
+                expect(ratingsView.$("div.rank-trend").html()).to.be.equal("");
+
+                expect(ratingsView.$("div.rating").find("a.btn").length).to.equal(1);
+                expect(ratingsView.$("div.rating").find("a.btn > span.icon-line-chart").length).to.equal(1);
+                expect(ratingsView.$("div.rating").find("a.btn").html()).to.contain("Trend");
+
+                expect(ratingsView.$("div.rating-trend").html()).to.be.equal("");
+
+                expect(ratingsView.$("div.current-results").find("button.btn").length).to.equal(1);
+                expect(ratingsView.$("div.current-results").find("button.btn").html()).to.be.equal("Gjeldende resultater");
+
+                expect(ratingsView.$("div.tabell-score > span").html()).to.be.equal("Tabell");
+                expect(ratingsView.$("div.pall-score > span").html()).to.be.equal("Pall");
+                expect(ratingsView.$("div.toppscorer-score > span").html()).to.be.equal("Toppsk.");
+                expect(ratingsView.$("div.opprykk-score > span").html()).to.be.equal("Opprykk");
+                expect(ratingsView.$("div.cup-score > span").html()).to.be.equal("Cup");
+            });
+
+
+            it("should render a default participant scores row", function (done) {
                 sandbox.server.respondWith("GET", /(.*)/, function (xhr, query) {
                     console.log("query:" + query);
                     ajaxSpy(xhr, query);
-                    if (query === [ SharedRatingModel.resources.scores.baseUri, SharedRatingModel.resources.uri.element.current ].join("/")) {
-                        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
+                    if (query === [SharedRatingModel.resources.scores.baseUri, SharedRatingModel.resources.uri.element.current].join("/")) {
+                        xhr.respond(200, {"Content-Type": "application/json"}, JSON.stringify({
                             "metadata": {
                                 "year": 2017,
                                 "round": 22,
                                 "hasPredictions": {}
                             },
                             "scores": {
+                                // Participant: Having 'rating' property > 0
                                 "john": {
                                     "tabell": 0,
                                     "pall": 0,
-                                    "nedrykk": 0,
                                     "toppscorer": 0,
                                     "opprykk": 0,
                                     "cup": 0,
-                                    "rating": 0,
+                                    "rating": 1,
                                     "previousRating": 0
                                 }
                             }
@@ -166,58 +223,33 @@ define([
 
                 Backbone.listenTo(ratingCollection, "reset", ratingsView.render);
 
-                // Empty $el
-                /*
-                expect(ratingsView.$el).to.exist;
-                expect(ratingsView.$el.children().length).to.equal(0);
-                expect(ratingsView.$("tbody").length).to.equal(0);
-                */
-
                 ratingsView.on("render", function () {
                     expect(ajaxSpy.calledOnce).to.be.true;
 
-                    // Fasit: "<div class="participant current-scores scores-table-row"><div class="rank strong"><span class="icon-trophy-gold"></span></div><div class="name strong">John</div><div class="rank-trend"><span class="tendency-arrow"></span><small>&nbsp;</small></div><div class="rating strong">0</div><div class="rating-trend"><small></small></div><div class="prediction"><button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable">Johns tips</button></div><div class="tabell-score">0</div><div class="pall-score">0</div><div class="nedrykk-score">0</div><div class="toppscorer-score">0</div><div class="opprykk-score">0</div><div class="cup-score">0</div></div>"
-                    // TODO: ...
-                    //expect(ratingsView.$el).to.exist;
-                    //expect(ratingsView.$("tbody").length).to.be.equal(1);
-                    //expect(ratingsView.$("tr").length).to.be.equal(2);
+                    // Table default participant row
+                    expect(ratingsView.$("div.participant").length).to.be.equal(1);
 
-                    // Empty scores
-                    //expect(ratingsView.$("td").length).to.be.equal(12);
-                    //expect($(ratingsView.$("td")[ 0 ]).html()).to.have.string("icon-trophy-gold");
-                    //expect($(ratingsView.$("td")[ 1 ]).find("span").html()).to.be.equal("John");
-                    //expect($(ratingsView.$("td")[ 2 ]).html()).to.be.equal('<span class="tendency-arrow"></span><small>&nbsp;</small>');
-                    //expect($(ratingsView.$("td")[ 3 ]).html()).to.be.equal("");
-                    //expect($(ratingsView.$("td")[ 4 ]).find(".rating-tendency").prev().html()).to.be.equal("0");
-                    //expect($(ratingsView.$("td")[ 5 ]).find("button").html()).to.have.string("Johns tips");
-                    //expect($(ratingsView.$("td")[ 6 ]).html()).to.be.equal("0");
-                    //expect($(ratingsView.$("td")[ 7 ]).html()).to.be.equal("0");
-                    //expect($(ratingsView.$("td")[ 8 ]).html()).to.be.equal("0");
-                    //expect($(ratingsView.$("td")[ 9 ]).html()).to.be.equal("0");
-                    //expect($(ratingsView.$("td")[ 10 ]).html()).to.be.equal("0");
-                    //expect($(ratingsView.$("td")[ 11 ]).html()).to.be.equal("0");
+                    // Table default participant row cells
+                    expect(ratingsView.$("div.participant").children().length).to.equal(11);
+                    expect(ratingsView.$("div.participant").find("div.scores-table-header-row").length).to.be.equal(0);
 
-                    /* OLD
-                    // Table rows
-                    expect(ratingsView.$el).to.exist;
-                    expect(ratingsView.$("tbody").length).to.be.equal(1);
-                    expect(ratingsView.$("tr").length).to.be.equal(2);
+                    expect(ratingsView.$("div.rank > span").hasClass("icon-trophy-gold")).to.be.true;
+                    expect(ratingsView.$("div.name").html()).to.be.equal("John");
+                    expect(ratingsView.$("div.rank-trend > span").hasClass("tendency-arrow")).to.be.true;
 
-                    // Empty scores
-                    expect(ratingsView.$("td").length).to.be.equal(12);
-                    expect($(ratingsView.$("td")[ 0 ]).html()).to.have.string("icon-trophy-gold");
-                    expect($(ratingsView.$("td")[ 1 ]).find("span").html()).to.be.equal("John");
-                    expect($(ratingsView.$("td")[ 2 ]).html()).to.be.equal('<span class="tendency-arrow"></span><small>&nbsp;</small>');
-                    expect($(ratingsView.$("td")[ 3 ]).html()).to.be.equal("");
-                    expect($(ratingsView.$("td")[ 4 ]).find(".rating-tendency").prev().html()).to.be.equal("0");
-                    expect($(ratingsView.$("td")[ 5 ]).find("button").html()).to.have.string("Johns tips");
-                    expect($(ratingsView.$("td")[ 6 ]).html()).to.be.equal("0");
-                    expect($(ratingsView.$("td")[ 7 ]).html()).to.be.equal("0");
-                    expect($(ratingsView.$("td")[ 8 ]).html()).to.be.equal("0");
-                    expect($(ratingsView.$("td")[ 9 ]).html()).to.be.equal("0");
-                    expect($(ratingsView.$("td")[ 10 ]).html()).to.be.equal("0");
-                    expect($(ratingsView.$("td")[ 11 ]).html()).to.be.equal("0");
-                    */
+                    expect(ratingsView.$("div.rating").html()).to.equal("1");
+
+                    expect(ratingsView.$("div.rating-trend > small").length).to.equal(1);
+                    expect(ratingsView.$("div.rating-trend > small").html()).to.be.equal("");
+
+                    expect(ratingsView.$("div.current-results").length).to.equal(0);
+                    expect(ratingsView.$("div.prediction").find("button.btn").html()).to.be.equal("Johns tips");
+
+                    expect(ratingsView.$("div.tabell-score").html()).to.be.equal("0");
+                    expect(ratingsView.$("div.pall-score").html()).to.be.equal("0");
+                    expect(ratingsView.$("div.toppscorer-score").html()).to.be.equal("0");
+                    expect(ratingsView.$("div.opprykk-score").html()).to.be.equal("0");
+                    expect(ratingsView.$("div.cup-score").html()).to.be.equal("0");
 
                     done();
                 });
@@ -230,21 +262,23 @@ define([
                 sandbox.server.respondWith("GET", /(.*)/, function (xhr, query) {
                     console.log("query:" + query);
                     ajaxSpy(xhr, query);
-                    if (query === [ SharedRatingModel.resources.scores.baseUri, SharedRatingModel.resources.uri.element.current ].join("/")) {
-                        xhr.respond(200, { "Content-Type": "application/json" }, JSON.stringify({
+                    if (query === [SharedRatingModel.resources.scores.baseUri, SharedRatingModel.resources.uri.element.current].join("/")) {
+                        xhr.respond(200, {"Content-Type": "application/json"}, JSON.stringify({
                             "metadata": {
                                 "year": 2016,
                                 "round": 10,
                                 "hasPredictions": {}
                             },
+                            // 13 Participants: Having 'rating' property > 0
+                            // Client side does not calculate anything, except sort for rank
                             "scores": {
                                 "einar": {
                                     "tabell": 68,
                                     "pall": 0,
                                     "nedrykk": 0,
                                     "toppscorer": 0,
-                                    "opprykk": -1,
-                                    "cup": -1,
+                                    "opprykk": -3,
+                                    "cup": -5,
                                     "rating": 66,
                                     "previousRating": 61
                                 },
@@ -254,8 +288,8 @@ define([
                                     "nedrykk": 0,
                                     "toppscorer": 0,
                                     "opprykk": 0,
-                                    "cup": -1,
-                                    "rating": 71,
+                                    "cup": -5,
+                                    "rating": 67,
                                     "previousRating": 73
                                 },
                                 "geir": {
@@ -264,8 +298,8 @@ define([
                                     "nedrykk": 0,
                                     "toppscorer": 0,
                                     "opprykk": 0,
-                                    "cup": -1,
-                                    "rating": 51,
+                                    "cup": -5,
+                                    "rating": 47,
                                     "previousRating": 51
                                 },
                                 "hans_bernhard": {
@@ -274,8 +308,8 @@ define([
                                     "nedrykk": 0,
                                     "toppscorer": 0,
                                     "opprykk": 0,
-                                    "cup": -1,
-                                    "rating": 83,
+                                    "cup": -5,
+                                    "rating": 79,
                                     "previousRating": 75
                                 },
                                 "jan_tore": {
@@ -283,9 +317,9 @@ define([
                                     "pall": -1,
                                     "nedrykk": 0,
                                     "toppscorer": 0,
-                                    "opprykk": -1,
-                                    "cup": -1,
-                                    "rating": 59,
+                                    "opprykk": -3,
+                                    "cup": -5,
+                                    "rating": 53,
                                     "previousRating": 50
                                 },
                                 "oddgeir": {
@@ -294,8 +328,8 @@ define([
                                     "nedrykk": 0,
                                     "toppscorer": 0,
                                     "opprykk": 0,
-                                    "cup": -1,
-                                    "rating": 69,
+                                    "cup": -5,
+                                    "rating": 65,
                                     "previousRating": 61
                                 },
                                 "oddvar": {
@@ -304,8 +338,8 @@ define([
                                     "nedrykk": 0,
                                     "toppscorer": 0,
                                     "opprykk": 0,
-                                    "cup": -1,
-                                    "rating": 62,
+                                    "cup": -5,
+                                    "rating": 58,
                                     "previousRating": 56
                                 },
                                 "ole_erik": {
@@ -313,9 +347,9 @@ define([
                                     "pall": -1,
                                     "nedrykk": 0,
                                     "toppscorer": 0,
-                                    "opprykk": -1,
-                                    "cup": -1,
-                                    "rating": 59,
+                                    "opprykk": -3,
+                                    "cup": -5,
+                                    "rating": 53,
                                     "previousRating": 56
                                 },
                                 "rikard": {
@@ -324,8 +358,8 @@ define([
                                     "nedrykk": 0,
                                     "toppscorer": 0,
                                     "opprykk": 0,
-                                    "cup": -1,
-                                    "rating": 52,
+                                    "cup": -5,
+                                    "rating": 48,
                                     "previousRating": 54
                                 },
                                 "svein_tore": {
@@ -334,8 +368,8 @@ define([
                                     "nedrykk": 0,
                                     "toppscorer": 0,
                                     "opprykk": 0,
-                                    "cup": -1,
-                                    "rating": 66,
+                                    "cup": -5,
+                                    "rating": 62,
                                     "previousRating": 54
                                 },
                                 "steinar": {
@@ -344,8 +378,8 @@ define([
                                     "nedrykk": 0,
                                     "toppscorer": 0,
                                     "opprykk": 0,
-                                    "cup": -1,
-                                    "rating": 55,
+                                    "cup": -5,
+                                    "rating": 51,
                                     "previousRating": 49
                                 },
                                 "tore": {
@@ -354,8 +388,8 @@ define([
                                     "nedrykk": 0,
                                     "toppscorer": 0,
                                     "opprykk": 0,
-                                    "cup": -1,
-                                    "rating": 54,
+                                    "cup": -5,
+                                    "rating": 50,
                                     "previousRating": 49
                                 },
                                 "trond": {
@@ -364,8 +398,8 @@ define([
                                     "nedrykk": 0,
                                     "toppscorer": 0,
                                     "opprykk": 0,
-                                    "cup": -1,
-                                    "rating": 78,
+                                    "cup": -5,
+                                    "rating": 74,
                                     "previousRating": 74
                                 }
                             }
@@ -379,77 +413,90 @@ define([
                 var ratingCollection = new RatingModelCollection(),
                     ratingsView = new RatingsView({
                         // Uncomment if viewing it (with the help of a breakpoint) in 'test.amd.html'
-                        //el: "#content",
+                        el: "#content",
                         model: new Backbone.Model(),
                         collection: ratingCollection
                     });
 
                 Backbone.listenTo(ratingCollection, "reset", ratingsView.render);
 
-                // Empty $el
-                // TODO: ...
-                //expect(ratingsView.$el).to.exist;
-                //expect(ratingsView.$el.children().length).to.equal(0);
-                //expect(ratingsView.$("tbody").length).to.equal(0);
-
+                /* jshint -W071 */
                 ratingsView.on("render", function () {
 
-                    // Fasit: "<div class="participant current-scores scores-table-row"><div class="rank strong"><span class="icon-trophy-gold"></span></div><div class="name strong">Geir</div><div class="rank-trend"><span class="icon-up-plus"></span><small>&nbsp;+3</small></div><div class="rating strong">51</div><div class="rating-trend"><small></small></div><div class="prediction"><button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable">Geirs tips</button></div><div class="tabell-score">54</div><div class="pall-score">-2</div><div class="nedrykk-score">0</div><div class="toppscorer-score">0</div><div class="opprykk-score">0</div><div class="cup-score">-1</div></div><div class="participant current-scores scores-table-row"><div class="rank strong"><span class="icon-trophy-silver"></span></div><div class="name strong">Rikard</div><div class="rank-trend"><span class="icon-up-plus"></span><small>&nbsp;+3</small></div><div class="rating strong">52</div><div class="rating-trend"><small>(-2p)</small></div><div class="prediction"><button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable">Rikards tips</button></div><div class="tabell-score">54</div><div class="pall-score">-1</div><div class="nedrykk-score">0</div><div class="toppscorer-score">0</div><div class="opprykk-score">0</div><div class="cup-score">-1</div></div><div class="participant current-scores scores-table-row"><div class="rank strong"><span class="icon-trophy-bronze"></span></div><div class="name strong">Tore</div><div class="rank-trend"><span class="icon-down"></span><small>&nbsp;-2</small></div><div class="rating strong">54</div><div class="rating-trend"><small>(+5p)</small></div><div class="prediction"><button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable">Tores tips</button></div><div class="tabell-score">56</div><div class="pall-score">-1</div><div class="nedrykk-score">0</div><div class="toppscorer-score">0</div><div class="opprykk-score">0</div><div class="cup-score">-1</div></div><div class="participant current-scores scores-table-row"><div class="rank strong">4.</div><div class="name strong">Steinar</div><div class="rank-trend"><span class="icon-down-plus"></span><small>&nbsp;-3</small></div><div class="rating strong">55</div><div class="rating-trend"><small>(+6p)</small></div><div class="prediction"><button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable">Steinars tips</button></div><div class="tabell-score">58</div><div class="pall-score">-2</div><div class="nedrykk-score">0</div><div class="toppscorer-score">0</div><div class="opprykk-score">0</div><div class="cup-score">-1</div></div><div class="participant current-scores scores-table-row"><div class="rank strong">5.</div><div class="name strong">Jan Tore</div><div class="rank-trend"><span class="icon-down"></span><small>&nbsp;-2</small></div><div class="rating strong">59</div><div class="rating-trend"><small>(+9p)</small></div><div class="prediction"><button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable">Jan Tores tips</button></div><div class="tabell-score">62</div><div class="pall-score">-1</div><div class="nedrykk-score">0</div><div class="toppscorer-score">0</div><div class="opprykk-score">-1</div><div class="cup-score">-1</div></div><div class="participant current-scores scores-table-row"><div class="rank strong"></div><div class="name strong">Ole Erik</div><div class="rank-trend"><span class="icon-up"></span><small>&nbsp;+2</small></div><div class="rating strong">59</div><div class="rating-trend"><small>(+3p)</small></div><div class="prediction"><button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable">Ole Eriks tips</button></div><div class="tabell-score">62</div><div class="pall-score">-1</div><div class="nedrykk-score">0</div><div class="toppscorer-score">0</div><div class="opprykk-score">-1</div><div class="cup-score">-1</div></div><div class="participant current-scores scores-table-row"><div class="rank strong">7.</div><div class="name strong">Oddvar</div><div class="rank-trend"><span class=""></span><small>&nbsp;</small></div><div class="rating strong">62</div><div class="rating-trend"><small>(+6p)</small></div><div class="prediction"><button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable">Oddvars tips</button></div><div class="tabell-score">64</div><div class="pall-score">-1</div><div class="nedrykk-score">0</div><div class="toppscorer-score">0</div><div class="opprykk-score">0</div><div class="cup-score">-1</div></div><div class="participant current-scores scores-table-row"><div class="rank strong">8.</div><div class="name strong">Einar</div><div class="rank-trend"><span class="icon-up"></span><small>&nbsp;+1</small></div><div class="rating strong">66</div><div class="rating-trend"><small>(+5p)</small></div><div class="prediction"><button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable">Einars tips</button></div><div class="tabell-score">68</div><div class="pall-score">0</div><div class="nedrykk-score">0</div><div class="toppscorer-score">0</div><div class="opprykk-score">-1</div><div class="cup-score">-1</div></div><div class="participant current-scores scores-table-row"><div class="rank strong"></div><div class="name strong">Svein Tore</div><div class="rank-trend"><span class="icon-down-plus"></span><small>&nbsp;-3</small></div><div class="rating strong">66</div><div class="rating-trend"><small>(+12p)</small></div><div class="prediction"><button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable">Svein Tores tips</button></div><div class="tabell-score">68</div><div class="pall-score">-1</div><div class="nedrykk-score">0</div><div class="toppscorer-score">0</div><div class="opprykk-score">0</div><div class="cup-score">-1</div></div><div class="participant current-scores scores-table-row"><div class="rank strong">10.</div><div class="name strong">Oddgeir</div><div class="rank-trend"><span class="icon-down"></span><small>&nbsp;-1</small></div><div class="rating strong">69</div><div class="rating-trend"><small>(+8p)</small></div><div class="prediction"><button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable">Oddgeirs tips</button></div><div class="tabell-score">70</div><div class="pall-score">0</div><div class="nedrykk-score">0</div><div class="toppscorer-score">0</div><div class="opprykk-score">0</div><div class="cup-score">-1</div></div><div class="participant current-scores scores-table-row"><div class="rank strong">11.</div><div class="name strong">Eirik</div><div class="rank-trend"><span class=""></span><small>&nbsp;</small></div><div class="rating strong">71</div><div class="rating-trend"><small>(-2p)</small></div><div class="prediction"><button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable">Eiriks tips</button></div><div class="tabell-score">72</div><div class="pall-score">0</div><div class="nedrykk-score">0</div><div class="toppscorer-score">0</div><div class="opprykk-score">0</div><div class="cup-score">-1</div></div><div class="participant current-scores scores-table-row"><div class="rank strong">12.</div><div class="name strong">Trond</div><div class="rank-trend"><span class=""></span><small>&nbsp;</small></div><div class="rating strong">78</div><div class="rating-trend"><small>(+4p)</small></div><div class="prediction"><button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable">Tronds tips</button></div><div class="tabell-score">80</div><div class="pall-score">-1</div><div class="nedrykk-score">0</div><div class="toppscorer-score">0</div><div class="opprykk-score">0</div><div class="cup-score">-1</div></div><div class="participant current-scores scores-table-row"><div class="rank strong">13.</div><div class="name strong">Hans Bernhard</div><div class="rank-trend"><span class=""></span><small>&nbsp;</small></div><div class="rating strong">83</div><div class="rating-trend"><small>(+8p)</small></div><div class="prediction"><button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable">Hans Bernhards tips</button></div><div class="tabell-score">84</div><div class="pall-score">0</div><div class="nedrykk-score">0</div><div class="toppscorer-score">0</div><div class="opprykk-score">0</div><div class="cup-score">-1</div></div>"
-                    // TODO: ...
+                    // Table participant rows
+                    var participants = ratingsView.$("div.participant");
 
-                    /* OLD
-                    // Table rows
-                    expect(ratingsView.$el).to.exist;
-                    expect(ratingsView.$("tbody").length).to.be.equal(1);
-                    var rows = ratingsView.$("tr");
-                    //expect($(rows).length).to.be.equal(14);
-                    expect(rows.length).to.be.equal(14);
+                    expect(participants.length).to.be.equal(13);
 
                     // #1 (Upward PLUS trending, 3 notches)
-                    var $row = $(rows[ 1 ]);
-                    expect($($row.find("td")[ 0 ]).html()).to.have.string("icon-trophy-gold");
-                    expect($($row.find("td")[ 1 ]).html()).to.have.string("Geir");
+                    var no1 = participants.get(0);
+                    expect($(no1).children().length).to.be.equal(11);
 
-                    var rankTrendIcon = $($row.find("td")[ 2 ]).find("span.icon-up-plus"),
-                        rankTrendPlaces = rankTrendIcon.siblings();
-                    expect(rankTrendIcon.length).to.be.equal(1);
-                    expect(rankTrendPlaces.html()).to.have.string("+3");
-                    expect($($row.find("td")[ 4 ]).html()).to.have.string("51");
+                    expect($(no1).find("div.rank > span").hasClass("icon-trophy-gold")).to.be.true;
+                    expect($(no1).find("div.name").html()).to.equal("Geir");
+                    expect($(no1).find("div.rank-trend > span").hasClass("icon-up-plus")).to.be.true;
+                    expect($(no1).find("div.rank-trend > small").html()).to.equal("&nbsp;+3");
+
+                    expect($(no1).find("div.rating").html()).to.equal("47");
+
+                    expect($(no1).find("div.rating-trend > small").length).to.equal(1);
+                    expect($(no1).find("div.rating-trend > small").html()).to.equal("(-4p)");
+
+                    expect($(no1).find("div.current-results").length).to.equal(0);
+                    expect($(no1).find("div.prediction").find("button.btn").html()).to.equal("Geirs tips");
+
+                    expect($(no1).find("div.tabell-score").html()).to.equal("54");
+                    expect($(no1).find("div.pall-score").html()).to.equal("-2");
+                    expect($(no1).find("div.toppscorer-score").html()).to.equal("0");
+                    expect($(no1).find("div.opprykk-score").html()).to.equal("0");
+                    expect($(no1).find("div.cup-score").html()).to.equal("-5");
 
                     // #2
-                    $row = $(rows[ 2 ]);
-                    expect($($row.find("td")[ 0 ]).html()).to.have.string("icon-trophy-silver");
-                    expect($($row.find("td")[ 1 ]).html()).to.have.string("Rikard");
+                    var no2 = participants.get(1);
+                    expect($(no2).children().length).to.be.equal(11);
 
-                    rankTrendIcon = $($row.find("td")[ 2 ]).find("span.icon-up-plus");
-                    rankTrendPlaces = rankTrendIcon.siblings();
-                    expect(rankTrendIcon.length).to.be.equal(1);
-                    expect(rankTrendPlaces.html()).to.have.string("+3");
-                    expect($($row.find("td")[ 4 ]).html()).to.have.string("52");
-                    expect($($row.find("td")[ 4 ]).html()).to.have.string("(-2p)");
+                    expect($(no2).find("div.rank > span").hasClass("icon-trophy-silver")).to.be.true;
+                    expect($(no2).find("div.name").html()).to.equal("Rikard");
+                    expect($(no2).find("div.rank-trend > span").hasClass("icon-up-plus")).to.be.true;
+                    expect($(no2).find("div.rank-trend > small").html()).to.equal("&nbsp;+3");
+
+                    expect($(no2).find("div.rating").html()).to.equal("48");
+
+                    expect($(no2).find("div.rating-trend > small").length).to.equal(1);
+                    expect($(no2).find("div.rating-trend > small").html()).to.equal("(-6p)");
+
+                    expect($(no2).find("div.current-results").length).to.equal(0);
+                    expect($(no2).find("div.prediction").find("button.btn").html()).to.equal("Rikards tips");
+
+                    expect($(no2).find("div.tabell-score").html()).to.equal("54");
+                    expect($(no2).find("div.pall-score").html()).to.equal("-1");
+                    expect($(no2).find("div.toppscorer-score").html()).to.equal("0");
+                    expect($(no2).find("div.opprykk-score").html()).to.equal("0");
+                    expect($(no2).find("div.cup-score").html()).to.equal("-5");
 
                     // #3
-                    $row = $(rows[ 3 ]);
-                    expect($($row.find("td")[ 0 ]).html()).to.have.string("icon-trophy-bronze");
-                    expect($($row.find("td")[ 1 ]).html()).to.have.string("Tore");
+                    var no3 = participants.get(2);
+                    expect($(no3).children().length).to.be.equal(11);
 
-                    rankTrendIcon = $($row.find("td")[ 2 ]).find("span.icon-down-plus");
-                    rankTrendPlaces = rankTrendIcon.siblings();
-                    expect(rankTrendIcon.length).to.be.equal(1);
-                    expect(rankTrendPlaces.html()).to.have.string("-2");
-                    expect($($row.find("td")[ 4 ]).html()).to.have.string("54");
-                    expect($($row.find("td")[ 4 ]).html()).to.have.string("(+5p)");
-                    */
+                    expect($(no3).find("div.rank > span").hasClass("icon-trophy-bronze")).to.be.true;
+                    expect($(no3).find("div.name").html()).to.equal("Tore");
+                    expect($(no3).find("div.rank-trend > span").hasClass("icon-down")).to.be.true;
+                    expect($(no3).find("div.rank-trend > small").html()).to.equal("&nbsp;-2");
+
+                    expect($(no3).find("div.rating").html()).to.equal("50");
+
+                    expect($(no3).find("div.rating-trend > small").html()).to.equal("(+1p)");
+
+                    expect($(no3).find("div.tabell-score").html()).to.equal("56");
+                    expect($(no3).find("div.pall-score").html()).to.equal("-1");
+                    expect($(no3).find("div.toppscorer-score").html()).to.equal("0");
+                    expect($(no3).find("div.opprykk-score").html()).to.equal("0");
+                    expect($(no3).find("div.cup-score").html()).to.equal("-5");
 
                     done();
                 });
 
                 ratingCollection.fetch();
             });
-
-
-            // TODO: ?
-            it("should calculate and show rating trends from previous round");
         });
-    }
-);
+    });

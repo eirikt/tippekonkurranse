@@ -53,9 +53,11 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
                     '          </td>' +
                     '          <td style="width:33%;vertical-align:top;">' +
                     '            <p>Toppskårer:</p>' +
-                    '            <p><strong><%= currentTippeligaToppscorer %></strong></p>' +
+                    //'            <p><strong><%= currentTippeligaToppscorer %></strong></p>' +
+                    '            <p><strong>Alle</strong></p>' +
                     '            <p style="margin-top:2rem;">Fortsatt med i cupen:</p>' +
-                    '            <p><strong><%= currentRemainingCupContenders %></strong></p>' +
+                    //'            <p><strong><%= currentRemainingCupContenders %></strong></p>' +
+                    '            <p><strong>Alle</strong></p>' +
                     '          </td>' +
                     '        </tr>' +
                     '      </table>' +
@@ -93,7 +95,7 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
                     // Pretty tabell presentation
                     prettyTabellView = new SoccerTableViews.SimpleTableView({
                         model: this.model.get('currentTippeligaTable'),
-                        emphasizeFormat: '3+2'
+                        emphasizeFormat: '3+0'
                     });
                     this.model.set('currentTippeligaTable', prettyTabellView.render().$el.html(), { silent: true });
 

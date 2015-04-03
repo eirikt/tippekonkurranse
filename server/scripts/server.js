@@ -55,8 +55,8 @@ server.get(app.resource.scores.uri, tippekonkurranseApi.handleScoresRequest);
 server.get(app.resource.ratingHistory.uri, tippekonkurranseApi.handleRatingHistoryRequest);
 
 // Dynamic resources (RESTful service API) (Only JSON content type supported so far)
-server.get([ app.resource.results.baseUri, app.resource.uri.element.current ].join("/"), tippekonkurranseApi.handleResultsRequest);
-server.get([ app.resource.scores.baseUri, app.resource.uri.element.current ].join("/"), tippekonkurranseApi.handleScoresRequest);
+server.get([app.resource.results.baseUri, app.resource.uri.element.current].join("/"), tippekonkurranseApi.handleResultsRequest);
+server.get([app.resource.scores.baseUri, app.resource.uri.element.current].join("/"), tippekonkurranseApi.handleScoresRequest);
 
 // Start HTTP server
 server.listen(port, function () {
@@ -80,31 +80,41 @@ root.app = {
     currentYear: new Date().getFullYear(),
     currentRound: null,
 
-    isYearStarted: function (round, year) {
-        "use strict";
-        var roundNumber, yearNumber;
-        try {
-            roundNumber = parseInt(round, 10);
-            yearNumber = parseInt(year, 10);
-        } catch (e) {
-            return false;
-        }
-        if (!roundNumber || !yearNumber) {
-            return false;
-        }
-        if (yearNumber > root.app.currentYear) {
-            return false;
-        }
-        return true;
-    },
+    /*
+     isYearStarted: function (round, year) {
+     "use strict";
+     var roundNumber, yearNumber;
+     try {
+     roundNumber = parseInt(round, 10);
+     yearNumber = parseInt(year, 10);
+     } catch (e) {
+     return false;
+     }
+     if (!roundNumber || !yearNumber) {
+     return false;
+     }
+     if (yearNumber > root.app.currentYear) {
+     return false;
+     }
+     //if (!root.app.currentRound) {
+     //    return false;
+     //}
+     return true;
+     },
+     */
     isCurrentYearCompleted: false,              // NB! To be set manually for now ...
     /*
      isCurrentRoundCompleted: function (round) {
      "use strict";
-     return round < root.app.currentRound ||
-     (round <= root.app.currentRound && root.app.isCurrentYearCompleted);
+     //return round < root.app.currentRound ||
+     //    (round <= root.app.currentRound && root.app.isCurrentYearCompleted);
+     throw new Error("Not implemented!");
      },
      */
+    isRoundActive: function (round, year) {
+        "use strict";
+        return round === root.app.currentRound && year === root.app.currentYear;
+    },
     isRoundCompleted: function (round, year) {
         "use strict";
         if (!year) {
@@ -112,10 +122,36 @@ root.app = {
                 (round <= root.app.currentRound && root.app.isCurrentYearCompleted);
         }
         return year < root.app.currentYear ||
-            ( year <= root.app.currentYear && round < root.app.currentRound) ||
-            ( year <= root.app.currentYear && round <= root.app.currentRound && root.app.isCurrentYearCompleted );
+            (year <= root.app.currentYear && round < root.app.currentRound) ||
+            (year <= root.app.currentYear && round <= root.app.currentRound && root.app.isCurrentYearCompleted);
     }
 };
+
+
+dbSchema.TippeligaRound.findOne({ year: root.app.currentYear }).sort("-round").exec(function (err, latestTippeligaRound) {
+    "use strict";
+    if (err){
+        console.err(err);
+        return;
+    }
+    if (!latestTippeligaRound){
+        console.warn("No round found for season " + root.app.currentYear + " ... setting it to 0");
+        root.app.currentRound = 0;
+        return;
+    }
+    root.app.currentRound = latestTippeligaRound.round;
+    console.log("Initialized with: current season " + root.app.currentYear + ", current round " + root.app.currentRound);
+});
+
+dbSchema.TippeligaRound.count({ year: 2014 }, function (err, count) {
+    "use strict";
+    console.log("2014 count: " + count);
+});
+
+dbSchema.TippeligaRound.count({ year: 2015 }, function (err, count) {
+    "use strict";
+    console.log("2015 count: " + count);
+});
 
 
 // Cache
@@ -134,7 +170,8 @@ if (env === "development") {
 
 // Warm up cache: Rating history for initial year/previous year/2014
 // TODO: Cache all years, this year and all previous ones
-/* No, this is not a good idea with single-dyno setup on Heroku - the node falls asleep and the response time will be unacceptable for "wake-up-the-dyno" requests
+/* No, this is not a good idea with single-dyno setup on Heroku - the node falls asleep and the response time will be unacceptable for "wake-up-the-dyno" requests*/
+/*
  dbSchema.TippeligaRound.count({ year: root.app.initialYear }, function (err, count) {
  "use strict";
  if (err) {
@@ -178,7 +215,7 @@ if (env === "development") {
  curry(tippekonkurranse.getStoredTippeligaDataRequestor, root.app.initialYear, roundIndex),
  rq.requestor(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
  rq.requestor(tippekonkurranse.addRound),
- curry(tippekonkurranse.addTippekonkurranseScoresRequestor, tippekonkurranse.predictions[ root.app.initialYear ], tippekonkurranse.rules[ root.app.initialYear ])
+ curry(tippekonkurranse.addTippekonkurranseScoresRequestor, tippekonkurranse.predictions[root.app.initialYear], tippekonkurranse.rules[root.app.initialYear])
  ])
  );
  }
@@ -187,9 +224,9 @@ if (env === "development") {
  RQ.parallel(getTippekonkurranseScoresHistory),
  rq.then(sortByRound),
  function (requestion, args) {
- var userIdArray = Object.keys(args[ 0 ][ tippekonkurranseData.indexOfScores ].scores);
+ var userIdArray = Object.keys(args[0][tippekonkurranseData.indexOfScores].scores);
  __.each(userIdArray, function (userId, index) {
- data[ userId ] = { userId: userId, ratings: [] };
+ data[userId] = { userId: userId, ratings: [] };
  if (index >= userIdArray.length - 1) {
  return requestion(args);
  }
@@ -197,8 +234,8 @@ if (env === "development") {
  },
  function (requestion, args) {
  __.each(args, function (completeTippekonkurranseRoundData) {
- __.each(completeTippekonkurranseRoundData[ tippekonkurranseData.indexOfScores ].scores, function (participantScores, userId) {
- data[ userId ].ratings.push(participantScores.rating);
+ __.each(completeTippekonkurranseRoundData[tippekonkurranseData.indexOfScores].scores, function (participantScores, userId) {
+ data[userId].ratings.push(participantScores.rating);
  });
  });
  return requestion(data);
