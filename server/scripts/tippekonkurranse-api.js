@@ -34,7 +34,7 @@ var env = process.env.NODE_ENV || "development",
 
             var year = parseInt(request.params.year, 10),
                 userId = request.params.userId,
-                predictions = tippekonkurranse.predictions[ year ][ userId ];
+                predictions = tippekonkurranse.predictions[year][userId];
 
             if (predictions) {
                 response.status(200).json(predictions);
@@ -65,47 +65,48 @@ var env = process.env.NODE_ENV || "development",
         function (request, response) {
             "use strict";
             var year = request.params.year || root.app.currentYear,
-                round = request.params.round || root.app.currentRound,
-                rulesOfTheYear = tippekonkurranse.rules[ year ],
-                predictionsOfTheYear = tippekonkurranse.predictions[ year ],
+                round = request.params.round,
+                rulesOfTheYear = tippekonkurranse.rules[year],
+                predictionsOfTheYear = tippekonkurranse.predictions[year],
 
                 getData = tippekonkurranse.retrieveTippeligaData(request),
                 thenAddScores = curry(tippekonkurranse.addTippekonkurranseScoresRequestor, predictionsOfTheYear, rulesOfTheYear),
                 thenAddPreviousScores = curry(tippekonkurranse.addPreviousMatchRoundRatingToEachParticipantRequestor, predictionsOfTheYear, rulesOfTheYear),
-                dispatchScoresForPresentation = curry(tippekonkurranse.dispatchScoresToClientForPresentation, response),
+                presentData = curry(tippekonkurranse.dispatchScoresToClientForPresentation, response),
                 storeData = tippekonkurranse.storeTippeligaRoundMatchData;
 
-            if (rulesOfTheYear && predictionsOfTheYear) {
-                if (root.app.isYearStarted(round, year) && rulesOfTheYear && predictionsOfTheYear) {
-                    sequence([
-                        getData,
-                        then(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
-                        then(tippekonkurranse.addRound),
-                        thenAddScores,
-                        thenAddPreviousScores,
-                        then(tippekonkurranse.addMetadataToScores),
-                        then(dispatchScoresForPresentation),
-                        then(storeData)
-                    ])(go);
-
-                } else {
-                    console.error(utils.logPreamble() + "Season " + year + " is not yet started");
-                    //response.status(404).send("Season " + year + " is not yet started");
-                    sequence([
-                        getData,
-                        then(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
-                        then(tippekonkurranse.addRound),
-                        thenAddScores,
-                        thenAddPreviousScores,
-                        then(tippekonkurranse.addMetadataToScores),
-                        then(dispatchScoresForPresentation)//,
-                        //then(storeData)
-                    ])(go);
-                }
-
-            } else {
+            if (!rulesOfTheYear || !predictionsOfTheYear) {
                 console.error(utils.logPreamble() + "Rules and/or predictions are missing for year " + year);
                 response.status(404).send("Rules and/or predictions are missing for year " + year);
+                return;
+            }
+            if (round && year && !root.app.isRoundCompleted(round, year) && !root.app.isRoundActive(round, year)) {
+                console.error(utils.logPreamble() + "Round " + year + "/" + round + " is in the future ...");
+                response.status(404).send("Round " + year + "/" + round + " is in the future ...");
+                return;
+            }
+            if (round && year && root.app.isRoundCompleted(round, year)) {
+                sequence([
+                    getData,
+                    then(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
+                    then(tippekonkurranse.addRound),
+                    thenAddScores,
+                    thenAddPreviousScores,
+                    then(tippekonkurranse.addMetadataToScores),
+                    then(presentData)
+                ])(go);
+
+            } else {
+                sequence([
+                    getData,
+                    then(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
+                    then(tippekonkurranse.addRound),
+                    thenAddScores,
+                    thenAddPreviousScores,
+                    then(tippekonkurranse.addMetadataToScores),
+                    then(presentData),
+                    then(storeData)
+                ])(go);
             }
         },
 
@@ -116,8 +117,8 @@ var env = process.env.NODE_ENV || "development",
             var year = request.params.year,
                 round = request.params.round,
                 key = year + round,
-                rulesOfTheYear = tippekonkurranse.rules[ year ],
-                predictionsOfTheYear = tippekonkurranse.predictions[ year ],
+                rulesOfTheYear = tippekonkurranse.rules[year],
+                predictionsOfTheYear = tippekonkurranse.predictions[year],
 
                 cache = root.app.cache.ratingHistory,
                 memoizedValue = utils.memoizationReader(cache, key),
@@ -164,49 +165,51 @@ var env = process.env.NODE_ENV || "development",
             }
 
             // 4. Then execute them ...
-            sequence([
-                parallel(getTippekonkurranseScoresHistory),
+            if (round > 0) {
+                sequence([
+                    parallel(getTippekonkurranseScoresHistory),
 
-                // 5. And manipulate them ...
-                then(sortByRound),
+                    // 5. And manipulate them ...
+                    then(sortByRound),
 
-                // TODO: Ugly! Rewrite with 'map' and 'partialFn' and ...
-                function (requestion, args) {
-                    /* Create processing-friendly data structure skeleton:
-                     * { <userId> = { userId: <userId>, ratings: [] }}
-                     */
-                    var userIdArray = Object.keys(args[ 0 ][ tippekonkurranseData.indexOfScores ].scores);
-                    __.each(userIdArray, function (userId, index) {
-                        data[ userId ] = { userId: userId, ratings: [] };
-                        if (index >= userIdArray.length - 1) {
-                            return requestion(args);
-                        }
-                    });
-                },
-
-                // TODO: Ugly! Rewrite with 'map' and 'partialFn' and ...
-                function (requestion, args) {
-                    // Process/build data structure
-                    __.each(args, function (completeTippekonkurranseRoundData) {
-                        __.each(completeTippekonkurranseRoundData[ tippekonkurranseData.indexOfScores ].scores, function (participantScores, userId) {
-                            data[ userId ].ratings.push(participantScores.rating);
+                    // TODO: Ugly! Rewrite with 'map' and 'partialFn' and ...
+                    function (requestion, args) {
+                        /* Create processing-friendly data structure skeleton:
+                         * { <userId> = { userId: <userId>, ratings: [] }}
+                         */
+                        var userIdArray = Object.keys(args[0][tippekonkurranseData.indexOfScores].scores);
+                        __.each(userIdArray, function (userId, index) {
+                            data[userId] = { userId: userId, ratings: [] };
+                            if (index >= userIdArray.length - 1) {
+                                return requestion(args);
+                            }
                         });
-                    });
-                    return requestion(data);
-                },
+                    },
 
-                /* Create/Transform from processing-friendly data structure:
-                 * var participants = [{ <userId> = { userId: {string}, ratings: [] }}]
-                 * to JqPlot-friendly data structure:
-                 * var participants = [{ userId: {string}, ratings: [] }]
-                 *
-                 * 'partialFn' is just for switching the argument ordering in Underscore's 'map' function, which is all wrong.
-                 */
-                // TODO: Consider including 'year' in response
-                then(___.partialFn(__.map, __.identity)),
+                    // TODO: Ugly! Rewrite with 'map' and 'partialFn' and ...
+                    function (requestion, args) {
+                        // Process/build data structure
+                        __.each(args, function (completeTippekonkurranseRoundData) {
+                            __.each(completeTippekonkurranseRoundData[tippekonkurranseData.indexOfScores].scores, function (participantScores, userId) {
+                                data[userId].ratings.push(participantScores.rating);
+                            });
+                        });
+                        return requestion(data);
+                    },
 
-                then(cacheTheResults),
-                then(dispatchTheResults)
+                    /* Create/Transform from processing-friendly data structure:
+                     * var participants = [{ <userId> = { userId: {string}, ratings: [] }}]
+                     * to JqPlot-friendly data structure:
+                     * var participants = [{ userId: {string}, ratings: [] }]
+                     *
+                     * 'partialFn' is just for switching the argument ordering in Underscore's 'map' function, which is all wrong.
+                     */
+                    // TODO: Consider including 'year' in response
+                    then(___.partialFn(__.map, __.identity)),
 
-            ])(go);
+                    then(cacheTheResults),
+                    then(dispatchTheResults)
+
+                ])(go);
+            }
         };

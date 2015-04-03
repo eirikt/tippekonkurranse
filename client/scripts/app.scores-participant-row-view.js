@@ -1,6 +1,6 @@
 /* global define:false */
 define(
-    [ 'jquery', 'underscore', 'backbone', 'marionette', 'app.models', 'app.result', 'backbone.bootstrap.views', 'app.soccer-table-views' ],
+    ['jquery', 'underscore', 'backbone', 'marionette', 'app.models', 'app.result', 'backbone.bootstrap.views', 'app.soccer-table-views'],
     function ($, _, Backbone, Marionette, App, ParticipantScore, BootstrapViews, SoccerTableViews) {
         'use strict';
 
@@ -12,7 +12,7 @@ define(
 
             PredictionsModel = Backbone.Model.extend({
                 url: function () {
-                    return [ App.resource.predictions.baseUri, this.get(ParticipantScore.yearPropertyName), this.get(ParticipantScore.userIdPropertyName) ].join('/');
+                    return [App.resource.predictions.baseUri, this.get(ParticipantScore.yearPropertyName), this.get(ParticipantScore.userIdPropertyName)].join('/');
                 }
             }),
 
@@ -54,7 +54,7 @@ define(
                     // Pretty tabell presentation
                     var prettyTabellView = new SoccerTableViews.SimpleTableView({
                         model: this.model.get(App.scoreModel.tabellPropertyName),
-                        emphasizeFormat: '3+2'
+                        emphasizeFormat: '3+0'
                     });
                     this.model.set(App.scoreModel.tabellPropertyName, prettyTabellView.render().$el.html(), { silent: true });
 
@@ -262,30 +262,30 @@ define(
             className: 'participant current-scores scores-table-row',
 
             getChildView: function (model) {
-                switch (model.get("column")) {
-                    case 1:
+                switch (model.get("columnType")) {
+                    case "rank":
                         return RankView;
-                    case 2:
+                    case "name":
                         return NameView;
-                    case 3:
+                    case "rankTrend":
                         return RankTrendView;
-                    case 4:
+                    case "rating":
                         return RatingView;
-                    case 5:
+                    case "ratingTrend":
                         return RatingTrendView;
-                    case 6:
+                    case "prediction":
                         return PredictionView;
-                    case 7:
+                    case "tabell":
                         return TabellScoreView;
-                    case 8:
+                    case "pall":
                         return PallScoreView;
-                    case 9:
+                    case "nedrykk":
                         return NedrykkScoreView;
-                    case 10:
+                    case "toppscorer":
                         return ToppscorerScoreView;
-                    case 11:
+                    case "opprykk":
                         return OpprykkScoreView;
-                    case 12:
+                    case "cup":
                         return CupScoreView;
                     default:
                         throw new Error("No participant row cell view declared for cell column #" + model.get("column"));
@@ -308,70 +308,73 @@ define(
                 });
             },
             onBeforeRender: function (collectionView) {
+                var year = collectionView.model.get(ParticipantScore.yearPropertyName);
+
                 this.collection = new Collection();
 
-                // Match round navigation
                 this.collection.add(new Model({
-                        column: 1,
+                        columnType: "rank",
                         rank: collectionView.model.get(ParticipantScore.rankPropertyName),
                         // TODO: Move all rank presentation logic into RankView
                         rankPresentation: collectionView.model.get(ParticipantScore.rankPresentationPropertyName)
                     })
                 );
                 this.collection.add(new Model({
-                        column: 2,
+                        columnType: "name",
                         name: collectionView.model.get(ParticipantScore.namePropertyName)
                     })
                 );
                 this.collection.add(new Model({
-                        column: 3,
+                        columnType: "rankTrend",
                         rank: collectionView.model.get(ParticipantScore.rankPropertyName),
                         previousRank: collectionView.model.get(ParticipantScore.previousRankPropertyName)
                     })
                 );
                 this.collection.add(new Model({
-                        column: 4,
+                        columnType: "rating",
                         rating: collectionView.model.get(App.scoreModel.ratingPropertyName)
                     })
                 );
                 this.collection.add(new Model({
-                        column: 5,
+                        columnType: "ratingTrend",
                         rating: collectionView.model.get(App.scoreModel.ratingPropertyName),
                         previousRating: collectionView.model.get(App.scoreModel.previousRatingPropertyName)
                     })
                 );
                 this.collection.add(new Model({
-                        column: 6,
+                        columnType: "prediction",
                         name: collectionView.model.get(ParticipantScore.namePropertyName)
                     })
                 );
                 this.collection.add(new Model({
-                        column: 7,
+                        columnType: "tabell",
                         tabell: collectionView.model.get(App.scoreModel.tabellPropertyName)
                     })
                 );
                 this.collection.add(new Model({
-                        column: 8,
+                        columnType: "pall",
                         pall: collectionView.model.get(App.scoreModel.pallPropertyName)
                     })
                 );
+                if (year === 2014) {
+                    this.collection.add(new Model({
+                            columnType: "nedrykk",
+                            nedrykk: collectionView.model.get(App.scoreModel.nedrykkPropertyName)
+                        })
+                    );
+                }
                 this.collection.add(new Model({
-                        column: 9,
-                        nedrykk: collectionView.model.get(App.scoreModel.nedrykkPropertyName)
-                    })
-                );
-                this.collection.add(new Model({
-                        column: 10,
+                        columnType: "toppscorer",
                         toppscorer: collectionView.model.get(App.scoreModel.toppscorerPropertyName)
                     })
                 );
                 this.collection.add(new Model({
-                        column: 11,
+                        columnType: "opprykk",
                         opprykk: collectionView.model.get(App.scoreModel.opprykkPropertyName)
                     })
                 );
                 this.collection.add(new Model({
-                        column: 12,
+                        columnType: "cup",
                         cup: collectionView.model.get(App.scoreModel.cupPropertyName)
                     })
                 );

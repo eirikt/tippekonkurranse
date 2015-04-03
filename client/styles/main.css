@@ -161,8 +161,6 @@ h2, .h2 {
 }
 
 .rank {
-    /*width: 3rem;*/
-    /*width: 5.5rem;*/
     text-align: right;
     padding-right: .8rem;
 
@@ -184,7 +182,6 @@ h2, .h2 {
 }
 
 .name {
-    /*width: 14rem;*/
     text-align: left;
 
     -webkit-order: 4;
@@ -205,7 +202,6 @@ h2, .h2 {
 }
 
 .rank-trend {
-    /*width: 8rem;*/
     text-align: left;
 
     -webkit-order: 3;
@@ -227,7 +223,7 @@ h2, .h2 {
 
 .rating {
     text-align: right;
-    padding-right: .6rem;
+    padding-right: .4rem;
 
     -webkit-order: 4;
     -ms-order: 4;
@@ -275,7 +271,6 @@ h2, .h2 {
 }
 
 .tabell-score {
-    /*width: 8rem;*/
     text-align: center;
 
     -webkit-order: 7;
@@ -292,7 +287,6 @@ h2, .h2 {
 }
 
 .pall-score {
-    /*width: 8rem;*/
     text-align: center;
 
     -webkit-order: 8;
@@ -309,7 +303,6 @@ h2, .h2 {
 }
 
 .nedrykk-score {
-    /*width: 9rem;*/
     text-align: center;
 
     -webkit-order: 9;
@@ -326,7 +319,6 @@ h2, .h2 {
 }
 
 .toppscorer-score {
-    /*width: 9rem;*/
     text-align: center;
 
     -webkit-order: 10;
@@ -343,7 +335,6 @@ h2, .h2 {
 }
 
 .opprykk-score {
-    /*width: 9rem;*/
     text-align: center;
 
     -webkit-order: 11;
@@ -360,7 +351,6 @@ h2, .h2 {
 }
 
 .cup-score {
-    /*width: 9rem;*/
     text-align: center;
 
     -webkit-order: 12;

@@ -71,23 +71,25 @@ define([
         });
 
 
-        var _delayedRelocationOfParticipant = function (timeOutInMillis, participantToRemove, participantToAdd) {
-            var dfd = $.Deferred();
-            Please.wait(timeOutInMillis).then(function () {
-                if (participantToRemove) {
-                    console.log("Relocating participant (" + participantToRemove.get("name") + " | " + participantToAdd.get("name") + ")");
-                    app.mainContent.currentView.collection.remove(participantToRemove);
-                } else {
-                    console.log("No participant to relocate ...");
-                }
-                app.mainContent.currentView.collection.add(participantToAdd);
-                dfd.resolve();
-            });
-            return dfd.promise();
-        };
+        /*
+         var _delayedRelocationOfParticipant = function (timeOutInMillis, participantToRemove, participantToAdd) {
+         var dfd = $.Deferred();
+         Please.wait(timeOutInMillis).then(function () {
+         if (participantToRemove) {
+         console.log("Relocating participant (" + participantToRemove.get("name") + " | " + participantToAdd.get("name") + ")");
+         app.mainContent.currentView.collection.remove(participantToRemove);
+         } else {
+         console.log("No participant to relocate ...");
+         }
+         app.mainContent.currentView.collection.add(participantToAdd);
+         dfd.resolve();
+         });
+         return dfd.promise();
+         };
+         */
 
 
-        // TODO: Fix
+        // TODO: Fix JSHint
         /* jshint -W071 */
         app.listenTo(scores, 'reset', function () {
             console.log('event::scores:reset');
@@ -95,9 +97,9 @@ define([
             var hasNoMainContentView = !app.mainContent.hasView(),
                 hasNoData = scores.models.length <= 0 || scores.round < 1,
 
-                headerModel,// = appModel.clone(),
-                matchRoundNavigation,// = appModel.clone(),
-                seasonNavigation,// = appModel.clone(),
+                headerModel,
+                matchRoundNavigation,
+                seasonNavigation,
 
                 participants, gold, silver, bronze, rank, rankTrend, rating, ratingTrend;
 
@@ -149,16 +151,16 @@ define([
 
 
             // Temporary ... To be removed when applying animations
-            if (hasNoData) {
-                //if (!appModel.get("currentTippeligaSeasonHasStarted")) {
+            //if (hasNoData) {
+            if (appModel.get("year") === appModel.get("currentYear") && !appModel.get("currentTippeligaSeasonHasStarted")) {
                 headerModel.set("hasNoData", true);
             }
             //if (!hasNoMainContentView) {
             currentScores = scores.clone();
             currentScores.unshift(headerModel);
             //}
-            if (hasNoData) {
-                //if (!appModel.get("currentTippeligaSeasonHasStarted")) {
+            //if (hasNoData) {
+            if (appModel.get("year") === appModel.get("currentYear") && !appModel.get("currentTippeligaSeasonHasStarted")) {
                 app.mainContent.show(new PreSeasonView({
                     model: appModel,
                     collection: currentScores

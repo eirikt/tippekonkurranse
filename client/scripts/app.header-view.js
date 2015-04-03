@@ -40,7 +40,7 @@ define([ 'jquery', 'underscore', 'moment', 'backbone', 'marionette' ],
             onRender: function () {
                 this.$('#countdown').countdown(window.app.model.get('currentTippeligaSeasonStartDate'), function (event) {
                     $(this).html(event.strftime(
-                        '<span class="contrast"><strong>%w</strong></span> uke ' +
+                        //'<span class="contrast"><strong>%w</strong></span> uke ' +
                         '<span class="contrast"><strong>%d</strong></span> dager ' +
                         '<span class="contrast"><strong>%H</strong></span> timer ' +
                         '<span class="contrast"><strong>%M</strong></span> minutter ' +

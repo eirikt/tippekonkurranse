@@ -1,8 +1,8 @@
 /* global define:false */
 /* jshint -W106 */
-define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment', 'moment.nb',
+define(['jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment', 'moment.nb',
         'backbone.fetch-local-copy', 'client-utils', 'backbone.bootstrap.views',
-        'app.models', 'app.scores-header-row-view', 'app.pre-season-participant-row-view', 'app.soccer-table-views' ],
+        'app.models', 'app.scores-header-row-view', 'app.pre-season-participant-row-view', 'app.soccer-table-views'],
 
     function ($, _, Backbone, Marionette, Bootstrap, Moment, Moment_nb, BackboneFetchLocalCopy, utils, BootstrapViews, App, HeaderRowView, ParticipantRowView, SoccerTableViews) {
 
@@ -11,9 +11,9 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
         var CurrentResults = Backbone.Model.extend({
             url: function () {
                 if (this.get('year') && this.get('round')) {
-                    return [ App.resource.results.baseUri, this.get('year'), this.get('round') ].join('/');
+                    return [App.resource.results.baseUri, this.get('year'), this.get('round')].join('/');
                 }
-                return [ App.resource.results.baseUri, App.resource.uri.element.current ].join('/');
+                return [App.resource.results.baseUri, App.resource.uri.element.current].join('/');
             }
         });
         _.extend(CurrentResults.prototype, App.nameable);
@@ -54,9 +54,11 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
                     '          </td>' +
                     '          <td style="width:33%;vertical-align:top;">' +
                     '            <p>Toppskårer:</p>' +
-                    '            <p><strong><%= currentTippeligaToppscorer %></strong></p>' +
+                    //'            <p><strong><%= currentTippeligaToppscorer %></strong></p>' +
+                    '            <p><strong>Alle</strong></p>' +
                     '            <p style="margin-top:2rem;">Fortsatt med i cupen:</p>' +
-                    '            <p><strong><%= currentRemainingCupContenders %></strong></p>' +
+                    //'            <p><strong><%= currentRemainingCupContenders %></strong></p>' +
+                    '            <p><strong>Alle</strong></p>' +
                     '          </td>' +
                     '        </tr>' +
                     '      </table>' +
@@ -78,8 +80,8 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
                     this.model.clone();
 
                     // Meta-data for offline
-                    this.model.set('appName', this.model.name(), { silent: true });
-                    this.model.set('uri', this.model.urlRoot, { silent: true });
+                    this.model.set('appName', this.model.name(), {silent: true});
+                    this.model.set('uri', this.model.urlRoot, {silent: true});
 
                     // Pretty date presentation
                     prettyDateView = new PrettyDateView({
@@ -89,28 +91,28 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
                             culture: 'nb'
                         }
                     });
-                    this.model.set('currentDate', prettyDateView.render(), { silent: true });
+                    this.model.set('currentDate', prettyDateView.render(), {silent: true});
 
                     // Pretty tabell presentation
                     prettyTabellView = new SoccerTableViews.SimpleTableView({
                         model: this.model.get('currentTippeligaTable'),
                         emphasizeFormat: '3+0'
                     });
-                    this.model.set('currentTippeligaTable', prettyTabellView.render().$el.html(), { silent: true });
+                    this.model.set('currentTippeligaTable', prettyTabellView.render().$el.html(), {silent: true});
 
                     // Pretty tabell presentation
                     prettyTabellView = new SoccerTableViews.SimpleTableView({
                         model: this.model.get('currentAdeccoligaTable'),
                         emphasizeFormat: '2+0'
                     });
-                    this.model.set('currentAdeccoligaTable', prettyTabellView.render().$el.html(), { silent: true });
+                    this.model.set('currentAdeccoligaTable', prettyTabellView.render().$el.html(), {silent: true});
 
                     // Pretty toppscorer presentation
                     toppscorer = this.model.get('currentTippeligaToppscorer');
                     toppscorer = _.reduce(toppscorer, function (result, toppscorer, index) {
                         return result += toppscorer + '<br/>';
                     }, '');
-                    this.model.set('currentTippeligaToppscorer', toppscorer, { silent: true });
+                    this.model.set('currentTippeligaToppscorer', toppscorer, {silent: true});
 
                     // Pretty cup presentation
                     cupContenders = this.model.get('currentRemainingCupContenders');
@@ -118,7 +120,7 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
                         //return index > 0 ? result += ' og ' + team : result += team;
                         return result += team + '<br/>';
                     }, '');
-                    this.model.set('currentRemainingCupContenders', cupContenders, { silent: true });
+                    this.model.set('currentRemainingCupContenders', cupContenders, {silent: true});
                 },
                 onRender: function () {
                     $('#currentResultsTable').append(this.template(this.model.toJSON()));
