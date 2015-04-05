@@ -37,10 +37,27 @@ var _predictions2015 = exports.predictions = {
         cup: []
     },
     hans_bernhard: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            "Molde",
+            "Vålerenga",
+            "Viking",
+            "Lillestrøm",
+            "Bodø/Glimt",
+            "Haugesund",
+            "Mjøndalen",
+            "Aalesund",
+            "Odd",
+            "Rosenborg",
+            "Sandefjord",
+            "Sarpsborg 08",
+            "Stabæk",
+            "Start",
+            "Strømsgodset",
+            "Tromsø"
+        ],
+        opprykk: ["Brann", "Bryne"],
+        toppscorer: ["Frode Johnsen"],
+        cup: ["Brann"]
     },
     jan_tore: {
         tabell: [],
@@ -95,10 +112,27 @@ var _predictions2015 = exports.predictions = {
         cup: ["Rosenborg"]
     },
     ole_erik: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            "Molde",
+            "Odd",
+            "Rosenborg",
+            "Vålerenga",
+            "Haugesund",
+            "Strømsgodset",
+            "Sarpsborg 08",
+            "Lillestrøm",
+            "Tromsø",
+            "Start",
+            "Viking",
+            "Aalesund",
+            "Stabæk",
+            "Bodø/Glimt",
+            "Mjøndalen",
+            "Sandefjord"
+        ],
+        opprykk: ["Sogndal", "Brann"],
+        toppscorer: ["Christian Gytkjær"],
+        cup: ["Molde"]
     },
     rikard: {
         tabell: [
