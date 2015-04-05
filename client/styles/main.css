@@ -49,14 +49,14 @@ h2, .h2 {
 #currentResultsTable .modal-content {
     width: 625px;
     margin-top: 75px;
-    color:black;
+    color: black;
     background-image: linear-gradient(to bottom right, #ffffff 0%, #61c100 50%);
 }
 
 #predictionsTable .modal-content {
     width: 340px;
     margin-top: 75px;
-    color:black;
+    color: black;
     background-image: linear-gradient(to bottom right, #ffffff 0%, #01f944 75%);
 }
 
@@ -76,6 +76,10 @@ h2, .h2 {
  */
 .x-large {
     font-size: x-large;
+}
+
+.x-small {
+    font-size: 14px;
 }
 
 .strong {
@@ -110,6 +114,11 @@ h2, .h2 {
     padding-right: 2rem;
     font-size: 22px;
     white-space: nowrap;
+}
+
+button#pageRefresher {
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 /**

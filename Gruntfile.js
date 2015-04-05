@@ -66,12 +66,26 @@ module.exports = function (grunt) {
                 ].join('&&')
             },
             mongod: {
-                options: { stdout: true, stderr: true, failOnError: true },
+                options: {
+                    stdout: true,
+                    stderr: true,
+                    failOnError: true,
+                    execOptions: {
+                        maxBuffer: Infinity
+                    }
+                },
                 command: 'mongod.exe --dbpath data/db'
             },
             run: {
-                options: { stdout: true, stderr: true, failOnError: true },
-                command: 'npm start'
+                options: {
+                    stdout: true,
+                    stderr: true,
+                    failOnError: true,
+                    execOptions: {
+                        maxBuffer: Infinity
+                    }
+                },
+                command: 'npm start',
             },
             'install-client': {
                 options: { stdout: true, stderr: true, failOnError: true },
@@ -86,24 +100,24 @@ module.exports = function (grunt) {
         copy: {
             'to-client': {
                 files: [
-                    { expand: true, cwd: 'shared', src: [ '**' ], dest: 'client' }
+                    { expand: true, cwd: 'shared', src: ['**'], dest: 'client' }
                 ]
             },
             'to-build': {
                 files: [
-                    { expand: true, cwd: 'client', src: [ '**' ], dest: 'build' },
-                    { expand: true, cwd: 'shared', src: [ '**' ], dest: 'build' },
+                    { expand: true, cwd: 'client', src: ['**'], dest: 'build' },
+                    { expand: true, cwd: 'shared', src: ['**'], dest: 'build' },
 
                     // These are under RequireJS control, version folder added:
-                    { expand: true, cwd: 'shared', src: [ '**' ], dest: 'build/<%= pkg.version %>/scripts' },
+                    { expand: true, cwd: 'shared', src: ['**'], dest: 'build/<%= pkg.version %>/scripts' },
                     {
                         expand: true,
                         cwd: 'client/bower_components',
-                        src: [ '**' ],
+                        src: ['**'],
                         dest: 'build/<%= pkg.version %>/bower_components'
                     },
-                    { expand: true, cwd: 'client/scripts', src: [ '**' ], dest: 'build/<%= pkg.version %>/scripts' },
-                    { expand: true, cwd: 'client/styles', src: [ '**' ], dest: 'build/<%= pkg.version %>/styles' }
+                    { expand: true, cwd: 'client/scripts', src: ['**'], dest: 'build/<%= pkg.version %>/scripts' },
+                    { expand: true, cwd: 'client/styles', src: ['**'], dest: 'build/<%= pkg.version %>/styles' }
                 ]
             }
         },
@@ -113,7 +127,7 @@ module.exports = function (grunt) {
                 'no-write': false
             },
             build: {
-                src: [ 'build' ]
+                src: ['build']
             }
         },
 
@@ -219,7 +233,7 @@ module.exports = function (grunt) {
         // Client-side test coverage
         // TODO: Not working as of now ...
         blanket_mocha: {
-            all: [ 'tests/client/test.html' ],
+            all: ['tests/client/test.html'],
             //all: [ 'tests/client/test-amd.html' ]
 
             options: {
@@ -230,24 +244,24 @@ module.exports = function (grunt) {
         'saucelabs-mocha': {
             all: {
                 options: {
-                    urls: [ clientTestUrl ],
+                    urls: [clientTestUrl],
                     testname: 'Tippekonkurranse',
-                    tags: [ 'master' ],
+                    tags: ['master'],
                     build: process.env.TRAVIS_JOB_ID,
                     concurrency: 2,
                     browsers: [
                         { platform: 'Windows 7', browserName: 'Chrome', version: '41' },
                         { platform: 'Windows 7', browserName: 'Firefox', version: '36' },
-                        { platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' }//,
+                        { platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' },
                         //{ platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' },
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '9' },
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '8' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '7' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '6' },
-                        //{ platform: 'Linux', browserName: 'Android', version: '4.4' },
+                        { platform: 'Linux', browserName: 'Android', version: '4.4' },
                         //{ platform: 'OS X 10.10', browserName: 'Safari', version: '8' },
-                        //{ platform: 'OS X 10.10', browserName: 'iPhone', version: '8.2', deviceName: 'iPhone Simulator', device-orientation: 'landscape');
-                        //{ platform: 'OS X 10.10', browserName: 'iPhone', version: '8.2', deviceName: 'iPad Simulator', device-orientation: 'landscape');
+                        { platform: 'OS X 10.10', browserName: 'iPhone', version: '8.2', deviceName: 'iPhone Simulator', 'device-orientation': 'landscape' },
+                        { platform: 'OS X 10.10', browserName: 'iPhone', version: '8.2', deviceName: 'iPad Simulator', 'device-orientation': 'landscape' }
                     ]
                 }
             }
@@ -276,7 +290,8 @@ module.exports = function (grunt) {
                     'build/<%= pkg.version %>/scripts/app.pre-season-participant-row-view.js': 'build/<%= pkg.version %>/scripts/app.pre-season-participant-row-view.js',
                     'build/<%= pkg.version %>/scripts/app.pre-season-table-view.js': 'build/<%= pkg.version %>/scripts/app.pre-season-table-view.js',
                     'build/<%= pkg.version %>/scripts/app.rating-history-collection.js': 'build/<%= pkg.version %>/scripts/app.rating-history-collection.js',
-                    'build/<%= pkg.version %>/scripts/app.rating-history-view.js': 'build/<%= pkg.version %>/scripts/app.rating-history-view.js', 'build/<%= pkg.version %>/scripts/app.result.js': 'build/<%= pkg.version %>/scripts/app.result.js',
+                    'build/<%= pkg.version %>/scripts/app.rating-history-view.js': 'build/<%= pkg.version %>/scripts/app.rating-history-view.js',
+                    'build/<%= pkg.version %>/scripts/app.result.js': 'build/<%= pkg.version %>/scripts/app.result.js',
                     'build/<%= pkg.version %>/scripts/app.result-collection.js': 'build/<%= pkg.version %>/scripts/app.result-collection.js',
                     'build/<%= pkg.version %>/scripts/app.scores-header-row-view.js': 'build/<%= pkg.version %>/scripts/app.scores-header-row-view.js',
                     'build/<%= pkg.version %>/scripts/app.scores-participant-row-view.js': 'build/<%= pkg.version %>/scripts/app.scores-participant-row-view.js',
@@ -293,7 +308,7 @@ module.exports = function (grunt) {
             minify: {
                 expand: true,
                 cwd: 'build/styles/',
-                src: [ '*.css', '!*.min.css' ],
+                src: ['*.css', '!*.min.css'],
                 dest: 'build/styles/'
             }
         },
@@ -301,7 +316,7 @@ module.exports = function (grunt) {
         jsdoc: {
             dist: {
                 //src: ['server/scripts/*.js', 'client/scripts/*.js'],
-                src: [ 'server/scripts/*.js' ],
+                src: ['server/scripts/*.js'],
                 options: {
                     destination: 'docs'
                 }
@@ -318,7 +333,7 @@ module.exports = function (grunt) {
                     'client/index.html',
                     'client/manifest.appcache'
                 ],
-                tasks: [ 'copy' ]
+                tasks: ['copy']
             },
             tests: {
                 files: [
@@ -326,7 +341,7 @@ module.exports = function (grunt) {
                     'shared/scripts/*.js',
                     'tests/**/*'
                 ],
-                tasks: [ 'test' ]//,
+                tasks: ['test']//,
                 //options: {
                 //    interval : 5000,
                 //    debounceDelay: 5000
@@ -353,34 +368,34 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-jsdoc');
 
 
-    grunt.registerTask('help', [ 'shell:help' ]);
-    grunt.registerTask('install:client', [ 'shell:install-client' ]);
-    grunt.registerTask('db', [ 'shell:createDataDir', 'shell:createDbDir', 'shell:mongod' ]);
+    grunt.registerTask('help', ['shell:help']);
+    grunt.registerTask('install:client', ['shell:install-client']);
+    grunt.registerTask('db', ['shell:createDataDir', 'shell:createDbDir', 'shell:mongod']);
 
-    grunt.registerTask('build:development', [ 'clean', 'copy:to-client', 'copy:to-build' ]);
-    grunt.registerTask('build:client', [ 'build:development', 'uglify', 'cssmin' ]);
+    grunt.registerTask('build:development', ['clean', 'copy:to-client', 'copy:to-build']);
+    grunt.registerTask('build:client', ['build:development', 'uglify', 'cssmin']);
 
-    grunt.registerTask('test:client', [ 'connect', 'shell:mocha-phantomjs' ]);
-    grunt.registerTask('test:client-development', [ 'build:development', 'test:client' ]);
-    grunt.registerTask('test:client-watch', [ 'connect', 'watch' ]);
-    grunt.registerTask('test:server', [ 'mochaTest' ]);
-    grunt.registerTask('test', [ 'install:client', 'build:client', 'test:server', 'test:client' ]);
-    grunt.registerTask('test:sauce', [ 'connect', 'saucelabs-mocha' ]);
-    grunt.registerTask('coverage:server', [ 'mochacov:report' ]);
+    grunt.registerTask('test:client', ['connect', 'shell:mocha-phantomjs']);
+    grunt.registerTask('test:client-development', ['build:development', 'test:client']);
+    grunt.registerTask('test:client-watch', ['connect', 'watch']);
+    grunt.registerTask('test:server', ['mochaTest']);
+    grunt.registerTask('test', ['install:client', 'build:client', 'test:server', 'test:client']);
+    grunt.registerTask('test:sauce', ['connect', 'saucelabs-mocha']);
+    grunt.registerTask('coverage:server', ['mochacov:report']);
 
-    grunt.registerTask('build:travis', [ 'test', 'saucelabs-mocha', /*'blanket_mocha',*/ 'mochacov:travis', 'jshint', 'jsdoc' ]);
+    grunt.registerTask('build:travis', ['test', 'saucelabs-mocha', /*'blanket_mocha',*/ 'mochacov:travis', 'jshint', 'jsdoc']);
 
-    grunt.registerTask('deploy:development', [ 'env:dev', 'install:client', 'copy:to-client', 'shell:run' ]);
-    grunt.registerTask('deploy:local', [ 'env:prod', 'install:client', 'build:client', 'shell:run' ]);
-    grunt.registerTask('deploy:production', [ 'install:client', 'build:client' ]);
+    grunt.registerTask('deploy:development', ['install:client', 'copy:to-client', 'shell:run']);
+    grunt.registerTask('deploy:local', ['env:prod', 'install:client', 'build:client', 'shell:run']);
+    grunt.registerTask('deploy:production', ['env:prod', 'install:client', 'build:client']);
 
     /*
      * Using npm trick described in:
      * http://stackoverflow.com/questions/13784600/how-to-deploy-node-app-that-uses-grunt-to-heroku
      */
-    grunt.registerTask('deploy:heroku', [ 'deploy:production' ]);
+    grunt.registerTask('deploy:heroku', ['deploy:production']);
 
-    grunt.registerTask('run', [ 'deploy:development' ]);
+    grunt.registerTask('run', ['deploy:development']);
 
-    grunt.registerTask('default', [ 'help' ]);
+    grunt.registerTask('default', ['help']);
 };

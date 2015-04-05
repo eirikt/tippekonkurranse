@@ -16,9 +16,11 @@ define([
 
         var app = new Marionette.Application(),
 
-            currentTippeligaSeasonStartDate = new Date(2015, (4 - 1), 6, 15, 30, 0),
+        currentTippeligaSeasonStartDate = new Date(2015, (4 - 1), 6, 15, 30, 0),
+        // Testing:
+        //currentTippeligaSeasonStartDate = new Date(2015, (4 - 1), 5, 11, 5, 0),
 
-            appModel = new Backbone.Model({
+            appModel = app.model = new Backbone.Model({
                 initialYear: 2014,
                 initialRound: 1,
                 year: null,
@@ -32,10 +34,29 @@ define([
             scores = new ScoresCollection(),
             currentScores,
 
-            historicScores = new HistoricScoresCollection();
+            historicScores = new HistoricScoresCollection(),
 
+            autoPageRefreshEnabled = app.autoPageRefreshEnabled = true,
+            autoPageRefreshIntervalInSeconds = 180,
 
-        app.model = appModel;
+            autoPageRefreshCountdown = app.autoPageRefreshCountdown = function (remaining) {
+                if (!(remaining || remaining === 0)) {
+                    remaining = autoPageRefreshIntervalInSeconds;
+                }
+                var nextRemaining = remaining - 1;
+                $('#autoPageRefreshCountdown').html(remaining);
+                console.log('Data fetch in ' + remaining + ' seconds ...');
+                if (remaining === 0) {
+                    app.execute('getTippekonkurranseScores');
+                    nextRemaining = autoPageRefreshIntervalInSeconds;
+                }
+                if (app.autoPageRefreshEnabled) {
+                    setTimeout(function () {
+                        app.autoPageRefreshCountdown(nextRemaining);
+                    }, 1000);
+                }
+            };
+
 
         app.commands.setHandler('getTippekonkurranseScores', function (year, round) {
             console.log('command::getTippekonkurranseScores(' + year + ', ' + round + ')');
@@ -247,6 +268,9 @@ define([
         app.addInitializer(function () {
             console.log('initializing::getTippekonkurranseScores');
             app.execute('getTippekonkurranseScores');
+            if (appModel.get("currentTippeligaSeasonHasStarted")) {
+                autoPageRefreshCountdown();
+            }
         });
 
 

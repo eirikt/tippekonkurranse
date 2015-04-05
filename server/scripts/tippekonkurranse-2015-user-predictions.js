@@ -7,10 +7,27 @@ var _predictions2015 = exports.predictions = {
         cup: []
     },
     eirik: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            "Molde",
+            "Rosenborg",
+            "Strømsgodset",
+            "Odd",
+            "Vålerenga",
+            "Haugesund",
+            "Sarpsborg 08",
+            "Viking",
+            "Lillestrøm",
+            "Aalesund",
+            "Tromsø",
+            "Stabæk",
+            "Bodø/Glimt",
+            "Start",
+            "Mjøndalen",
+            "Sandefjord"
+        ],
+        opprykk: ["Sogndal", "Brann"],
+        toppscorer: ["Daniel Omoya Braaten"],
+        cup: ["Vålerenga"]
 
     },
     geir: {
@@ -32,10 +49,27 @@ var _predictions2015 = exports.predictions = {
         cup: []
     },
     oddgeir: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            "Molde",
+            "Rosenborg",
+            "Strømsgodset",
+            "Odd",
+            "Vålerenga",
+            "Viking",
+            "Haugesund",
+            "Sarpsborg 08",
+            "Aalesund",
+            "Lillestrøm",
+            "Tromsø",
+            "Bodø/Glimt",
+            "Sandefjord",
+            "Start",
+            "Stabæk",
+            "Mjøndalen",
+        ],
+        opprykk: ["Brann", "Sogndal"],
+        toppscorer: ["Ola Kamara"],
+        cup: ["Rosenborg"]
     },
     oddvar: {
         tabell: [
@@ -67,10 +101,27 @@ var _predictions2015 = exports.predictions = {
         cup: []
     },
     rikard: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            "Molde",
+            "Rosenborg",
+            "Odd",
+            "Viking",
+            "Strømsgodset",
+            "Haugesund",
+            "Sarpsborg 08",
+            "Vålerenga",
+            "Lillestrøm",
+            "Tromsø",
+            "Bodø/Glimt",
+            "Aalesund",
+            "Sandefjord",
+            "Stabæk",
+            "Start",
+            "Mjøndalen"
+        ],
+        opprykk: ["Brann", "Sogndal"],
+        toppscorer: ["Ola Kamara"],
+        cup: ["Rosenborg"]
     },
     svein_tore: {
         tabell: [
@@ -92,7 +143,7 @@ var _predictions2015 = exports.predictions = {
             "Start"
         ],
         opprykk: ["Brann", "Sogndal"],
-        toppscorer: ["Ola Williams Kamara"],
+        toppscorer: ["Ola Kamara"],
         cup: ["Molde"]
     },
     steinar: {
@@ -102,15 +153,49 @@ var _predictions2015 = exports.predictions = {
         cup: []
     },
     tore: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            "Molde",
+            "Rosenborg",
+            "Vålerenga",
+            "Odd",
+            "Tromsø",
+            "Strømsgodset",
+            "Viking",
+            "Sarpsborg 08",
+            "Aalesund",
+            "Lillestrøm",
+            "Bodø/Glimt",
+            "Start",
+            "Sandefjord",
+            "Mjøndalen",
+            "Stabæk",
+            "Haugesund"
+        ],
+        opprykk: ["Brann", "Fredrikstad"],
+        toppscorer: ["Ola Kamara"],
+        cup: ["Molde"]
     },
     trond: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            "Molde",
+            "Odd",
+            "Strømsgodset",
+            "Rosenborg",
+            "Haugesund",
+            "Vålerenga",
+            "Sarpsborg 08",
+            "Viking",
+            "Lillestrøm",
+            "Tromsø",
+            "Aalesund",
+            "Bodø/Glimt",
+            "Stabæk",
+            "Start",
+            "Mjøndalen",
+            "Sandefjord"
+        ],
+        opprykk: ["Fredrikstad", "Brann"],
+        toppscorer: ["Iver Fossum"],
+        cup: ["Vålerenga"]
     }
 };

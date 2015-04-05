@@ -259,7 +259,7 @@ var env = process.env.NODE_ENV || "development",
                 }
             }
 
-            if (year && round) {
+            if (year && (round || round === 0)) {
                 //root.app.currentRound = round;
                 return curry(_getStoredTippeligaDataRequestor, year, round);
 

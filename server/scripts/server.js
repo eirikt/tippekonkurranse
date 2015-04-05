@@ -128,32 +128,6 @@ root.app = {
 };
 
 
-dbSchema.TippeligaRound.findOne({ year: root.app.currentYear }).sort("-round").exec(function (err, latestTippeligaRound) {
-    "use strict";
-    if (err){
-        console.err(err);
-        return;
-    }
-    if (!latestTippeligaRound){
-        console.warn("No round found for season " + root.app.currentYear + " ... setting it to 0");
-        root.app.currentRound = 0;
-        return;
-    }
-    root.app.currentRound = latestTippeligaRound.round;
-    console.log("Initialized with: current season " + root.app.currentYear + ", current round " + root.app.currentRound);
-});
-
-dbSchema.TippeligaRound.count({ year: 2014 }, function (err, count) {
-    "use strict";
-    console.log("2014 count: " + count);
-});
-
-dbSchema.TippeligaRound.count({ year: 2015 }, function (err, count) {
-    "use strict";
-    console.log("2015 count: " + count);
-});
-
-
 // Cache
 root.app.cache = {
     ratingHistory: {}
@@ -163,8 +137,37 @@ root.app.cache = {
 // Development tweaks ...
 if (env === "development") {
     // Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
-    root.overrideTippeligaDataWithYear = root.app.currentYear;
-    //root.overrideTippeligaDataWithRound = 1;
+    root.app.overrideTippeligaDataWithYear = root.app.currentYear;
+    root.app.overrideTippeligaDataWithRound = 0;
+}
+
+if (root.app.overrideTippeligaDataWithYear && (root.app.overrideTippeligaDataWithRound || root.app.overrideTippeligaDataWithRound === 0)) {
+    root.app.currentRound = root.app.overrideTippeligaDataWithRound;
+    console.log(utils.logPreamble() + app.name + ", Initialized with: current season " + root.app.currentYear + ", current round " + root.app.currentRound + " [DEVELOPMENT mode, using stored data]");
+
+} else {
+    dbSchema.TippeligaRound.findOne({ year: root.app.currentYear }).sort("-round").exec(function (err, latestTippeligaRound) {
+        "use strict";
+        if (err) {
+            console.err(err);
+            return;
+        }
+        if (!latestTippeligaRound) {
+            console.warn(utils.logPreamble() + "No round found for season " + root.app.currentYear + " ... setting it to 0");
+            root.app.currentRound = 0;
+            return;
+        }
+        root.app.currentRound = latestTippeligaRound.round;
+        console.log(utils.logPreamble() + app.name + " " + "Initialized with: current season " + root.app.currentYear + ", current round " + root.app.currentRound);
+
+        dbSchema.TippeligaRound.count({ year: 2014 }, function (err, count) {
+            console.log(utils.logPreamble() + app.name + " " + "2014 count: " + count);
+        });
+
+        dbSchema.TippeligaRound.count({ year: 2015 }, function (err, count) {
+            console.log(utils.logPreamble() + app.name + " " + "2015 count: " + count);
+        });
+    });
 }
 
 
