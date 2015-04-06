@@ -16,8 +16,7 @@ define([
 
         var app = new Marionette.Application(),
 
-//            currentTippeligaSeasonStartDate = new Date(2015, (4 - 1), 6, 15, 30, 0),
-            currentTippeligaSeasonStartDate = new Date(2015, (4 - 1), 6, 15, 0, 0),
+            currentTippeligaSeasonStartDate = new Date(2015, (4 - 1), 6, 15, 30, 0),
 
             appModel = app.model = new Backbone.Model({
                 initialYear: 2014,
