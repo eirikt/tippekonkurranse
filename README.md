@@ -26,6 +26,7 @@ Hosted [here][1].
 
 
 ## Scope
+* Idiomatic code base
 * Screen-scraping norwegian soccer result web pages
 * Calculating rating and rank
 * Simple multi-device-friendly presentation
@@ -35,7 +36,7 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
-#### v1.3.0 : _Planned Q1 2015_
+#### v1.3.0 : _Deployed 06.04.2015_
 * Multi-season handling with proper archiving
 * Show 'Gjeldende resultater' contextual to what round is actively chosen, as done with 'Trend'
 * Configurable strategy-based rules for calculating scores. The rules may differ from year to year ...
@@ -48,7 +49,7 @@ Hosted [here][1].
 * ~~Admin UI for data management~~
 * ~~Multiple draggable windows, no more modals (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css~~
 
-_Status: In progress_
+_Status: Done_
 
 
 #### v1.2.5 : _Deployed 23.11.2014_

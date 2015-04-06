@@ -1,40 +1,28 @@
 /* jshint -W106 */
 var _predictions2015 = exports.predictions = {
-    einar: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
-    },
     eirik: {
         tabell: [
             "Molde",
-            "Rosenborg",
-            "Strømsgodset",
             "Odd",
             "Vålerenga",
-            "Haugesund",
             "Sarpsborg 08",
+            "Rosenborg",
+            "Strømsgodset",
             "Viking",
             "Lillestrøm",
-            "Aalesund",
-            "Tromsø",
+            "Sandefjord",
+            "Haugesund",
             "Stabæk",
             "Bodø/Glimt",
+            "Aalesund",
+            "Tromsø",
             "Start",
-            "Mjøndalen",
-            "Sandefjord"
+            "Mjøndalen"
         ],
         opprykk: ["Sogndal", "Brann"],
         toppscorer: ["Daniel Omoya Braaten"],
         cup: ["Vålerenga"]
 
-    },
-    geir: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
     },
     hans_bernhard: {
         tabell: [

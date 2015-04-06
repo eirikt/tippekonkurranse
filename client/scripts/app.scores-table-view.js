@@ -53,11 +53,9 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
                     '          </td>' +
                     '          <td style="width:33%;vertical-align:top;">' +
                     '            <p>Toppskårer:</p>' +
-                    //'            <p><strong><%= currentTippeligaToppscorer %></strong></p>' +
-                    '            <p><strong>Alle</strong></p>' +
+                    '            <p><strong><%= currentTippeligaToppscorer %></strong></p>' +
                     '            <p style="margin-top:2rem;">Fortsatt med i cupen:</p>' +
-                    //'            <p><strong><%= currentRemainingCupContenders %></strong></p>' +
-                    '            <p><strong>Alle</strong></p>' +
+                    '            <p><strong><%= currentRemainingCupContenders %></strong></p>' +
                     '          </td>' +
                     '        </tr>' +
                     '      </table>' +
@@ -257,16 +255,17 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
              },
              */
             onBeforeRender: function () {
-                console.log('"scores-table-view:onBeforeRender"');
+                //console.log('"scores-table-view:onBeforeRender"');
             },
             onBeforeAddChild: function (childView) {
-                console.log('"scores-table-view:onBeforeAddChild"');
+                //console.log('"scores-table-view:onBeforeAddChild"');
+
                 //// The collection is always sorted - by rating, then name
                 //childView.$el.css("order", childView._index);
                 ////childView.$el.css("order", childView.model.get("rank"));
             },
             onAddChild: function (childView) {
-                console.log('"scores-table-view:onAddChild"');
+                //console.log('"scores-table-view:onAddChild"');
                 /*
                  // Add rank tendency marker
                  //new RankTrendView({ el: childView.$('.rank-tendency'), model: childView.model }).render();
@@ -276,13 +275,13 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
                  */
             },
             onBeforeRemoveChild: function (childView) {
-                console.log('"scores-table-view:onBeforeRemoveChild"');
+                //console.log('"scores-table-view:onBeforeRemoveChild"');
             },
             onRemoveChild: function (childView) {
-                console.log('"scores-table-view:onRemoveChild"');
+                //console.log('"scores-table-view:onRemoveChild"');
             },
             onRender: function (collectionView) {
-                console.log('"scores-table-view:onRender"');
+                //console.log('"scores-table-view:onRender"');
                 this.currentResults = new CurrentResults({
                     year: collectionView.model.get('year'),
                     round: collectionView.model.get('round')
@@ -301,7 +300,7 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
                 //collectionView.$el.prepend(new HeaderRowView({ model: this.model }).render().el);
             },
             onShow: function (collectionView) {
-                console.log('"scores-table-view:onShow"');
+            //    console.log('"scores-table-view:onShow"');
                 /*
                  var participants = collectionView.$el.find('.participant'),
                  gold = collectionView.$el.find('.icon-trophy-gold'),
@@ -317,13 +316,13 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
                  */
             },
             onDomRefresh: function (collectionView) {
-                console.log('"scores-table-view:onDomRefresh"');
+            //    console.log('"scores-table-view:onDomRefresh"');
             },
             onBeforeDestroy: function () {
-                console.log('"scores-table-view:onBeforeDestroy"');
+            //    console.log('"scores-table-view:onBeforeDestroy"');
             },
             onDestroy: function () {
-                console.log('"scores-table-view:onDestroy"');
+            //    console.log('"scores-table-view:onDestroy"');
             }
         });
     }

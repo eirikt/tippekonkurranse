@@ -14,7 +14,7 @@ require.config({
     // Development ('grunt [run|deploy:development]' and IDE execution):
     //baseUrl: 'scripts',
     // Standard:
-    baseUrl: '1.3.0-beta.4/scripts',
+    baseUrl: '1.3.0/scripts',
 
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',
@@ -25,14 +25,13 @@ require.config({
         'moment': '../bower_components/moment/min/moment.min',
         'moment.nb': '../bower_components/moment/locale/nb',
         'toastr': '../bower_components/toastr/toastr.min',
-        'jqplot': '../bower_components/jqplot-bower/dist/jquery.jqplot',
         'jquery.countdown': '../bower_components/jquery.countdown/dist/jquery.countdown',
+        'jquery.bootstrap.switch': '../bower_components/bootstrap-switch/dist/js/bootstrap-switch.min',
+        'jqplot': '../bower_components/jqplot-bower/dist/jquery.jqplot',
         // TODO: Make the jqplot cursor work ...
         //'jqplot.highlighter': '../bower_components/jqplot-bower/dist/plugins/jqplot.highlighter.min',
         //'jqplot.cursor': '../bower_components/jqplot-bower/dist/plugins/jqplot.cursor.min',
         //'jqplot.dateAxisRenderer': '../bower_components/jqplot-bower/dist/plugins/jqplot.dateAxisRenderer.min'
-
-        'jquery.bootstrap.switch': './vendor/bootstrap-switch'
     },
     shim: {
         jquery: {

@@ -16,9 +16,8 @@ define([
 
         var app = new Marionette.Application(),
 
-        currentTippeligaSeasonStartDate = new Date(2015, (4 - 1), 6, 15, 30, 0),
-        // Testing:
-        //currentTippeligaSeasonStartDate = new Date(2015, (4 - 1), 5, 11, 5, 0),
+//            currentTippeligaSeasonStartDate = new Date(2015, (4 - 1), 6, 15, 30, 0),
+            currentTippeligaSeasonStartDate = new Date(2015, (4 - 1), 6, 15, 0, 0),
 
             appModel = app.model = new Backbone.Model({
                 initialYear: 2014,
@@ -44,7 +43,7 @@ define([
                     remaining = autoPageRefreshIntervalInSeconds;
                 }
                 var nextRemaining = remaining - 1;
-                $('#autoPageRefreshCountdown').html(remaining);
+                $('#autoPageRefreshCountdown').empty().append(remaining);
                 console.log('Data fetch in ' + remaining + ' seconds ...');
                 if (remaining === 0) {
                     app.execute('getTippekonkurranseScores');

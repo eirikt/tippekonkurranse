@@ -259,9 +259,9 @@ module.exports = function (grunt) {
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '7' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '6' },
                         { platform: 'Linux', browserName: 'Android', version: '4.4' },
-                        { platform: 'OS X 10.10', browserName: 'Safari', version: '8' }
-                        //{ platform: 'OS X 10.10', browserName: 'iPhone', version: '8.2', deviceName: 'iPhone Simulator', 'device-orientation': 'landscape' },
-                        //{ platform: 'OS X 10.10', browserName: 'iPhone', version: '8.2', deviceName: 'iPad Simulator', 'device-orientation': 'landscape' }
+                        { platform: 'OS X 10.10', browserName: 'Safari', version: '8' },
+                        { platform: 'OS X 10.10', browserName: 'iPhone', version: '8.2', deviceName: 'iPhone Simulator', 'device-orientation': 'landscape' },
+                        { platform: 'OS X 10.10', browserName: 'iPhone', version: '8.2', deviceName: 'iPad Simulator', 'device-orientation': 'landscape' }
                     ]
                 }
             }
