@@ -198,10 +198,27 @@ var _predictions2015 = exports.predictions = {
         cup: ["Molde"]
     },
     steinar: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            "Molde",
+            "Rosenborg",
+            "Vålerenga",
+            "Strømsgodset",
+            "Sarpsborg 08",
+            "Viking",
+            "Haugesund",
+            "Odd",
+            "Aalesund",
+            "Lillestrøm",
+            "Stabæk",
+            "Start",
+            "Tromsø",
+            "Sandefjord",
+            "Bodø/Glimt",
+            "Mjøndalen"
+        ],
+        opprykk: ["Fredrikstad", "Brann"],
+        toppscorer: ["Mohamed Elyounoussi"],
+        cup: ["Molde"]
     },
     tore: {
         tabell: [

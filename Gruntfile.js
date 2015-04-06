@@ -253,15 +253,15 @@ module.exports = function (grunt) {
                         { platform: 'Windows 7', browserName: 'Chrome', version: '41' },
                         { platform: 'Windows 7', browserName: 'Firefox', version: '36' },
                         { platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' },
-                        //{ platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' },
+                        { platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' },
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '9' },
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '8' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '7' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '6' },
                         { platform: 'Linux', browserName: 'Android', version: '4.4' },
-                        //{ platform: 'OS X 10.10', browserName: 'Safari', version: '8' },
-                        { platform: 'OS X 10.10', browserName: 'iPhone', version: '8.2', deviceName: 'iPhone Simulator', 'device-orientation': 'landscape' },
-                        { platform: 'OS X 10.10', browserName: 'iPhone', version: '8.2', deviceName: 'iPad Simulator', 'device-orientation': 'landscape' }
+                        { platform: 'OS X 10.10', browserName: 'Safari', version: '8' }
+                        //{ platform: 'OS X 10.10', browserName: 'iPhone', version: '8.2', deviceName: 'iPhone Simulator', 'device-orientation': 'landscape' },
+                        //{ platform: 'OS X 10.10', browserName: 'iPhone', version: '8.2', deviceName: 'iPad Simulator', 'device-orientation': 'landscape' }
                     ]
                 }
             }
