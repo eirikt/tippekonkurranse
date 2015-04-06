@@ -40,13 +40,13 @@ Hosted [here][1].
 * Show 'Gjeldende resultater' contextual to what round is actively chosen, as done with 'Trend'
 * Configurable strategy-based rules for calculating scores. The rules may differ from year to year ...
 * No more HTTP refresh, now real SPA
-* ~~A simple countdown timer for data refresh (forcing a GET)~~
-* ~~Button for manual data refresh~~
+* A simple countdown timer for page data refresh
+* Button for manual page data refresh
+* Remove all JSON file backup, leave it to MongoDB
+* Backbone.Marionette
 * ~~User admin~~
 * ~~Admin UI for data management~~
 * ~~Multiple draggable windows, no more modals (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css~~
-* Remove all JSON file backup, leave it to MongoDB
-* Backbone.Marionette
 
 _Status: In progress_
 

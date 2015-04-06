@@ -60,10 +60,27 @@ var _predictions2015 = exports.predictions = {
         cup: ["Brann"]
     },
     jan_tore: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            "Molde",
+            "Rosenborg",
+            "Strømsgodset",
+            "Odd",
+            "Vålerenga",
+            "Viking",
+            "Haugesund",
+            "Tromsø",
+            "Aalesund",
+            "Lillestrøm",
+            "Sarpsborg 08",
+            "Stabæk",
+            "Bodø/Glimt",
+            "Start",
+            "Sandefjord",
+            "Mjøndalen"
+        ],
+        opprykk: ["Brann", "Fredrikstad"],
+        toppscorer: ["Christian Gytkjær"],
+        cup: ["Molde"]
     },
     oddgeir: {
         tabell: [
