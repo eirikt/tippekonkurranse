@@ -80,11 +80,13 @@ var env = process.env.NODE_ENV || "development",
                 response.status(404).send("Rules and/or predictions are missing for year " + year);
                 return;
             }
+
             if (round && year && !root.app.isRoundCompleted(round, year) && !root.app.isRoundActive(round, year)) {
                 console.error(utils.logPreamble() + "Round " + year + "/" + round + " is in the future ...");
                 response.status(404).send("Round " + year + "/" + round + " is in the future ...");
                 return;
             }
+
             if (round && year && root.app.isRoundCompleted(round, year)) {
                 sequence([
                     getData,

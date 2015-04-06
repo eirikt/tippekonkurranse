@@ -23,7 +23,7 @@ define([
                 initialRound: 1,
                 year: null,
                 round: null,
-                currentYear: null,
+                currentYear: currentTippeligaSeasonStartDate.getFullYear(),
                 currentRound: null,
                 currentTippeligaSeasonStartDate: currentTippeligaSeasonStartDate,
                 currentTippeligaSeasonHasStarted: Date.now() - currentTippeligaSeasonStartDate > 0
@@ -58,12 +58,6 @@ define([
 
         app.commands.setHandler('getTippekonkurranseScores', function (year, round) {
             console.log('command::getTippekonkurranseScores(' + year + ', ' + round + ')');
-            if (!year) {
-                year = appModel.get('currentYear');
-            }
-            if (!round) {
-                round = appModel.get('currentRound');
-            }
             scores.reset(null, { silent: true });
 
             scores.year = year;
@@ -123,15 +117,14 @@ define([
                 participants, gold, silver, bronze, rank, rankTrend, rating, ratingTrend;
 
             if (hasNoData) {
-                appModel.set('year', new Date().getFullYear());
+                appModel.set('year', appModel.get('currentYear'));
                 appModel.set('round', 0);
-                appModel.set('currentYear', appModel.get('year'));
-                appModel.set('currentRound', appModel.get('round'));
 
             } else {
                 appModel.set('year', scores.year);
                 appModel.set('round', scores.round);
             }
+            appModel.set('currentRound', appModel.get('round'));
 
             headerModel = appModel.clone();
             matchRoundNavigation = appModel.clone();
