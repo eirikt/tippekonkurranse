@@ -41,20 +41,15 @@ define([ "jquery", "underscore", "backbone" ],
                 if (team && team.matches) {
                     return '' +
                         '<tr>' +
-                        //'  <td style="font-weight:bold;text-align:right;">' + team.no + '.&nbsp;</td>' +
-                        //'  <td style="font-weight:bold;">(' + team.matches + ')&nbsp;</td>' +
-                        //'  <td style="font-weight:bold;">' + team.name + '</td>' +
-                        '  <td class="">' + team.no + '.&nbsp;</td>' +
-                        '  <td class="">(' + team.matches + ')&nbsp;</td>' +
-                        '  <td class="">' + team.name + '</td>' +
+                        '  <td style="text-align:right;">' + team.no + '.&nbsp;</td>' +
+                        '  <td>(' + team.matches + ')&nbsp;</td>' +
+                        '  <td>' + team.name + '</td>' +
                         '</tr>';
                 } else {
                     return '' +
                         '<tr>' +
-                        //'  <td style="font-weight:bold;text-align:right;">' + team.no + '.&nbsp;</td>' +
-                        //'  <td style="font-weight:bold;">' + team.name + '</td>' +
-                        '  <td class="">' + team.no + '.&nbsp;</td>' +
-                        '  <td class="">' + team.name + '</td>' +
+                        '  <td style="text-align:right;">' + team.no + '.&nbsp;</td>' +
+                        '  <td>' + team.name + '</td>' +
                         '</tr>';
                 }
             },
