@@ -20,11 +20,7 @@ define(['jquery', 'underscore', 'moment', 'backbone', 'marionette'],
 
                     '<span class="countdown pull-right" style="white-space:nowrap;">' +
                         // TODO: This is a view!
-                    '  <span id="autoPageRefresh" class="x-small">' +
-                        //'    <span>Nye data om</span>' +
-                        //'    <em><span id="autoPageRefreshCountdown"></span></em>' +
-                        //'    <span>sekunder</span>' +
-                    '  </span>' +
+                    '  <span id="autoPageRefresh" class="x-small"></span>' +
 
                     '  <span class="pull-right" style="margin-left:.4rem;">' +
                     '    <input id="autoPageRefreshToggler" type="checkbox" />' +
@@ -56,12 +52,14 @@ define(['jquery', 'underscore', 'moment', 'backbone', 'marionette'],
                         year: scores ? scores.year : '?'
                     }, { variable: 'args' });
                 }
+
                 if (!window.app.model.get('currentTippeligaSeasonHasStarted')) {
                     return _.template(preSeasonTemplate, {
                         year: scores ? scores.year : '?',
                         round: scores ? scores.round : '?'
                     }, { variable: 'args' });
                 }
+
                 return _.template(scoresTemplate, {
                     year: scores ? scores.year : '?',
                     round: scores ? scores.round : '?'
@@ -69,7 +67,7 @@ define(['jquery', 'underscore', 'moment', 'backbone', 'marionette'],
             },
 
             events: {
-                'click #pageRefresher': function (event) {
+                'click #pageRefresher': function () {
                     window.app.execute('getTippekonkurranseScores');
                 }
             },
@@ -93,20 +91,14 @@ define(['jquery', 'underscore', 'moment', 'backbone', 'marionette'],
             onShow: function () {
                 var $autoPageRefresh = $('#autoPageRefresh'),
                     $autoPageRefreshToggler = $('#autoPageRefreshToggler'),
-                    autoEnabledInModel = window.app.autoPageRefreshEnabled;//,
-                //autoEnabledInView = $autoPageRefreshToggler.is(':checked');
+                    autoEnabledInModel = window.app.autoPageRefreshEnabled;
 
-                //console.log("onShow :: autoEnabledInModel=" + autoEnabledInModel);
-                //console.log("onShow :: autoEnabledInView=" + autoEnabledInView);
                 if (autoEnabledInModel) {
                     $autoPageRefresh.empty().append('<span>Nye data om&nbsp;</span>' +
                     '<span id="autoPageRefreshCountdown" style="font-style:italic;"></span>' +
                     '<span>&nbsp;sekunder</span>');
 
-                    //$('#autoPageRefreshToggler').attr('checked', true);
                     $autoPageRefreshToggler.prop('checked', true);
-                    //var autoEnabledInView = $('#autoPageRefreshToggler').is(':checked');
-                    //console.log("onShow :: autoEnabledInView=" + autoEnabledInView);
                 }
 
                 $autoPageRefreshToggler.bootstrapSwitch({
@@ -118,6 +110,7 @@ define(['jquery', 'underscore', 'moment', 'backbone', 'marionette'],
                         if (value) {
                             window.app.autoPageRefreshEnabled = true;
                             window.app.autoPageRefreshCountdown();
+
                             $autoPageRefresh.empty().append('<span>Nye data om&nbsp;</span>' +
                             '<span id="autoPageRefreshCountdown" style="font-style:italic;"></span>' +
                             '<span>&nbsp;sekunder</span>');
@@ -125,6 +118,7 @@ define(['jquery', 'underscore', 'moment', 'backbone', 'marionette'],
 
                         } else {
                             window.app.autoPageRefreshEnabled = false;
+
                             $autoPageRefresh.hide();
                         }
                     }

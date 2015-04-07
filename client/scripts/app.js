@@ -43,7 +43,7 @@ define([
                 }
                 var nextRemaining = remaining - 1;
                 $('#autoPageRefreshCountdown').empty().append(remaining);
-                console.log('Data fetch in ' + remaining + ' seconds ...');
+                //console.log('Data fetch in ' + remaining + ' seconds ...');
                 if (remaining === 0) {
                     app.execute('getTippekonkurranseScores');
                     nextRemaining = autoPageRefreshIntervalInSeconds;

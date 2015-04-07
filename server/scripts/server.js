@@ -80,43 +80,17 @@ root.app = {
     currentYear: new Date().getFullYear(),
     currentRound: null,
 
-    /*
-     isYearStarted: function (round, year) {
-     "use strict";
-     var roundNumber, yearNumber;
-     try {
-     roundNumber = parseInt(round, 10);
-     yearNumber = parseInt(year, 10);
-     } catch (e) {
-     return false;
-     }
-     if (!roundNumber || !yearNumber) {
-     return false;
-     }
-     if (yearNumber > root.app.currentYear) {
-     return false;
-     }
-     //if (!root.app.currentRound) {
-     //    return false;
-     //}
-     return true;
-     },
-     */
     isCurrentYearCompleted: false,              // NB! To be set manually for now ...
-    /*
-     isCurrentRoundCompleted: function (round) {
-     "use strict";
-     //return round < root.app.currentRound ||
-     //    (round <= root.app.currentRound && root.app.isCurrentYearCompleted);
-     throw new Error("Not implemented!");
-     },
-     */
+
     isRoundActive: function (round, year) {
         "use strict";
         return round === root.app.currentRound && year === root.app.currentYear;
     },
     isRoundCompleted: function (round, year) {
         "use strict";
+        if (!round) {
+            return false;
+        }
         if (!year) {
             return round < root.app.currentRound ||
                 (round <= root.app.currentRound && root.app.isCurrentYearCompleted);
