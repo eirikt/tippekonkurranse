@@ -228,6 +228,7 @@ var RQ = require("./vendor/rq").RQ,
             try {
                 result = g(args);
                 return requestion(result, undefined);
+
             } catch (e) {
                 console.error(e.message);
                 return requestion(undefined, e);

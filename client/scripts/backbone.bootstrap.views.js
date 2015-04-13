@@ -24,9 +24,15 @@ define([ 'jquery', 'underscore', 'backbone' ],
                 this.id = attr.id;
                 this.ariaLabelledBy = attr.ariaLabelledBy;
             },
-            reset: function () {
+            detach: function () {
                 $('#' + this.id).empty().remove();
+            },
+            attach: function () {
                 $(this.parentSelector).append(this.el);
+            },
+            reset: function () {
+                this.detach();
+                this.attach();
             }
         });
 

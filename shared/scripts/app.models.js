@@ -157,7 +157,10 @@
                 TippekonkurranseData.prototype.indexOfScores = _scores;
 
                 TippekonkurranseData.prototype.getYear = function () {
-                    return this.date.getFullYear();
+                    if (this.date) {
+                        return this.date.getFullYear();
+                    }
+                    throw new Error("Property 'date' is missing for " + this.toArray());
                 };
 
                 TippekonkurranseData.prototype.toArray = function () {

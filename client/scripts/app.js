@@ -1,4 +1,7 @@
 /* global define:false */
+
+window.console.log('app.js');
+
 define([
         'underscore', 'backbone', 'marionette',
         'client-utils',
@@ -14,20 +17,49 @@ define([
 
         'use strict';
 
+        window.console.log('app.js :: Application start');
+
         var app = new Marionette.Application(),
 
             currentTippeligaSeasonStartDate = new Date(2015, (4 - 1), 6, 15, 30, 0),
 
-            appModel = app.model = new Backbone.Model({
-                initialYear: 2014,
-                initialRound: 1,
-                year: null,
-                round: null,
-                currentYear: currentTippeligaSeasonStartDate.getFullYear(),
-                currentRound: null,
-                currentTippeligaSeasonStartDate: currentTippeligaSeasonStartDate,
-                currentTippeligaSeasonHasStarted: Date.now() - currentTippeligaSeasonStartDate > 0
+            TippekonkurranseModel = Backbone.Model.extend({
+                defaults: {
+                    initialYear: 2014,
+                    initialRound: 1,
+                    year: null,
+                    round: null,
+                    currentYear: currentTippeligaSeasonStartDate.getFullYear(),
+                    currentRound: null,
+                    currentTippeligaSeasonStartDate: currentTippeligaSeasonStartDate,
+                    currentTippeligaSeasonHasStarted: Date.now() - currentTippeligaSeasonStartDate > 0,
+                    numberOfRounds: 30
+                },
+                // TODO: Needed?
+                //isActiveRound: function (round) {
+                //    return true;
+                //},
+                //isCompletedRound: function (round) {
+                //    return true;
+                //},
+                isFutureRound: function (options) {
+                    var year = window.app.model.get('year'),
+                        round = window.app.model.get('round'),
+                        currentYear = window.app.model.get('currentYear'),
+                        currentRound = window.app.model.get('currentRound');
+
+                    if (options) {
+                        if (options.round) {
+                            round = options.round;
+                        }
+                        if (options.year) {
+                            year = options.year;
+                        }
+                    }
+                    return year >= currentYear && round > currentRound;
+                }
             }),
+            appModel = app.model = new TippekonkurranseModel(),
 
             scores = new ScoresCollection(),
             currentScores,
@@ -124,7 +156,9 @@ define([
                 appModel.set('year', scores.year);
                 appModel.set('round', scores.round);
             }
-            appModel.set('currentRound', appModel.get('round'));
+            if (!appModel.has('currentRound')) {
+                appModel.set('currentRound', appModel.get('round'));
+            }
 
             headerModel = appModel.clone();
             matchRoundNavigation = appModel.clone();
@@ -257,6 +291,7 @@ define([
 
 
         app.addInitializer(function () {
+            window.console.log('app.js :: Init');
             console.log('initializing::getTippekonkurranseScores');
             app.execute('getTippekonkurranseScores');
             if (appModel.get("currentTippeligaSeasonHasStarted")) {

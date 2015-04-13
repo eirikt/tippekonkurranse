@@ -251,7 +251,7 @@ module.exports = function (grunt) {
                     concurrency: 2,
                     browsers: [
                         { platform: 'Windows 7', browserName: 'Chrome', version: '41' },
-                        { platform: 'Windows 7', browserName: 'Firefox', version: '36' },
+                        { platform: 'Windows 7', browserName: 'Firefox', version: '37' },
                         { platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' },
                         { platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' },
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '9' },

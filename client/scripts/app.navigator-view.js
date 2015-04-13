@@ -1,6 +1,6 @@
 /* global define:false */
 define(
-    [ 'jquery', 'underscore', 'backbone', 'marionette' ],
+    ['jquery', 'underscore', 'backbone', 'marionette'],
     function ($, _, Backbone, Marionette) {
         'use strict';
 
@@ -20,10 +20,17 @@ define(
             EnabledRightChevronView = Marionette.ItemView.extend({
                 tagName: 'span',
                 template: function (model) {
-                    return _.template(
-                        '<a href="/#/scores/<%= args.year %>/<%= args.round %>"><span class="icon-chevron-right"></span></a>',
-                        model, { variable: 'args' }
-                    );
+                    if (model.isFuture) {
+                        return _.template(
+                            '<a href="/#/scores/current"><span class="icon-chevron-right"></span></a>',
+                            model, { variable: 'args' }
+                        );
+                    } else {
+                        return _.template(
+                            '<a href="/#/scores/<%= args.year %>/<%= args.round %>"><span class="icon-chevron-right"></span></a>',
+                            model, { variable: 'args' }
+                        );
+                    }
                 }
             }),
 
@@ -47,10 +54,17 @@ define(
             EnabledView = Marionette.ItemView.extend({
                 tagName: 'span',
                 template: function (model) {
-                    return _.template(
-                        '<a href="/#/scores/<%= args.year %>/<%= args.round %>"><%= args.index %></a>',
-                        model, { variable: 'args' }
-                    );
+                    if (model.isFuture) {
+                        return _.template(
+                            '<a href="/#/scores/current"><%= args.index %></a>',
+                            model, { variable: 'args' }
+                        );
+                    } else {
+                        return _.template(
+                            '<a href="/#/scores/<%= args.year %>/<%= args.round %>"><%= args.index %></a>',
+                            model, { variable: 'args' }
+                        );
+                    }
                 }
             }),
 
@@ -99,60 +113,67 @@ define(
             onBeforeRender: function () {
                 var counter;
 
-                this.initialYear = this.model.get("initialYear");
-                this.initialRound = this.model.get("initialRound");
-                this.activeYear = this.model.get("year");
-                this.activeRound = this.model.get("round");
-                this.currentYear = this.model.get("currentYear");
-                this.currentRound = this.model.get("currentRound");
+                this.numberOfRounds = this.model.get('numberOfRounds');
+
+                this.initialYear = this.model.get('initialYear');
+                this.initialRound = this.model.get('initialRound');
+                this.activeYear = this.model.get('year');
+                this.activeRound = this.model.get('round');
+                this.currentYear = this.model.get('currentYear');
+                this.currentRound = this.model.get('currentRound');
 
                 this.collection = new Collection();
 
-                if (this.model.get("isSeason")) {
+                if (this.model.get('isSeason')) {
 
                     // Seasonal navigation
                     this.collection.add(new Model({
-                        isEnabled: this.activeYear > this.initialYear,
+                        isSeason: true,
+                        isLeftChevron: true,
                         isActive: null, // N/A
+                        isEnabled: this.activeYear > this.initialYear,
                         year: this.activeYear - 1,
-                        round: 30,
-                        index: null, // N/A,
-                        isLeftChevron: true
+                        round: this.numberOfRounds,
+                        index: null     // N/A,
                     }));
                     for (counter = this.initialYear; counter <= this.currentYear; counter += 1) {
                         this.collection.add(new Model({
-                            isEnabled: counter !== this.activeYear,
+                            isSeason: true,
                             isActive: counter === this.activeYear,
+                            isFuture: this.model.isFutureRound({ year: counter }),
+                            isEnabled: counter !== this.activeYear,
                             year: counter,
-                            round: 30,
+                            round: this.numberOfRounds, // Default for previous season, at least
                             index: counter
                         }));
                     }
                     this.collection.add(new Model({
-                        isEnabled: this.activeYear < this.currentYear,
+                        isSeason: true,
+                        isRightChevron: true,
                         isActive: null, // N/A
+                        isFuture: this.model.isFutureRound({ year: this.activeYear + 1 }),
+                        isEnabled: this.activeYear < this.currentYear,
                         year: this.activeYear + 1,
-                        round: 30,
-                        index: null, // N/A
-                        isRightChevron: true
+                        round: this.numberOfRounds,
+                        index: null     // N/A
                     }));
 
                 } else {
 
                     // Match round navigation
                     this.collection.add(new Model({
-                            isEnabled: this.activeRound > 1,
+                            isLeftChevron: true,
                             isActive: null, // N/A
+                            isEnabled: this.activeRound > 1,
                             year: this.activeYear,
                             round: this.activeRound - 1,
-                            index: null, // N/A
-                            isLeftChevron: true
+                            index: null     // N/A
                         })
                     );
-                    for (counter = 1; counter <= 30; counter += 1) {
+                    for (counter = 1; counter <= this.numberOfRounds; counter += 1) {
                         this.collection.add(new Model({
-                                isEnabled: this.activeYear < this.currentYear || counter <= this.activeRound,
                                 isActive: counter === this.activeRound,
+                                isEnabled: !this.model.isFutureRound({ round: counter }),
                                 year: this.activeYear,
                                 round: counter,
                                 index: counter
@@ -160,12 +181,12 @@ define(
                         );
                     }
                     this.collection.add(new Model({
-                            isEnabled: this.activeRound >= 1 && this.activeRound < 30 && (this.activeYear < this.currentYear || this.activeRound < this.currentRound),
+                            isRightChevron: true,
                             isActive: null, // N/A
+                            isEnabled: this.activeRound >= 1 && this.activeRound < 30 && (this.activeYear < this.currentYear || this.activeRound < this.currentRound),
                             year: this.activeYear,
                             round: this.activeRound + 1,
-                            index: null, // N/A
-                            isRightChevron: true
+                            index: null     // N/A
                         })
                     );
                 }

@@ -36,6 +36,18 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
+#### v1.3.2 : _Deployed 13.04.2015_
+* Modal notification (with forced page reload) on new version downloaded
+
+_Status: Done_
+
+
+#### v1.3.1 : _Deployed 07.04.2015_
+* Bugfixes
+
+_Status: Done_
+
+
 #### v1.3.0 : _Deployed 06.04.2015_
 * Multi-season handling with proper archiving
 * Show 'Gjeldende resultater' contextual to what round is actively chosen, as done with 'Trend'
@@ -45,9 +57,6 @@ Hosted [here][1].
 * Button for manual page data refresh
 * Remove all JSON file backup, leave it to MongoDB
 * Backbone.Marionette
-* ~~User admin~~
-* ~~Admin UI for data management~~
-* ~~Multiple draggable windows, no more modals (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css~~
 
 _Status: Done_
 
@@ -240,6 +249,10 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 
 ## Backlog
 
+#### v? : User administration
+* User admin
+* Admin UI for data management
+
 #### v? : Touch/Mobile
 * Mobile app, using Apache Cordova or something
 * Touch-friendly version, uniform finger-friendly buttons
@@ -271,6 +284,7 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 * Establish multi-tenant 'Tippeligakonkurranse' groups with full web-based user- and group administration
 
 #### v? : Misc. improvements
+* Multiple draggable windows, no more modals (with predictions and results): see http://stackoverflow.com/questions/13526712/make-div-draggable-using-css
 * ~~Compress the wire with gzip~~ (Obsolete by AppCache usage really)
 * Rewrite norwegian soccer result data retrieval to use
   http://www.nrk.no/sport/folg-hele-eliteserierunden-1.11601821

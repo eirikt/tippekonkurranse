@@ -58,6 +58,7 @@ server.get(app.resource.ratingHistory.uri, tippekonkurranseApi.handleRatingHisto
 server.get([app.resource.results.baseUri, app.resource.uri.element.current].join("/"), tippekonkurranseApi.handleResultsRequest);
 server.get([app.resource.scores.baseUri, app.resource.uri.element.current].join("/"), tippekonkurranseApi.handleScoresRequest);
 
+
 // Start HTTP server
 server.listen(port, function () {
     "use strict";
@@ -78,14 +79,16 @@ root.app = {
     //activeYear: null,                         // N/A (this kind of state => only on clients - designated there as 'year')
     //activeRound: null,                        // N/A (this kind of state => only on clients - designated there as 'round')
     currentYear: new Date().getFullYear(),
-    currentRound: null,
+    currentRound: null,                         // Dynamically updated in 'tippekonkurranse.addRound' method
 
     isCurrentYearCompleted: false,              // NB! To be set manually for now ...
 
+    // TODO: Rename to 'isActiveRound'
     isRoundActive: function (round, year) {
         "use strict";
-        return round === root.app.currentRound && year === root.app.currentYear;
+        return parseInt(round, 10) === root.app.currentRound && parseInt(year, 10) === root.app.currentYear;
     },
+    // TODO: Rename to 'isCompletedRound'
     isRoundCompleted: function (round, year) {
         "use strict";
         if (!round) {
@@ -112,8 +115,9 @@ root.app.cache = {
 if (env === "development") {
     // Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
     root.app.overrideTippeligaDataWithYear = root.app.currentYear;
-    root.app.overrideTippeligaDataWithRound = 0;
+    //root.app.overrideTippeligaDataWithRound = 2;
 }
+
 
 if (root.app.overrideTippeligaDataWithYear && (root.app.overrideTippeligaDataWithRound || root.app.overrideTippeligaDataWithRound === 0)) {
     root.app.currentRound = root.app.overrideTippeligaDataWithRound;

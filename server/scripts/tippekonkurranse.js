@@ -35,93 +35,97 @@ var env = process.env.NODE_ENV || "development",
     },
 
 
-    _calculateTippeligaScores = function (strategy, participantObj, tippeligaTable) {
-        "use strict";
-        var tableScore, pallScore, pallBonusScore, nedrykkScore, indexedTippeligaTable;
+    _calculateTippeligaScores =
+        function (strategy, participantObj, tippeligaTable) {
+            "use strict";
+            var tableScore, pallScore, pallBonusScore, nedrykkScore, indexedTippeligaTable;
 
-        if (__.isEmpty(participantObj.tabell)) {
-            console.warn(utils.logPreamble() + "'Tabell' property is missing, returning 1000 points for all predictions ...");
-            return [1000, 1000, 1000, 1000];
-        }
-
-        // Create associative array with team name as key, by extracting 'name'
-        // => a team-name-indexed data structure
-        indexedTippeligaTable = __.indexBy(tippeligaTable, "name");
-
-        tableScore = __.reduce(participantObj.tabell, function (memo, teamName, index) {
-            try {
-                var predictedTeamPlacing = index + 1,
-                    actualTeamPlacing = indexedTippeligaTable[teamName].no;
-
-                return memo + utils.getDisplacementPoints(strategy.tabellScoresStrategy.polarity, strategy.tabellScoresStrategy.weight,
-                        predictedTeamPlacing,
-                        actualTeamPlacing);
-            } catch (e) {
-                var errorMessage = utils.logPreamble() + "Unable to calculate scores for team '" + participantObj.tabell[index] + "' for participant '" + participantObj.name + "' - probably illegal data format";
-                console.warn(errorMessage);
-                throw new Error(errorMessage);
+            if (__.isEmpty(participantObj.tabell)) {
+                console.warn(utils.logPreamble() + "'Tabell' property is missing, returning 1000 points for all predictions ...");
+                return [1000, 1000, 1000, 1000];
             }
-        }, 0);
 
-        pallScore =
-            utils.getMatchPoints(strategy.pall1ScoreStrategy.polarity, strategy.pall1ScoreStrategy.weight,
-                participantObj.tabell[0], tippeligaTable[0].name) +
-            utils.getMatchPoints(strategy.pall2ScoreStrategy.polarity, strategy.pall2ScoreStrategy.weight,
-                participantObj.tabell[1], tippeligaTable[1].name) +
-            utils.getMatchPoints(strategy.pall3ScoreStrategy.polarity, strategy.pall3ScoreStrategy.weight,
-                participantObj.tabell[2], tippeligaTable[2].name);
+            // Create associative array with team name as key, by extracting 'name'
+            // => a team-name-indexed data structure
+            indexedTippeligaTable = __.indexBy(tippeligaTable, "name");
 
-        pallBonusScore = utils.getMatchPoints(strategy.pallBonusScoreStrategy.polarity, strategy.pallBonusScoreStrategy.weight,
-            [participantObj.tabell[0], participantObj.tabell[1], participantObj.tabell[2]],
-            [tippeligaTable[0].name, tippeligaTable[1].name, tippeligaTable[2].name]
-        );
+            tableScore = __.reduce(participantObj.tabell, function (memo, teamName, index) {
+                try {
+                    var predictedTeamPlacing = index + 1,
+                        actualTeamPlacing = indexedTippeligaTable[teamName].no;
 
-        nedrykkScore = utils.getPresentPoints(strategy.nedrykkScoreStrategy.polarity, strategy.nedrykkScoreStrategy.weight,
-            [participantObj.tabell[14], participantObj.tabell[15]],
-            [tippeligaTable[14].name, tippeligaTable[15].name]
-        );
+                    return memo + utils.getDisplacementPoints(strategy.tabellScoresStrategy.polarity, strategy.tabellScoresStrategy.weight,
+                            predictedTeamPlacing,
+                            actualTeamPlacing);
+                } catch (e) {
+                    var errorMessage = utils.logPreamble() + "Unable to calculate scores for team '" + participantObj.tabell[index] + "' for participant '" + participantObj.name + "' - probably illegal data format";
+                    console.warn(errorMessage);
+                    throw new Error(errorMessage);
+                }
+            }, 0);
 
-        return [tableScore, pallScore, pallBonusScore, nedrykkScore];
-    },
+            pallScore =
+                utils.getMatchPoints(strategy.pall1ScoreStrategy.polarity, strategy.pall1ScoreStrategy.weight,
+                    participantObj.tabell[0], tippeligaTable[0].name) +
+                utils.getMatchPoints(strategy.pall2ScoreStrategy.polarity, strategy.pall2ScoreStrategy.weight,
+                    participantObj.tabell[1], tippeligaTable[1].name) +
+                utils.getMatchPoints(strategy.pall3ScoreStrategy.polarity, strategy.pall3ScoreStrategy.weight,
+                    participantObj.tabell[2], tippeligaTable[2].name);
 
+            pallBonusScore = utils.getMatchPoints(strategy.pallBonusScoreStrategy.polarity, strategy.pallBonusScoreStrategy.weight,
+                [participantObj.tabell[0], participantObj.tabell[1], participantObj.tabell[2]],
+                [tippeligaTable[0].name, tippeligaTable[1].name, tippeligaTable[2].name]
+            );
 
-    _calculateOpprykkScores = function (strategy, participantObj, adeccoligaTable) {
-        "use strict";
-        if (__.isEmpty(participantObj.opprykk)) {
-            console.warn(utils.logPreamble() + "'Opprykk' property is missing");
-            return 1000;
-        }
-        return utils.getPresentPoints(strategy.opprykkScoreStrategy.polarity, strategy.opprykkScoreStrategy.weight,
-            [participantObj.opprykk[0], participantObj.opprykk[1]],
-            [adeccoligaTable[0].name, adeccoligaTable[1].name]
-        );
-    },
+            nedrykkScore = utils.getPresentPoints(strategy.nedrykkScoreStrategy.polarity, strategy.nedrykkScoreStrategy.weight,
+                [participantObj.tabell[14], participantObj.tabell[15]],
+                [tippeligaTable[14].name, tippeligaTable[15].name]
+            );
 
-
-    _calculateToppscorerScores = function (strategy, participantObj, tippeligaToppscorer) {
-        "use strict";
-        if (__.isEmpty(participantObj.toppscorer)) {
-            console.warn(utils.logPreamble() + "'Toppscorer' property is missing");
-            return 1000;
-        }
-        return utils.getPresentPoints(strategy.toppscorerScoreStrategy.polarity, strategy.toppscorerScoreStrategy.weight,
-            participantObj.toppscorer[0],
-            tippeligaToppscorer
-        );
-    },
+            return [tableScore, pallScore, pallBonusScore, nedrykkScore];
+        },
 
 
-    _calculateCupScores = function (strategy, participantObj, remainingCupContenders) {
-        "use strict";
-        if (__.isEmpty(participantObj.cup)) {
-            console.warn(utils.logPreamble() + "'Cup' property is missing");
-            return 1000;
-        }
-        return utils.getPresentPoints(strategy.cupScoreStrategy.polarity, strategy.cupScoreStrategy.weight,
-            participantObj.cup[0],
-            remainingCupContenders
-        );
-    },
+    _calculateOpprykkScores =
+        function (strategy, participantObj, adeccoligaTable) {
+            "use strict";
+            if (__.isEmpty(participantObj.opprykk)) {
+                console.warn(utils.logPreamble() + "'Opprykk' property is missing");
+                return 1000;
+            }
+            return utils.getPresentPoints(strategy.opprykkScoreStrategy.polarity, strategy.opprykkScoreStrategy.weight,
+                [participantObj.opprykk[0], participantObj.opprykk[1]],
+                [adeccoligaTable[0].name, adeccoligaTable[1].name]
+            );
+        },
+
+
+    _calculateToppscorerScores =
+        function (strategy, participantObj, tippeligaToppscorer) {
+            "use strict";
+            if (__.isEmpty(participantObj.toppscorer)) {
+                console.warn(utils.logPreamble() + "'Toppscorer' property is missing");
+                return 1000;
+            }
+            return utils.getPresentPoints(strategy.toppscorerScoreStrategy.polarity, strategy.toppscorerScoreStrategy.weight,
+                participantObj.toppscorer[0],
+                tippeligaToppscorer
+            );
+        },
+
+
+    _calculateCupScores =
+        function (strategy, participantObj, remainingCupContenders) {
+            "use strict";
+            if (__.isEmpty(participantObj.cup)) {
+                console.warn(utils.logPreamble() + "'Cup' property is missing");
+                return 1000;
+            }
+            return utils.getPresentPoints(strategy.cupScoreStrategy.polarity, strategy.cupScoreStrategy.weight,
+                participantObj.cup[0],
+                remainingCupContenders
+            );
+        },
 
 
     /**
@@ -160,17 +164,17 @@ var env = process.env.NODE_ENV || "development",
                     // TODO: Liten svakhet: Hvis Adeccoliga spiller runder mens Tippeliga ikke gjør det så blir ikke runden oppdatert ...
 
                     dbCount = dbMatchesCount[round].length;
-                    if (currentRoundCount < dbCount) {
-                        logMsg += " is already stored with " + dbCount + " teams - current data has " + currentRoundCount + " teams";
-                        console.log(logMsg + " => no need for updating db with new results");
-
-                    } else if (root.app.isRoundCompleted(round, year)) {
+                    if (root.app.isRoundCompleted(round, year)) {
                         logMsg += " is completed => no need for updating db with new results";
                         console.log(logMsg);
 
+                    } else if (currentRoundCount < dbCount) {
+                        logMsg += " is already stored for " + dbCount + " teams - current data has " + currentRoundCount + " teams";
+                        console.log(logMsg + " => no need for updating db with new results");
+
                     } else {
                         method = "UPDATE";
-                        logMsg += " is already stored with " + dbCount + " teams - current data has " + currentRoundCount + " teams";
+                        logMsg += " is already stored for " + dbCount + " teams - current data has " + currentRoundCount + " teams";
                     }
                 }
             }
@@ -181,11 +185,12 @@ var env = process.env.NODE_ENV || "development",
                         tippeliga: currentTippeligaTable,
                         toppscorer: currentTippeligaToppscorer,
                         adeccoliga: currentAdeccoligaTable,
-                        remainingCupContenders: currentRemainingCupContenders
+                        remainingCupContenders: currentRemainingCupContenders,
+                        date: new Date() // Which as you see should be named 'documentLastModificationTimestamp'
                     },
                     { upsert: true, multi: false },
                     function () {
-                        console.log(logMsg + ", " + currentRoundCount + " matches saved... OK");
+                        console.log(logMsg + ", " + currentRoundCount + " teams saved... OK");
                     }
                 );
             }
@@ -220,6 +225,7 @@ var env = process.env.NODE_ENV || "development",
 
                                 tippekonkurranseData.round = tippeligaRound.round;
                                 tippekonkurranseData.date = tippeligaRound.date;
+
                                 tippekonkurranseData.currentRound = allTippeligaRounds.length;
                                 //tippekonkurranseData.currentDate = new Date();
 
@@ -231,8 +237,14 @@ var env = process.env.NODE_ENV || "development",
 
                                 //tippekonkurranseData.round = 0;
                                 tippekonkurranseData.date = new Date(); // Cannot be null
+
                                 //tippekonkurranseData.currentRound = 0;
                                 //tippekonkurranseData.currentDate = new Date();
+                            }
+
+                            // Workaround for strangely missing stored 'date' property for some rounds ...
+                            if (!tippekonkurranseData.date) {
+                                tippekonkurranseData.date = tippeligaRound._id.getTimestamp();
                             }
 
                             return requestion(tippekonkurranseData.toArray());
@@ -286,6 +298,9 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
+    /**
+     * NB! The presence of the property 'matchesCountGrouping' is a prerequisite for data to be stored.
+     */
     _addGroupingOfTeamAndNumberOfMatchesPlayed = exports.addGroupingOfTeamAndNumberOfMatchesPlayed =
         function (args) {
             "use strict";
@@ -316,7 +331,7 @@ var env = process.env.NODE_ENV || "development",
 
                 } else {
                     tippekonkurranseData.currentRound = tippekonkurranseData.round;
-                    // Current round is a dynamic value, nice to remember
+                    // Current round is a dynamic value, nice to have it around/available
                     if (root.app.currentRound < tippekonkurranseData.currentRound) {
                         root.app.currentRound = tippekonkurranseData.currentRound;
                     }
@@ -465,7 +480,7 @@ var env = process.env.NODE_ENV || "development",
             "use strict";
             var tippekonkurranseData = new TippekonkurranseData(args),
 
-                year = tippekonkurranseData.date.getFullYear(),
+                year = tippekonkurranseData.getYear(),
                 previousRound = tippekonkurranseData.round - 1,
                 getPreviousRoundTippeligaData = curry(_getStoredTippeligaDataRequestor, year, previousRound),
                 addTippekonkurranseScores = curry(_addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
@@ -506,7 +521,7 @@ var env = process.env.NODE_ENV || "development",
 
             tippekonkurranseData.scores.metadata = {
                 live: tippekonkurranseData.liveData,
-                year: tippekonkurranseData.date.getFullYear(),
+                year: tippekonkurranseData.getYear(),
                 round: tippekonkurranseData.round,
                 currentYear: tippekonkurranseData.currentYear,
                 currentRound: tippekonkurranseData.currentRound
@@ -540,7 +555,7 @@ var env = process.env.NODE_ENV || "development",
                 currentTippeligaToppscorer: tippekonkurranseData.tippeligaTopScorer,
                 currentAdeccoligaTable: tippekonkurranseData.adeccoligaTable,
                 currentRemainingCupContenders: tippekonkurranseData.remainingCupContenders,
-                currentYear: tippekonkurranseData.date.getFullYear(),
+                currentYear: tippekonkurranseData.getYear(),
                 currentRound: tippekonkurranseData.round,
                 currentDate: tippekonkurranseData.date
             });
@@ -552,23 +567,24 @@ var env = process.env.NODE_ENV || "development",
         function (args) {
             "use strict";
             var tippekonkurranseData = new TippekonkurranseData(args);
-            for (var round in tippekonkurranseData.matchesCountGrouping) {
-                if (tippekonkurranseData.matchesCountGrouping.hasOwnProperty(round)) {
-                    var roundNo = parseInt(round, 10),
-                        currentMatchCountInRound = tippekonkurranseData.matchesCountGrouping[round].length,
-                        conditionallyStoreTippeligaRound = curry(_storeTippeligaRound,
-                            tippekonkurranseData.tippeligaTable,
-                            tippekonkurranseData.tippeligaTopScorer,
-                            tippekonkurranseData.adeccoligaTable,
-                            tippekonkurranseData.remainingCupContenders,
-                            tippekonkurranseData.getYear(),
-                            tippekonkurranseData.round,
-                            currentMatchCountInRound);
 
-                    dbSchema.TippeligaRound
-                        .findOne({ year: tippekonkurranseData.date.getFullYear(), round: roundNo })
-                        .exec(conditionallyStoreTippeligaRound);
-                }
+            if (tippekonkurranseData.matchesCountGrouping &&
+                tippekonkurranseData.matchesCountGrouping.hasOwnProperty(tippekonkurranseData.round)) {
+
+                var roundNo = parseInt(tippekonkurranseData.round, 10),
+                    currentMatchCountInRound = tippekonkurranseData.matchesCountGrouping[tippekonkurranseData.round].length,
+                    conditionallyStoreTippeligaRound = curry(_storeTippeligaRound,
+                        tippekonkurranseData.tippeligaTable,
+                        tippekonkurranseData.tippeligaTopScorer,
+                        tippekonkurranseData.adeccoligaTable,
+                        tippekonkurranseData.remainingCupContenders,
+                        tippekonkurranseData.getYear(),
+                        tippekonkurranseData.round,
+                        currentMatchCountInRound);
+
+                dbSchema.TippeligaRound
+                    .findOne({ year: tippekonkurranseData.getYear(), round: roundNo })
+                    .exec(conditionallyStoreTippeligaRound);
             }
             return tippekonkurranseData.toArray();
         };
