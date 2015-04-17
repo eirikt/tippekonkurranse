@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html manifest="manifest.appcache">
 <head>
-    <meta property="version" content="1.3.2">
+    <meta property="version" content="1.3.3">
 
     <meta charset="UTF-8">
 
@@ -15,8 +15,7 @@
 
     <meta property="og:url" content="http://tippekonkurranse.herokuapp.com">
     <meta property="og:title" content="Tippekonkurranse 2015">
-    <meta property="og:description"
-          content="Now that there is the Tec-9, a crappy spray gun from South Miami. This gun is advertised as the most popular gun in American crime. Do you believe that shit? It actually says that in the little book that comes with it: the most popular gun in American crime. Like they're actually proud of that shit.">
+    <meta property="og:description" content="Now that there is the Tec-9, a crappy spray gun from South Miami. This gun is advertised as the most popular gun in American crime. Do you believe that shit? It actually says that in the little book that comes with it: the most popular gun in American crime. Like they're actually proud of that shit.">
     <!--<meta property="og:image" content="http://tippekonkurranse.herokuapp.com/images/facsimile.png"/>-->
     <meta property="og:image" content="http://tippekonkurranse.herokuapp.com/images/poengtrend.jpg">
 
@@ -33,49 +32,52 @@
     -->
     <!-- Standard:-->
     <link rel="shortcut icon" href="favicon.ico">
-    <link rel="stylesheet" type="text/css" href="1.3.2/bower_components/fontawesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="1.3.2/bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="1.3.2/bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css">
-    <link rel="stylesheet" type="text/css" href="1.3.2/bower_components/toastr/toastr.min.css">
-    <link rel="stylesheet" type="text/css" href="1.3.2/bower_components/jqplot-bower/dist/jquery.jqplot.min.css">
-    <link rel="stylesheet" type="text/css" href="1.3.2/styles/main.css">
+    <link rel="stylesheet" type="text/css" href="1.3.3/bower_components/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="1.3.3/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="1.3.3/bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css">
+    <link rel="stylesheet" type="text/css" href="1.3.3/bower_components/toastr/toastr.min.css">
+    <link rel="stylesheet" type="text/css" href="1.3.3/bower_components/jqplot-bower/dist/jquery.jqplot.min.css">
+    <link rel="stylesheet" type="text/css" href="1.3.3/styles/main.css">
 </head>
 
 <body>
 <!--[if lt IE 10]>
-<section style="margin:3rem;border:1px dotted">
-    <p style="padding:1rem;font-size:x-large;color:red;">
-        <em>Hei, kamerat - på høy tid at du <a href="http://browsehappy.com/">oppgraderer</a> nettleseren din gitt
-            ...</em>
-    </p>
+<section id="oldBrowserWarning">
+    <div class="warningBox">
+        <em>Hei, kamerat - på høy tid at du <a href="http://browsehappy.com/">oppgraderer</a> nettleseren din gitt ...</em>
+    </div>
 </section>
 <![endif]-->
 
-<header id="header"></header>
+<header id="header">
+    <section id="splashscreen" class="animated fadeIn">
+        <h3 style="text-align:center;margin-top:12rem;">Tippekonkurranse loading ...</h3>
+        <p style="text-align:center"><img src="images/loading.gif" /></p>
+    </section>
+</header>
 
-<section id="main">
-    <section id="mainSection"></section>
-    <footer id="footer1"></footer>
-    <footer id="footer2"></footer>
+<section id="main" class="hidden">
+    <section id="mainSection" class="hidden"></section>
+    <footer id="roundFooter" class="hidden"></footer>
+    <footer id="seasonFooter" class="hidden"></footer>
 </section>
 
 <section id="ratingHistory"></section>
 
-<footer style="text-align:center;margin-bottom:2rem;">
+<footer class="hidden" style="text-align:center;margin-bottom:2rem;">
     <hr>
         <span>
             <span style="font-size:large;">[</span>&nbsp;
             <a href="https://www.facebook.com/groups/260807820653927" target="_new">Tippegjengen@Facebook</a>
             &nbsp;|&nbsp;
-            <a href="http://www.altomfotball.no/element.do?cmd=tournament&tournamentId=1&useFullUrl=false"
-               target="_new">altomfotball.no</a>
+            <a href="http://www.altomfotball.no/element.do?cmd=tournament&tournamentId=1&useFullUrl=false" target="_new">altomfotball.no</a>
             &nbsp;|&nbsp;
             <a href="http://www.vg.no/sport/fotball/norsk/eliteguiden" target="_new">VG</a>
             &nbsp;<span style="font-size:large;">]</span>
         </span>
         <span style="margin-right:1rem;float:right !important;}">
             <span style="font-size:large;">(</span>
-            <a href="https://github.com/eirikt/tippekonkurranse/blob/master/README.md" target="_new">v1.3.2</a>
+            <a href="https://github.com/eirikt/tippekonkurranse/blob/master/README.md" target="_new">v1.3.3</a>
             <span style="font-size:large;">)</span>
             &nbsp;
             <span style="font-size:large;">(</span>
@@ -88,7 +90,7 @@
 <script src="bower_components/requirejs/require.js" data-main="scripts/app.config"></script>
 -->
 <!-- Standard:-->
-<script src="1.3.2/bower_components/requirejs/require.js" data-main="1.3.2/scripts/app.config"></script>
+<script src="1.3.3/bower_components/requirejs/require.js" data-main="1.3.3/scripts/app.config"></script>
 
 </body>
 </html>

@@ -36,6 +36,13 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
+#### v1.3.3 : _Deployed 17.04.2015_
+* UX: Better robustness when loading application
+
+_Status: Done_
+
+
+
 #### v1.3.2 : _Deployed 13.04.2015_
 * Modal notification (with forced page reload) on new version downloaded
 

@@ -111,8 +111,8 @@ define([
         app.addRegions({
             header: '#header',
             mainContent: '#mainSection',
-            navigatorFooter1: '#footer1',
-            navigatorFooter2: '#footer2'
+            navigatorFooter1: '#roundFooter',
+            navigatorFooter2: '#seasonFooter'
         });
 
 

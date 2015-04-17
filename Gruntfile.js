@@ -47,7 +47,7 @@ module.exports = function (grunt) {
                     'echo.',
                     'echo Essential grunt tasks are:',
                     'echo   install:client   installs client resources via Bower                 (requires Git in path)',
-                    'echo   test             installs, builds, and executes all Mocha tests      (using PhantomJS)',
+                    'echo   test             installs, builds, and executes all Mocha tests      (using PhantomJS for client-side specifications)',
                     'echo   db               starts a MongoDB instance using a local data folder (blocking command)',
                     'echo   run              starts up local Node.js runtime                     (blocking command)'
                 ].join('&&')
@@ -85,7 +85,7 @@ module.exports = function (grunt) {
                         maxBuffer: Infinity
                     }
                 },
-                command: 'npm start',
+                command: 'npm start'
             },
             'install-client': {
                 options: { stdout: true, stderr: true, failOnError: true },
@@ -259,9 +259,9 @@ module.exports = function (grunt) {
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '7' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '6' },
                         { platform: 'Linux', browserName: 'Android', version: '4.4' },
-                        { platform: 'OS X 10.10', browserName: 'Safari', version: '8' },
-                        { platform: 'OS X 10.10', browserName: 'iPhone', version: '8.2', deviceName: 'iPhone Simulator', 'device-orientation': 'landscape' },
-                        { platform: 'OS X 10.10', browserName: 'iPhone', version: '8.2', deviceName: 'iPad Simulator', 'device-orientation': 'landscape' }
+                        //{ platform: 'OS X 10.10', browserName: 'Safari', version: '8' },
+                        { platform: 'OS X 10.10', browserName: 'iPhone', version: '8.3', deviceName: 'iPhone Simulator', 'device-orientation': 'landscape' },
+                        { platform: 'OS X 10.10', browserName: 'iPhone', version: '8.3', deviceName: 'iPad Simulator', 'device-orientation': 'landscape' }
                     ]
                 }
             }

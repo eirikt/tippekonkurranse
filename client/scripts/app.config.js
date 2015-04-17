@@ -17,7 +17,7 @@ require.config({
     // Development ('grunt [run|deploy:development]' and IDE execution):
     //baseUrl: 'scripts',
     // Standard:
-    baseUrl: '1.3.2/scripts',
+    baseUrl: '1.3.3/scripts',
 
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',
@@ -68,37 +68,6 @@ require(['underscore', 'jquery', 'backbone', 'marionette', 'toastr', 'jqplot', '
 
         window.console.log('app.config.js :: Application configuration and start ...');
 
-        /*
-         console.log('Checking AppCache status ...');
-         var appCache = window.applicationCache;
-
-         if (appCache) {
-         switch (appCache.status) {
-         case appCache.UNCACHED: // UNCACHED == 0
-         console.log('UNCACHED');
-         break;
-         case appCache.IDLE: // IDLE == 1
-         console.log('IDLE');
-         break;
-         case appCache.CHECKING: // CHECKING == 2
-         console.log('CHECKING');
-         break;
-         case appCache.DOWNLOADING: // DOWNLOADING == 3
-         console.log('DOWNLOADING');
-         break;
-         case appCache.UPDATEREADY:  // UPDATEREADY == 4
-         console.log('UPDATEREADY');
-         break;
-         case appCache.OBSOLETE: // OBSOLETE == 5
-         console.log('OBSOLETE');
-         break;
-         default:
-         console.log('UKNOWN CACHE STATUS');
-         break;
-         }
-         }
-         */
-
         // Toastr.js config (=> http://codeseven.github.io/toastr/demo.html)
         Toastr.options = {
             'positionClass': 'toast-top-full-width',
@@ -119,6 +88,7 @@ require(['underscore', 'jquery', 'backbone', 'marionette', 'toastr', 'jqplot', '
         Backbone.history.start({
             pushState: false,
             hashChange: true,
+
             root: '/'
         });
 
@@ -132,117 +102,125 @@ require(['underscore', 'jquery', 'backbone', 'marionette', 'toastr', 'jqplot', '
 
             // Strict AppCache updateready modal window
             var appCache = window.applicationCache,
-                ReloadNotificationView,
-                bootstrapModalContainerView,
-                reloadNotificationView;
+                bootstrapModalContainerView1,
+                bootstrapModalContainerView2,
+                ReloadNotificationView1,
+                ReloadNotificationView2,
+                reloadNotificationView1,
+                reloadNotificationView2;
 
-            if (appCache && appCache.status === appCache.UPDATEREADY) {
-                bootstrapModalContainerView = new BootstrapViews.ModalContainerView({
-                    parentSelector: 'body',
-                    id: 'reloadNotification',
-                    ariaLabelledBy: 'reloadNotificationLabel'
-                });
-                bootstrapModalContainerView.attach();
+            if (appCache) {
+                appCache.addEventListener('error', function () {
+                    // Strict AppCache error modal window
+                    bootstrapModalContainerView1 = new BootstrapViews.ModalContainerView({
+                        parentSelector: 'body',
+                        id: 'reloadNotification1',
+                        ariaLabelledBy: 'reloadNotificationLabel1'
+                    });
+                    bootstrapModalContainerView1.attach();
 
-                ReloadNotificationView = Marionette.ItemView.extend({
-                    template: _.template('' +
-                    '<div class="modal-dialog" style="width:400px;text-align:center;margin-top:200px">' +
-                    '  <div class="modal-content">' +
-                    '    <div class="modal-header">' +
-                    '      <h4 id="reloadNotificationLabel" class="modal-title">' +
-                    '        En ny versjon av Tippekonkurranse er klar ...' +
-                    '      </h4>' +
-                    '    </div>' +
-                    '    <div class="modal-footer" style="text-align:center;">' +
-                    '      <button id="reload" type="button" class="btn btn-default" data-dismiss="modal">OK, greit!</button>' +
-                    '    </div>' +
-                    '  </div>' +
-                    '</div>'),
+                    ReloadNotificationView1 = Marionette.ItemView.extend({
+                        template: _.template('' +
 
-                    onRender: function () {
-                        var self = this;
-                        this.$el.modal({ keyboard: false })
-                            .on('click', '#reload', function () {
-                                window.location.reload();
-                            })
-                            .on('shown.bs.modal', function () {
-                                self.$('button').focus();
+                        '<div class="modal-dialog" style="width:450px;text-align:center;margin-top:150px">' +
+                        '  <div class="modal-content">' +
+                        '    <div class="modal-header">' +
+                        '      <h2 id="reloadNotificationLabel1" class="modal-title" style="color:red;font-style:italic;">Noe har tryna ...</h2>' +
+                        '    </div>' +
+                        '    <div class="modal-body">' +
+                        '      <div style="text-align:left;font-size:x-large;">Prøv:</div>' +
+                        '      <ol style="text-align:left;font-size:large;">' +
+                        '        <li>Trykk "Prøv igjen!" nedenfor en gang eller to.</li>' +
+                        '        <li>Hvis ingen endring til det bedre, kontakt Eirik T. - skjell han ut! Lurest å kreve pengene tilbake også.</li>' +
+                        '      </ol>' +
+                        '    </div>' +
+                        '    <div class="modal-footer" style="text-align:center;">' +
+                        '      <button id="reload1" type="button" class="btn btn-danger" data-dismiss="modal" style="font-size:large;">Prøv igjen!</button>' +
+                        '    </div>' +
+                        '  </div>' +
+                        '</div>'),
+
+                        onRender: function () {
+                            var self = this;
+                            this.$el.modal({ keyboard: false })
+                                .on('click', '#reload1', function () {
+                                    window.location.reload();
+                                })
+                                .on('shown.bs.modal', function () {
+                                    self.$('button').focus();
+                                }
+                            );
+                        }
+                    });
+
+                    reloadNotificationView1 = new ReloadNotificationView1({
+                        el: $('#' + bootstrapModalContainerView1.id)
+                    });
+                    reloadNotificationView1.render();
+                    // /Strict AppCache error modal window
+                }, false);
+
+                appCache.addEventListener('updateready', function () {
+                    // Strict AppCache updateready modal window
+                    if (appCache.status === appCache.UPDATEREADY) {
+                        bootstrapModalContainerView2 = new BootstrapViews.ModalContainerView({
+                            parentSelector: 'body',
+                            id: 'reloadNotification2',
+                            ariaLabelledBy: 'reloadNotificationLabel2'
+                        });
+                        bootstrapModalContainerView2.attach();
+
+                        ReloadNotificationView2 = Marionette.ItemView.extend({
+                            template: _.template('' +
+                            '<div class="modal-dialog" style="width:400px;text-align:center;margin-top:150px">' +
+                            '  <div class="modal-content">' +
+                            '    <div class="modal-header">' +
+                            '      <h3 id="reloadNotificationLabel2" class="modal-title">' +
+                            '        En ny versjon av Tippekonkurranse er klar ...' +
+                            '      </h3>' +
+                            '    </div>' +
+                            '    <div class="modal-footer" style="text-align:center;">' +
+                            '      <button id="reload2" type="button" class="btn btn-default" data-dismiss="modal" style="font-size:large;">OK, greit!</button>' +
+                            '    </div>' +
+                            '  </div>' +
+                            '</div>'),
+
+                            onRender: function () {
+                                var self = this;
+                                this.$el.modal({ keyboard: false })
+                                    .on('click', '#reload2', function () {
+                                        window.location.reload();
+                                    })
+                                    .on('shown.bs.modal', function () {
+                                        self.$('button').focus();
+                                    }
+                                );
                             }
-                        );
+                        });
+
+                        reloadNotificationView2 = new ReloadNotificationView2({
+                            el: $('#' + bootstrapModalContainerView2.id)
+                        });
+                        reloadNotificationView2.render();
                     }
+                    // /Strict AppCache updateready modal window
+                }, false);
+            }
+
+            // OK, bring the page alive!
+            $('#splashscreen').addClass('animated fadeOut')
+                // When animation ends:
+                .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function (e) {
+                    $(e.target).addClass('hidden');
                 });
 
-                reloadNotificationView = new ReloadNotificationView({
-                    el: $('#' + bootstrapModalContainerView.id)
-                });
-                reloadNotificationView.render();
-            }
-            // /Strict AppCache updateready modal window
+            setTimeout(function () {
+                $('#main').removeClass('hidden').addClass('animated fadeIn');
+                $('#mainSection').removeClass('hidden').addClass('animated fadeIn');
+                $('#roundFooter').removeClass('hidden').addClass('animated fadeIn');
+                $('#seasonFooter').removeClass('hidden').addClass('animated fadeIn');
+                $('footer').removeClass('hidden').addClass('animated fadeIn');
+            }, 1000);
         });
     }
-)
-;
-
-
-// Listen to window errors: remedy for Heroku instances sleeping/warm-up
-// TODO: Revisit ...
-/* jshint -W073 */
-/*
- window.onerror = function (message, url, lineNumber) {
- "use strict";
- var initialNumberOfReloads = 1,
- millisecondsBeforeReload = 3000,
- isHerokuServerStartingUp = function () {
- // TODO: A bit safer, please ...
- return true;
- },
- remainingNumberOfReloadsKey = "Tippekonkurranse/remainingnumberofreloads",
- remainingNumberOfReloadsTimestampKey = "Tippekonkurranse/remainingnumberofreloads:timestamp",
- remainingNumberOfReloads,
- remainingNumberOfReloadsTimestamp,
- eligibleForReload = false;
-
- window.console.warn("Error: message=" + message);
- window.console.warn("Error: url=" + url);
- window.console.warn("Error: lineNumber=" + lineNumber);
-
- if (isHerokuServerStartingUp()) {
- if (window.localStorage) {
- remainingNumberOfReloads = window.localStorage.getItem(remainingNumberOfReloadsKey);
- remainingNumberOfReloadsTimestamp = window.localStorage.getItem(remainingNumberOfReloadsTimestampKey);
-
- if (!remainingNumberOfReloads) {
- remainingNumberOfReloads = initialNumberOfReloads;
- eligibleForReload = true;
- } else {
- // Relevant 'remainingNumberOfReloads' fetched from local store?
- if (remainingNumberOfReloadsTimestamp > Date.now() - (2 * millisecondsBeforeReload)) {
- if (window.parseInt(remainingNumberOfReloads, 10) > 0) {
- eligibleForReload = true;
- }
- } else {
- remainingNumberOfReloads = initialNumberOfReloads;
- eligibleForReload = true;
- }
- }
-
- if (eligibleForReload) {
- window.console.debug(remainingNumberOfReloads + " more reload attempt ...");
- remainingNumberOfReloads -= 1;
- window.localStorage.setItem(remainingNumberOfReloadsKey, remainingNumberOfReloads);
- window.localStorage.setItem(remainingNumberOfReloadsTimestampKey, Date.now());
-
- window.setTimeout(function () {
- window.location.reload();
- }, millisecondsBeforeReload);
-
- return true;
-
- } else {
- window.console.debug("No more reload attempts for now ...");
- }
- }
- }
- return false;
- };
- */
+);

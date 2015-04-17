@@ -35,7 +35,7 @@ a:hover, a:visited, a:link, a:active {
  * Bootstrap overrides
  */
 h2, .h2 {
-    font-size: 24px;
+    font-size: 26px;
 }
 
 .btn {
@@ -68,8 +68,18 @@ h2, .h2 {
     padding-bottom: 1.6rem;
 }
 
-#footer1 {
+#roundFooter {
     margin-top: 2rem;
+}
+
+#oldBrowserWarning {
+    margin: 3rem;
+    border: 1px dotted;
+}
+
+#crashWarning {
+    margin: 3rem;
+    border: 1px dotted;
 }
 
 /**
@@ -83,6 +93,10 @@ h2, .h2 {
     font-size: 14px;
 }
 
+.smaller {
+    font-size: smaller;
+}
+
 .strong {
     font-size: larger;
     font-weight: bold;
@@ -94,6 +108,12 @@ h2, .h2 {
 
 .contrast {
     color: #f96e00;
+}
+
+.warningBox {
+    color: red;
+    font-size: x-large;
+    padding: 1rem;
 }
 
 /**
@@ -448,6 +468,67 @@ button#pageRefresher {
     animation-name: outdated-to-current-fadein;
     animation-duration: 0.8s;
     animation-timing-function: ease-out;
+}
+
+/**
+ *  Module            : ...
+ *  Portable/reusable :
+ *  Dependencies      :
+ *  Resources         :
+ ******************************************************************************/
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-iteration-count: 1;
+    animation-iteration-count: 1;
+}
+
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+}
+
+.fadeOut {
+    -webkit-animation-name: fadeOut;
+    animation-name: fadeOut;
 }
 
 /**
