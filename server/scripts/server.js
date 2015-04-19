@@ -14,13 +14,11 @@ var env = process.env.NODE_ENV || "development",
     ___ = require("scoreunder"),
     path = require("path"),
     express = require("express"),
-    RQ = require("./vendor/rq").RQ,
 
 // Module dependencies, local generic
     utils = require("./../../shared/scripts/utils"),
     comparators = require("./../../shared/scripts/comparators"),
     curry = require("./../../shared/scripts/fun").curry,
-//rq = require("./rq-fun"),
 
 // Module dependencies, local application-specific
     dbSchema = require("./db-schema"),
@@ -151,8 +149,7 @@ if (root.app.overrideTippeligaDataWithYear && (root.app.overrideTippeligaDataWit
 
 // Warm up cache: Rating history for initial year/previous year/2014
 // TODO: Cache all years, this year and all previous ones
-/* No, this is not a good idea with single-dyno setup on Heroku - the node falls asleep and the response time will be unacceptable for "wake-up-the-dyno" requests*/
-/*
+/* No, this is not a good idea with single-dyno setup on Heroku - the node falls asleep and than this caching procedure starts all over again, making the response time unacceptable for all those "wake-up-the-dyno" requests
  dbSchema.TippeligaRound.count({ year: root.app.initialYear }, function (err, count) {
  "use strict";
  if (err) {

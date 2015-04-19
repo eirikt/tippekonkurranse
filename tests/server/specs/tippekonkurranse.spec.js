@@ -4,10 +4,10 @@
 var __ = require("underscore"),
 
     expect = require("chai").expect,
+    rq = require("rq-essentials"),
 
     Comparators = require('../../../shared/scripts/comparators'),
     curry = require("../../../shared/scripts/fun").curry,
-    rq = require("../../../server/scripts/rq-fun"),
     maxDisplacementSumInPermutationOfLength = require("../../../shared/scripts/utils").maxDisplacementSumInPermutationOfLength,
 
     TeamPlacement = require("../../../shared/scripts/app.models").TeamPlacement,
@@ -16,11 +16,11 @@ var __ = require("underscore"),
     addRound = require("../../../server/scripts/tippekonkurranse").addRound,
     addTippekonkurranseScoresRequestor = require("../../../server/scripts/tippekonkurranse").addTippekonkurranseScoresRequestor,
 
-    predictions2014 = require("../../../server/scripts/tippekonkurranse").predictions[ 2014 ],
-    rules2014 = require("../../../server/scripts/tippekonkurranse").rules[ 2014 ],
+    predictions2014 = require("../../../server/scripts/tippekonkurranse").predictions[2014],
+    rules2014 = require("../../../server/scripts/tippekonkurranse").rules[2014],
 
-    predictions2015 = require("../../../server/scripts/tippekonkurranse").predictions[ 2015 ],
-    rules2015 = require("../../../server/scripts/tippekonkurranse").rules[ 2015 ],
+    predictions2015 = require("../../../server/scripts/tippekonkurranse").predictions[2015],
+    rules2015 = require("../../../server/scripts/tippekonkurranse").rules[2015],
 
     addTippekonkurranseScores2014 = curry(addTippekonkurranseScoresRequestor, predictions2014, rules2014),
     addTippekonkurranseScores2015 = curry(addTippekonkurranseScoresRequestor, predictions2015, rules2015),
@@ -38,10 +38,10 @@ describe("Tippekonkurranse", function () {
     describe("Underlying basics", function () {
 
         it("should ensure (native) sorting of number strings", function () {
-            expect(Math.max.apply(null, [ "1", "2" ])).to.equal(2);
-            expect(Math.max.apply(null, [ "0", "4", "9" ])).to.equal(9);
-            expect(Math.max.apply(null, [ "8", "9", "10" ])).to.equal(10);
-            expect(Math.max.apply(null, [ "02", "009", "10", "103" ])).to.equal(103);
+            expect(Math.max.apply(null, ["1", "2"])).to.equal(2);
+            expect(Math.max.apply(null, ["0", "4", "9"])).to.equal(9);
+            expect(Math.max.apply(null, ["8", "9", "10"])).to.equal(10);
+            expect(Math.max.apply(null, ["02", "009", "10", "103"])).to.equal(103);
         });
     });
 
@@ -97,12 +97,12 @@ describe("Tippekonkurranse", function () {
     describe("addTippekonkurranseScores requestor", function () {
 
         it("should throw error if no requestion argument is provided", function () {
-            expect(addTippekonkurranseScores2014).to.throw(Error, "Requestion argument is missing - check your RQ.js setup");
+            expect(addTippekonkurranseScores2014).to.throw(Error, "RQ callback argument is missing - check your RQ setup");
         });
 
 
         it("should throw error if no argument array is provided", function () {
-            expect(curry(addTippekonkurranseScores2014, rq.execute)).to.throw(Error, "Requestion argument array is missing - check your RQ.js setup");
+            expect(curry(addTippekonkurranseScores2014, rq.execute)).to.throw(Error, "RQ callback argument array is missing - check your RQ setup");
         });
 
 
@@ -584,7 +584,7 @@ describe("Tippekonkurranse", function () {
                 };
 
             for (var i = 0; i < reversedClonedPredictionTable.length; i += 1) {
-                reversedTable[ i ] = new TeamPlacement(reversedClonedPredictionTable[ i ], i + 1, reversedClonedPredictionTable.length * 2 - 2);
+                reversedTable[i] = new TeamPlacement(reversedClonedPredictionTable[i], i + 1, reversedClonedPredictionTable.length * 2 - 2);
             }
 
             inputArgs.tippeligaTable = reversedTable;
@@ -889,7 +889,7 @@ describe("Tippekonkurranse", function () {
                     john: {
                         tabell: null,
                         toppscorer: null,
-                        opprykk: [ "TeamA", "TeamB", "C", "D" ],
+                        opprykk: ["TeamA", "TeamB", "C", "D"],
                         cup: null
                     }
                 },
@@ -916,7 +916,7 @@ describe("Tippekonkurranse", function () {
                     john: {
                         tabell: null,
                         toppscorer: null,
-                        opprykk: [ "TeamA", "TeamB" ],
+                        opprykk: ["TeamA", "TeamB"],
                         cup: null
                     }
                 },
@@ -944,7 +944,7 @@ describe("Tippekonkurranse", function () {
                     john: {
                         tabell: null,
                         toppscorer: null,
-                        opprykk: [ "TeamA", "TeamC" ],
+                        opprykk: ["TeamA", "TeamC"],
                         cup: null
                     }
                 },
@@ -972,7 +972,7 @@ describe("Tippekonkurranse", function () {
                     john: {
                         tabell: null,
                         toppscorer: null,
-                        opprykk: [ "TeamA", "TeamC" ],
+                        opprykk: ["TeamA", "TeamC"],
                         cup: null
                     }
                 },
@@ -1002,12 +1002,12 @@ describe("Tippekonkurranse", function () {
             var userPredictions = {
                     john: {
                         tabell: null,
-                        toppscorer: [ "Mr. T" ],
+                        toppscorer: ["Mr. T"],
                         opprykk: null,
                         cup: null
                     }
                 },
-                actualToppscorerTable = [ "Mr. T" ],
+                actualToppscorerTable = ["Mr. T"],
                 addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
@@ -1025,12 +1025,12 @@ describe("Tippekonkurranse", function () {
             var userPredictions = {
                     john: {
                         tabell: null,
-                        toppscorer: [ "Mr. T" ],
+                        toppscorer: ["Mr. T"],
                         opprykk: null,
                         cup: null
                     }
                 },
-                actualToppscorerTable = [ "Mr. T" ],
+                actualToppscorerTable = ["Mr. T"],
                 addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2015),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
@@ -1048,12 +1048,12 @@ describe("Tippekonkurranse", function () {
             var userPredictions = {
                     john: {
                         tabell: null,
-                        toppscorer: [ "Mr. T" ],
+                        toppscorer: ["Mr. T"],
                         opprykk: null,
                         cup: null
                     }
                 },
-                actualToppscorerTable = [ "Mr. A", "Mr. B" ],
+                actualToppscorerTable = ["Mr. A", "Mr. B"],
                 addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
@@ -1071,12 +1071,12 @@ describe("Tippekonkurranse", function () {
             var userPredictions = {
                     john: {
                         tabell: null,
-                        toppscorer: [ "Mr. T" ],
+                        toppscorer: ["Mr. T"],
                         opprykk: null,
                         cup: null
                     }
                 },
-                actualToppscorerTable = [ "Mr. A", "Mr. B" ],
+                actualToppscorerTable = ["Mr. A", "Mr. B"],
                 addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2015),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
@@ -1094,12 +1094,12 @@ describe("Tippekonkurranse", function () {
             var userPredictions = {
                     john: {
                         tabell: null,
-                        toppscorer: [ "Mr. T" ],
+                        toppscorer: ["Mr. T"],
                         opprykk: null,
                         cup: null
                     }
                 },
-                actualToppscorerTable = [ "Mr. A", "Mr. T" ],
+                actualToppscorerTable = ["Mr. A", "Mr. T"],
                 addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
@@ -1117,12 +1117,12 @@ describe("Tippekonkurranse", function () {
             var userPredictions = {
                     john: {
                         tabell: null,
-                        toppscorer: [ "Mr. T" ],
+                        toppscorer: ["Mr. T"],
                         opprykk: null,
                         cup: null
                     }
                 },
-                actualToppscorerTable = [ "Mr. A", "Mr. T" ],
+                actualToppscorerTable = ["Mr. A", "Mr. T"],
                 addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2015),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {

@@ -5,13 +5,13 @@ var env = process.env.NODE_ENV || "development",
 
 // Module dependencies, external
     __ = require("underscore"),
+    RQ = require("async-rq"),
+    rq = require("rq-essentials"),
 
 // Module dependencies, local generic
     comparators = require("./../../shared/scripts/comparators"),
     curry = require("./../../shared/scripts/fun").curry,
     utils = require("./../../shared/scripts/utils"),
-    RQ = require("./vendor/rq").RQ,
-    rq = require("./rq-fun"),
 
 // Module dependencies, local application-specific
     norwegianSoccerLeagueService = require("./norwegian-soccer-service"),
@@ -198,17 +198,17 @@ var env = process.env.NODE_ENV || "development",
 
 
     _getStoredTippeligaDataRequestor = exports.getStoredTippeligaDataRequestor =
-        function (year, round, requestion, args) {
+        function (year, round, callback, args) {
             "use strict";
             dbSchema.TippeligaRound.find({ year: year }).exec(
                 function (err, allTippeligaRounds) {
                     if (err) {
-                        return requestion(undefined, err);
+                        return callback(undefined, err);
                     }
                     dbSchema.TippeligaRound.findOne({ year: year, round: round }).exec(
                         function (err, tippeligaRound) {
                             if (err) {
-                                return requestion(undefined, err); // => Blank screen ...
+                                return callback(undefined, err); // => Blank screen ...
                             }
 
                             var tippekonkurranseData = new TippekonkurranseData();
@@ -247,7 +247,7 @@ var env = process.env.NODE_ENV || "development",
                                 tippekonkurranseData.date = tippeligaRound._id.getTimestamp();
                             }
 
-                            return requestion(tippekonkurranseData.toArray());
+                            return callback(tippekonkurranseData.toArray());
                         }
                     );
                 }
@@ -354,7 +354,7 @@ var env = process.env.NODE_ENV || "development",
 // TODO: This function is close to unreadable / unmanageable ... the truth is in there somewhere
 // TODO: Get rid of the requestion argument somehow
     _addTippekonkurranseScoresRequestor = exports.addTippekonkurranseScoresRequestor =
-        function (userPredictions, rules, requestion, args) {
+        function (userPredictions, rules, callback, args) {
             "use strict";
             if (!userPredictions || (__.isEmpty(userPredictions))) {
                 throw new Error("User predictions are missing - cannot calculate Tippekonkurranse scores");
@@ -362,11 +362,11 @@ var env = process.env.NODE_ENV || "development",
             if (!rules || (__.isEmpty(rules))) {
                 throw new Error("Rules are missing - cannot calculate Tippekonkurranse scores");
             }
-            if (!requestion) {
-                throw new Error("Requestion argument is missing - check your RQ.js setup");
+            if (!callback) {
+                throw new Error("RQ callback argument is missing - check your RQ setup");
             }
             if (!args) {
-                throw new Error("Requestion argument array is missing - check your RQ.js setup");
+                throw new Error("RQ callback argument array is missing - check your RQ setup");
             }
 
             // Data holders
@@ -383,7 +383,7 @@ var env = process.env.NODE_ENV || "development",
                 cupScoreIndex = 6,
                 ratingIndex = 7,
 
-                _sum = function (ratingIndex, requestion, scoresArray) {
+                _sum = function (ratingIndex, callback, scoresArray) {
                     var // Create 'scores' array - default value for all scores are 0
                         scores = __.range(ratingIndex).map(function () {
                             return 0;
@@ -405,7 +405,7 @@ var env = process.env.NODE_ENV || "development",
                                 scores[opprykkScoreIndex] +
                                 scores[cupScoreIndex];
 
-                            return requestion(scores);
+                            return callback(scores);
                         })
                     ])(rq.execute);
                 },
@@ -469,14 +469,14 @@ var env = process.env.NODE_ENV || "development",
             return RQ.sequence([
                 RQ.parallel(scoresRequestors),
                 curry(rq.interceptor, curry(_updateStandings, currentStanding), args),
-                curry(rq.terminator, requestion)
+                curry(rq.terminator, callback)
             ])(rq.execute);
         },
 
 
-// TODO: Get rid of the requestion argument somehow
+// TODO: Get rid of the RQ callback argument somehow
     _addPreviousMatchRoundRatingToEachParticipantRequestor = exports.addPreviousMatchRoundRatingToEachParticipantRequestor =
-        function (userPredictions, scoresStrategy, requestion, args) {
+        function (userPredictions, scoresStrategy, callback, args) {
             "use strict";
             var tippekonkurranseData = new TippekonkurranseData(args),
 
@@ -485,12 +485,10 @@ var env = process.env.NODE_ENV || "development",
                 getPreviousRoundTippeligaData = curry(_getStoredTippeligaDataRequestor, year, previousRound),
                 addTippekonkurranseScores = curry(_addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
 
-                updatedScores = tippekonkurranseData.scores.scores,
-
-                parentRequestion = requestion;
+                parentRequestion = callback;
 
             if (previousRound <= 0) {
-                return requestion(args);
+                return parentRequestion(args);
 
             } else {
                 return RQ.sequence([
@@ -498,14 +496,13 @@ var env = process.env.NODE_ENV || "development",
                     rq.requestor(_addGroupingOfTeamAndNumberOfMatchesPlayed),
                     rq.requestor(_addRound),
                     addTippekonkurranseScores,
-                    function (requestion, args) {
-                        __.each(__.keys(updatedScores), function (participant) {
-                            updatedScores[participant][appModels.scoreModel.previousRatingPropertyName] = args[tippekonkurranseData.indexOfScores].scores[participant][appModels.scoreModel.ratingPropertyName];
+                    function (callback, args) {
+                        __.each(__.keys(tippekonkurranseData.scores.scores), function (participant) {
+                            tippekonkurranseData.scores.scores[participant][appModels.scoreModel.previousRatingPropertyName] = args[tippekonkurranseData.indexOfScores].scores[participant][appModels.scoreModel.ratingPropertyName];
                         });
-                        return requestion();
+                        return callback();
                     },
-                    function (requestion, args) {
-                        tippekonkurranseData.scores.scores = updatedScores;
+                    function (callback, args) {
                         return parentRequestion(tippekonkurranseData.toArray());
                     }
                 ])(rq.execute);
@@ -542,7 +539,7 @@ var env = process.env.NODE_ENV || "development",
             "use strict";
             var tippekonkurranseData = new TippekonkurranseData(args);
             response.json(tippekonkurranseData.scores);
-            return tippekonkurranseData.toArray();
+            return args;
         },
 
 
@@ -559,7 +556,7 @@ var env = process.env.NODE_ENV || "development",
                 currentRound: tippekonkurranseData.round,
                 currentDate: tippekonkurranseData.date
             });
-            return tippekonkurranseData.toArray();
+            return args;
         },
 
 
@@ -586,5 +583,5 @@ var env = process.env.NODE_ENV || "development",
                     .findOne({ year: tippekonkurranseData.getYear(), round: roundNo })
                     .exec(conditionallyStoreTippeligaRound);
             }
-            return tippekonkurranseData.toArray();
+            return args;
         };

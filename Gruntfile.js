@@ -45,7 +45,7 @@ module.exports = function (grunt) {
                     'echo       <%= pkg.name %> v<%= pkg.version %>',
                     'echo #######################################',
                     'echo.',
-                    'echo Essential grunt tasks are:',
+                    'echo Essential Grunt tasks are:',
                     'echo   install:client   installs client resources via Bower                 (requires Git in path)',
                     'echo   test             installs, builds, and executes all Mocha tests      (using PhantomJS for client-side specifications)',
                     'echo   db               starts a MongoDB instance using a local data folder (blocking command)',
@@ -193,7 +193,6 @@ module.exports = function (grunt) {
                 src: [
                     'tests/server/specs/app-models.spec.js',
                     'tests/server/specs/comparators.spec.js',
-                    'tests/server/specs/rq-fun.spec.js',
                     'tests/server/specs/string-extensions.spec.js',
                     'tests/server/specs/tippekonkurranse.spec.js',
                     'tests/server/specs/utils.spec.js'
@@ -222,7 +221,6 @@ module.exports = function (grunt) {
                 files: [
                     'tests/server/specs/app-models.spec.js',
                     'tests/server/specs/comparators.spec.js',
-                    'tests/server/specs/rq-fun.spec.js',
                     'tests/server/specs/string-extensions.spec.js',
                     'tests/server/specs/tippekonkurranse.spec.js',
                     'tests/server/specs/utils.spec.js'

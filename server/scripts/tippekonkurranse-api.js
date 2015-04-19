@@ -1,23 +1,20 @@
 /* global root:false, require:false, exports:false */
 
-// Environment
-var env = process.env.NODE_ENV || "development",
-
 // Module dependencies, external
-    __ = require("underscore"),
+var __ = require("underscore"),
     ___ = require("scoreunder"),
+    RQ = require("async-rq"),
+    sequence = RQ.sequence,
+    parallel = RQ.parallel,
+    rq = require("rq-essentials"),
+    then = rq.then,
+    go = rq.execute,
 
 // Module dependencies, local generic
     comparators = require("./../../shared/scripts/comparators"),
     map = require("./../../shared/scripts/fun").map,
     curry = require("./../../shared/scripts/fun").curry,
     utils = require("./../../shared/scripts/utils"),
-    RQ = require("./vendor/rq").RQ,
-    sequence = RQ.sequence,
-    parallel = RQ.parallel,
-    rq = require("./rq-fun"),
-    then = rq.then,
-    go = rq.execute,
 
 // Module dependencies, local application-specific
     TippekonkurranseData = require("./../../shared/scripts/app.models").TippekonkurranseData,
@@ -93,7 +90,10 @@ var env = process.env.NODE_ENV || "development",
                     then(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
                     then(tippekonkurranse.addRound),
                     thenAddScores,
+
+                    //then(thenAddPreviousScores),
                     thenAddPreviousScores,
+
                     then(tippekonkurranse.addMetadataToScores),
                     then(presentData)
                 ])(go);
@@ -104,7 +104,10 @@ var env = process.env.NODE_ENV || "development",
                     then(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
                     then(tippekonkurranse.addRound),
                     thenAddScores,
+
                     thenAddPreviousScores,
+                    //then(thenAddPreviousScores),
+
                     then(tippekonkurranse.addMetadataToScores),
                     then(presentData),
                     then(storeData)

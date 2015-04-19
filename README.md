@@ -302,7 +302,7 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 ## [License](#license)
 The MIT License (MIT)
 
-Copyright (c) 2014 Eirik Torske
+Copyright (c) 2014-2015 Eirik Torske
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -3,10 +3,10 @@
 // Module dependencies, external
 var __ = require("underscore"),
     cheerio = require("cheerio"),
-    RQ = require("./vendor/rq").RQ,
-
-// Module dependencies, local generic
-    rq = require("./rq-fun"),
+    RQ = require("async-rq"),
+    rq = require("rq-essentials"),
+    get = rq.get,
+    then = rq.then,
 
 // Module dependencies, local application-specific
     TeamPlacement = require("./../../shared/scripts/app.models").TeamPlacement,
@@ -113,20 +113,20 @@ var __ = require("underscore"),
 // These are "data generator" requestors => No forwarding of existing data ...
     _getCurrentTippeligaTableRequestory = exports.getCurrentTippeligaTable =
         RQ.sequence([
-            rq.get(currentTippeligaTableUrl),
-            rq.then(parseTippeligaTable)
+            get(currentTippeligaTableUrl),
+            then(parseTippeligaTable)
         ]),
 
     _getCurrentAdeccoligaTableRequestory = exports.getCurrentAdeccoligaTable =
         RQ.sequence([
-            rq.get(currentAdeccoligaTableUrl),
-            rq.then(parseAdeccoligaTable)
+            get(currentAdeccoligaTableUrl),
+            then(parseAdeccoligaTable)
         ]),
 
     _getCurrentTippeligaTopScorerRequestory = exports.getCurrentTippeligaTopScorer =
         RQ.sequence([
-            rq.get(currentTippeligaToppscorerTableUrl),
-            rq.then(parseTippeligaTopScorerTable)
+            get(currentTippeligaToppscorerTableUrl),
+            then(parseTippeligaTopScorerTable)
         ]),
 
     /**
