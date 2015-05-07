@@ -36,6 +36,13 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
+#### v1.3.4 : _Deployed 07.05.2015_
+* Cup-bomber!
+* io.js 2.x
+
+_Status: Done_
+
+
 #### v1.3.3 : _Deployed 17.04.2015_
 * UX: Better robustness when loading application
 
@@ -64,6 +71,7 @@ _Status: Done_
 * Button for manual page data refresh
 * Remove all JSON file backup, leave it to MongoDB
 * Backbone.Marionette
+* io.js
 
 _Status: Done_
 

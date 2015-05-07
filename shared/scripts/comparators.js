@@ -11,7 +11,7 @@
     }
 }).
 
-    define([ './fun' ], function (F) {
+    define(['./fun'], function (F) {
         'use strict';
 
         var
@@ -21,7 +21,7 @@
              * @return The property with the given <code>propertyName</code> in the given object
              */
             _propertyGetter = function (propertyName, object) {
-                return object[ propertyName ];
+                return object[propertyName];
             },
 
 
@@ -43,11 +43,11 @@
             },
 
 
+        // TODO: Add support/polyfill for IE10 and Safari
             /**
              * Alphanumeric comparators works for Strings.
              * The support for comparator distance is not yet fully supported.
              *
-             * @see http://caniuse.com/#search=local
              * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare
              * @returns The comparator (x < 0 < y) value
              */
@@ -105,13 +105,13 @@
              * @param otherObject {Object} object to be compared against
              */
             _ascendingComparator = function (locale, options, propertyGetter, propertyNameArray, object, otherObject) {
-                var propertyArray = F.isArray(propertyNameArray) ? propertyNameArray : [ propertyNameArray ],
+                var propertyArray = F.isArray(propertyNameArray) ? propertyNameArray : [propertyNameArray],
                     propertyName, i, ascendingComparator;
 
-                propertyName = propertyArray[ propertyArray.length - 1 ];
+                propertyName = propertyArray[propertyArray.length - 1];
                 ascendingComparator = _chainable_AscendingComparator(locale, options, propertyGetter, _alwaysEqualComparator, propertyName);
                 for (i = propertyArray.length - 2; i >= 0; i -= 1) {
-                    propertyName = propertyArray[ i ];
+                    propertyName = propertyArray[i];
                     ascendingComparator = _chainable_AscendingComparator(locale, options, propertyGetter, ascendingComparator, propertyName);
                 }
                 return ascendingComparator(object, otherObject);

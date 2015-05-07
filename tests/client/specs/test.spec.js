@@ -1,5 +1,5 @@
 /* global define:false, describe:false, it:false */
-/* jshint -W030 */
+/* jshint -W030, -W126 */
 
 // "SUT"
 var hello = function () {

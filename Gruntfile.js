@@ -148,39 +148,45 @@ module.exports = function (grunt) {
 
                 //reporterOutput: 'dist/jshint.xml',
 
+                node: true,
                 browser: true,
                 jquery: true,
-                node: true,
                 mocha: true,
 
                 bitwise: true,
                 camelcase: true,
                 curly: true,
                 eqeqeq: true,
-                es3: false,
+                //es3: true,        // ES3 not relevant for Node.js
+                //es5: true,        // Default
                 forin: true,
                 freeze: true,
+                funcscope: true,
+                futurehostile: true,
+                globals: false,
+                globalstrict: false,
                 immed: true,
-                indent: false,
+                indent: true,
                 latedef: true,
                 newcap: true,
                 noarg: true,
+                nocomma: true,
                 noempty: true,
                 nonbsp: true,
                 nonew: true,
                 plusplus: true,
                 //qoutmark: true,   // Not forcing consistent use of 'single' or 'double' as of now ...
+                singleGroups: true,
                 undef: true,
-                //unused: true,     // Don't know how to avoid this ...
+                //unused: true,     // Don't know how to avoid this one - does not fit with hoisted variables/CommonJS style ...
                 strict: true,
                 trailing: true,
-                maxparams: 14,
-                maxdepth: 4,
-                maxstatements: 30, // Default: ...
-                maxcomplexity: 30, // TODO: Sigh, let us start all over again, target should be 5 or thereabout ...
-                //maxlen: 180,
 
-                laxcomma: true
+                maxcomplexity: 30,  // TODO: Target should be 5 or thereabout ...
+                maxdepth: 4,
+                maxlen: 350,        // I have a laarge screen ...
+                maxparams: 14,      // I loove currying ...
+                maxstatements: 30   // Default: ...
             }
         },
 

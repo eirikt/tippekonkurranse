@@ -113,7 +113,7 @@ define([
                     if (previousRating) {
                         if (previousRating > lastPreviousRating) {
                             lastPreviousRating = previousRating;
-                            previousRank = (index + 1);
+                            previousRank = index + 1;
                         }
                         participant.set(ParticipantScore.previousRankPropertyName, previousRank, { silent: true });
                     }
@@ -132,7 +132,7 @@ define([
                     var participantRating = participant.get(App.scoreModel.ratingPropertyName);
                     if (participantRating > lastRating) {
                         lastRating = participantRating;
-                        rank = (index + 1);
+                        rank = index + 1;
 
                         // Just add some trophy icons instead of podium-place 1, 2, and 3
                         // TODO: Move rank attribute logic to a (very small) RatingView

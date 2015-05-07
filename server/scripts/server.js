@@ -94,11 +94,11 @@ root.app = {
         }
         if (!year) {
             return round < root.app.currentRound ||
-                (round <= root.app.currentRound && root.app.isCurrentYearCompleted);
+                round <= root.app.currentRound && root.app.isCurrentYearCompleted;
         }
         return year < root.app.currentYear ||
-            (year <= root.app.currentYear && round < root.app.currentRound) ||
-            (year <= root.app.currentYear && round <= root.app.currentRound && root.app.isCurrentYearCompleted);
+            year <= root.app.currentYear && round < root.app.currentRound ||
+            year <= root.app.currentYear && round <= root.app.currentRound && root.app.isCurrentYearCompleted;
     }
 };
 

@@ -32,7 +32,7 @@ define([ "jquery", "underscore", "backbone" ],
                         if (_.isObject(team)) {
                             self.model.push(team);
                         } else {
-                            self.model.push({ no: (index + 1), name: team });
+                            self.model.push({ no: index + 1, name: team });
                         }
                     });
                 }

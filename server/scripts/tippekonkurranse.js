@@ -356,10 +356,10 @@ var env = process.env.NODE_ENV || "development",
     _addTippekonkurranseScoresRequestor = exports.addTippekonkurranseScoresRequestor =
         function (userPredictions, rules, callback, args) {
             "use strict";
-            if (!userPredictions || (__.isEmpty(userPredictions))) {
+            if (!userPredictions || __.isEmpty(userPredictions)) {
                 throw new Error("User predictions are missing - cannot calculate Tippekonkurranse scores");
             }
-            if (!rules || (__.isEmpty(rules))) {
+            if (!rules || __.isEmpty(rules)) {
                 throw new Error("Rules are missing - cannot calculate Tippekonkurranse scores");
             }
             if (!callback) {

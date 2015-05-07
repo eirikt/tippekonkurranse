@@ -87,7 +87,7 @@
              * @returns {Number} The maximum sum of displacements of elements in a permutation of given argument
              */
             _maxDisplacementSumInPermutationOfLength = function (n) {
-                if (!__.isNumber(n) || (n % 1 !== 0)) {
+                if (!__.isNumber(n) || n % 1 !== 0) {
                     throw new Error('Natural number (including zero) argument is mandatory');
                 }
                 return Math.floor(Math.pow(n, 2) / 2);
@@ -127,7 +127,7 @@
                 if (!cache[ key ]) {
                     cache[ key ] = {};
                 }
-                if (!writeCondition || (writeCondition && writeCondition())) {
+                if (!writeCondition || writeCondition && writeCondition()) {
                     cache[ key ].value = __.clone(data);
                     cache[ key ].numberOfHits = 0;
                     if (logContent) {

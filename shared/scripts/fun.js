@@ -65,9 +65,9 @@
                 numArgs = numArgs || fn.length;
                 var f = function () {
                     if (arguments.length < numArgs) {
-                        return (numArgs - arguments.length > 0)
-                            ? _autoCurry(_curry.apply(this, [ fn ].concat(_toArray(arguments))), numArgs - arguments.length)
-                            : _curry.apply(this, [ fn ].concat(_toArray(arguments)));
+                        return numArgs - arguments.length > 0
+                            ? _autoCurry(_curry.apply(this, [fn].concat(_toArray(arguments))), numArgs - arguments.length)
+                            : _curry.apply(this, [fn].concat(_toArray(arguments)));
                     }
                     return fn.apply(this, arguments);
                 };
@@ -81,6 +81,7 @@
             /**
              * @see https://github.com/loop-recur/FunctionalJS/blob/master/functional.js/
              */
+            /* jshint -W126 */
             _decorateFunctionPrototypeWithAutoCurry = (function () {
                 Function.prototype.autoCurry = function (n) {
                     return _autoCurry(this, n);
