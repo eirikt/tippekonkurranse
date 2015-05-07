@@ -1,0 +1,14 @@
+# Always
+.ssh
+
+# IDE stuff
+.idea
+
+# Windows
+.bin
+
+docs
+node_modules
+
+# Temp files
+howto.md

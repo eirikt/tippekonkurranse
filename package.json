@@ -21,7 +21,7 @@
         "underscore": "1.8.3",
         "scoreunder": "0.1.1",
         "async-rq": "0.0.1",
-        "rq-essentials": "eirikt/RQ-essentials",
+        "rq-essentials": "./server/scripts/vendor/RQ-essentials",
         "moment": "2.10.2",
         "mocha-phantomjs": "3.5.3",
         "chai": "2.3.0",
