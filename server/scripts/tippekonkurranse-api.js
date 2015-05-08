@@ -6,9 +6,13 @@ var __ = require("underscore"),
     RQ = require("async-rq"),
     sequence = RQ.sequence,
     parallel = RQ.parallel,
-    rq = require("rq-essentials"),
+//rq = require("rq-essentials"),
+//then = rq.then,
+//go = rq.execute,
+    rq = require("./vendor/RQ-essentials/rq-essentials"),
     then = rq.then,
     go = rq.execute,
+
 
 // Module dependencies, local generic
     comparators = require("./../../shared/scripts/comparators"),

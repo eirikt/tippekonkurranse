@@ -4,8 +4,12 @@
 var __ = require("underscore"),
     cheerio = require("cheerio"),
     RQ = require("async-rq"),
-    rq = require("rq-essentials"),
-    get = rq.get,
+//rq = require("rq-essentials"),
+//get = rq.get,
+//then = rq.then,
+    rqRequest = require("./vendor/RQ-essentials/rq-essentials-request"),
+    get = rqRequest.get,
+    rq = require("./vendor/RQ-essentials/rq-essentials"),
     then = rq.then,
 
 // Module dependencies, local application-specific

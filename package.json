@@ -44,10 +44,10 @@
         "grunt-contrib-watch": "0.6.1",
         "time-grunt": "1.1.1",
         "async-rq": "0.0.1",
-        "rq-essentials": "eirikt/RQ-essentials"
+        "request": "2.55.0",
+        "iconv-lite": "0.4.8"
     },
     "scripts": {
-        "preinstall" : "npm cache clean",
         "postinstall": "echo postinstall time; ./node_modules/grunt-cli/bin/grunt deploy:heroku",
         "start": "node server/scripts/server.js",
         "test": "grunt test",

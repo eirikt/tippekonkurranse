@@ -6,7 +6,8 @@ var env = process.env.NODE_ENV || "development",
 // Module dependencies, external
     __ = require("underscore"),
     RQ = require("async-rq"),
-    rq = require("rq-essentials"),
+//rq = require("rq-essentials"),
+    rq = require("./vendor/RQ-essentials/rq-essentials"),
 
 // Module dependencies, local generic
     comparators = require("./../../shared/scripts/comparators"),
