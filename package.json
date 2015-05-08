@@ -47,6 +47,7 @@
         "rq-essentials": "eirikt/RQ-essentials"
     },
     "scripts": {
+        "preinstall" : "npm cache clean",
         "postinstall": "echo postinstall time; ./node_modules/grunt-cli/bin/grunt deploy:heroku",
         "start": "node server/scripts/server.js",
         "test": "grunt test",
