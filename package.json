@@ -9,7 +9,7 @@
         "url": "https://github.com/eirikt/tippekonkurranse.git"
     },
     "engines": {
-        "iojs": "2.x"
+        "iojs": "1.x"
     },
     "dependencies": {
         "mongodb": "2.0.28",
