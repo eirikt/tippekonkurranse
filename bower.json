@@ -5,12 +5,14 @@
         "bootstrap": "~3.3.4",
         "bootstrap-switch": "~3.3.2",
         "fontawesome": "~4.3.0",
-        "underscore": "~1.6.0",
         "backbone": "~1.1.2",
         "marionette": "~2.4.1",
         "moment": "~2.10.3",
         "toastr": "~2.1.1",
         "jqplot-bower": "~1.0.8",
         "jquery.countdown": "~2.0.4"
+    },
+    "resolutions": {
+        "underscore": "1.8.3"
     }
 }
