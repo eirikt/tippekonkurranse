@@ -1,12 +1,16 @@
 /* global require:false, exports:false, console:false, JSON:false */
 
-var utils = require('./utils'),
+var __ = require('underscore'),
 
-    _mongoose4ModelInvocation = exports.mongoose =
+// TODO: Fix this lib, functions (including naming) seem strange and not consistent ...
+    /**
+     * ...
+     */
+    mongoose4GenericInvocationFactory = exports.mongoose =
         function (mongooseModel, mongooseModelFunction, conditions) {
             'use strict';
 
-            var func = utils.isString(mongooseModelFunction) ?
+            var func = __.isString(mongooseModelFunction) ?
                 mongooseModel[mongooseModelFunction] :
                 mongooseModelFunction;
 
@@ -25,10 +29,14 @@ var utils = require('./utils'),
         },
 
 
-    _mongoose4ModelInvocationJson = exports.mongooseJson =
+// TODO: Document ...
+    /**
+     * ...
+     */
+    mongoose4ModelGenericInvocationWithJsonResultFactory = exports.mongooseJson =
         function (mongooseModel, mongooseModelFunctionName, conditions) {
             'use strict';
-            if (!utils.isString(mongooseModelFunctionName)) {
+            if (!__.isString(mongooseModelFunctionName)) {
                 throw new Error('RQ-essentials-mongoose4 :: mongooseJson, second argument must be a String!');
             }
             var func = mongooseModel[mongooseModelFunctionName];
@@ -40,14 +48,33 @@ var utils = require('./utils'),
                     }
                     var jsonResult = {};
                     jsonResult[mongooseModelFunctionName] = result;
-                    console.log('RQ-essentials-mongoose4 :: Function name \'' + mongooseModelFunctionName + '\', returning JSON result (' + jsonResult + ')');
+                    console.log('RQ-essentials-mongoose4 :: Function name \'' + mongooseModelFunctionName + '\', returning JSON result (' + JSON.stringify(jsonResult) + ')');
                     return callback(jsonResult, undefined);
                 });
             };
         },
 
 
-    _mongoose4QueryInvocationFactory = exports.mongooseQueryInvocation =
+// TODO: Document ...
+    /**
+     * ...
+     */
+    mongoose4FindFactory = exports.mongooseFindInvocation =
+        function (type, findQuery, sortQuery, skip, limit) {
+            'use strict';
+            return function requestor(callback, args) {
+                type.find(findQuery).sort(sortQuery).skip(skip).limit(limit).exec(function (err, books) {
+                    callback(books, undefined);
+                });
+            };
+        },
+
+
+// TODO: Document ...
+    /**
+     * ...
+     */
+    mongoose4QueryInvocationFactory = exports.mongooseQueryInvocation =
         function (functionName, conditions) {
             'use strict';
             return function requestor(callback, mongooseQuery) {
@@ -63,3 +90,4 @@ var utils = require('./utils'),
                 });
             };
         };
+

@@ -18,7 +18,7 @@ var RQ = require('async-rq'),
      *  });
      * </pre>
      */
-    _executeAndVerify = exports.executeAndVerify =
+    executeAndVerify = exports.executeAndVerify =
         function (requestorToTest, initialArguments, verifyFunction, doneFunction) {
             'use strict';
             RQ.sequence([

@@ -392,11 +392,11 @@ var env = process.env.NODE_ENV || "development",
                         populateScores = curry(utils.mergeArgsIntoArray, scoresArray, scores);
 
                     return RQ.sequence([
-                        rq.requestor(curry(populateScores, tabellScoreIndex)),
-                        rq.requestor(curry(populateScores, toppscorerScoreIndex)),
-                        rq.requestor(curry(populateScores, opprykkScoreIndex)),
-                        rq.requestor(curry(populateScores, cupScoreIndex)),
-                        rq.requestor(function () {
+                        rq.requestorize(curry(populateScores, tabellScoreIndex)),
+                        rq.requestorize(curry(populateScores, toppscorerScoreIndex)),
+                        rq.requestorize(curry(populateScores, opprykkScoreIndex)),
+                        rq.requestorize(curry(populateScores, cupScoreIndex)),
+                        rq.requestorize(function () {
                             scores[ratingIndex] =
                                 scores[tabellScoreIndex] +
                                 scores[pallScoreIndex] +
@@ -445,7 +445,7 @@ var env = process.env.NODE_ENV || "development",
 
                 if (__.isEmpty(userPredictions[participant])) {
                     scoresRequestors.push(
-                        rq.requestor(curry(_defaultCurrentStandingUpdate, currentStanding, participant))
+                        rq.requestorize(curry(_defaultCurrentStandingUpdate, currentStanding, participant))
                     );
 
                 } else {
@@ -455,13 +455,13 @@ var env = process.env.NODE_ENV || "development",
                     scoresRequestors.push(
                         RQ.sequence([
                             RQ.parallel([
-                                rq.requestor(curry(_calculateTippeligaScores, rules, userPredictions[participant], tippekonkurranseData.tippeligaTable)),
-                                rq.requestor(curry(_calculateToppscorerScores, rules, userPredictions[participant], tippekonkurranseData.tippeligaTopScorer)),
-                                rq.requestor(curry(_calculateOpprykkScores, rules, userPredictions[participant], tippekonkurranseData.adeccoligaTable)),
-                                rq.requestor(curry(_calculateCupScores, rules, userPredictions[participant], tippekonkurranseData.remainingCupContenders))
+                                rq.requestorize(curry(_calculateTippeligaScores, rules, userPredictions[participant], tippekonkurranseData.tippeligaTable)),
+                                rq.requestorize(curry(_calculateToppscorerScores, rules, userPredictions[participant], tippekonkurranseData.tippeligaTopScorer)),
+                                rq.requestorize(curry(_calculateOpprykkScores, rules, userPredictions[participant], tippekonkurranseData.adeccoligaTable)),
+                                rq.requestorize(curry(_calculateCupScores, rules, userPredictions[participant], tippekonkurranseData.remainingCupContenders))
                             ]),
                             curry(_sum, ratingIndex),
-                            rq.requestor(curry(_currentStandingUpdate, currentStanding, participant))
+                            rq.requestorize(curry(_currentStandingUpdate, currentStanding, participant))
                         ])
                     );
                 }
@@ -494,8 +494,8 @@ var env = process.env.NODE_ENV || "development",
             } else {
                 return RQ.sequence([
                     getPreviousRoundTippeligaData,
-                    rq.requestor(_addGroupingOfTeamAndNumberOfMatchesPlayed),
-                    rq.requestor(_addRound),
+                    rq.requestorize(_addGroupingOfTeamAndNumberOfMatchesPlayed),
+                    rq.requestorize(_addRound),
                     addTippekonkurranseScores,
                     function (callback, args) {
                         __.each(__.keys(tippekonkurranseData.scores.scores), function (participant) {

@@ -138,16 +138,20 @@ var __ = require("underscore"),
      */
     _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
         rq.return([
-            "Bodø/Glimt",
-            "Lillestrøm",
+            "Brann",
+            "Hødd",
+            "Kristiansund BK",
+            "Kvik Halden",
             "Mjøndalen",
             "Molde",
             "Odd",
             "Rosenborg",
-            "Sandefjord",
             "Sarpsborg 08",
+            "Sandefjord",
+            "Sogndal",
             "Stabæk",
-            "Strømsgodset",
+            "Strømmen",
+            "Tromsdalen",
             "Viking",
-            "Aalesund"
+            "Åsane"
         ]);
