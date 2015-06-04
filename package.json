@@ -9,7 +9,7 @@
         "url": "https://github.com/eirikt/tippekonkurranse.git"
     },
     "engines": {
-        "iojs": "1.x"
+        "iojs": "2.x"
     },
     "dependencies": {
         "mongodb": "~2.0.33",
@@ -19,9 +19,13 @@
         "scoreunder": "~0.1.1",
         "moment": "~2.10.3",
         "async-rq": "~0.0.1",
+        "RQ-essentials": "eirikt/RQ-essentials",
         "request": "~2.57.0",
         "iconv-lite": "~0.4.10",
         "cheerio": "~0.19.0",
+        "logdown": "~1.1.2"
+    },
+    "devDependencies": {
         "mocha-phantomjs": "~3.5.3",
         "chai": "~2.3.0",
         "chai-jquery": "~2.0.0",
@@ -44,7 +48,6 @@
         "grunt-contrib-jshint": "~0.11.2",
         "grunt-contrib-uglify": "~0.9.1",
         "grunt-contrib-watch": "~0.6.1",
-        "logdown": "~1.1.2",
         "time-grunt": "~1.2.1"
     },
     "scripts": {

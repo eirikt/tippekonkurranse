@@ -7,10 +7,9 @@ var __ = require("underscore"),
 //rq = require("rq-essentials"),
 //get = rq.get,
 //then = rq.then,
-    rqRequest = require("./vendor/RQ-essentials/rq-essentials-request"),
-    get = rqRequest.get,
-    rq = require("./vendor/RQ-essentials/rq-essentials"),
+    rq = require("RQ-essentials"),
     then = rq.then,
+    get = rq.get,
 
 // Module dependencies, local application-specific
     TeamPlacement = require("./../../shared/scripts/app.models").TeamPlacement,
