@@ -6,7 +6,7 @@ var __ = require("underscore"),
     RQ = require("async-rq"),
     sequence = RQ.sequence,
     parallel = RQ.parallel,
-    rq = require("rq-essentials"),
+    rq = require("RQ-essentials"),
     then = rq.then,
     go = rq.execute,
 

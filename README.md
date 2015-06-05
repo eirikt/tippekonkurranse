@@ -26,19 +26,29 @@ Hosted [here][1].
 
 
 ## Scope
-* Idiomatic code base
 * Screen-scraping norwegian soccer result web pages
 * Calculating rating and rank
 * Simple multi-device-friendly presentation
+* Idiomatic code base
 * Deployment to [Heroku][30]
 
 
 
 ## Version history/roadmap
 
-#### v1.3.4 : _Deployed 07.05.2015_
-* Cup-bomber!
+#### v1.3.5 : _Deployed 05.06.2015_
+* More 'Cup-bomber!'
 * io.js 2.x
+* Modularizing RQ stuff via npm GitHub
+* Dependency updates
+
+_Status: Done_
+
+
+#### v1.3.4 : _Deployed 07.05.2015_
+* 'Cup-bomber!'
+* ~~io.js 2.x~~ (too early it seems, rolled back to 1.x)
+* ~~Modularizing RQ stuff via npm GitHub~~ (leads to 'unmet dependency', rolled back to copy of code ...)
 
 _Status: Done_
 
