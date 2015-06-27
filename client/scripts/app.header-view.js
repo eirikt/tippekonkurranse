@@ -8,62 +8,63 @@ define(['jquery', 'underscore', 'moment', 'backbone', 'marionette'],
             className: 'clearfix',
 
             template: function (scores) {
-                var scoresTemplate = '' +
-                    '<span style="white-space:nowrap;">' +
-                    '  <span class="heading"><a href="/#/scores/current">Tippekonkurranse <%= args.year %></a></span>' +
-                    '  <span class="heading-extra">&nbsp;&nbsp;|&nbsp;&nbsp;runde&nbsp;<%= args.round %></span>' +
-                    '  <span class="dimmed heading-extra">&nbsp;av 30</span>' +
-                    '  <span id="offlineScoresNotification" class="hidden" ' +
-                    'data-appname="Tippekonkurranse" data-uri="/api/scores/current" data-urititle="Denne stillingen er beregnet" ' +
-                    'style="margin-left:.5rem;font-size:1.5rem;font-weight:bold;color:#ef8d15;"></span>' +
-                    '</span>' +
-
-                    '<span class="countdown pull-right" style="white-space:nowrap;">' +
-                        // TODO: This is a view!
-                    '  <span id="autoPageRefresh" class="x-small"></span>' +
-
-                    '  <span class="pull-right" style="margin-left:.4rem;">' +
-                    '    <input id="autoPageRefreshToggler" type="checkbox" />' +
-                    '    <button id="pageRefresher" type="button" class="btn btn-default" style="width:10rem;margin-left:2rem;">Oppdater nå!</button>' +
-                    '  </span>' +
-                    '</span>';
-
-                var preSeasonTemplate = '' +
-                    '<span class="heading"><a href="/#/scores/current">Tippekonkurranse <%= args.year %></a></span>' +
-                    '<span class="heading-extra">&nbsp;&nbsp;|&nbsp;&nbsp;runde&nbsp;<%= args.round %></span>' +
-                    '<span class="dimmed heading-extra">&nbsp;av 30</span>' +
-                    '<span id="offlineScoresNotification" class="hidden" ' +
-                    'data-appname="Tippekonkurranse" data-uri="/api/scores/current" data-urititle="Denne stillingen er beregnet" ' +
-                    'style="margin-left:.5rem;font-size:1.5rem;font-weight:bold;color:#ef8d15;"></span>' +
-
-                    '<div class="countdown pull-right">' +
-                    '  <span><em>Til seriestart:&nbsp;</em></span>' +
-                    '  <span id="countdown"></span>' +
-                    '</div>';
-
                 var ratingHistoryTemplate = '' +
-                    '<div>' +
-                    '  <span class="heading"><a href="/#/scores/current">Tippekonkurranse <%= args.year %></a></span>' +
-                    '  <span class="heading-extra">&nbsp;&nbsp;|&nbsp;&nbsp;poengtrend</span>' +
-                    '</div>';
+                        '<div>' +
+                        '  <span class="heading"><a href="/#/scores/current">Tippekonkurranse <%= args.year %></a></span>' +
+                        '  <span class="heading-extra">&nbsp;&nbsp;|&nbsp;&nbsp;poengtrend</span>' +
+                        '</div>',
+
+
+                    preSeasonTemplate = '' +
+                        '<span class="heading"><a href="/#/scores/current">Tippekonkurranse <%= args.year %></a></span>' +
+                        '<span class="heading-extra">&nbsp;&nbsp;|&nbsp;&nbsp;runde&nbsp;<%= args.round %></span>' +
+                        '<span class="dimmed heading-extra">&nbsp;av 30</span>' +
+                        '<span id="offlineScoresNotification" class="hidden" ' +
+                        'data-appname="Tippekonkurranse" data-uri="/api/scores/current" data-urititle="Denne stillingen er beregnet" ' +
+                        'style="margin-left:.5rem;font-size:1.5rem;font-weight:bold;color:#ef8d15;"></span>' +
+
+                        '<div class="countdown pull-right">' +
+                        '  <span><em>Til seriestart:&nbsp;</em></span>' +
+                        '  <span id="countdown"></span>' +
+                        '</div>',
+
+                    scoresTemplate = '' +
+                        '<span style="white-space:nowrap;">' +
+                        '  <span class="heading"><a href="/#/scores/current">Tippekonkurranse <%= args.year %></a></span>' +
+                        '  <span class="heading-extra">&nbsp;&nbsp;|&nbsp;&nbsp;runde&nbsp;<%= args.round %></span>' +
+                        '  <span class="dimmed heading-extra">&nbsp;av 30</span>' +
+                        '  <span id="offlineScoresNotification" class="hidden" ' +
+                        'data-appname="Tippekonkurranse" data-uri="/api/scores/current" data-urititle="Denne stillingen er beregnet" ' +
+                        'style="margin-left:.5rem;font-size:1.5rem;font-weight:bold;color:#ef8d15;"></span>' +
+                        '</span>' +
+
+                        '<span class="countdown pull-right" style="white-space:nowrap;">' +
+                            // TODO: This is a view!
+                        '  <span id="autoPageRefresh" class="x-small"></span>' +
+
+                        '  <span class="pull-right" style="margin-left:.4rem;">' +
+                        '    <input id="autoPageRefreshToggler" type="checkbox" />' +
+                        '    <button id="pageRefresher" type="button" class="btn btn-default" style="width:10rem;margin-left:2rem;">Oppdater nå!</button>' +
+                        '  </span>' +
+                        '</span>';
 
                 if (scores.isRatingHistory) {
-                    return _.template(ratingHistoryTemplate, {
+                    return _.template(ratingHistoryTemplate, { variable: 'args' })({
                         year: scores ? scores.year : '?'
-                    }, { variable: 'args' });
+                    });
                 }
 
                 if (!window.app.model.get('currentTippeligaSeasonHasStarted')) {
-                    return _.template(preSeasonTemplate, {
+                    return _.template(preSeasonTemplate, { variable: 'args' })({
                         year: scores ? scores.year : '?',
                         round: scores ? scores.round : '?'
-                    }, { variable: 'args' });
+                    });
                 }
 
-                return _.template(scoresTemplate, {
+                return _.template(scoresTemplate, { variable: 'args' })({
                     year: scores ? scores.year : '?',
                     round: scores ? scores.round : '?'
-                }, { variable: 'args' });
+                });
             },
 
             events: {
@@ -95,8 +96,8 @@ define(['jquery', 'underscore', 'moment', 'backbone', 'marionette'],
 
                 if (autoEnabledInModel) {
                     $autoPageRefresh.empty().append('<span>Nye data om&nbsp;</span>' +
-                    '<span id="autoPageRefreshCountdown" style="font-style:italic;"></span>' +
-                    '<span>&nbsp;sekunder</span>');
+                        '<span id="autoPageRefreshCountdown" style="font-style:italic;"></span>' +
+                        '<span>&nbsp;sekunder</span>');
 
                     $autoPageRefreshToggler.prop('checked', true);
                 }
@@ -112,8 +113,8 @@ define(['jquery', 'underscore', 'moment', 'backbone', 'marionette'],
                             window.app.autoPageRefreshCountdown();
 
                             $autoPageRefresh.empty().append('<span>Nye data om&nbsp;</span>' +
-                            '<span id="autoPageRefreshCountdown" style="font-style:italic;"></span>' +
-                            '<span>&nbsp;sekunder</span>');
+                                '<span id="autoPageRefreshCountdown" style="font-style:italic;"></span>' +
+                                '<span>&nbsp;sekunder</span>');
                             $autoPageRefresh.show();
 
                         } else {

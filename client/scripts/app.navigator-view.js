@@ -12,79 +12,92 @@ define(
 
             RightChevronView = Marionette.ItemView.extend({
                 tagName: 'span',
-                template: function () {
-                    return _.template('<span class="icon-chevron-right"></span>');
+                template: _.template(
+                    '<span class="icon-chevron-right"></span>',
+                    { variable: 'args' }
+                ),
+                onRender: function () {
+                    this.template(this.model.toJSON());
                 }
             }),
 
             EnabledRightChevronView = Marionette.ItemView.extend({
                 tagName: 'span',
-                template: function (model) {
-                    if (model.isFuture) {
+                template: function (serializedModel) {
+                    if (serializedModel.isFuture) {
                         return _.template(
-                            '<a href="/#/scores/current"><span class="icon-chevron-right"></span></a>',
-                            model, { variable: 'args' }
-                        );
+                            '<a href="/#/scores/current">' +
+                            '  <span class="icon-chevron-right"></span>' +
+                            '</a>',
+                            { variable: 'args' })(serializedModel);
                     } else {
                         return _.template(
-                            '<a href="/#/scores/<%= args.year %>/<%= args.round %>"><span class="icon-chevron-right"></span></a>',
-                            model, { variable: 'args' }
-                        );
+                            '<a href="/#/scores/<%= args.year %>/<%= args.round %>">' +
+                            '  <span class="icon-chevron-right"></span>' +
+                            '</a>',
+                            { variable: 'args' })(serializedModel);
                     }
                 }
             }),
 
             LeftChevronView = Marionette.ItemView.extend({
                 tagName: 'span',
-                template: function () {
-                    return _.template('<span class="icon-chevron-left"></span>');
+                template: _.template(
+                    '<span class="icon-chevron-left"></span>',
+                    { variable: 'args' }
+                ),
+                onRender: function () {
+                    this.template(this.model.toJSON());
                 }
             }),
 
             EnabledLeftChevronView = Marionette.ItemView.extend({
                 tagName: 'span',
-                template: function (model) {
-                    return _.template(
-                        '<a href="/#/scores/<%= args.year %>/<%= args.round %>"><span class="icon-chevron-left"></span></a>',
-                        model, { variable: 'args' }
-                    );
+                template: _.template(
+                    '<a href="/#/scores/<%= args.year %>/<%= args.round %>">' +
+                    '  <span class="icon-chevron-left"></span>' +
+                    '</a>',
+                    { variable: 'args' }
+                ),
+                onRender: function () {
+                    this.template(this.model.toJSON());
                 }
             }),
 
             EnabledView = Marionette.ItemView.extend({
                 tagName: 'span',
-                template: function (model) {
-                    if (model.isFuture) {
+                template: function (serializedModel) {
+                    if (serializedModel.isFuture) {
                         return _.template(
                             '<a href="/#/scores/current"><%= args.index %></a>',
-                            model, { variable: 'args' }
-                        );
+                            { variable: 'args' })(serializedModel);
                     } else {
                         return _.template(
                             '<a href="/#/scores/<%= args.year %>/<%= args.round %>"><%= args.index %></a>',
-                            model, { variable: 'args' }
-                        );
+                            { variable: 'args' })(serializedModel);
                     }
                 }
             }),
 
             ActiveView = Marionette.ItemView.extend({
                 tagName: 'span',
-                template: function (model) {
-                    return _.template(
-                        '<strong><%= args.index %></strong>',
-                        model, { variable: 'args' }
-                    );
+                template: _.template(
+                    '<strong><%= args.index %></strong>',
+                    { variable: 'args' }
+                ),
+                onRender: function () {
+                    this.template(this.model.toJSON());
                 }
             }),
 
             View = Marionette.ItemView.extend({
                 tagName: 'span',
-                template: function (model) {
-                    return _.template(
-                        '<span style="color:#cccccc"><%= args.index %></span>',
-                        model, { variable: 'args' }
-                    );
+                template: _.template(
+                    '<span style="color:#cccccc"><%= args.index %></span>',
+                    { variable: 'args' }
+                ),
+                onRender: function () {
+                    this.template(this.model.toJSON());
                 }
             });
 

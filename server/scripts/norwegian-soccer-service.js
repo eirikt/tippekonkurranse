@@ -1,15 +1,15 @@
 /* global require: false, exports: false */
 
 // Module dependencies, external
-var __ = require("underscore"),
-    cheerio = require("cheerio"),
-    RQ = require("async-rq"),
-    rq = require("RQ-essentials"),
+var __ = require('underscore'),
+    cheerio = require('cheerio'),
+    RQ = require('async-rq'),
+    rq = require('RQ-essentials'),
     then = rq.then,
     get = rq.get,
 
 // Module dependencies, local application-specific
-    TeamPlacement = require("./../../shared/scripts/app.models").TeamPlacement,
+    TeamPlacement = require('./../../shared/scripts/app.models').TeamPlacement,
 
 
 //////////////////////////////////
@@ -17,23 +17,23 @@ var __ = require("underscore"),
 //////////////////////////////////
 
     currentTippeligaTableUrl =
-        "http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&subCmd=total&live=true&useFullUrl=false",
+        'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&subCmd=total&live=true&useFullUrl=false',
 
     parseTippeligaTable = function (body) {
-        "use strict";
+        'use strict';
         var currentTable = [],
             $ = cheerio.load(body, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false }),
-            rows = $("tbody").find("tr");
+            rows = $('tbody').find('tr');
 
         __.each(rows, function (element) {
-            var $cells = $(element).find("td"),
+            var $cells = $(element).find('td'),
                 no = $($cells[0]).html(),
-                team = $cells.find("a").first().html(),
+                team = $cells.find('a').first().html(),
                 matches = $($cells[2]).html();
 
             // Launder ...
             no = no.substring(0, no.length - 1);
-            team = team.replace("&nbsp;", " ");
+            team = team.replace('&nbsp;', ' ');
 
             // Normalize ...
 
@@ -44,23 +44,23 @@ var __ = require("underscore"),
     },
 
     currentAdeccoligaTableUrl =
-        "http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=2&subCmd=total&live=true&useFullUrl=false",
+        'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=2&subCmd=total&live=true&useFullUrl=false',
 
     parseAdeccoligaTable = function (body) {
-        "use strict";
+        'use strict';
         var currentTable = [],
             $ = cheerio.load(body, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false }),
-            rows = $("tbody").find("tr");
+            rows = $('tbody').find('tr');
 
         __.each(rows, function (element) {
-            var $cells = $(element).find("td"),
+            var $cells = $(element).find('td'),
                 no = $($cells[0]).html(),
-                team = $cells.find("a").first().html(),
+                team = $cells.find('a').first().html(),
                 matches = $($cells[2]).html();
 
             // Launder ...
             no = no.substring(0, no.length - 1);
-            team = team.replace("&nbsp;", " ");
+            team = team.replace('&nbsp;', ' ');
 
             // Normalize ...
 
@@ -71,23 +71,23 @@ var __ = require("underscore"),
     },
 
     currentTippeligaToppscorerTableUrl =
-        "http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&seasonId=&teamId=&useFullUrl=false",
+        'http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&seasonId=&teamId=&useFullUrl=false',
 
     parseTippeligaTopScorerTable = function (body) {
-        "use strict";
+        'use strict';
         var toppscorers = [],
             $ = cheerio.load(body, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false }),
-            rows = $("tbody").find("tr"),
+            rows = $('tbody').find('tr'),
             maxGoals = 0;
 
         __.each(rows, function (element, index) {
-            var $cells = $(element).find("td"),
-                player = $cells.find("a").first().html(),
+            var $cells = $(element).find('td'),
+                player = $cells.find('a').first().html(),
                 goals = $($cells[3]).html();
 
             // Launder ...
             // => max three spaces in name ...
-            player = player.replace("&nbsp;", " ").replace("&nbsp;", " ").replace("&nbsp;", " ");
+            player = player.replace('&nbsp;', ' ').replace('&nbsp;', ' ').replace('&nbsp;', ' ');
 
             // Normalize ...
 
@@ -110,7 +110,7 @@ var __ = require("underscore"),
 // Public functions
 //////////////////////////////////////////////
 
-// These are "data generator" requestors => No forwarding of existing data ...
+// These are 'data generator' requestors => No forwarding of existing data ...
     _getCurrentTippeligaTableRequestory = exports.getCurrentTippeligaTable =
         RQ.sequence([
             get(currentTippeligaTableUrl),
@@ -134,20 +134,12 @@ var __ = require("underscore"),
      */
     _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
         rq.return([
-            "Brann",
-            "Hødd",
-            "Kristiansund BK",
-            "Kvik Halden",
-            "Mjøndalen",
-            "Molde",
-            "Odd",
-            "Rosenborg",
-            "Sarpsborg 08",
-            "Sandefjord",
-            "Sogndal",
-            "Stabæk",
-            "Strømmen",
-            "Tromsdalen",
-            "Viking",
-            "Åsane"
+            'Mjøndalen',
+            'Molde',
+            'Odd',
+            'Sandefjord',
+            'Sarpsborg 08',
+            'Stabæk',
+            'Rosenborg',
+            'Viking'
         ]);

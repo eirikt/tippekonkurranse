@@ -36,8 +36,15 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
+#### v1.3.6 : _Deployed 27.06.2015_
+* Cup results update
+* Dependency updates (included the infamous Underscore v1.7 template function incident)
+
+_Status: Done_
+
+
 #### v1.3.5 : _Deployed 05.06.2015_
-* More 'Cup-bomber!'
+* Cup results update
 * io.js 2.x
 * Modularizing RQ stuff via npm GitHub
 * Dependency updates
@@ -46,7 +53,8 @@ _Status: Done_
 
 
 #### v1.3.4 : _Deployed 07.05.2015_
-* 'Cup-bomber!'
+* Cup results update
+* Cup round
 * ~~io.js 2.x~~ (too early it seems, rolled back to 1.x)
 * ~~Modularizing RQ stuff via npm GitHub~~ (leads to 'unmet dependency', rolled back to copy of code ...)
 

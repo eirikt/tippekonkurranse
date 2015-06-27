@@ -31,9 +31,9 @@ define(
             RatingHeadingView = Marionette.ItemView.extend({
                 tagName: 'div',
                 className: 'rating',
-                template: function (model) {
-                    // TODO: Make a conditional _.template func
-                    if (model.hideContent) {
+                template: function (serializedModel) {
+                    // TODO: Make a conditional _.template func !!
+                    if (serializedModel.hideContent) {
                         return '';
 
                     } else {
@@ -43,7 +43,7 @@ define(
                             '    <span style="margin-right:1rem;" class="icon-line-chart"></span>Trend' +
                             '  </a>' +
                             '</div>',
-                            model, { variable: 'args' });
+                            { variable: 'args' })(serializedModel);
                     }
                 }
             }),
@@ -57,24 +57,26 @@ define(
             PredictionHeadingView = Marionette.ItemView.extend({
                 tagName: 'div',
                 className: 'prediction current-results',
-                template: function (model) {
-                    return _.template(
-                        '<button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>',
-                        model, { variable: 'args' });
+                template: _.template(
+                    '<button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>',
+                    { variable: 'args' }
+                ),
+                onRender: function () {
+                    this.template(this.model.toJSON());
                 }
             }),
 
             TabellScoreHeadingView = Marionette.ItemView.extend({
                 tagName: 'div',
                 className: 'tabell-score scores-table-header-row',
-                template: function (model) {
-                    if (model.hideContent) {
+                template: function (serializedModel) {
+                    if (serializedModel.hideContent) {
                         return '';
 
                     } else {
                         return _.template(
                             '<span>Tabell</span>',
-                            model, { variable: 'args' });
+                            { variable: 'args' })(serializedModel);
                     }
                 }
             }),
@@ -82,14 +84,14 @@ define(
             PallScoreHeadingView = Marionette.ItemView.extend({
                 tagName: 'div',
                 className: 'pall-score scores-table-header-row',
-                template: function (model) {
-                    if (model.hideContent) {
+                template: function (serializedModel) {
+                    if (serializedModel.hideContent) {
                         return '';
 
                     } else {
                         return _.template(
                             '<span>Pall</span>',
-                            model, { variable: 'args' });
+                            { variable: 'args' })(serializedModel);
                     }
                 }
             }),
@@ -97,14 +99,14 @@ define(
             NedrykkScoreHeadingView = Marionette.ItemView.extend({
                 tagName: 'div',
                 className: 'nedrykk-score scores-table-header-row',
-                template: function (model) {
-                    if (model.hideContent) {
+                template: function (serializedModel) {
+                    if (serializedModel.hideContent) {
                         return '';
 
                     } else {
                         return _.template(
                             '<span>Nedrykk</span>',
-                            model, { variable: 'args' });
+                            { variable: 'args' })(serializedModel);
                     }
                 }
             }),
@@ -112,14 +114,14 @@ define(
             ToppscorerScoreHeadingView = Marionette.ItemView.extend({
                 tagName: 'div',
                 className: 'toppscorer-score scores-table-header-row',
-                template: function (model) {
-                    if (model.hideContent) {
+                template: function (serializedModel) {
+                    if (serializedModel.hideContent) {
                         return '';
 
                     } else {
                         return _.template(
                             '<span>Toppsk.</span>',
-                            model, { variable: 'args' });
+                            { variable: 'args' })(serializedModel);
                     }
                 }
             }),
@@ -127,14 +129,14 @@ define(
             OpprykkScoreHeadingView = Marionette.ItemView.extend({
                 tagName: 'div',
                 className: 'opprykk-score scores-table-header-row',
-                template: function (model) {
-                    if (model.hideContent) {
+                template: function (serializedModel) {
+                    if (serializedModel.hideContent) {
                         return '';
 
                     } else {
                         return _.template(
                             '<span>Opprykk</span>',
-                            model, { variable: 'args' });
+                            { variable: 'args' })(serializedModel);
                     }
                 }
             }),
@@ -142,14 +144,14 @@ define(
             CupScoreHeadingView = Marionette.ItemView.extend({
                 tagName: 'div',
                 className: 'cup-score scores-table-header-row',
-                template: function (model) {
-                    if (model.hideContent) {
+                template: function (serializedModel) {
+                    if (serializedModel.hideContent) {
                         return '';
 
                     } else {
                         return _.template(
                             '<span>Cup</span>',
-                            model, { variable: 'args' });
+                            { variable: 'args' })(serializedModel);
                     }
                 }
             });
@@ -160,100 +162,100 @@ define(
             className: 'participant current-scores scores-table-row',
 
             getChildView: function (model) {
-                switch (model.get("columnType")) {
-                    case "rank":
+                switch (model.get('columnType')) {
+                    case 'rank':
                         return RankHeadingView;
-                    case "name":
+                    case 'name':
                         return NameHeadingView;
-                    case "rankTrend":
+                    case 'rankTrend':
                         return RankTrendHeadingView;
-                    case "rating":
+                    case 'rating':
                         return RatingHeadingView;
-                    case "ratingTrend":
+                    case 'ratingTrend':
                         return RatingTrendHeadingView;
-                    case "prediction":
+                    case 'prediction':
                         return PredictionHeadingView;
-                    case "tabell":
+                    case 'tabell':
                         return TabellScoreHeadingView;
-                    case "pall":
+                    case 'pall':
                         return PallScoreHeadingView;
-                    case "nedrykk":
+                    case 'nedrykk':
                         return NedrykkScoreHeadingView;
-                    case "toppscorer":
+                    case 'toppscorer':
                         return ToppscorerScoreHeadingView;
-                    case "opprykk":
+                    case 'opprykk':
                         return OpprykkScoreHeadingView;
-                    case "cup":
+                    case 'cup':
                         return CupScoreHeadingView;
                     default:
-                        throw new Error("No heading row cell view declared for cell column #" + model.get("column"));
+                        throw new Error('No heading row cell view declared for cell column #' + model.get('column'));
                 }
             },
 
             onBeforeRender: function (collectionView) {
                 var year = collectionView.model.get(ParticipantScore.yearPropertyName),
                     round = collectionView.model.get(ParticipantScore.roundPropertyName),
-                    hideContent = collectionView.model.get("hasNoData");
+                    hideContent = collectionView.model.get('hasNoData');
 
                 this.collection = new Collection();
 
                 this.collection.add(new Model({
-                        columnType: "rank"
+                        columnType: 'rank'
                     })
                 );
                 this.collection.add(new Model({
-                        columnType: "name"
+                        columnType: 'name'
                     })
                 );
                 this.collection.add(new Model({
-                        columnType: "rankTrend"
+                        columnType: 'rankTrend'
                     })
                 );
                 this.collection.add(new Model({
-                        columnType: "rating",
+                        columnType: 'rating',
                         year: year,
                         round: round,
                         hideContent: hideContent
                     })
                 );
                 this.collection.add(new Model({
-                        columnType: "ratingTrend"
+                        columnType: 'ratingTrend'
                     })
                 );
                 this.collection.add(new Model({
-                        columnType: "prediction"
+                        columnType: 'prediction'
                     })
                 );
                 this.collection.add(new Model({
-                        columnType: "tabell",
-                        hideContent: collectionView.model.get("hasNoData")
+                        columnType: 'tabell',
+                        hideContent: collectionView.model.get('hasNoData')
                     })
                 );
                 this.collection.add(new Model({
-                        columnType: "pall",
-                        hideContent: collectionView.model.get("hasNoData")
+                        columnType: 'pall',
+                        hideContent: collectionView.model.get('hasNoData')
                     })
                 );
                 if (year === 2014) {
                     this.collection.add(new Model({
-                            columnType: "nedrykk",
-                            hideContent: collectionView.model.get("hasNoData")
+                            columnType: 'nedrykk',
+                            hideContent: collectionView.model.get('hasNoData')
                         })
                     );
                 }
                 this.collection.add(new Model({
-                        columnType: "toppscorer",
-                        hideContent: collectionView.model.get("hasNoData")
+                        columnType: 'toppscorer',
+                        hideContent: collectionView.model.get('hasNoData')
                     })
                 );
                 this.collection.add(new Model({
-                        columnType: "opprykk",
-                        hideContent: collectionView.model.get("hasNoData")
+                        columnType: 'opprykk',
+                        hideContent: collectionView.model.get('hasNoData')
                     })
                 );
                 this.collection.add(new Model({
-                        columnType: "cup",
-                        hideContent: collectionView.model.get("hasNoData")
+                        columnType: 'cup',
+                        hideContent: collectionView.model.get('hasNoData')
                     })
                 );
             }

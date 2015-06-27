@@ -16,7 +16,7 @@ define(
 
             PredictionsModel = Backbone.Model.extend({
                 url: function () {
-                    return [ App.resource.predictions.baseUri, this.get(ParticipantScore.yearPropertyName), this.get(ParticipantScore.userIdPropertyName) ].join('/');
+                    return [App.resource.predictions.baseUri, this.get(ParticipantScore.yearPropertyName), this.get(ParticipantScore.userIdPropertyName)].join('/');
                 }
             }),
 
@@ -36,11 +36,11 @@ define(
                     '          </td>' +
                     '          <td style="vertical-align:top;padding-left:4rem;">' +
                     '            <p>Toppskårer:</p>' +
-                    //'            <p><strong><%= ' + App.scoreModel.toppscorerPropertyName + ' %></strong></p>' +
+                        //'            <p><strong><%= ' + App.scoreModel.toppscorerPropertyName + ' %></strong></p>' +
                     '            <p style="margin-top:4rem;">Opprykk:</p>' +
                     '            <p><strong><%= ' + App.scoreModel.opprykkPropertyName + ' %></strong></p>' +
                     '            <p style="margin-top:4rem;">Cupmester:</p>' +
-                    //'            <p><strong><%= ' + App.scoreModel.cupPropertyName + ' %></strong></p>' +
+                        //'            <p><strong><%= ' + App.scoreModel.cupPropertyName + ' %></strong></p>' +
                     '          </td>' +
                     '        </tr>' +
                     '      </table>' +
@@ -86,7 +86,8 @@ define(
                 template: function (model) {
                     return _.template(
                         '<%= args.' + ParticipantScore.namePropertyName + ' %>',
-                        model, { variable: 'args' });
+                        { variable: 'args' }, model
+                    );
                 }
             }),
 
@@ -115,7 +116,7 @@ define(
                     if (model.hasPredictions) {
                         //return _.template(
                         //    '<button type="button" class="btn btn-sm btn-primary" data-id="ParticipantScore.userIdPropertyName" data-toggle="modal" data-target="#predictionsTable"><%= args.' + ParticipantScore.namePropertyName + ' %>s tips</button>',
-                        //    model, { variable: 'args' }
+                        //    { variable: 'args' }, model
                         //);
                         return "<span class='icon-check' style='padding-left:6rem;'></span>";
 

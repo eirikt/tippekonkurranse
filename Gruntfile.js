@@ -262,9 +262,9 @@ module.exports = function (grunt) {
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '8' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '7' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '6' },
-                        { platform: 'Linux', browserName: 'Android', version: '4.4' }//,
+                        { platform: 'Linux', browserName: 'Android', version: '4.4' },
                         //{ platform: 'OS X 10.10', browserName: 'Safari', version: '8' },
-                        //{ platform: 'OS X 10.10', browserName: 'iPhone', version: '8.3', deviceName: 'iPhone Simulator', 'device-orientation': 'landscape' },
+                        { platform: 'OS X 10.10', browserName: 'iPhone', version: '8.3', deviceName: 'iPhone Simulator', 'device-orientation': 'landscape' },
                         //{ platform: 'OS X 10.10', browserName: 'iPhone', version: '8.3', deviceName: 'iPad Simulator', 'device-orientation': 'landscape' }
                     ]
                 }
@@ -274,10 +274,8 @@ module.exports = function (grunt) {
         uglify: {
             myUglifyTask: {
                 files: {
-                    // Minified versions not available via Bower ...
+                    // Minified version not available via Bower ...
                     'build/<%= pkg.version %>/bower_components/requirejs/require.js': 'build/<%= pkg.version %>/bower_components/requirejs/require.js',
-                    'build/<%= pkg.version %>/bower_components/backbone/backbone.js': 'build/<%= pkg.version %>/bower_components/backbone/backbone.js',
-                    'build/<%= pkg.version %>/bower_components/underscore/underscore.js': 'build/<%= pkg.version %>/bower_components/underscore/underscore.js',
 
                     'build/<%= pkg.version %>/scripts/fun.js': 'build/<%= pkg.version %>/scripts/fun.js',
                     'build/<%= pkg.version %>/scripts/comparators.js': 'build/<%= pkg.version %>/scripts/comparators.js',

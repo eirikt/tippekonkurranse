@@ -17,20 +17,20 @@ require.config({
     // Development ('grunt [run|deploy:development]' and IDE execution):
     //baseUrl: 'scripts',
     // Standard:
-    baseUrl: '1.3.5/scripts',
+    baseUrl: '1.3.6/scripts',
 
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',
-        'bootstrap': '../bower_components/bootstrap/dist/js/bootstrap',
-        'underscore': '../bower_components/underscore/underscore',
-        'backbone': '../bower_components/backbone/backbone',
+        'bootstrap': '../bower_components/bootstrap/dist/js/bootstrap.min',
+        'underscore': '../bower_components/underscore/underscore-min',
+        'backbone': '../bower_components/backbone/backbone-min',
         'marionette': '../bower_components/marionette/lib/backbone.marionette.min',
         'moment': '../bower_components/moment/min/moment.min',
         'moment.nb': '../bower_components/moment/locale/nb',
         'toastr': '../bower_components/toastr/toastr.min',
-        'jquery.countdown': '../bower_components/jquery.countdown/dist/jquery.countdown',
+        'jquery.countdown': '../bower_components/jquery.countdown/dist/jquery.countdown.min',
         'jquery.bootstrap.switch': '../bower_components/bootstrap-switch/dist/js/bootstrap-switch.min',
-        'jqplot': '../bower_components/jqplot-bower/dist/jquery.jqplot'
+        'jqplot': '../bower_components/jqplot-bower/dist/jquery.jqplot.min'
         // TODO: Make the jqplot cursor work ...
         //'jqplot.highlighter': '../bower_components/jqplot-bower/dist/plugins/jqplot.highlighter.min',
         //'jqplot.cursor': '../bower_components/jqplot-bower/dist/plugins/jqplot.cursor.min',

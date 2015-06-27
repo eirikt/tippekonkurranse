@@ -151,7 +151,7 @@ define(['jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment',
             modalCurrentResultsView: null,
 
             onRender: function (collectionView) {
-                console.log('"pre-season-table-view:onRender"');
+                //console.log('"pre-season-table-view:onRender"');
                 this.currentResults = new CurrentResults({
                     year: collectionView.model.get('year'),
                     round: collectionView.model.get('round')
