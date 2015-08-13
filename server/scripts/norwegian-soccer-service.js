@@ -134,10 +134,6 @@ var __ = require('underscore'),
      */
     _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
         rq.return([
-            'Mjøndalen',
-            'Molde',
-            'Odd',
-            'Sandefjord',
             'Sarpsborg 08',
             'Stabæk',
             'Rosenborg',

@@ -36,9 +36,17 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
+#### v1.3.7 : _To be deployed 13.08.2015_
+* Cup results update
+* io.js 3.x
+* Dependency updates
+
+_Status: Done_
+
+
 #### v1.3.6 : _Deployed 27.06.2015_
 * Cup results update
-* Dependency updates (included the infamous Underscore v1.7 template function incident)
+* Dependency updates (included the infamous [Underscore v1.7 template function incident](https://github.com/jashkenas/underscore/issues/1805))
 
 _Status: Done_
 
@@ -360,7 +368,7 @@ SOFTWARE.
 [32]: https://devcenter.heroku.com/articles/custom-domains
 [35]: https://mongolab.com
 
-[50]: http://nodejs.org
+[50]: https://iojs.org
 [51]: http://expressjs.com
 [52]: https://www.mongodb.org
 [53]: http://mongoosejs.com

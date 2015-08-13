@@ -1,6 +1,6 @@
 {
     "name": "Tippekonkurranse",
-    "version": "1.3.6",
+    "version": "1.3.7",
     "description": "An idiomatic Node-based web application hosted on Heroku",
     "author": "Eirik Torske <eirik.torske@gmail.com>",
     "license": "MIT",
@@ -9,24 +9,24 @@
         "url": "https://github.com/eirikt/tippekonkurranse.git"
     },
     "engines": {
-        "iojs": "2.x"
+        "iojs": "3.x"
     },
     "dependencies": {
         "mongodb": "~2.0.33",
-        "mongoose": "~4.0.4",
+        "mongoose": "~4.1.2",
         "express": "~4.13.0",
         "underscore": "~1.8.3",
         "scoreunder": "~0.1.1",
         "moment": "~2.10.3",
         "async-rq": "~0.0.1",
         "RQ-essentials": "eirikt/RQ-essentials",
-        "request": "~2.58.0",
+        "request": "~2.60.0",
         "iconv-lite": "~0.4.10",
         "cheerio": "~0.19.0",
-        "logdown": "~1.1.2",
+        "logdown": "~1.2.4",
 
-        "mocha-phantomjs": "~3.5.3",
-        "chai": "~3.0.0",
+        "mocha-phantomjs": "~3.6.0",
+        "chai": "~3.2.0",
         "chai-jquery": "~2.0.0",
         "sinon": "~1.15.3",
         "bower": "~1.4.1",
@@ -41,9 +41,9 @@
         "grunt-saucelabs": "~8.6.1",
         "grunt-jsdoc": "~0.6.7",
         "grunt-contrib-clean": "~0.6.0",
-        "grunt-contrib-connect": "~0.10.1",
+        "grunt-contrib-connect": "~0.11.2",
         "grunt-contrib-copy": "~0.8.0",
-        "grunt-contrib-cssmin": "~0.12.3",
+        "grunt-contrib-cssmin": "~0.13.0",
         "grunt-contrib-jshint": "~0.11.2",
         "grunt-contrib-uglify": "~0.9.1",
         "grunt-contrib-watch": "~0.6.1",

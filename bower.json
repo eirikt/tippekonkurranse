@@ -4,7 +4,7 @@
         "requirejs": "~2.1.18",
         "bootstrap": "~3.3.4",
         "bootstrap-switch": "~3.3.2",
-        "fontawesome": "~4.3.0",
+        "fontawesome": "~4.4.0",
         "marionette": "~2.4.2",
         "moment": "~2.10.3",
         "toastr": "~2.1.1",
