@@ -1,5 +1,5 @@
 /* global define:false */
-define([ "jquery", "underscore", "backbone", "moment", "toastr" ],
+define(["jquery", "underscore", "backbone", "moment", "toastr"],
     function ($, _, Backbone, Moment, toastr) {
         "use strict";
 
@@ -39,7 +39,7 @@ define([ "jquery", "underscore", "backbone", "moment", "toastr" ],
          */
         var _serverConnectionListener = function (appNameDataElementName, appUriDataElementName, appUriTitleDataElementName, culture, elementSelector) {
             var self = this,
-                elementSelectors = _.isArray(elementSelector) ? elementSelector : [ elementSelector ],
+                elementSelectors = _.isArray(elementSelector) ? elementSelector : [elementSelector],
                 momentJsCulture = culture || "en";
 
             Backbone.Events.on("onserverconnection", function (originUri) {
@@ -48,12 +48,28 @@ define([ "jquery", "underscore", "backbone", "moment", "toastr" ],
 
             Backbone.Events.on("onnoserverconnection", function (originUri) {
                 console.warn("Missing server connection event ('onnoserverconnection') received from URI '" + originUri + "'");
-
-                // toastr demo: Display a warning toast, with no title
                 if (culture === "nb") {
                     toastr.error('Oops, ingen kontakt med server for øyeblikket - det ordner seg sikkert snart ...');
                 } else {
-                    console.warn("Culture '" + momentJsCulture + "' not yet implemented");
+                    console.warn("(Culture '" + momentJsCulture + "' not yet implemented)");
+                }
+            });
+
+            Backbone.Events.on("onlivedatanotavailable", function (originUri) {
+                console.warn("No live data available event ('onlivedatanotavailable') received from URI '" + originUri + "'");
+                if (culture === "nb") {
+                    toastr.error('Oops, live fotball-resultater er ikke å få tak i for øyeblikket, kun historikk er tilgjengelig - det ordner seg sikkert snart ...');
+                } else {
+                    console.warn("(Culture '" + momentJsCulture + "' not yet implemented)");
+                }
+            });
+
+            Backbone.Events.on("onhistoricdatanotavailable", function (originUri) {
+                console.warn("No historic data available event ('onhistoricdatanotavailable') received from URI '" + originUri + "'");
+                if (culture === "nb") {
+                    toastr.error('Oops, databasen er nede ser det ut til, kun live resultater er tilgjengelig - det ordner seg sikkert snart ...');
+                } else {
+                    console.warn("(Culture '" + momentJsCulture + "' not yet implemented)");
                 }
             });
 
@@ -64,20 +80,20 @@ define([ "jquery", "underscore", "backbone", "moment", "toastr" ],
 
                 Backbone.Events.on("onnoserverconnection", function (originUri) {
                     _.each($(elementSelector), function (el) {
-                        var appName = el.dataset[ appNameDataElementName ],
-                            appUri = el.dataset[ appUriDataElementName ],
-                            appUriName = el.dataset[ appUriTitleDataElementName ],
+                        var appName = el.dataset[appNameDataElementName],
+                            appUri = el.dataset[appUriDataElementName],
+                            appUriName = el.dataset[appUriTitleDataElementName],
                             ageString = self.getResourceAge(appName, appUri, momentJsCulture),
                             msg = null;
 
                         if (culture === "nb") {
                             if (ageString) {
                                 msg = "(" +
-                                "NB! " + appUriName + " " +
-                                "<em>" +
-                                self.getResourceAge(appName, appUri, momentJsCulture) +
-                                "</em>" +
-                                ")";
+                                    "NB! " + appUriName + " " +
+                                    "<em>" +
+                                    self.getResourceAge(appName, appUri, momentJsCulture) +
+                                    "</em>" +
+                                    ")";
                             } else {
                                 msg = "<em>(NB! Ingen kontakt med server, og ingen mellomlagrede data tilgjengelig heller ...</em>)";
                             }
@@ -180,32 +196,38 @@ define([ "jquery", "underscore", "backbone", "moment", "toastr" ],
                         window.localStorage.setItem(resourceTimestampCacheKey, Date.now());
                         console.log("Resource '" + url + "' stored in localStorage (client-side persistent cache) ...");
                     }
+                    if (data && data.metadata && /*data.metadata.isLive &&*/ !data.metadata.isLiveDataAvailable){
+                        Backbone.Events.trigger("onlivedatanotavailable", url);
+                    }
+                    if (data && data.metadata && !data.metadata.isHistoricDataAvailable){
+                        Backbone.Events.trigger("onhistoricdatanotavailable", url);
+                    }
                     Backbone.Events.trigger("onserverconnection", url);
                 });
 
                 xhr.fail(function (jqXHR, textStatus, errorThrown) {
-                    if (window.localStorage) {
-                        Moment.locale("en"); // Reset Moment.js culture (just to be sure, log messages in english ...)
-                        var cacheAge = new Date(JSON.parse(window.localStorage.getItem(resourceTimestampCacheKey))),
-                            prettyCacheAge = new Moment(cacheAge).fromNow(),
-                            cachedItem = window.localStorage.getItem(currentScoreResourceKey);
+                        if (window.localStorage) {
+                            Moment.locale("en"); // Reset Moment.js culture (just to be sure, log messages in english ...)
+                            var cacheAge = new Date(JSON.parse(window.localStorage.getItem(resourceTimestampCacheKey))),
+                                prettyCacheAge = new Moment(cacheAge).fromNow(),
+                                cachedItem = window.localStorage.getItem(currentScoreResourceKey);
 
-                        if (cachedItem) {
-                            // Then complete the Backbone fetch success routine
-                            if (isBackboneModel) {
-                                self.set(self.parse(JSON.parse(cachedItem)));
-                            } else if (isBackboneCollection) {
-                                self.reset(self.parse(JSON.parse(cachedItem)));
+                            if (cachedItem) {
+                                // Then complete the Backbone fetch success routine
+                                if (isBackboneModel) {
+                                    self.set(self.parse(JSON.parse(cachedItem)));
+                                } else if (isBackboneCollection) {
+                                    self.reset(self.parse(JSON.parse(cachedItem)));
+                                } else {
+                                    throw new Error("Only Backbone.Model and Backbone.Collection constructor functions are supported");
+                                }
+                                console.warn("Resource '" + url + "' not available - using cached version (from " + prettyCacheAge + ") ...");
+
                             } else {
-                                throw new Error("Only Backbone.Model and Backbone.Collection constructor functions are supported");
+                                console.warn("Resource '" + url + "' not available - not even in cache ...");
                             }
-                            console.warn("Resource '" + url + "' not available - using cached version (from " + prettyCacheAge + ") ...");
-
-                        } else {
-                            console.warn("Resource '" + url + "' not available - not even in cache ...");
                         }
-                    }
-                    if (jqXHR.status === 404) {
+
                         if (isBackboneModel) {
                             self.set(self.parse(jqXHR.status));
                         } else if (isBackboneCollection) {
@@ -213,12 +235,18 @@ define([ "jquery", "underscore", "backbone", "moment", "toastr" ],
                         } else {
                             throw new Error("Only Backbone.Model and Backbone.Collection constructor functions are supported");
                         }
-                        Backbone.Events.trigger("onserverconnection", url);
 
-                    } else {
-                        Backbone.Events.trigger("onnoserverconnection", url);
+                        //switch (jqXHR.status) {
+                        //    case 503:
+                        //        Backbone.Events.trigger("onlivedatanotavailable", url);
+                        //        break;
+                        //    default:
+                        //        Backbone.Events.trigger("onnoserverconnection", url);
+                        //        break;
+                        //}
+                        //Backbone.Events.trigger("onserverconnection", url);
                     }
-                });
+                );
             },
 
             /** Default configuration of the server connection listener. */

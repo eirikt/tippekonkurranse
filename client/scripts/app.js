@@ -33,7 +33,10 @@ define([
                     currentRound: null,
                     currentTippeligaSeasonStartDate: currentTippeligaSeasonStartDate,
                     currentTippeligaSeasonHasStarted: Date.now() - currentTippeligaSeasonStartDate > 0,
-                    numberOfRounds: 30
+                    numberOfRounds: 30,
+                    isHistoricDataAvailable: null,
+                    isLiveDataAvailable: null//,
+                    //isLive: null
                 },
                 // TODO: Needed?
                 //isActiveRound: function (round) {
@@ -43,10 +46,10 @@ define([
                 //    return true;
                 //},
                 isFutureRound: function (options) {
-                    var year = window.app.model.get('year'),
-                        round = window.app.model.get('round'),
-                        currentYear = window.app.model.get('currentYear'),
-                        currentRound = window.app.model.get('currentRound');
+                    var year = this.attributes.year,
+                        round = this.attributes.round,
+                        currentYear = this.attributes.currentYear,
+                        currentRound = this.attributes.currentRound;
 
                     if (options) {
                         if (options.round) {
@@ -148,7 +151,7 @@ define([
 
                 participants, gold, silver, bronze, rank, rankTrend, rating, ratingTrend;
 
-            if (hasNoData) {
+            if (/*scores.isLiveDataAvailable &&*/ hasNoData) {
                 appModel.set('year', appModel.get('currentYear'));
                 appModel.set('round', 0);
 
@@ -156,6 +159,7 @@ define([
                 appModel.set('year', scores.year);
                 appModel.set('round', scores.round);
             }
+
             if (!appModel.has('currentRound')) {
                 appModel.set('currentRound', appModel.get('round'));
             }

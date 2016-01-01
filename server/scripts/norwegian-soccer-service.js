@@ -17,13 +17,16 @@ var __ = require('underscore'),
 //////////////////////////////////
 
     currentTippeligaTableUrl =
-        'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&subCmd=total&live=true&useFullUrl=false',
+        'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&subCmd=total&live=true&useFullUrl=false', // Original
+        //'http://www.altomfotball.no/element.do?cmd=tournament&tournamentId=1&seasonId=337&useFullUrl=false', // Works
+        //'http://nonexisting.nu',
 
     parseTippeligaTable = function (body) {
         'use strict';
         var currentTable = [],
             $ = cheerio.load(body, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false }),
             rows = $('tbody').find('tr');
+        //    rows = $('#sd_table_1').find('tbody').find('tr');
 
         __.each(rows, function (element) {
             var $cells = $(element).find('td'),
@@ -43,14 +46,16 @@ var __ = require('underscore'),
         return currentTable;
     },
 
-    currentAdeccoligaTableUrl =
+    currentObosligaTableUrl =
         'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=2&subCmd=total&live=true&useFullUrl=false',
+        //'http://www.altomfotball.no/element.do?cmd=tournament&tournamentId=2&seasonId=337&useFullUrl=false',
 
-    parseAdeccoligaTable = function (body) {
+    parseObosligaTable = function (body) {
         'use strict';
         var currentTable = [],
             $ = cheerio.load(body, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false }),
             rows = $('tbody').find('tr');
+        //    rows = $('#sd_table_2').find('tbody').find('tr');
 
         __.each(rows, function (element) {
             var $cells = $(element).find('td'),
@@ -72,6 +77,7 @@ var __ = require('underscore'),
 
     currentTippeligaToppscorerTableUrl =
         'http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&seasonId=&teamId=&useFullUrl=false',
+        //'http://www.altomfotball.no/element.do?cmd=tournamentStatistics&tournamentId=1&seasonId=337&useFullUrl=false',
 
     parseTippeligaTopScorerTable = function (body) {
         'use strict';
@@ -117,10 +123,10 @@ var __ = require('underscore'),
             then(parseTippeligaTable)
         ]),
 
-    _getCurrentAdeccoligaTableRequestory = exports.getCurrentAdeccoligaTable =
+    _getCurrentObosligaTableRequestory = exports.getCurrentObosligaTable =
         RQ.sequence([
-            get(currentAdeccoligaTableUrl),
-            then(parseAdeccoligaTable)
+            get(currentObosligaTableUrl),
+            then(parseObosligaTable)
         ]),
 
     _getCurrentTippeligaTopScorerRequestory = exports.getCurrentTippeligaTopScorer =
@@ -133,9 +139,24 @@ var __ = require('underscore'),
      * Solved manually: Just remove the teams one after another whenever they screw up ...
      */
     _getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
-        rq.return([
-            'Sarpsborg 08',
-            'Stabæk',
-            'Rosenborg',
-            'Viking'
-        ]);
+        rq.return(['Rosenborg']),
+// /'Data generator' requestors
+
+
+// Service validation functions
+// TODO: ...
+    _isEnabled = exports.isEnabled = function () {
+        'use strict';
+        return false;
+        //return true;
+
+        // TODO: Is 'RQ.sequence([get(currentTippeligaTableUrl)])' returning anything (online/parseable)
+    },
+
+// TODO: ...
+    _isValid = exports.isValid = function () {
+        'use strict';
+        return _isEnabled();
+
+        // TODO: Is 'RQ.sequence([get(currentTippeligaTableUrl), then(parseTippeligaTable)])' returning anything useful/valid data
+    };

@@ -13,14 +13,16 @@ var env = process.env.NODE_ENV || "development",
     curry = require("./../../shared/scripts/fun").curry,
     utils = require("./../../shared/scripts/utils"),
 
-// Module dependencies, local application-specific
-    norwegianSoccerLeagueService = require("./norwegian-soccer-service"),
+// Module dependencies, local application-specific services
     dbSchema = require("./db-schema"),
-    appModels = require("./../../shared/scripts/app.models"),
+    norwegianSoccerLeagueService = require("./norwegian-soccer-service"),
     predictions2014 = require("./tippekonkurranse-2014-user-predictions").predictions,
     predictions2015 = require("./tippekonkurranse-2015-user-predictions").predictions,
     rules2014 = require("./tippekonkurranse-2014-rules").rules,
     rules2015 = require("./tippekonkurranse-2015-rules").rules,
+
+// Module dependencies, local application-specific
+    appModels = require("./../../shared/scripts/app.models"),
 
     TippekonkurranseData = appModels.TippekonkurranseData,
 
@@ -164,7 +166,7 @@ var env = process.env.NODE_ENV || "development",
                     // TODO: Liten svakhet: Hvis Adeccoliga spiller runder mens Tippeliga ikke gjør det så blir ikke runden oppdatert ...
 
                     dbCount = dbMatchesCount[round].length;
-                    if (root.app.isRoundCompleted(round, year)) {
+                    if (root.app.isCompletedRound(round, year)) {
                         logMsg += " is completed => no need for updating db with new results";
                         console.log(logMsg);
 
@@ -213,6 +215,8 @@ var env = process.env.NODE_ENV || "development",
 
                             var tippekonkurranseData = new TippekonkurranseData();
 
+                            tippekonkurranseData.isHistoricDataAvailable = root.app.isDbConnected;
+                            tippekonkurranseData.isLiveDataAvailable = root.app.isLiveDataAvailable;
                             tippekonkurranseData.isLive = false;
                             tippekonkurranseData.matchesCountGrouping = null;
                             tippekonkurranseData.scores = null;
@@ -271,18 +275,48 @@ var env = process.env.NODE_ENV || "development",
                 }
             }
 
-            if (root.app.isRoundCompleted(round, year)) {
+            if (root.app.isCompletedRound(round, year)) {
                 return curry(_getStoredTippeligaDataRequestor, year, round);
+
+            } else if (!root.app.isLiveDataAvailable) {
+                //console.error(utils.logPreamble() + "Live soccer result data not available ...");
+                //response.status(503).send("Live soccer result data not available");
+                //return;
+                now = new Date();
+
+                tippekonkurranseData = new TippekonkurranseData();
+
+                tippekonkurranseData.isHistoricDataAvailable = rq.return(root.app.isDbConnected);
+                tippekonkurranseData.isLiveDataAvailable = rq.false;
+                tippekonkurranseData.isLive = rq.false;
+
+                tippekonkurranseData.tippeligaTable = rq.null;
+                tippekonkurranseData.tippeligaTopScorer = rq.null;
+                tippekonkurranseData.adeccoligaTable = rq.null;
+                tippekonkurranseData.remainingCupContenders = rq.null;
+
+                tippekonkurranseData.round = rq.null;
+                tippekonkurranseData.date = rq.return(now);
+                tippekonkurranseData.currentRound = rq.null;
+                tippekonkurranseData.currentDate = rq.return(now);
+
+                tippekonkurranseData.matchesCountGrouping = rq.null;
+                tippekonkurranseData.scores = rq.return({});
+
+                return RQ.parallel(tippekonkurranseData.toArray());
 
             } else {
                 now = new Date();
+
                 tippekonkurranseData = new TippekonkurranseData();
 
+                tippekonkurranseData.isHistoricDataAvailable = rq.return(root.app.isDbConnected);
+                tippekonkurranseData.isLiveDataAvailable = rq.return(root.app.isLiveDataAvailable);
                 tippekonkurranseData.isLive = rq.true;
 
                 tippekonkurranseData.tippeligaTable = norwegianSoccerLeagueService.getCurrentTippeligaTable;
                 tippekonkurranseData.tippeligaTopScorer = norwegianSoccerLeagueService.getCurrentTippeligaTopScorer;
-                tippekonkurranseData.adeccoligaTable = norwegianSoccerLeagueService.getCurrentAdeccoligaTable;
+                tippekonkurranseData.adeccoligaTable = norwegianSoccerLeagueService.getCurrentObosligaTable;
                 tippekonkurranseData.remainingCupContenders = norwegianSoccerLeagueService.getCurrentRemainingCupContenders;
 
                 tippekonkurranseData.round = rq.null;
@@ -346,6 +380,12 @@ var env = process.env.NODE_ENV || "development",
                 //if (!tippekonkurranseData.currentRound) {
                 //    throw new Error("Current round is not set, it should be");
                 //}
+            //} else if (!tippekonkurranseData.isLiveDataAvailable && !tippekonkurranseData.isHistoricDataAvailable) {
+            //    tippekonkurranseData.round = root.app.currentRound;
+            //    tippekonkurranseData.currentRound = tippekonkurranseData.round;
+
+            //} else if (!tippekonkurranseData.isLiveDataAvailable && tippekonkurranseData.isHistoricDataAvailable) {
+            //    tippekonkurranseData.currentRound = tippekonkurranseData.round;
             }
             return tippekonkurranseData.toArray();
         },
@@ -362,6 +402,12 @@ var env = process.env.NODE_ENV || "development",
             if (!rules || __.isEmpty(rules)) {
                 throw new Error("Rules are missing - cannot calculate Tippekonkurranse scores");
             }
+            //if (!root.app.isLiveDataAvailable) {
+            //    console.error(utils.logPreamble() + "Live soccer result data not available ...");
+                //response.status(503).send("Live soccer result data not available");
+                //return;
+                //throw new Error("Live soccer result data not available ...");
+            //}
             if (!callback) {
                 throw new Error("RQ callback argument is missing - check your RQ setup");
             }
@@ -517,7 +563,9 @@ var env = process.env.NODE_ENV || "development",
                 hasPredictions = {};
 
             tippekonkurranseData.scores.metadata = {
-                live: tippekonkurranseData.liveData,
+                isHistoricDataAvailable: tippekonkurranseData.isHistoricDataAvailable,
+                isLiveDataAvailable: tippekonkurranseData.isLiveDataAvailable,
+                isLive: tippekonkurranseData.isLive,
                 year: tippekonkurranseData.getYear(),
                 round: tippekonkurranseData.round,
                 currentYear: tippekonkurranseData.currentYear,

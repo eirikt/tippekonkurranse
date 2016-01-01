@@ -10,29 +10,28 @@ var env = process.env.NODE_ENV || "development",
 
 // Module dependencies, external
     mongoose = require("mongoose"),
-    __ = require("underscore"),
-    ___ = require("scoreunder"),
     path = require("path"),
     express = require("express"),
+    RQ = require("async-rq"),
+    sequence = RQ.sequence,
 
 // Module dependencies, local generic
     utils = require("./../../shared/scripts/utils"),
     comparators = require("./../../shared/scripts/comparators"),
-    curry = require("./../../shared/scripts/fun").curry,
+
+// Module dependencies, local application-specific services
+    dbSchema = require("./db-schema"),
+    norwegianSoccerLeagueService = require("./norwegian-soccer-service"),
+    tippekonkurranseApi = require("./tippekonkurranse-api"),
 
 // Module dependencies, local application-specific
-    dbSchema = require("./db-schema"),
     app = require("./../../shared/scripts/app.models"),
-    TippekonkurranseData = app.TippekonkurranseData,
-    tippekonkurranseApi = require("./tippekonkurranse-api"),
-    tippekonkurranse = require("./tippekonkurranse"),
+
 
 // The app server
     server = express(),
     port = Number(process.env.PORT || 5000);
 
-// Connect to database via Mongoose
-mongoose.connect(dbUrl);
 
 // Static resources (AppCache candidates) (files)
 if (env === "development") {
@@ -57,37 +56,39 @@ server.get([app.resource.results.baseUri, app.resource.uri.element.current].join
 server.get([app.resource.scores.baseUri, app.resource.uri.element.current].join("/"), tippekonkurranseApi.handleScoresRequest);
 
 
-// Start HTTP server
-server.listen(port, function () {
-    "use strict";
-    if (env === "development") {
-        console.log(utils.logPreamble() + app.name + ", Node.js Express server listening on port %d in %s mode, root path:", port, env, path.join(applicationRootAbsolutePath, developmentWebRootRelativePath));
-    } else {
-        console.log(utils.logPreamble() + app.name + ", Node.js Express server listening on port %d in %s mode, root path:", port, env, path.join(applicationRootAbsolutePath, productionWebRootRelativePath));
-    }
-});
-
-
 // Global state
 root.app = {
+    isCurrentYearCompleted: true,               // NB! To be set manually for now ...
+
     numberOfRounds: 30,                         // NB! To be set manually for now ...
 
     initialYear: 2014,                          // NB! To be set manually for now ...
     initialRound: 1,                            // NB! To be set manually for now ...
+
     //activeYear: null,                         // N/A (this kind of state => only on clients - designated there as 'year')
     //activeRound: null,                        // N/A (this kind of state => only on clients - designated there as 'round')
+
     currentYear: new Date().getFullYear(),
-    currentRound: null,                         // Dynamically updated in 'tippekonkurranse.addRound' method
+    currentRound: null,                         // Dynamically updated below and in the 'tippekonkurranse.addRound' method
 
-    isCurrentYearCompleted: false,              // NB! To be set manually for now ...
-
-    // TODO: Rename to 'isActiveRound'
-    isRoundActive: function (round, year) {
+    isRedirected: function (request) {
         "use strict";
-        return parseInt(round, 10) === root.app.currentRound && parseInt(year, 10) === root.app.currentYear;
+        return request.query.isredirected;
     },
-    // TODO: Rename to 'isCompletedRound'
-    isRoundCompleted: function (round, year) {
+
+    // TODO: 'live' / 'current' / 'active' - are they the same/synonyms ...?
+    isLiveRequest: function (request) {
+        "use strict";
+        return request.url.indexOf('current') > 0 || request.query.islive;
+    },
+
+    // TODO: Is this the same as 'isLive'?
+    isActiveRound: function (round, year) {
+        "use strict";
+        return (parseInt(round, 10) === root.app.currentRound) && (parseInt(year, 10) === root.app.currentYear);
+    },
+
+    isCompletedRound: function (round, year) {
         "use strict";
         if (!round) {
             return false;
@@ -99,8 +100,12 @@ root.app = {
         return year < root.app.currentYear ||
             year <= root.app.currentYear && round < root.app.currentRound ||
             year <= root.app.currentYear && round <= root.app.currentRound && root.app.isCurrentYearCompleted;
-    }
+    },
+
+    isDbConnected: null,
+    isLiveDataAvailable: null
 };
+
 
 
 // Cache
@@ -109,6 +114,7 @@ root.app.cache = {
 };
 
 
+// TODO: At least from here and downwards - use RQ
 // Development tweaks ...
 if (env === "development") {
     // Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
@@ -117,6 +123,29 @@ if (env === "development") {
 }
 
 
+// Connect to database via Mongoose
+mongoose.connect(dbUrl, function (err) {
+    "use strict";
+    root.app.isDbConnected = true;
+    if (err) {
+        console.error(err);
+        root.app.isDbConnected = false;
+    }
+});
+
+
+// Start HTTP server
+server.listen(port, function () {
+    "use strict";
+    if (env === "development") {
+        console.log(utils.logPreamble() + app.name + ", Node.js Express server listening on port %d in %s mode, web root path:", port, env, path.join(applicationRootAbsolutePath, developmentWebRootRelativePath));
+    } else {
+        console.log(utils.logPreamble() + app.name + ", Node.js Express server listening on port %d in %s mode, web root path:", port, env, path.join(applicationRootAbsolutePath, productionWebRootRelativePath));
+    }
+});
+
+
+// More global initial state ...
 if (root.app.overrideTippeligaDataWithYear && (root.app.overrideTippeligaDataWithRound || root.app.overrideTippeligaDataWithRound === 0)) {
     root.app.currentRound = root.app.overrideTippeligaDataWithRound;
     console.log(utils.logPreamble() + app.name + ", Initialized with: current season " + root.app.currentYear + ", current round " + root.app.currentRound + " [DEVELOPMENT mode, using stored data]");
@@ -128,6 +157,14 @@ if (root.app.overrideTippeligaDataWithYear && (root.app.overrideTippeligaDataWit
             console.err(err);
             return;
         }
+
+        dbSchema.TippeligaRound.count({ year: 2014 }, function (err, count) {
+            console.log(utils.logPreamble() + app.name + " " + "2014 count: " + count);
+        });
+        dbSchema.TippeligaRound.count({ year: 2015 }, function (err, count) {
+            console.log(utils.logPreamble() + app.name + " " + "2015 count: " + count);
+        });
+
         if (!latestTippeligaRound) {
             console.warn(utils.logPreamble() + "No round found for season " + root.app.currentYear + " ... setting it to 0");
             root.app.currentRound = 0;
@@ -135,16 +172,37 @@ if (root.app.overrideTippeligaDataWithYear && (root.app.overrideTippeligaDataWit
         }
         root.app.currentRound = latestTippeligaRound.round;
         console.log(utils.logPreamble() + app.name + " " + "Initialized with: current season " + root.app.currentYear + ", current round " + root.app.currentRound);
-
-        dbSchema.TippeligaRound.count({ year: 2014 }, function (err, count) {
-            console.log(utils.logPreamble() + app.name + " " + "2014 count: " + count);
-        });
-
-        dbSchema.TippeligaRound.count({ year: 2015 }, function (err, count) {
-            console.log(utils.logPreamble() + app.name + " " + "2015 count: " + count);
-        });
     });
 }
+
+
+// More global initial state ...
+// TODO: Move this into 'norwegianSoccerLeagueService'
+sequence([
+    norwegianSoccerLeagueService.getCurrentTippeligaTable,
+    function (callback, args) {
+        "use strict";
+        if (!args || !args.length || args.length < 16) {
+            return callback(null, { message: "Tippeligatable result is missing" });
+        }
+        if (parseInt(args[0].matches, 10) < root.app.currentRound) {
+            return callback(null, { message: "Retrieved tippeligatable result is not in sync with stored results - is it a new season?" });
+        }
+        // Extra check for end of season/new season results available and predictions are not
+        // TODO: Revisit this logic ... in 2016
+        if (!root.app.isDbConnected && new Date().getMonth() >= 11 && args[0].matches && parseInt(args[0].matches, 10) === 0) {
+            return callback(null, { message: "Retrieved tippeligatable result is not in sync with stored results - is it a new season?" });
+        }
+        return callback(args);
+    }
+])(function (success, failure) {
+    "use strict";
+    root.app.isLiveDataAvailable = true;
+    if (failure) {
+        console.error(failure.message);
+        root.app.isLiveDataAvailable = false;
+    }
+});
 
 
 // Warm up cache: Rating history for initial year/previous year/2014

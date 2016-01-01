@@ -28,7 +28,15 @@ define(
                 template: _.identity
             }),
 
+        // Switch with 'RatingTrendHeadingView' for UI reasons
             RatingHeadingView = Marionette.ItemView.extend({
+                tagName: 'div',
+                className: 'rating-trend',
+                template: _.identity
+            }),
+
+        // Switch with 'RatingHeadingView' for UI reasons
+            RatingTrendHeadingView = Marionette.ItemView.extend({
                 tagName: 'div',
                 className: 'rating',
                 template: function (serializedModel) {
@@ -36,7 +44,7 @@ define(
                     if (serializedModel.hideContent) {
                         return '';
 
-                    } else {
+                    } else if (serializedModel.isEnabled) {
                         return _.template(
                             '<div>' +
                             '  <a href="/#/ratinghistory/<%= args.year %>/<%= args.round %>" type="button" class="btn btn-sm btn-success">' +
@@ -44,14 +52,17 @@ define(
                             '  </a>' +
                             '</div>',
                             { variable: 'args' })(serializedModel);
+
+                    } else {
+                        return _.template(
+                            '<div>' +
+                            '  <a href="/#/ratinghistory/<%= args.year %>/<%= args.round %>" type="button" class="btn btn-sm btn-success" disabled=true>' +
+                            '    <span style="margin-right:1rem;" class="icon-line-chart"></span>Trend' +
+                            '  </a>' +
+                            '</div>',
+                            { variable: 'args' })(serializedModel);
                     }
                 }
-            }),
-
-            RatingTrendHeadingView = Marionette.ItemView.extend({
-                tagName: 'div',
-                className: 'rating-trend',
-                template: _.identity
             }),
 
             PredictionHeadingView = Marionette.ItemView.extend({
@@ -170,9 +181,11 @@ define(
                     case 'rankTrend':
                         return RankTrendHeadingView;
                     case 'rating':
-                        return RatingHeadingView;
-                    case 'ratingTrend':
+                        // Switch with 'ratingTrend' for UI reasons
                         return RatingTrendHeadingView;
+                    case 'ratingTrend':
+                        // Switch with 'rating' for UI reasons
+                        return RatingHeadingView;
                     case 'prediction':
                         return PredictionHeadingView;
                     case 'tabell':
@@ -193,7 +206,8 @@ define(
             },
 
             onBeforeRender: function (collectionView) {
-                var year = collectionView.model.get(ParticipantScore.yearPropertyName),
+                var isHistoricDataAvailable = collectionView.model.get('isHistoricDataAvailable'),
+                    year = collectionView.model.get(ParticipantScore.yearPropertyName),
                     round = collectionView.model.get(ParticipantScore.roundPropertyName),
                     hideContent = collectionView.model.get('hasNoData');
 
@@ -213,6 +227,7 @@ define(
                 );
                 this.collection.add(new Model({
                         columnType: 'rating',
+                        isEnabled: isHistoricDataAvailable,
                         year: year,
                         round: round,
                         hideContent: hideContent

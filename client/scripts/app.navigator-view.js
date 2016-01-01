@@ -126,6 +126,8 @@ define(
             onBeforeRender: function () {
                 var counter;
 
+                this.isHistoricDataAvailable = this.model.get('isHistoricDataAvailable');
+
                 this.numberOfRounds = this.model.get('numberOfRounds');
 
                 this.initialYear = this.model.get('initialYear');
@@ -144,7 +146,7 @@ define(
                         isSeason: true,
                         isLeftChevron: true,
                         isActive: null, // N/A
-                        isEnabled: this.activeYear > this.initialYear,
+                        isEnabled: this.isHistoricDataAvailable && this.activeYear > this.initialYear,
                         year: this.activeYear - 1,
                         round: this.numberOfRounds,
                         index: null     // N/A,
@@ -154,7 +156,7 @@ define(
                             isSeason: true,
                             isActive: counter === this.activeYear,
                             isFuture: this.model.isFutureRound({ year: counter }),
-                            isEnabled: counter !== this.activeYear,
+                            isEnabled: this.isHistoricDataAvailable && counter !== this.activeYear,
                             year: counter,
                             round: this.numberOfRounds, // Default for previous season, at least
                             index: counter
@@ -165,7 +167,7 @@ define(
                         isRightChevron: true,
                         isActive: null, // N/A
                         isFuture: this.model.isFutureRound({ year: this.activeYear + 1 }),
-                        isEnabled: this.activeYear < this.currentYear,
+                        isEnabled: this.isHistoricDataAvailable && this.activeYear < this.currentYear,
                         year: this.activeYear + 1,
                         round: this.numberOfRounds,
                         index: null     // N/A
@@ -177,7 +179,7 @@ define(
                     this.collection.add(new Model({
                             isLeftChevron: true,
                             isActive: null, // N/A
-                            isEnabled: this.activeRound > 1,
+                            isEnabled: this.isHistoricDataAvailable && this.activeRound > 1,
                             year: this.activeYear,
                             round: this.activeRound - 1,
                             index: null     // N/A
@@ -186,7 +188,7 @@ define(
                     for (counter = 1; counter <= this.numberOfRounds; counter += 1) {
                         this.collection.add(new Model({
                                 isActive: counter === this.activeRound,
-                                isEnabled: !this.model.isFutureRound({ round: counter }),
+                                isEnabled: this.isHistoricDataAvailable && !this.model.isFutureRound({ round: counter }),
                                 year: this.activeYear,
                                 round: counter,
                                 index: counter
@@ -196,7 +198,7 @@ define(
                     this.collection.add(new Model({
                             isRightChevron: true,
                             isActive: null, // N/A
-                            isEnabled: this.activeRound >= 1 && this.activeRound < 30 && (this.activeYear < this.currentYear || this.activeRound < this.currentRound),
+                            isEnabled: this.isHistoricDataAvailable && this.activeRound >= 1 && this.activeRound < 30 && (this.activeYear < this.currentYear || this.activeRound < this.currentRound),
                             year: this.activeYear,
                             round: this.activeRound + 1,
                             index: null     // N/A

@@ -72,7 +72,7 @@ define([
             },
 
             parse: function (response) {
-                if (response === 404) {
+                if (response === 404/* || response === 503*/) {
                     return this.models;
                 }
                 this.year = response.metadata.year;
@@ -97,6 +97,13 @@ define([
                     this._setPreviousRank();
                 }
                 this._setRank();
+
+                // Update global service flags for application, if exists
+                if (window.app && window.app.model) {
+                    window.app.model.set("isHistoricDataAvailable", response.metadata.isHistoricDataAvailable, { silent: true });
+                    window.app.model.set("isLiveDataAvailable", response.metadata.isLiveDataAvailable, { silent: true });
+                    //window.app.model.set("isLive", response.metadata.isLive, { silent: true });
+                }
 
                 return this.models;
             },

@@ -104,21 +104,23 @@
                 if (!(this instanceof TippekonkurranseData)) {
                     return new TippekonkurranseData(updatedPropertyArray, options);
                 }
-                var _isLiveData = 0,                // Live or historic Tippeliga data
+                var _isHistoricDataAvailable = 0,   // Is database connection available and working?
+                    _isLiveDataAvailable = 1,       // Is external data source services available and working?
+                    _isLiveData = 2,                // Live or historic Tippeliga data (when '_isHistoricDataAvailable' === false then always true)
 
-                    _tippeligaTable = 1,            // The Tippeliga table, on the format defined by TeamPlacement function
-                    _tippeligaTopScorer = 2,        // The Tippeliga top scorer, array of strings
-                    _adeccoligaTable = 3,           // The Adeccoliga table, on the format defined by TeamPlacement function
-                    _remainingCupContenders = 4,    // The remaining cup contenders, array of strings
+                    _tippeligaTable = 3,            // The Tippeliga table, on the format defined by TeamPlacement function
+                    _tippeligaTopScorer = 4,        // The Tippeliga top scorer, array of strings
+                    _adeccoligaTable = 5,           // The Adeccoliga table, on the format defined by TeamPlacement function
+                    _remainingCupContenders = 6,    // The remaining cup contenders, array of strings
 
-                // If _isLiveData === true, then requested and current are the same
-                    _round = 5,                     // The requested round (may or may not be the latest round)
-                    _date = 6,                      // The date of the requested round
-                    _currentRound = 7,              // The latest round (may or may not be the requested round)
-                    _currentDate = 8,               // The date of the latest round
+                    // If _isLiveData === true, then requested and current are the same
+                    _round = 7,                     // The requested round (may or may not be the latest round)
+                    _date = 8,                      // The date of the requested round
+                    _currentRound = 9,              // The latest round (may or may not be the requested round)
+                    _currentDate = 10,               // The date of the latest round
 
-                    _matchesCountGrouping = 9,      // TODO: Document ...
-                    _scores = 10,                   // "View model" object with properties 'scores' and 'metadata' (properties being complex objects)
+                    _matchesCountGrouping = 11,     // TODO: Document ...
+                    _scores = 12,                   // "View model" object with properties 'scores' and 'metadata' (properties being complex objects)
 
                     useDefaultValues = !(updatedPropertyArray && __.isArray(updatedPropertyArray) && updatedPropertyArray.length > 0);
 
@@ -126,6 +128,8 @@
 
                 // See: https://gist.github.com/nverinaud/4054348
                 if (useDefaultValues) {
+                    Object.defineProperty(this, 'isHistoricDataAvailable', utils.mutablePropertyWithDefaultValue(null));
+                    Object.defineProperty(this, 'isLiveDataAvailable', utils.mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'isLive', utils.mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'tippeligaTable', utils.mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'tippeligaTopScorer', utils.mutablePropertyWithDefaultValue(null));
@@ -137,8 +141,9 @@
                     Object.defineProperty(this, 'currentDate', utils.mutablePropertyWithDefaultValue(new Date()));
                     Object.defineProperty(this, 'matchesCountGrouping', utils.mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'scores', utils.mutablePropertyWithDefaultValue(null));
-
                 } else {
+                    Object.defineProperty(this, 'isHistoricDataAvailable', utils.mutablePropertyWithDefaultValue(updatedPropertyArray[ _isHistoricDataAvailable ]));
+                    Object.defineProperty(this, 'isLiveDataAvailable', utils.mutablePropertyWithDefaultValue(updatedPropertyArray[ _isLiveDataAvailable ]));
                     Object.defineProperty(this, 'isLive', utils.mutablePropertyWithDefaultValue(updatedPropertyArray[ _isLiveData ]));
                     Object.defineProperty(this, 'tippeligaTable', utils.mutablePropertyWithDefaultValue(updatedPropertyArray[ _tippeligaTable ]));
                     Object.defineProperty(this, 'tippeligaTopScorer', utils.mutablePropertyWithDefaultValue(updatedPropertyArray[ _tippeligaTopScorer ]));
@@ -165,6 +170,8 @@
 
                 TippekonkurranseData.prototype.toArray = function () {
                     return [
+                        this.isHistoricDataAvailable,
+                        this.isLiveDataAvailable,
                         this.isLive,
                         this.tippeligaTable,
                         this.tippeligaTopScorer,

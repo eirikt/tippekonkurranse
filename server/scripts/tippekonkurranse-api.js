@@ -12,7 +12,7 @@ var __ = require("underscore"),
 
 // Module dependencies, local generic
     comparators = require("./../../shared/scripts/comparators"),
-    map = require("./../../shared/scripts/fun").map,
+    //map = require("./../../shared/scripts/fun").map,
     curry = require("./../../shared/scripts/fun").curry,
     utils = require("./../../shared/scripts/utils"),
 
@@ -70,7 +70,9 @@ var __ = require("underscore"),
                 thenAddScores = curry(tippekonkurranse.addTippekonkurranseScoresRequestor, predictionsOfTheYear, rulesOfTheYear),
                 thenAddPreviousScores = curry(tippekonkurranse.addPreviousMatchRoundRatingToEachParticipantRequestor, predictionsOfTheYear, rulesOfTheYear),
                 presentData = curry(tippekonkurranse.dispatchScoresToClientForPresentation, response),
-                storeData = tippekonkurranse.storeTippeligaRoundMatchData;
+                storeData = tippekonkurranse.storeTippeligaRoundMatchData,
+
+                isLiveRequest = root.app.isLiveRequest(request);
 
             if (!rulesOfTheYear || !predictionsOfTheYear) {
                 console.error(utils.logPreamble() + "Rules and/or predictions are missing for year " + year);
@@ -78,24 +80,89 @@ var __ = require("underscore"),
                 return;
             }
 
-            if (round && year && !root.app.isRoundCompleted(round, year) && !root.app.isRoundActive(round, year)) {
+            if (round && year && !root.app.isCompletedRound(round, year) && !root.app.isActiveRound(round, year)) {
                 console.error(utils.logPreamble() + "Round " + year + "/" + round + " is in the future ...");
-                response.status(404).send("Round " + year + "/" + round + " is in the future ...");
+                response.status(404).send("Round " + year + "/" + round + " is in the future");
                 return;
             }
 
-            if (round && year && root.app.isRoundCompleted(round, year)) {
+            //if (!root.app.isHistoricDataAvailable) {
+            //    console.error(utils.logPreamble() + "Historic data is not available ...");
+            //    response.status(503).send("Historic data is not available");
+            //    return;
+            //}
+
+            if (isLiveRequest && !root.app.isLiveDataAvailable && !root.app.isRedirected(request)) {
+                console.error(utils.logPreamble() + "Live soccer result data not available ...");
+                if (root.app.isDbConnected) {
+                    // Redirecting to last completed round
+                    response.redirect(year + "/" + root.app.currentRound + "?isredirected=true&islive=true");
+                } else {
+                    sequence([
+                        function (callback, args) {
+                            return callback(args);
+                        },
+                        getData,
+                        function (callback, args) {
+                            return callback(args);
+                        },
+                        then(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
+                        function (callback, args) {
+                            return callback(args);
+                        },
+                        then(tippekonkurranse.addRound),
+                        //thenAddScores,
+                        //function (callback, args) {
+                        //    return callback(args);
+                        //},
+                        //thenAddPreviousScores,
+                        function (callback, args) {
+                            return callback(args);
+                        },
+                        then(tippekonkurranse.addMetadataToScores),
+                        function (callback, args) {
+                            return callback(args);
+                        },
+                        then(presentData),
+                        function (callback, args) {
+                            return callback(args);
+                        }
+                    ])(go);
+                }
+
+            } else if (round && year && root.app.isCompletedRound(round, year)) {
                 sequence([
+                    //function (callback, args) {
+                    //    return callback(args);
+                    //},
                     getData,
+                    //function (callback, args) {
+                    //    return callback(args);
+                    //},
                     then(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
+                    //function (callback, args) {
+                    //    return callback(args);
+                    //},
                     then(tippekonkurranse.addRound),
+                    //function (callback, args) {
+                    //    return callback(args);
+                    //},
                     thenAddScores,
-
-                    //then(thenAddPreviousScores),
+                    //function (callback, args) {
+                    //    return callback(args);
+                    //},
                     thenAddPreviousScores,
-
+                    //function (callback, args) {
+                    //    return callback(args);
+                    //},
                     then(tippekonkurranse.addMetadataToScores),
-                    then(presentData)
+                    //function (callback, args) {
+                    //    return callback(args);
+                    //},
+                    then(presentData)//,
+                    //function (callback, args) {
+                    //    return callback(args);
+                    //}
                 ])(go);
 
             } else {
@@ -104,10 +171,7 @@ var __ = require("underscore"),
                     then(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
                     then(tippekonkurranse.addRound),
                     thenAddScores,
-
                     thenAddPreviousScores,
-                    //then(thenAddPreviousScores),
-
                     then(tippekonkurranse.addMetadataToScores),
                     then(presentData),
                     then(storeData)
@@ -155,7 +219,7 @@ var __ = require("underscore"),
                 return args.sort(comparators.ascendingByArrayElement(elementIndex));
             };
             sortByRound = curry(sortByElementIndex, tippekonkurranseData.indexOfRound);
-            cacheTheResults = curry(utils.memoizationWriter, true, cache, curry(root.app.isRoundCompleted, round, year), key);
+            cacheTheResults = curry(utils.memoizationWriter, true, cache, curry(root.app.isCompletedRound, round, year), key);
 
             // 3. Create array of requestors: all historic Tippeligakonkurranse scores - and then execute and wait for all to finish
             for (; roundIndex <= round; roundIndex += 1) {
