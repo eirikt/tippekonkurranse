@@ -11,18 +11,19 @@ Hosted [here][1].
 
 [![Build Status](https://travis-ci.org/eirikt/tippekonkurranse.png?branch=master)](https://travis-ci.org/eirikt/tippekonkurranse)
 &nbsp;&nbsp;&nbsp;
-[![Codacy Badge](https://www.codacy.com/project/badge/4f9fda90eb834d27ae6cc2f539ae263c)](https://www.codacy.com/public/eiriktorske/tippekonkurranse)
+[![Codacy Badge](https://www.codacy.com/project/badge/4f9fda90eb834d27ae6cc2f539ae263c)](https://www.codacy.com/public/eiriktorske/tippekonkurranse/dashboard)
 &nbsp;&nbsp;&nbsp;
-[![License](http://img.shields.io/badge/license-MIT-yellow.svg?style=flat)](https://github.com/eirikt/tippekonkurranse/blob/master/README.md#license)
+[![License](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/eirikt/tippekonkurranse/blob/master/README.md#license)
 
-<sub><sup>__Server-side__:</sup></sub> [![Dependency Status](https://www.versioneye.com/user/projects/54690c9395082540da000012/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54690c9395082540da000012)
+<sub><sup>__Server-side__:</sup></sub> [![Dependency Status](https://www.versioneye.com/user/projects/54690c9395082540da000012/badge.svg)](https://www.versioneye.com/user/projects/54690c9395082540da000012)
 &nbsp;&nbsp;&nbsp;
 [![Coverage Status](https://coveralls.io/repos/eirikt/tippekonkurranse/badge.png?branch=master)](https://coveralls.io/r/eirikt/tippekonkurranse?branch=master)
 
-<sub><sup>__Client-side__:</sup></sub> [![Dependency Status](https://www.versioneye.com/user/projects/54690c92950825928500000b/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54690c92950825928500000b)
+<sub><sup>__Client-side__:</sup></sub> [![Dependency Status](https://www.versioneye.com/user/projects/54690c92950825928500000b/badge.svg)](https://www.versioneye.com/user/projects/54690c92950825928500000b)
 &nbsp;&nbsp;&nbsp;
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/tippekonkurranse.svg)](https://saucelabs.com/u/tippekonkurranse)
 
+[![Codacy Badge2](https://img.shields.io/codacy/69206fcb0df6462ca559610af32fd1fb.svg)](https://www.codacy.com/public/eiriktorske/tippekonkurranse/dashboard)
 
 
 ## Scope
@@ -36,7 +37,22 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
-#### v1.3.7 : _To be deployed 13.08.2015_
+#### v1.3.9 :
+* More robust backend data handling
+* Node 5.x
+* Dependency updates
+* Results and season data update
+
+_Status: In process ..._
+
+
+#### v1.3.8 : _Deployed 23.12.2015_
+* Holiday down-time splash screen
+
+_Status: Done_
+
+
+#### v1.3.7 : _Deployed 13.08.2015_
 * Cup results update
 * io.js 3.x
 * Dependency updates
