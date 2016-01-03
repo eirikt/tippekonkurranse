@@ -21,7 +21,8 @@ define([
 
         var app = new Marionette.Application(),
 
-            currentTippeligaSeasonStartDate = new Date(2015, 4 - 1, 6, 15, 30, 0),
+        // NB! To be set manually for now ...
+            currentTippeligaSeasonStartDate = new Date(2016, 3 - 1, 13, 18, 0, 0),
 
             TippekonkurranseModel = Backbone.Model.extend({
                 defaults: {

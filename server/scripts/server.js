@@ -58,7 +58,7 @@ server.get([app.resource.scores.baseUri, app.resource.uri.element.current].join(
 
 // Global state
 root.app = {
-    isCurrentYearCompleted: true,               // NB! To be set manually for now ...
+    isCurrentYearCompleted: false,              // NB! To be set manually for now ...
 
     numberOfRounds: 30,                         // NB! To be set manually for now ...
 
@@ -85,7 +85,7 @@ root.app = {
     // TODO: Is this the same as 'isLive'?
     isActiveRound: function (round, year) {
         "use strict";
-        return (parseInt(round, 10) === root.app.currentRound) && (parseInt(year, 10) === root.app.currentYear);
+        return parseInt(round, 10) === root.app.currentRound && parseInt(year, 10) === root.app.currentYear;
     },
 
     isCompletedRound: function (round, year) {

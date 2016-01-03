@@ -83,11 +83,11 @@ define(
             NameView = Marionette.ItemView.extend({
                 tagName: 'div',
                 className: 'name strong',
-                template: function (model) {
-                    return _.template(
-                        '<%= args.' + ParticipantScore.namePropertyName + ' %>',
-                        { variable: 'args' }, model
-                    );
+                template: _.template(
+                    '<%= args.' + ParticipantScore.namePropertyName + ' %>',
+                    { variable: 'args' }),
+                onRender: function () {
+                    this.template(this.model.toJSON());
                 }
             }),
 
