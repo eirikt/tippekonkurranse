@@ -254,24 +254,19 @@ module.exports = function (grunt) {
                     build: process.env.TRAVIS_JOB_ID,
                     concurrency: 2,
                     browsers: [
-                        { platform: 'Windows 10', browserName: 'MicrosoftEdge', version: '20.10240' },
-                        { platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' },
+                        //{ platform: 'Windows 10', browserName: 'MicrosoftEdge', version: '20.10240' },
+                        //{ platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' },
                         //{ platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' },
-                        { platform: 'Windows 7', browserName: 'Chrome', version: '46' },
-                        { platform: 'Windows 7', browserName: 'Firefox', version: '42' },
+                        { platform: 'Windows 7', browserName: 'chrome', version: '46.0' }//,
+                        //{ platform: 'Windows 7', browserName: 'firefox', version: '42' },
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '9' },
                         //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '8' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '7' },
                         //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '6' },
-                        {
-                            platform: 'Linux', browserName: 'Android',
-                            version: '5.1',
-                            deviceName: 'Android Emulator',
-                            deviceOrientation: 'portrait'
-                        },
-                        { platform: 'OS X 10.10', browserName: 'Safari', version: '8' }//,
-                        //{ platform: 'OS X 10.10', browserName: 'iPhone', version: '8.4', deviceName: 'iPhone Simulator', deviceOrientation: 'portrait' },
-                        //{ platform: 'OS X 10.10', browserName: 'iPhone', version: '8.4', deviceName: 'iPad Simulator', 'device-orientation': 'landscape' }
+                        //{ platform: 'Linux', browserName: 'android', version: '5.1', deviceName: 'Android Emulator', deviceOrientation: 'portrait' },
+                        //{ platform: 'OS X 10.11', browserName: 'safari', version: '9.0' },
+                        //{ platform: 'OS X 10.10', browserName: 'iphone', version: '9.2', deviceName: 'iPhone 6 Plus', deviceOrientation: 'portrait' },
+                        //{ platform: 'OS X 10.10', browserName: 'iphone', version: '9.2', deviceName: 'iPad Retina', deviceOrientation: 'portrait' }
                     ]
                 }
             }

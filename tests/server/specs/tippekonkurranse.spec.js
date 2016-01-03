@@ -29,7 +29,6 @@ var __ = require("underscore"),
     expectDefaultGlobalStatePreserved = function () {
         "use strict";
         expect(root.currentRound).is.null;
-        //expect(root.isCurrentRoundCompleted).is.false;
     };
 
 
@@ -37,7 +36,6 @@ describe("Tippekonkurranse", function () {
     "use strict";
 
     describe("Underlying basics", function () {
-
         it("should ensure (native) sorting of number strings", function () {
             expect(Math.max.apply(null, ["1", "2"])).to.equal(2);
             expect(Math.max.apply(null, ["0", "4", "9"])).to.equal(9);
@@ -47,14 +45,12 @@ describe("Tippekonkurranse", function () {
     });
 
     describe("addRound", function () {
-
         beforeEach(function () {
             // Global state
             root.currentYear = new Date().getFullYear();
             root.currentRound = null;
             //root.isCurrentRoundCompleted = false;
         });
-
 
         it("should throw error if no requestion argument is provided", function () {
             expect(addRound).to.throw(Error, "Requestion argument array is missing - check your RQ.js setup");
