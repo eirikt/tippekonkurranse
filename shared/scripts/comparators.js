@@ -43,7 +43,7 @@
             },
 
 
-        // TODO: Add support/polyfill for IE10 and Safari and Node!
+            // TODO: Not working for all browsers/JavaScript engines
             /**
              * Alphanumeric comparators works for Strings.
              * The support for comparator distance is not yet fully supported.

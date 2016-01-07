@@ -36,13 +36,13 @@ describe("Comparators", function () {
                 expect(alphanumericComparator("D", "A")).to.be.above(0);
             });
 
-            // Below 0 is BEFORE (ascending comes beforegreater-than), Above 0 is AFTER (less-than)
+            // Below 0 is BEFORE (ascending comes before/greater-than), Above 0 is AFTER (less-than)
             it("should sort Strings, case sensitive", function () {
                 expect(alphanumericComparator("d", "D")).to.be.below(0);
                 expect(alphanumericComparator("D", "d")).to.be.above(0);
             });
 
-            // Below 0 is BEFORE (ascending comes beforegreater-than), Above 0 is AFTER (less-than)
+            // Below 0 is BEFORE (ascending comes before/greater-than), Above 0 is AFTER (less-than)
             it("should sort Strings, diacritics sensitive", function () {
                 expect(alphanumericComparator("æ", "æ")).to.be.equal(0);
                 expect(alphanumericComparator("Ø", "Ø")).to.be.equal(0);

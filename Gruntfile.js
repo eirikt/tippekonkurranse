@@ -227,6 +227,7 @@ module.exports = function (grunt) {
                 files: [
                     'tests/server/specs/app-models.spec.js',
                     'tests/server/specs/comparators.spec.js',
+                    'tests/server/specs/norwegian-soccer-service.spec.js',
                     'tests/server/specs/string-extensions.spec.js',
                     'tests/server/specs/tippekonkurranse.spec.js',
                     'tests/server/specs/utils.spec.js'
@@ -252,21 +253,21 @@ module.exports = function (grunt) {
                     testname: 'Tippekonkurranse',
                     tags: ['master'],
                     build: process.env.TRAVIS_JOB_ID,
-                    concurrency: 2,
+                    'max-duration': 360,
                     browsers: [
-                        //{ platform: 'Windows 10', browserName: 'MicrosoftEdge', version: '20.10240' },
-                        //{ platform: 'Windows 8.1', browserName: 'Internet Explorer', version: '11' },
-                        //{ platform: 'Windows 8', browserName: 'Internet Explorer', version: '10' },
-                        { platform: 'Windows 7', browserName: 'chrome', version: '46.0' }//,
-                        //{ platform: 'Windows 7', browserName: 'firefox', version: '42' },
-                        //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '9' },
-                        //{ platform: 'Windows 7', browserName: 'Internet Explorer', version: '8' },
-                        //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '7' },
-                        //{ platform: 'Windows XP', browserName: 'Internet Explorer', version: '6' },
-                        //{ platform: 'Linux', browserName: 'android', version: '5.1', deviceName: 'Android Emulator', deviceOrientation: 'portrait' },
-                        //{ platform: 'OS X 10.11', browserName: 'safari', version: '9.0' },
-                        //{ platform: 'OS X 10.10', browserName: 'iphone', version: '9.2', deviceName: 'iPhone 6 Plus', deviceOrientation: 'portrait' },
-                        //{ platform: 'OS X 10.10', browserName: 'iphone', version: '9.2', deviceName: 'iPad Retina', deviceOrientation: 'portrait' }
+                        { platform: 'Windows 7', browserName: 'chrome', version: '46.0' },
+                        { platform: 'Windows 7', browserName: 'firefox', version: '42.0' },
+                        { platform: 'Windows 10', browserName: 'MicrosoftEdge', version: '20.10240' },
+                        { platform: 'Windows 8.1', browserName: 'internet Explorer', version: '11.0' },
+                        //{ platform: 'Windows 8', browserName: 'internet Explorer', version: '10.0' },
+                        //{ platform: 'Windows 7', browserName: 'internet Explorer', version: '9.0' },
+                        //{ platform: 'Windows 7', browserName: 'internet Explorer', version: '8.0' },
+                        //{ platform: 'Windows XP', browserName: 'internet Explorer', version: '7.0' },
+                        //{ platform: 'Windows XP', browserName: 'internet Explorer', version: '6.0' },
+                        { platform: 'Linux', browserName: 'android', version: '5.1', deviceName: 'Android Emulator', deviceOrientation: 'portrait' },
+                        { platform: 'OS X 10.11', browserName: 'safari', version: '9.0' },
+                        { platform: 'OS X 10.10', browserName: 'iphone', version: '9.2', deviceName: 'iPhone 6', deviceOrientation: 'portrait' },
+                        { platform: 'OS X 10.10', browserName: 'iphone', version: '9.2', deviceName: 'iPad Retina', deviceOrientation: 'portrait' }
                     ]
                 }
             }

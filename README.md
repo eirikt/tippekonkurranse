@@ -23,14 +23,13 @@ Hosted [here][1].
 &nbsp;&nbsp;&nbsp;
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/tippekonkurranse.svg)](https://saucelabs.com/u/tippekonkurranse)
 
-[![Codacy Badge2](https://img.shields.io/codacy/69206fcb0df6462ca559610af32fd1fb.svg)](https://www.codacy.com/public/eiriktorske/tippekonkurranse/dashboard)
 
 
 ## Scope
 * Screen-scraping norwegian soccer result web pages
 * Calculating rating and rank
 * Simple multi-device-friendly presentation
-* Idiomatic code base
+* Idiomatic code base (well, 2014-style at least)
 * Deployment to [Heroku][30]
 
 
@@ -41,9 +40,9 @@ Hosted [here][1].
 * More robust backend data handling
 * Node 5.x
 * Dependency updates
-* Results and season data update
+* Results and season input data updates
 
-_Status: In process ..._
+_Status: In process_
 
 
 #### v1.3.8 : _Deployed 23.12.2015_
@@ -78,7 +77,6 @@ _Status: Done_
 
 #### v1.3.4 : _Deployed 07.05.2015_
 * Cup results update
-* Cup round
 * ~~io.js 2.x~~ (too early it seems, rolled back to 1.x)
 * ~~Modularizing RQ stuff via npm GitHub~~ (leads to 'unmet dependency', rolled back to copy of code ...)
 
@@ -163,21 +161,21 @@ _Status: Done_
 _Status: Done_
 
 
-#### v1.1.6 : _Delivery goal 06.06.2014_
+#### v1.1.6 : _Deployed 06.06.2014_
 * Altered participant rating, skipping non-used rating numbers
 * Bugfix: Sorting of participants
 
 _Status: Done_
 
 
-#### v1.1.5 : _Delivery goal 18.05.2014_
+#### v1.1.5 : _Deployed 18.05.2014_
 * Improved notifications with toastr
 * Client-side routing established
 
 _Status: Done_
 
 
-#### v1.1.4 : _Delivery goal 05.05.2014_
+#### v1.1.4 : _Deployed 05.05.2014_
 * An attempt to make better Facebook URL presence ~~(must be tested/verified live)~~ yep, looks better
 * Offline capability / Resilient against Tippekonkurranse server dropouts
 * An attempt for improved response times with some caching
@@ -186,7 +184,7 @@ _Status: Done_
 _Status: Done_
 
 
-#### v1.1.3 : _Delivery goal 28.04.2014_
+#### v1.1.3 : _Deployed 28.04.2014_
 * View current Tippeliga results, and other relevant data
 * Better touch device UX: uniform finger-friendly buttons
 * Better touch device UX: remove hover striping
@@ -195,7 +193,7 @@ _Status: Done_
 _Status: Done_
 
 
-#### v1.1.2 : Bugfix release
+#### v1.1.2 : Bugfix release, _deployed 22.04.2014_
 * Tippeliga 2014, round 4 bugfixes
 * Bugfix: MongoDB won't save new data
 * Bugfix: Won't update round with 16 ongoing matches (masked by previous bug :-)
@@ -204,20 +202,20 @@ _Status: Done_
 _Status: Done_
 
 
-#### v1.1.1 : _Delivery goal 21.04.2014_
+#### v1.1.1 : _Deployed 21.04.2014_
 * View all user's predictions
 
 _Status: Done_
 
 
-#### v1.1.0 : _Delivery goal 16.04.2014_
+#### v1.1.0 : _Deployed 16.04.2014_
 * Persistent data with MongoDB
 * Tendency markers in table (moving up or down compared to previous round)
 
 _Status: Done_
 
 
-#### v1.0.0 : _Delivery goal 06.04.2014_
+#### v1.0.0 : _Deployed 06.04.2014_
 * __First feature-complete version__
 
 _Status: Done_
@@ -352,7 +350,7 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 ## [License](#license)
 The MIT License (MIT)
 
-Copyright (c) 2014-2015 Eirik Torske
+Copyright (c) 2014-2016 Eirik Torske
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
