@@ -17,7 +17,7 @@ Hosted [here][1].
 
 <sub><sup>__Server-side__:</sup></sub> [![Dependency Status](https://www.versioneye.com/user/projects/54690c9395082540da000012/badge.svg)](https://www.versioneye.com/user/projects/54690c9395082540da000012)
 &nbsp;&nbsp;&nbsp;
-[![Coverage Status](https://coveralls.io/repos/eirikt/tippekonkurranse/badge.png?branch=master)](https://coveralls.io/r/eirikt/tippekonkurranse?branch=master)
+[![Coverage Status](https://coveralls.io/repos/eirikt/tippekonkurranse/badge.svg?branch=master&service=github)](https://coveralls.io/github/eirikt/tippekonkurranse?branch=master)
 
 <sub><sup>__Client-side__:</sup></sub> [![Dependency Status](https://www.versioneye.com/user/projects/54690c92950825928500000b/badge.svg)](https://www.versioneye.com/user/projects/54690c92950825928500000b)
 &nbsp;&nbsp;&nbsp;

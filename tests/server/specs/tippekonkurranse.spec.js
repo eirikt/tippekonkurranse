@@ -4,7 +4,6 @@
 var __ = require("underscore"),
 
     expect = require("chai").expect,
-    //rq = require("rq-essentials"),
     rq = require("RQ-essentials"),
 
     Comparators = require('../../../shared/scripts/comparators'),
@@ -13,18 +12,23 @@ var __ = require("underscore"),
 
     TeamPlacement = require("../../../shared/scripts/app.models").TeamPlacement,
     TippekonkurranseData = require("../../../shared/scripts/app.models").TippekonkurranseData,
+    tippekonkurranse = require("../../../server/scripts/tippekonkurranse"),
 
-    addRound = require("../../../server/scripts/tippekonkurranse").addRound,
-    addTippekonkurranseScoresRequestor = require("../../../server/scripts/tippekonkurranse").addTippekonkurranseScoresRequestor,
+    addRound = tippekonkurranse.addRound,
+    addTippekonkurranseScoresRequestor = tippekonkurranse.addTippekonkurranseScoresRequestor,
 
-    predictions2014 = require("../../../server/scripts/tippekonkurranse").predictions[2014],
-    rules2014 = require("../../../server/scripts/tippekonkurranse").rules[2014],
+    predictions2014 = tippekonkurranse.predictions[2014],
+    rules2014 = tippekonkurranse.rules[2014],
 
-    predictions2015 = require("../../../server/scripts/tippekonkurranse").predictions[2015],
-    rules2015 = require("../../../server/scripts/tippekonkurranse").rules[2015],
+    predictions2015 = tippekonkurranse.predictions[2015],
+    rules2015 = tippekonkurranse.rules[2015],
+
+    predictions2016 = tippekonkurranse.predictions[2016],
+    rules2016 = tippekonkurranse.rules[2016],
 
     addTippekonkurranseScores2014 = curry(addTippekonkurranseScoresRequestor, predictions2014, rules2014),
     addTippekonkurranseScores2015 = curry(addTippekonkurranseScoresRequestor, predictions2015, rules2015),
+    addTippekonkurranseScores2016 = curry(addTippekonkurranseScoresRequestor, predictions2016, rules2016),
 
     expectDefaultGlobalStatePreserved = function () {
         "use strict";
@@ -93,6 +97,11 @@ describe("Tippekonkurranse", function () {
 
     describe("addTippekonkurranseScores requestor", function () {
 
+        it("should throw error if no user predictions are provided", function () {
+            expect(addTippekonkurranseScoresRequestor).to.throw(Error, "User predictions are missing - cannot calculate Tippekonkurranse scores");
+        });
+
+
         it("should throw error if no requestion argument is provided", function () {
             expect(addTippekonkurranseScores2014).to.throw(Error, "RQ callback argument is missing - check your RQ setup");
         });
@@ -100,11 +109,6 @@ describe("Tippekonkurranse", function () {
 
         it("should throw error if no argument array is provided", function () {
             expect(curry(addTippekonkurranseScores2014, rq.execute)).to.throw(Error, "RQ callback argument array is missing - check your RQ setup");
-        });
-
-
-        it("should throw error if no user predictions are provided", function () {
-            expect(addTippekonkurranseScoresRequestor).to.throw(Error, "User predictions are missing - cannot calculate Tippekonkurranse scores");
         });
 
 

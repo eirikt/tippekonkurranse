@@ -219,7 +219,7 @@ var __ = require('underscore'),
                 }
 
                 // Extra check for end of season/new season results available and predictions are not
-                // TODO: Revisit this logic ... in 2016
+                // TODO: Revisit this logic ... during 2016
                 if (/*!rqInternalStack.isDbConnected &&*/ new Date().getMonth() >= 11 && tippeligatable[0].matches && parseInt(tippeligatable[0].matches, 10) === 0) {
                     return callback(null, { message: "Retrieved tippeligatable result is not in sync with stored results - is it a new season?" });
                 }
