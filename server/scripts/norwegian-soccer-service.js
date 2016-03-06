@@ -1,12 +1,12 @@
 /* global require: false, exports: false */
 
 // Module dependencies, external
-var __ = require('underscore'),
+var R = require('ramda'),
     cheerio = require('cheerio'),
     RQ = require('async-rq'),
-    rq = require('RQ-essentials'),
+    rq = require('rq-essentials'),
     then = rq.then,
-    get = rq.get,
+    get = rq.http.get,
 
 // Module dependencies, local application-specific
     TeamPlacement = require('./../../shared/scripts/app.models').TeamPlacement,
@@ -27,14 +27,14 @@ var __ = require('underscore'),
         if (!htmlContent) {
             throw new Error('Argument is missing - cannot parse');
         }
-        if (!__.isString(htmlContent)) {
+        if (!R.is(String, htmlContent)) {
             throw new Error('Argument is not a string - cannot parse');
         }
 
         $ = cheerio.load(htmlContent, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false });
         rows = $('table').first().find('tbody').find('tr');
 
-        __.each(rows, function (element) {
+        R.forEach(function (element) {
             var $cells = $(element).find('td'),
                 no = $($cells[0]).html(),
                 team = $cells.find('a').first().html(),
@@ -45,10 +45,12 @@ var __ = require('underscore'),
             team = team.replace('&nbsp;', ' ');
 
             // Normalize ...
+            no = parseInt(no, 10);
 
             // The data format
-            currentTable.push(new TeamPlacement(team, parseInt(no, 10), matches));
-        });
+            currentTable.push(new TeamPlacement(team, no, matches));
+        }, rows);
+
         return currentTable;
     },
 
@@ -61,8 +63,6 @@ var __ = require('underscore'),
     parseObosligaTable = parseAltOmFotballHtmlTable,
 
 
-    currentTippeligaToppscorerTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&seasonId=&teamId=&useFullUrl=false',
-
     /**
      * Publicly available for testing purposes only
      */
@@ -74,37 +74,38 @@ var __ = require('underscore'),
         if (!htmlContent) {
             throw new Error('Argument is missing - cannot parse');
         }
-        if (!__.isString(htmlContent)) {
+        if (!R.is(String, htmlContent)) {
             throw new Error('Argument is not a string - cannot parse');
         }
 
         $ = cheerio.load(htmlContent, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false });
         rows = $('tbody').find('tr');
 
-        __.each(rows, function (element, index) {
+        R.forEach(function (element) {
             var $cells = $(element).find('td'),
                 player = $cells.find('a').first().html(),
                 goals = $($cells[3]).html();
 
             // Launder ...
-            // => max three spaces in name ...
+            // Max three spaces in name ...
             player = player.replace('&nbsp;', ' ').replace('&nbsp;', ' ').replace('&nbsp;', ' ');
 
             // Normalize ...
 
             // Filter ...
-            if (index === 0) {
+            if (!maxGoals) {
                 maxGoals = goals;
-                // The data format
-                topScorers.push(player);
-
-            } else if (goals === maxGoals) {
+            }
+            if (!maxGoals || goals === maxGoals) {
                 // The data format
                 topScorers.push(player);
             }
-        });
+        }, rows);
+
         return topScorers;
     },
+
+    currentTippeligaToppscorerTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&seasonId=&teamId=&useFullUrl=false',
 
 
 //////////////////////////////////////////////
@@ -187,11 +188,11 @@ var __ = require('underscore'),
      */
     isValid = exports.isValid =
         RQ.sequence([
-            rq.push,
+            rq.stack.push,
             isEnabled,
             function (callback, args) {
                 'use strict';
-                var current = rq._getStack().pop(),
+                var current = rq.stack._getStack().pop(),
                     tippeligatable,
                     obosligatable,
                     tippeligatableTopScorer;

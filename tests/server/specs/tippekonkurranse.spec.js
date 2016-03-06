@@ -164,7 +164,7 @@ describe("Tippekonkurranse", function () {
                 },
                 args = [];
 
-            rq.executeAndVerify(addTippekonkurranseScores, args, verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, args, verify, done);
         });
 
 
@@ -200,7 +200,7 @@ describe("Tippekonkurranse", function () {
                 },
                 args = [];
 
-            rq.executeAndVerify(addTippekonkurranseScores, args, verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, args, verify, done);
         });
 
 
@@ -238,7 +238,7 @@ describe("Tippekonkurranse", function () {
                 },
                 args = [];
 
-            rq.executeAndVerify(addTippekonkurranseScores, args, verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, args, verify, done);
         });
 
 
@@ -279,7 +279,7 @@ describe("Tippekonkurranse", function () {
                 },
                 args = [];
 
-            rq.executeAndVerify(addTippekonkurranseScores, args, verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, args, verify, done);
         });
 
 
@@ -385,7 +385,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTable = actualTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
@@ -439,7 +439,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTable = twoPenaltyPoints;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
@@ -493,7 +493,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTable = tenPenaltyPoints;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
@@ -547,7 +547,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTable = thirtyTwoPenaltyPoints;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
@@ -590,7 +590,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTable = reversedTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
     });
 
@@ -650,7 +650,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTable = actualNedrykkTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
@@ -707,7 +707,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTable = actualNedrykkTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
@@ -764,7 +764,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTable = actualNedrykkTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
@@ -821,7 +821,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTable = actualNedrykkTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
@@ -878,7 +878,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTable = actualNedrykkTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
     });
 
@@ -909,7 +909,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.adeccoligaTable = actualOpprykkTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
         it("2014: should give -1 if both teams exist in prediction, whatever order", function (done) {
@@ -936,7 +936,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.adeccoligaTable = actualOpprykkTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
@@ -964,7 +964,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.adeccoligaTable = actualOpprykkTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
@@ -992,7 +992,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.adeccoligaTable = actualOpprykkTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
     });
 
@@ -1018,7 +1018,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTopScorer = actualToppscorerTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
@@ -1041,7 +1041,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTopScorer = actualToppscorerTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
@@ -1064,7 +1064,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTopScorer = actualToppscorerTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
@@ -1087,7 +1087,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTopScorer = actualToppscorerTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
@@ -1110,7 +1110,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTopScorer = actualToppscorerTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
@@ -1133,7 +1133,7 @@ describe("Tippekonkurranse", function () {
 
             inputArgs.tippeligaTopScorer = actualToppscorerTable;
 
-            rq.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
     });
 });

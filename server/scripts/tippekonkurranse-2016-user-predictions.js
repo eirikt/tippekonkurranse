@@ -1,11 +1,16 @@
 /* jshint -W106 */
 var _predictions2016 = exports.predictions = {
+    einar: {
+        tabell: [],
+        opprykk: [],
+        toppscorer: [],
+        cup: []
+    },
     eirik: {
         tabell: [],
         opprykk: [],
         toppscorer: [],
         cup: []
-
     },
     hans_bernhard: {
         tabell: [],

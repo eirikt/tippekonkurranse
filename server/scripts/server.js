@@ -14,7 +14,7 @@ var env = process.env.NODE_ENV || "development",
     express = require("express"),
     RQ = require("async-rq"),
     sequence = RQ.sequence,
-    rq = require("RQ-essentials"),
+    rq = require("rq-essentials"),
     clone = rq.utilities.clone,
 
 // Module dependencies, local generic

@@ -36,13 +36,19 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
-#### v1.3.9 :
+#### v1.3.10 : _Deployed 06.03.2016_
+* Dependency updates
+
+_Status: Done_
+
+
+#### v1.3.9 : _Deployed 08.01.2016_
 * More robust backend data handling
 * Node 5.x
 * Dependency updates
 * Results and season input data updates
 
-_Status: In process_
+_Status: Done_
 
 
 #### v1.3.8 : _Deployed 23.12.2015_
