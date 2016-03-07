@@ -1,10 +1,27 @@
 /* jshint -W106 */
 var _predictions2016 = exports.predictions = {
     einar: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Strømsgodset',
+            'Molde',
+            'Odd',
+            'Lillestrøm',
+            'Vålerenga',
+            'Viking',
+            'Sarpsborg 08',
+            'Stabæk',
+            'Brann',
+            'Aalesund',
+            'Bodø/Glimt',
+            'Haugesund',
+            'Tromsø',
+            'Start',
+            'Sogndal'
+        ],
+        opprykk: ['Sandefjord', 'Mjøndalen'],
+        toppscorer: ['Christian Gytkjær'],
+        cup: ['Rosenborg']
     },
     eirik: {
         tabell: [],
