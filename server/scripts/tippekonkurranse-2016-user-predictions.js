@@ -19,7 +19,10 @@ var _predictions2016 = exports.predictions = {
             'Start',
             'Sogndal'
         ],
-        opprykk: ['Sandefjord', 'Mjøndalen'],
+        opprykk: [
+            'Sandefjord',
+            'Mjøndalen'
+        ],
         toppscorer: ['Christian Gytkjær'],
         cup: ['Rosenborg']
     },
@@ -42,10 +45,30 @@ var _predictions2016 = exports.predictions = {
         cup: []
     },
     oddgeir: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Molde',
+            'RBK',
+            'Strømsgodset',
+            'Odd',
+            'Vålerenga',
+            'Viking',
+            'Lillestrøm',
+            'Brann',
+            'Sarpsborg 08',
+            'Stabæk',
+            'Tromsø',
+            'Haugesund',
+            'Sogndal',
+            'Ålesund',
+            'Bodø/Glimt',
+            'Start'
+        ],
+        opprykk: [
+            'Sandefjord',
+            'Mjøndalen'
+        ],
+        toppscorer: ['Christian Gytkjær'],
+        cup: ['Strømsgodset']
     },
     oddvar: {
         tabell: [],
@@ -60,9 +83,29 @@ var _predictions2016 = exports.predictions = {
         cup: []
     },
     rikard: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
+        tabell: [
+            'Molde',
+            'Rosenborg',
+            'Odd',
+            'Strømsgodset',
+            'Vålerenga',
+            'Viking',
+            'Lillestrøm',
+            'Stabæk',
+            'Sarpsborg 08',
+            'Haugesund',
+            'Brann',
+            'Bodø/Glimt',
+            'Tromsø',
+            'Aalesund',
+            'Sogndal',
+            'Start'
+        ],
+        opprykk: [
+            'Mjøndalen',
+            'Hødd'
+        ],
+        toppscorer: ['Christian Gytkjær'],
         cup: []
     },
     svein_tore: {
@@ -78,15 +121,55 @@ var _predictions2016 = exports.predictions = {
         cup: []
     },
     tore: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Molde',
+            'Rosenborg',
+            'Odd',
+            'Viking',
+            'Vålerenga',
+            'Strømsgodset',
+            'Lillestrøm',
+            'Ålesund',
+            'Stabæk',
+            'Sarpsborg 08',
+            'Haugesund',
+            'Tromsø',
+            'Bodø/Glimt',
+            'Sogndal',
+            'Brann',
+            'Start'
+        ],
+        opprykk: [
+            'Fredrikstad',
+            'Kristiansund'
+        ],
+        toppscorer: ['Fredrik Gulbrandsen'],
+        cup: ['Molde']
     },
     trond: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Molde',
+            'Odd',
+            'Strømsgodset',
+            'Viking',
+            'Lillestrøm',
+            'Vålerenga',
+            'Haugesund',
+            'Sarpsborg 08',
+            'Stabæk',
+            'Brann',
+            'Bodø/Glimt',
+            'Sogndal',
+            'Aalesund',
+            'Tromsø',
+            'Start'
+        ],
+        opprykk: [
+            'Sandnes Ulf',
+            'Mjøndalen'
+        ],
+        toppscorer: ['Pål André Helland'],
+        cup: ['Strømsgodset']
     }
 };
