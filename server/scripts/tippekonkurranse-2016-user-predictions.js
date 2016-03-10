@@ -71,16 +71,56 @@ var _predictions2016 = exports.predictions = {
         cup: ['Strømsgodset']
     },
     oddvar: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Odd',
+            'Lillestrøm',
+            'Molde',
+            'Strømsgodset',
+            'Vålerenga',
+            'Viking',
+            'Sarpsborg 08',
+            'Stabæk',
+            'Haugesund',
+            'Brann',
+            'Bodø/Glimt',
+            'Aalesund',
+            'Tromsø',
+            'Sogndal',
+            'Start'
+        ],
+        opprykk: [
+            'Sandnes Ulf',
+            'Mjøndalen'
+        ],
+        toppscorer: ['Marcus Pedersen'],
+        cup: ['Odd']
     },
     ole_erik: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Molde',
+            'Rosenborg',
+            'Odd',
+            'Strømsgodset',
+            'Vålerenga',
+            'Viking',
+            'Stabæk',
+            'Lillestrøm',
+            'Sarpsborg 08',
+            'Haugesund',
+            'Sogndal',
+            'Brann',
+            'Tromsø',
+            'Bodø/Glimt',
+            'Aalesund',
+            'Start'
+        ],
+        opprykk: [
+            'Sandnes Ulf',
+            'Mjøndalen'
+        ],
+        toppscorer: ['Fredrik Guldbrandsen'],
+        cup: ['Molde']
     },
     rikard: {
         tabell: [
