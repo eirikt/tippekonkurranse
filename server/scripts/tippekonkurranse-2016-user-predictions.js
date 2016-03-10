@@ -47,7 +47,7 @@ var _predictions2016 = exports.predictions = {
     oddgeir: {
         tabell: [
             'Molde',
-            'RBK',
+            'Rosenborg',
             'Strømsgodset',
             'Odd',
             'Vålerenga',
@@ -59,7 +59,7 @@ var _predictions2016 = exports.predictions = {
             'Tromsø',
             'Haugesund',
             'Sogndal',
-            'Ålesund',
+            'Aalesund',
             'Bodø/Glimt',
             'Start'
         ],
@@ -106,7 +106,7 @@ var _predictions2016 = exports.predictions = {
             'Hødd'
         ],
         toppscorer: ['Christian Gytkjær'],
-        cup: []
+        cup: ['Strømsgodset']
     },
     svein_tore: {
         tabell: [],
@@ -129,7 +129,7 @@ var _predictions2016 = exports.predictions = {
             'Vålerenga',
             'Strømsgodset',
             'Lillestrøm',
-            'Ålesund',
+            'Aalesund',
             'Stabæk',
             'Sarpsborg 08',
             'Haugesund',
