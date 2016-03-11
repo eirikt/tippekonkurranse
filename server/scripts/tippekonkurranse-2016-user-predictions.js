@@ -53,10 +53,30 @@ var _predictions2016 = exports.predictions = {
         cup: ['Molde']
     },
     hans_bernhard: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Vålerenga',
+            'Molde',
+            'Rosenborg',
+            'Tromsø',
+            'Haugesund',
+            'Brann',
+            'Odd',
+            'Lillestrøm',
+            'Bodø/Glimt',
+            'Start',
+            'Viking',
+            'Stabæk',
+            'Sarpsborg 08',
+            'Strømsgodset',
+            'Aalesund',
+            'Sogndal'
+            ],
+        opprykk: [
+            'Raufoss',
+            'Bryne'
+        ],
+        toppscorer: ['Fredrik Guldbrandsen'],
+        cup: ['Vålerenga']
     },
     jan_tore: {
         tabell: [],
