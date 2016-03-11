@@ -27,10 +27,30 @@ var _predictions2016 = exports.predictions = {
         cup: ['Rosenborg']
     },
     eirik: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Molde',
+            'Strømsgodset',
+            'Odd',
+            'Stabæk',
+            'Rosenborg',
+            'Vålerenga',
+            'Viking',
+            'Bodø/Glimt',
+            'Sarpsborg 08',
+            'Brann',
+            'Aalesund',
+            'Haugesund',
+            'Lillestrøm',
+            'Tromsø',
+            'Sogndal',
+            'Start'
+        ],
+        opprykk: [
+            'Jerv',
+            'Mjøndalen'
+        ],
+        toppscorer: ['Marcus Pedersen'],
+        cup: ['Molde']
     },
     hans_bernhard: {
         tabell: [],
@@ -155,10 +175,31 @@ var _predictions2016 = exports.predictions = {
         cup: []
     },
     steinar: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Molde',
+            'Rosenborg',
+            'Odd',
+            'Strømsgodset',
+            'Viking',
+            'Vålerenga',
+            'Lillestrøm',
+            'Stabæk',
+            'Brann',
+            'Bodø/Glimt',
+            'Aalesund',
+            'Sogndal',
+            'Sarpsborg 08',
+            'Haugesund',
+            'Sogndal',
+            'Tromsø',
+            'Start'
+        ],
+        opprykk: [
+            'Fredrikstad',
+            'Hødd'
+        ],
+        toppscorer: ['Fredrik Gulbrandsen'],
+        cup: ['Rosenborg']
     },
     tore: {
         tabell: [
