@@ -186,7 +186,7 @@ var _predictions2016 = exports.predictions = {
             'Hødd'
         ],
         toppscorer: ['Christian Gytkjær'],
-        cup: ['Strømsgodset']
+        cup: ['Molde']
     },
     svein_tore: {
         tabell: [],

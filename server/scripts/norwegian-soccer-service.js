@@ -216,7 +216,8 @@ var R = require('ramda'),
                     return callback(null, { message: 'Retrieved tippeligatable result is not in sync with stored results - is it a new season?' });
                 }
                 if (parseInt(obosligatable[0].matches, 10) < current.currentRound) {
-                    return callback(null, { message: 'Retrieved obosligatable result is not in sync with stored results - is it a new season?' });
+                    //return callback(null, { message: 'Retrieved obosligatable result is not in sync with stored results - is it a new season?' });
+                    console.warn('Retrieved obosligatable result is not in sync with stored results - is it a new season?');
                 }
 
                 // Extra check for end of season/new season results available and predictions are not
