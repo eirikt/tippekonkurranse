@@ -70,7 +70,7 @@ var _predictions2016 = exports.predictions = {
             'Strømsgodset',
             'Aalesund',
             'Sogndal'
-            ],
+        ],
         opprykk: [
             'Raufoss',
             'Bryne'
@@ -189,10 +189,30 @@ var _predictions2016 = exports.predictions = {
         cup: ['Molde']
     },
     svein_tore: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Molde',
+            'Vålerenga',
+            'Rosenborg',
+            'Lillestrøm',
+            'Viking',
+            'Strømsgodset',
+            'Odd',
+            'Stabæk',
+            'Aalesund',
+            'Haugesund',
+            'Brann',
+            'Tromsø',
+            'Start',
+            'Bodø/Glimt',
+            'Sarpsborg 08',
+            'Sogndal'
+        ],
+        opprykk: [
+            'Sandefjord',
+            'Sandnes Ulf'
+        ],
+        toppscorer: ['Eidur Gudjohnsen'],
+        cup: ['Molde']
     },
     steinar: {
         tabell: [
