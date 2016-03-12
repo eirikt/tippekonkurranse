@@ -1,14 +1,14 @@
 {
     "name": "Tippekonkurranse",
     "dependencies": {
-        "requirejs": "~2.1.18",
-        "bootstrap": "~3.3.4",
-        "bootstrap-switch": "~3.3.2",
-        "fontawesome": "~4.5.0",
-        "marionette": "~2.4.2",
-        "moment": "~2.11.0",
-        "toastr": "~2.1.1",
-        "jqplot-bower": "~1.0.8",
-        "jquery.countdown": "~2.1.0"
+        "requirejs": "2.x",
+        "bootstrap": "3.x",
+        "bootstrap-switch": "3.x",
+        "fontawesome": "4.x",
+        "marionette": "2.x",
+        "moment": "2.x",
+        "toastr": "2.x",
+        "jqplot-bower": "1.x",
+        "jquery.countdown": "2.x"
     }
 }
