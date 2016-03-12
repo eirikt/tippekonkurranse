@@ -4,7 +4,7 @@
 var __ = require("underscore"),
 
     expect = require("chai").expect,
-    rq = require("RQ-essentials"),
+    rq = require("rq-essentials"),
 
     Comparators = require('../../../shared/scripts/comparators'),
     curry = require("../../../shared/scripts/fun").curry,
