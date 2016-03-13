@@ -79,10 +79,30 @@ var _predictions2016 = exports.predictions = {
         cup: ['Vålerenga']
     },
     jan_tore: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Molde',
+            'Odd',
+            'Strømsgodset',
+            'Viking',
+            'Lillestrøm',
+            'Vålerenga',
+            'Sarpsborg 08',
+            'Stabæk',
+            'Haugesund',
+            'Tromsø',
+            'Bodø/Glimt',
+            'Aalesund',
+            'Brann',
+            'Sogndal',
+            'Start'
+        ],
+        opprykk: [
+            'Sandefjord',
+            'Mjøndalen]'
+        ],
+        toppscorer: ['Marcus Pedersen'],
+        cup: ['Rosenborg']
     },
     oddgeir: {
         tabell: [
