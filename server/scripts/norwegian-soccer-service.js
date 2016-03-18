@@ -212,8 +212,10 @@ var R = require('ramda'),
                     return callback(null, { message: 'Retrieved obosligatable result has not 16 teams ("norwegian-soccer-service.js")' });
                 }
 
+                // TODO: Revisit this logic ... during 2016 - those below are not specific enough! Crashed the app in round 1 and the start of round 2 ...
                 if (parseInt(tippeligatable[0].matches, 10) < current.currentRound) {
-                    return callback(null, { message: 'Retrieved tippeligatable result is not in sync with stored results - is it a new season?' });
+                    //return callback(null, { message: 'Retrieved tippeligatable result is not in sync with stored results - is it a new season?' });
+                    console.warn('Retrieved tippeligatable result is not in sync with stored results - is it a new season?');
                 }
                 if (parseInt(obosligatable[0].matches, 10) < current.currentRound) {
                     //return callback(null, { message: 'Retrieved obosligatable result is not in sync with stored results - is it a new season?' });
@@ -221,7 +223,6 @@ var R = require('ramda'),
                 }
 
                 // Extra check for end of season/new season results available and predictions are not
-                // TODO: Revisit this logic ... during 2016
                 if (/*!rqInternalStack.isDbConnected &&*/ new Date().getMonth() >= 11 && tippeligatable[0].matches && parseInt(tippeligatable[0].matches, 10) === 0) {
                     return callback(null, { message: "Retrieved tippeligatable result is not in sync with stored results - is it a new season?" });
                 }
