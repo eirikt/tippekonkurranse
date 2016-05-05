@@ -48,8 +48,8 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
                     '            <p><strong><%= currentTippeligaTable %></strong></p>' +
                     '          </td>' +
                     '          <td style="width:33%;vertical-align:top;">' +
-                    '            <p style="margin-left:.8rem">Adeccoliga:</p>' +
-                    '            <p><strong><%= currentAdeccoligaTable %></strong></p>' +
+                    '            <p style="margin-left:.8rem">OBOS-liga:</p>' +
+                    '            <p><strong><%= currentObosligaTable %></strong></p>' +
                     '          </td>' +
                     '          <td style="width:33%;vertical-align:top;">' +
                     '            <p>Toppskårer:</p>' +
@@ -99,10 +99,10 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
 
                     // Pretty tabell presentation
                     prettyTabellView = new SoccerTableViews.SimpleTableView({
-                        model: this.model.get('currentAdeccoligaTable'),
+                        model: this.model.get('currentObosligaTable'),
                         emphasizeFormat: '2+0'
                     });
-                    this.model.set('currentAdeccoligaTable', prettyTabellView.render().$el.html(), { silent: true });
+                    this.model.set('currentObosligaTable', prettyTabellView.render().$el.html(), { silent: true });
 
                     // Pretty toppscorer presentation
                     toppscorer = this.model.get('currentTippeligaToppscorer');

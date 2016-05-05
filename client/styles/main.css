@@ -284,6 +284,19 @@ button#pageRefresher {
     flex-basis: 0;
 }
 
+.prediction-header {
+    text-align: left;
+    padding-left: 2rem;
+
+    -webkit-order: 6;
+    -ms-order: 6;
+    order: 6;
+
+    flex-grow: 6;
+
+    flex-basis: 3rem;
+}
+
 .prediction {
     text-align: center;
 

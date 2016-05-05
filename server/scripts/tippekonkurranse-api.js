@@ -99,70 +99,23 @@ var __ = require("underscore"),
                     response.redirect(year + "/" + root.app.currentRound + "?isredirected=true&islive=true");
                 } else {
                     sequence([
-                        function (callback, args) {
-                            return callback(args);
-                        },
                         getData,
-                        function (callback, args) {
-                            return callback(args);
-                        },
                         then(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
-                        function (callback, args) {
-                            return callback(args);
-                        },
                         then(tippekonkurranse.addRound),
-                        //thenAddScores,
-                        //function (callback, args) {
-                        //    return callback(args);
-                        //},
-                        //thenAddPreviousScores,
-                        function (callback, args) {
-                            return callback(args);
-                        },
                         then(tippekonkurranse.addMetadataToScores),
-                        function (callback, args) {
-                            return callback(args);
-                        },
-                        then(presentData),
-                        function (callback, args) {
-                            return callback(args);
-                        }
+                        then(presentData)
                     ])(go);
                 }
 
             } else if (round && year && root.app.isCompletedRound(round, year)) {
                 sequence([
-                    //function (callback, args) {
-                    //    return callback(args);
-                    //},
                     getData,
-                    //function (callback, args) {
-                    //    return callback(args);
-                    //},
                     then(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
-                    //function (callback, args) {
-                    //    return callback(args);
-                    //},
                     then(tippekonkurranse.addRound),
-                    //function (callback, args) {
-                    //    return callback(args);
-                    //},
                     thenAddScores,
-                    //function (callback, args) {
-                    //    return callback(args);
-                    //},
                     thenAddPreviousScores,
-                    //function (callback, args) {
-                    //    return callback(args);
-                    //},
                     then(tippekonkurranse.addMetadataToScores),
-                    //function (callback, args) {
-                    //    return callback(args);
-                    //},
-                    then(presentData)//,
-                    //function (callback, args) {
-                    //    return callback(args);
-                    //}
+                    then(presentData)
                 ])(go);
 
             } else {

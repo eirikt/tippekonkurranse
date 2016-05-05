@@ -907,7 +907,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.opprykk).to.equal(-1);
                 };
 
-            inputArgs.adeccoligaTable = actualOpprykkTable;
+            inputArgs.obosligaTable = actualOpprykkTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -934,7 +934,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.opprykk).to.equal(-1);
                 };
 
-            inputArgs.adeccoligaTable = actualOpprykkTable;
+            inputArgs.obosligaTable = actualOpprykkTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -962,7 +962,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.opprykk).to.equal(0);
                 };
 
-            inputArgs.adeccoligaTable = actualOpprykkTable;
+            inputArgs.obosligaTable = actualOpprykkTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -990,7 +990,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.opprykk).to.equal(0);
                 };
 
-            inputArgs.adeccoligaTable = actualOpprykkTable;
+            inputArgs.obosligaTable = actualOpprykkTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });

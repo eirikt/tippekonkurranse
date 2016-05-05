@@ -36,6 +36,13 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
+#### v1.3.11 : _Deployed 05.05.2016_
+* Dependency updates
+* Results updates
+
+_Status: Done_
+
+
 #### v1.3.10 : _Deployed 06.03.2016_
 * Dependency updates
 
@@ -44,7 +51,7 @@ _Status: Done_
 
 #### v1.3.9 : _Deployed 08.01.2016_
 * More robust backend data handling
-* Node 5.x
+* Node.js 5.x
 * Dependency updates
 * Results and season input data updates
 
@@ -228,7 +235,7 @@ _Status: Done_
 
 
 #### v0.0.11 : Last iteration
-* Implement "adecco-opprykk" point calculations
+* Implement "obos-opprykk" point calculations
 * Add specifications
 * Feedback and fixes ...
 

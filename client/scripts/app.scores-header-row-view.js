@@ -67,7 +67,7 @@ define(
 
             PredictionHeadingView = Marionette.ItemView.extend({
                 tagName: 'div',
-                className: 'prediction current-results',
+                className: 'prediction-header current-results',
                 template: _.template(
                     '<button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#currentResultsTable">Gjeldende resultater</button>',
                     { variable: 'args' }

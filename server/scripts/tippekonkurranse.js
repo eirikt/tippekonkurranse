@@ -93,16 +93,25 @@ var env = process.env.NODE_ENV || "development",
 
 
     _calculateOpprykkScores =
-        function (strategy, participantObj, adeccoligaTable) {
+        function (strategy, participantObj, obosligaTable) {
             "use strict";
             if (__.isEmpty(participantObj.opprykk)) {
                 console.warn(utils.logPreamble() + "'Opprykk' property is missing");
                 return 1000;
             }
-            return utils.getPresentPoints(strategy.opprykkScoreStrategy.polarity, strategy.opprykkScoreStrategy.weight,
-                [participantObj.opprykk[0], participantObj.opprykk[1]],
-                [adeccoligaTable[0].name, adeccoligaTable[1].name]
-            );
+            if (!obosligaTable) {
+                //console.warn(JSON.stringify(strategy));
+                //console.warn(JSON.stringify(participantObj));
+                //console.warn(JSON.stringify(obosligaTable));
+            } else {
+                //console.log(JSON.stringify(strategy));
+                //console.log(JSON.stringify(participantObj));
+                //console.log(JSON.stringify(obosligaTable));
+                return utils.getPresentPoints(strategy.opprykkScoreStrategy.polarity, strategy.opprykkScoreStrategy.weight,
+                    [participantObj.opprykk[0], participantObj.opprykk[1]],
+                    [obosligaTable[0].name, obosligaTable[1].name]
+                );
+            }
         },
 
 
@@ -145,7 +154,7 @@ var env = process.env.NODE_ENV || "development",
      * @private
      */
     _storeTippeligaRound =
-        function (currentTippeligaTable, currentTippeligaToppscorer, currentAdeccoligaTable, currentRemainingCupContenders, year, round, currentRoundCount, mongoDbErr, storedTippeligaRound) {
+        function (currentTippeligaTable, currentTippeligaToppscorer, currentObosligaTable, currentRemainingCupContenders, year, round, currentRoundCount, mongoDbErr, storedTippeligaRound) {
             "use strict";
             var method = null,
                 tippeligaResults,
@@ -167,7 +176,7 @@ var env = process.env.NODE_ENV || "development",
 
                 } else {
                     // TODO: Revisit logic, seems a bit strange!
-                    // TODO: Liten svakhet: Hvis Adeccoliga spiller runder mens Tippeliga ikke gjør det så blir ikke runden oppdatert ...
+                    // TODO: Liten svakhet: Hvis OBOS-liga har runde mens Tippeliga ikke har det så blir ikke runden oppdatert ...
 
                     dbCount = dbMatchesCount[round].length;
                     if (root.app.isCompletedRound(round, year)) {
@@ -190,7 +199,7 @@ var env = process.env.NODE_ENV || "development",
                     {
                         tippeliga: currentTippeligaTable,
                         toppscorer: currentTippeligaToppscorer,
-                        adeccoliga: currentAdeccoligaTable,
+                        obosliga: currentObosligaTable,
                         remainingCupContenders: currentRemainingCupContenders,
                         date: new Date() // Which as you see should be named 'documentLastModificationTimestamp'
                     },
@@ -228,7 +237,7 @@ var env = process.env.NODE_ENV || "development",
                             if (tippeligaRound) {
                                 tippekonkurranseData.tippeligaTable = tippeligaRound.tippeliga;
                                 tippekonkurranseData.tippeligaTopScorer = tippeligaRound.toppscorer;
-                                tippekonkurranseData.adeccoligaTable = tippeligaRound.adeccoliga;
+                                tippekonkurranseData.obosligaTable = tippeligaRound.obosliga;
                                 tippekonkurranseData.remainingCupContenders = tippeligaRound.remainingCupContenders;
 
                                 tippekonkurranseData.round = tippeligaRound.round;
@@ -240,7 +249,7 @@ var env = process.env.NODE_ENV || "development",
                             } else {
                                 //tippekonkurranseData.tippeligaTable = null;
                                 //tippekonkurranseData.tippeligaTopScorer = null;
-                                //tippekonkurranseData.adeccoligaTable = null;
+                                //tippekonkurranseData.obosligaTable = null;
                                 //tippekonkurranseData.remainingCupContenders = null;
 
                                 //tippekonkurranseData.round = 0;
@@ -296,7 +305,7 @@ var env = process.env.NODE_ENV || "development",
 
                 tippekonkurranseData.tippeligaTable = rq.null;
                 tippekonkurranseData.tippeligaTopScorer = rq.null;
-                tippekonkurranseData.adeccoligaTable = rq.null;
+                tippekonkurranseData.obosligaTable = rq.null;
                 tippekonkurranseData.remainingCupContenders = rq.null;
 
                 tippekonkurranseData.round = rq.null;
@@ -320,7 +329,7 @@ var env = process.env.NODE_ENV || "development",
 
                 tippekonkurranseData.tippeligaTable = norwegianSoccerLeagueService.getCurrentTippeligaTable;
                 tippekonkurranseData.tippeligaTopScorer = norwegianSoccerLeagueService.getCurrentTippeligaTopScorer;
-                tippekonkurranseData.adeccoligaTable = norwegianSoccerLeagueService.getCurrentObosligaTable;
+                tippekonkurranseData.obosligaTable = norwegianSoccerLeagueService.getCurrentObosligaTable;
                 tippekonkurranseData.remainingCupContenders = norwegianSoccerLeagueService.getCurrentRemainingCupContenders;
 
                 tippekonkurranseData.round = rq.null;
@@ -384,12 +393,12 @@ var env = process.env.NODE_ENV || "development",
                 //if (!tippekonkurranseData.currentRound) {
                 //    throw new Error("Current round is not set, it should be");
                 //}
-            //} else if (!tippekonkurranseData.isLiveDataAvailable && !tippekonkurranseData.isHistoricDataAvailable) {
-            //    tippekonkurranseData.round = root.app.currentRound;
-            //    tippekonkurranseData.currentRound = tippekonkurranseData.round;
+                //} else if (!tippekonkurranseData.isLiveDataAvailable && !tippekonkurranseData.isHistoricDataAvailable) {
+                //    tippekonkurranseData.round = root.app.currentRound;
+                //    tippekonkurranseData.currentRound = tippekonkurranseData.round;
 
-            //} else if (!tippekonkurranseData.isLiveDataAvailable && tippekonkurranseData.isHistoricDataAvailable) {
-            //    tippekonkurranseData.currentRound = tippekonkurranseData.round;
+                //} else if (!tippekonkurranseData.isLiveDataAvailable && tippekonkurranseData.isHistoricDataAvailable) {
+                //    tippekonkurranseData.currentRound = tippekonkurranseData.round;
             }
             return tippekonkurranseData.toArray();
         },
@@ -408,9 +417,9 @@ var env = process.env.NODE_ENV || "development",
             }
             //if (!root.app.isLiveDataAvailable) {
             //    console.error(utils.logPreamble() + "Live soccer result data not available ...");
-                //response.status(503).send("Live soccer result data not available");
-                //return;
-                //throw new Error("Live soccer result data not available ...");
+            //response.status(503).send("Live soccer result data not available");
+            //return;
+            //throw new Error("Live soccer result data not available ...");
             //}
             if (!callback) {
                 throw new Error("RQ callback argument is missing - check your RQ setup");
@@ -506,7 +515,7 @@ var env = process.env.NODE_ENV || "development",
                             RQ.parallel([
                                 rq.requestorize(curry(_calculateTippeligaScores, rules, userPredictions[participant], tippekonkurranseData.tippeligaTable)),
                                 rq.requestorize(curry(_calculateToppscorerScores, rules, userPredictions[participant], tippekonkurranseData.tippeligaTopScorer)),
-                                rq.requestorize(curry(_calculateOpprykkScores, rules, userPredictions[participant], tippekonkurranseData.adeccoligaTable)),
+                                rq.requestorize(curry(_calculateOpprykkScores, rules, userPredictions[participant], tippekonkurranseData.obosligaTable)),
                                 rq.requestorize(curry(_calculateCupScores, rules, userPredictions[participant], tippekonkurranseData.remainingCupContenders))
                             ]),
                             curry(_sum, ratingIndex),
@@ -602,7 +611,7 @@ var env = process.env.NODE_ENV || "development",
             response.json({
                 currentTippeligaTable: tippekonkurranseData.tippeligaTable,
                 currentTippeligaToppscorer: tippekonkurranseData.tippeligaTopScorer,
-                currentAdeccoligaTable: tippekonkurranseData.adeccoligaTable,
+                currentObosligaTable: tippekonkurranseData.obosligaTable,
                 currentRemainingCupContenders: tippekonkurranseData.remainingCupContenders,
                 currentYear: tippekonkurranseData.getYear(),
                 currentRound: tippekonkurranseData.round,
@@ -625,7 +634,7 @@ var env = process.env.NODE_ENV || "development",
                     conditionallyStoreTippeligaRound = curry(_storeTippeligaRound,
                         tippekonkurranseData.tippeligaTable,
                         tippekonkurranseData.tippeligaTopScorer,
-                        tippekonkurranseData.adeccoligaTable,
+                        tippekonkurranseData.obosligaTable,
                         tippekonkurranseData.remainingCupContenders,
                         tippekonkurranseData.getYear(),
                         tippekonkurranseData.round,

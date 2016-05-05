@@ -67,8 +67,8 @@ describe("TippekonkurranseData constructor function / objects", function () {
         expect(tippekonkurranseData.tippeligaTable).to.be.null;
         expect(tippekonkurranseData.tippeligaTopScorer).to.be.a.property;
         expect(tippekonkurranseData.tippeligaTopScorer).to.be.null;
-        expect(tippekonkurranseData.adeccoligaTable).to.be.a.property;
-        expect(tippekonkurranseData.adeccoligaTable).to.be.null;
+        expect(tippekonkurranseData.obosligaTable).to.be.a.property;
+        expect(tippekonkurranseData.obosligaTable).to.be.null;
         expect(tippekonkurranseData.remainingCupContenders).to.be.a.property;
         expect(tippekonkurranseData.remainingCupContenders).to.be.null;
         //expect(tippekonkurranseData.currentYear).to.be.a.property;
@@ -130,7 +130,7 @@ describe("TippekonkurranseData constructor function / objects", function () {
             isLive = true,
             tippeligaTable = [],
             tippeligaTopScorer = [],
-            adeccoligaTable = [],
+            obosligaTable = [],
             remainingCupContenders = [],
             currentRound = 23,
             round = 2,
@@ -143,7 +143,7 @@ describe("TippekonkurranseData constructor function / objects", function () {
             tippekonkurranseDataArray = null;
 
         // Arbitrary order of properties
-        tippekonkurranseData.adeccoligaTable = adeccoligaTable;
+        tippekonkurranseData.obosligaTable = obosligaTable;
         tippekonkurranseData.round = round;
         tippekonkurranseData.matchesCountGrouping = matchesCountGrouping;
         tippekonkurranseData.isLive = isLive;
@@ -164,7 +164,7 @@ describe("TippekonkurranseData constructor function / objects", function () {
         expect(tippekonkurranseDataArray[2]).to.equal(isLive);
         expect(tippekonkurranseDataArray[3]).to.equal(tippeligaTable);
         expect(tippekonkurranseDataArray[4]).to.equal(tippeligaTopScorer);
-        expect(tippekonkurranseDataArray[5]).to.equal(adeccoligaTable);
+        expect(tippekonkurranseDataArray[5]).to.equal(obosligaTable);
         expect(tippekonkurranseDataArray[6]).to.equal(remainingCupContenders);
         expect(tippekonkurranseDataArray[7]).to.equal(round);
         expect(tippekonkurranseDataArray[8]).to.equal(date);
