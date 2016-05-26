@@ -36,9 +36,18 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
-#### v1.3.11 : _Deployed 05.05.2016_
-* Dependency updates
+#### v1.3.12 : _Deployed 26.05.2016_
+* HTML page 'og:description' updated (long overdue ...)
 * Results updates
+* Dependency updates
+
+_Status: Done_
+
+
+#### v1.3.11 : _Deployed 05.05.2016_
+* Results updates
+* Node.js 6.x
+* Dependency updates
 
 _Status: Done_
 
@@ -51,9 +60,9 @@ _Status: Done_
 
 #### v1.3.9 : _Deployed 08.01.2016_
 * More robust backend data handling
+* Results and season input data updates
 * Node.js 5.x
 * Dependency updates
-* Results and season input data updates
 
 _Status: Done_
 
@@ -65,7 +74,7 @@ _Status: Done_
 
 
 #### v1.3.7 : _Deployed 13.08.2015_
-* Cup results update
+* Results update
 * io.js 3.x
 * Dependency updates
 

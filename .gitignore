@@ -21,5 +21,6 @@ build
 docs
 node_modules
 
-# Temp files
+# Temp files and development stuff
+grunt.cmd
 howto.txt

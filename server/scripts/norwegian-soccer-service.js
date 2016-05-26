@@ -137,15 +137,13 @@ var R = require('ramda'),
     getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
         rq.return([
             'Bodø/Glimt',
-            'Haugesund',
-            'Odd',
+            'Kongsvinger',
             'Rosenborg',
+            'Sandefjord',
             'Sarpsborg 08',
-            'Stabæk',
             'Strømsgodset',
             'Tromsø',
-            'Vålerenga',
-            'Aalesund'
+            'Vålerenga'
         ]),
 // /'Data generator' requestors
 
@@ -178,7 +176,7 @@ var R = require('ramda'),
                     return callback(null, { message: 'Internal error in RQ.js ("norwegian-soccer-service.js")' });
                 }
 
-                var tippeligaTable = args[0];
+                tippeligaTable = args[0];
                 obosligaTable = args[1];
                 tippeligaTableTopScorer = args[2];
 
