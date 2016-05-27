@@ -46,7 +46,6 @@ _Status: Done_
 
 #### v1.3.11 : _Deployed 05.05.2016_
 * Results updates
-* Node.js 6.x
 * Dependency updates
 
 _Status: Done_

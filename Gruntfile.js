@@ -375,6 +375,9 @@ module.exports = function (grunt) {
     grunt.registerTask('build:development', ['clean', 'copy:to-client', 'copy:to-build']);
     grunt.registerTask('build:client', ['build:development', 'uglify', 'cssmin']);
 
+    grunt.registerTask('lint:js', ['jshint']);
+    grunt.registerTask('lint', ['lint:js']);
+
     grunt.registerTask('test:client', ['connect', 'shell:mocha-phantomjs']);
     grunt.registerTask('test:client-development', ['build:development', 'test:client']);
     grunt.registerTask('test:client-watch', ['connect', 'watch']);

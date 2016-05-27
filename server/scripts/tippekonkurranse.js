@@ -99,6 +99,7 @@ var env = process.env.NODE_ENV || "development",
                 console.warn(utils.logPreamble() + "'Opprykk' property is missing");
                 return 1000;
             }
+            /* jshint -W035 */
             if (!obosligaTable) {
                 //console.warn(JSON.stringify(strategy));
                 //console.warn(JSON.stringify(participantObj));
