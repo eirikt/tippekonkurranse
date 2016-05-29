@@ -1,8 +1,10 @@
 CACHE MANIFEST
-# v1.3.11
+# v1.3.12
 
 CACHE:
 favicon.ico
+
+images/loading.gif
 
 bower_components/bootstrap/dist/css/bootstrap.min.css
 bower_components/fontawesome/css/font-awesome.min.css

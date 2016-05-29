@@ -8,6 +8,9 @@
         "type": "git",
         "url": "https://github.com/eirikt/tippekonkurranse.git"
     },
+    "engines": {
+        "node": "5.x"
+    },
     "dependencies": {
         "mongodb": "2.x",
         "mongoose": "4.x",
@@ -22,7 +25,6 @@
         "iconv-lite": "0.x",
         "cheerio": "0.x",
         "logdown": "1.x",
-
         "phantomjs-prebuilt": "2.x",
         "mocha-phantomjs": "4.x",
         "chai": "3.x",
