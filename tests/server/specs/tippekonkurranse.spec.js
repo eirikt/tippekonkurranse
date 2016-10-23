@@ -32,7 +32,7 @@ var __ = require("underscore"),
 
     expectDefaultGlobalStatePreserved = function () {
         "use strict";
-        expect(root.currentRound).is.null;
+        expect(global.currentRound).is.null;
     };
 
 
@@ -51,9 +51,9 @@ describe("Tippekonkurranse", function () {
     describe("addRound", function () {
         beforeEach(function () {
             // Global state
-            root.currentYear = new Date().getFullYear();
-            root.currentRound = null;
-            //root.isCurrentRoundCompleted = false;
+            global.currentYear = new Date().getFullYear();
+            global.currentRound = null;
+            //global.isCurrentRoundCompleted = false;
         });
 
         it("should throw error if no requestion argument is provided", function () {

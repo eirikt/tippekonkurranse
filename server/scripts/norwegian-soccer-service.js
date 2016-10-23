@@ -3,10 +3,11 @@
 // Module dependencies, external
 var R = require('ramda'),
     cheerio = require('cheerio'),
-    RQ = require('async-rq'),
+    RQ = require('rq-commonjs'),
     rq = require('rq-essentials'),
+    rqRequest = require('rq-essentials-request'),
     then = rq.then,
-    get = rq.http.get,
+    get = rqRequest.get,
 
 // Module dependencies, local application-specific
     TeamPlacement = require('./../../shared/scripts/app.models').TeamPlacement,
@@ -139,11 +140,7 @@ var R = require('ramda'),
             'Bodø/Glimt',
             'Kongsvinger',
             'Rosenborg',
-            'Sandefjord',
-            'Sarpsborg 08',
-            'Strømsgodset',
-            'Tromsø',
-            'Vålerenga'
+            'Strømsgodset'
         ]),
 // /'Data generator' requestors
 

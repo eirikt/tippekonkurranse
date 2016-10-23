@@ -12,7 +12,7 @@ var env = process.env.NODE_ENV || "development",
     mongoose = require("mongoose"),
     path = require("path"),
     express = require("express"),
-    RQ = require("async-rq"),
+    RQ = require("rq-commonjs"),
     sequence = RQ.sequence,
     rq = require("rq-essentials"),
     clone = rq.utilities.clone,
@@ -87,7 +87,7 @@ sequence([
 
             // TODO: Is this the same as 'isLive'?
             isActiveRound: function (round, year) {
-                return parseInt(round, 10) === root.app.currentRound && parseInt(year, 10) === root.app.currentYear;
+                return parseInt(round, 10) === global.app.currentRound && parseInt(year, 10) === global.app.currentYear;
             },
 
             isCompletedRound: function (round, year) {
@@ -95,12 +95,12 @@ sequence([
                     return false;
                 }
                 if (!year) {
-                    return round < root.app.currentRound ||
-                        round <= root.app.currentRound && root.app.isCurrentYearCompleted;
+                    return round < global.app.currentRound ||
+                        round <= global.app.currentRound && global.app.isCurrentYearCompleted;
                 }
-                return year < root.app.currentYear ||
-                    year <= root.app.currentYear && round < root.app.currentRound ||
-                    year <= root.app.currentYear && round <= root.app.currentRound && root.app.isCurrentYearCompleted;
+                return year < global.app.currentYear ||
+                    year <= global.app.currentYear && round < global.app.currentRound ||
+                    year <= global.app.currentYear && round <= global.app.currentRound && global.app.isCurrentYearCompleted;
             },
 
             isDbConnected: null,
@@ -201,10 +201,10 @@ sequence([
         });
     },
 
-    // Set root.app object
+    // Set global.app object
     function (callback, args) {
         "use strict";
-        root.app = args;
+        global.app = args;
         return callback(args);
     },
 
@@ -227,18 +227,18 @@ sequence([
 // Warm up cache: Rating history for initial year/previous year/2014
 // TODO: Cache all years, this year and all previous ones
 // No, this is not a good idea with single-dyno setup on Heroku - the node falls asleep and than this caching procedure starts all over again, making the response time unacceptable for all those "wake-up-the-dyno" requests */
-//dbSchema.TippeligaRound.count({ year: root.app.initialYear }, function (err, count) {
+//dbSchema.TippeligaRound.count({ year: global.app.initialYear }, function (err, count) {
 //    "use strict";
 //    if (err) {
-//        console.error(utils.logPreamble() + "Tippeliga " + root.app.initialYear + " rounds count ERROR: " + err);
+//        console.error(utils.logPreamble() + "Tippeliga " + global.app.initialYear + " rounds count ERROR: " + err);
 //        return;
 //    }
 //    if (count < 1) {
-//        console.error(utils.logPreamble() + "Tippeliga " + root.app.initialYear + " has no rounds persisted ...");
+//        console.error(utils.logPreamble() + "Tippeliga " + global.app.initialYear + " has no rounds persisted ...");
 //        return;
 //    }
-//    console.log(utils.logPreamble() + "Warming up cache: Rating history for " + root.app.initialYear + ", round #1 - #" + count + " ...");
-//    var cache = root.app.cache.ratingHistory,
+//    console.log(utils.logPreamble() + "Warming up cache: Rating history for " + global.app.initialYear + ", round #1 - #" + count + " ...");
+//    var cache = global.app.cache.ratingHistory,
 //        key,
 //        tippekonkurranseData = new TippekonkurranseData(),
 //        data = {},
@@ -257,20 +257,20 @@ sequence([
 //
 //    console.log(utils.logPreamble() + "Caching: Rating history, starting ...");
 //    getMatchRoundRatingHistory = [];
-//    for (matchRoundIndex = 1; matchRoundIndex <= root.app.numberOfRounds; matchRoundIndex += 1) {
+//    for (matchRoundIndex = 1; matchRoundIndex <= global.app.numberOfRounds; matchRoundIndex += 1) {
 //        lastRound = (count - matchRoundIndex + 1);
-//        key = root.app.initialYear.toString() + lastRound;
+//        key = global.app.initialYear.toString() + lastRound;
 //        cacheTheResults = curry(utils.memoizationWriter, false, cache, utils.always, key);
 //        getTippekonkurranseScoresHistory = [];
 //
-//        console.log(utils.logPreamble() + "Caching: Adding job: Rating history for " + root.app.initialYear + ", round 1-" + lastRound + " ...");
+//        console.log(utils.logPreamble() + "Caching: Adding job: Rating history for " + global.app.initialYear + ", round 1-" + lastRound + " ...");
 //        for (roundIndex = 1; roundIndex <= lastRound; roundIndex += 1) {
 //            getTippekonkurranseScoresHistory.push(
 //                RQ.sequence([
-//                    curry(tippekonkurranse.getStoredTippeligaDataRequestor, root.app.initialYear, roundIndex),
+//                    curry(tippekonkurranse.getStoredTippeligaDataRequestor, global.app.initialYear, roundIndex),
 //                    rq.requestor(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
 //                    rq.requestor(tippekonkurranse.addRound),
-//                    curry(tippekonkurranse.addTippekonkurranseScoresRequestor, tippekonkurranse.predictions[root.app.initialYear], tippekonkurranse.rules[root.app.initialYear])
+//                    curry(tippekonkurranse.addTippekonkurranseScoresRequestor, tippekonkurranse.predictions[global.app.initialYear], tippekonkurranse.rules[global.app.initialYear])
 //                ])
 //          );
 //        }
@@ -298,7 +298,7 @@ sequence([
 //                rq.then(___.partialFn(__.map, __.identity)),
 //                rq.then(cacheTheResults),
 //                rq.then(function () {
-//                    console.log(utils.logPreamble() + "Caching: Rating history for " + root.app.initialYear + ", round 1-" + lastRoundCounter + " completed");
+//                    console.log(utils.logPreamble() + "Caching: Rating history for " + global.app.initialYear + ", round 1-" + lastRoundCounter + " completed");
 //                    lastRoundCounter -= 1;
 //                })
 //            ])

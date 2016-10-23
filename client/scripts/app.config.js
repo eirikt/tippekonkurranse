@@ -17,7 +17,14 @@ require.config({
     // Development ('grunt [run|deploy:development]' and IDE execution):
     //baseUrl: 'scripts',
     // Standard:
-    baseUrl: '1.3.12/scripts',
+    baseUrl: '1.3.13/scripts',
+
+    // See: http://momentjs.com/docs/#/use-it/require-js/
+    packages: [{
+        name: 'moment',
+        location: '../bower_components/moment',
+        main: 'moment'
+    }],
 
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',
@@ -25,8 +32,6 @@ require.config({
         'underscore': '../bower_components/underscore/underscore-min',
         'backbone': '../bower_components/backbone/backbone-min',
         'marionette': '../bower_components/marionette/lib/backbone.marionette.min',
-        'moment': '../bower_components/moment/min/moment.min',
-        'moment.nb': '../bower_components/moment/locale/nb',
         'toastr': '../bower_components/toastr/toastr.min',
         'jquery.countdown': '../bower_components/jquery.countdown/dist/jquery.countdown.min',
         'jquery.bootstrap.switch': '../bower_components/bootstrap-switch/dist/js/bootstrap-switch.min',
@@ -40,7 +45,7 @@ require.config({
         jquery: {
             exports: '$'
         },
-        'bootstrap': {
+        bootstrap: {
             deps: ['jquery'],
             exports: '$'
         },

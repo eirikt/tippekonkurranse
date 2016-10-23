@@ -36,6 +36,14 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
+#### v1.3.13 : _Deployed 26.10.2016_
+* Node.js 6.x
+* Results updates
+* Dependency updates
+
+_Status: Done_
+
+
 #### v1.3.12 : _Deployed 26.05.2016_
 * HTML page 'og:description' updated (long overdue ...)
 * Results updates

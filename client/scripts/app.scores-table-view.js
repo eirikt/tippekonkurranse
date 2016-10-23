@@ -1,6 +1,6 @@
 /* global define:false */
 /* jshint -W106 */
-define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment', 'moment.nb',
+define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment', 'moment/locale/nb',
         'backbone.fetch-local-copy', 'client-utils', 'backbone.bootstrap.views',
         'app.models', 'app.scores-header-row-view', 'app.scores-participant-row-view', 'app.soccer-table-views' ],
     function ($, _, Backbone, Marionette, Bootstrap, Moment, Moment_nb, BackboneFetchLocalCopy, utils, BootstrapViews, App, HeaderRowView, ParticipantRowView, SoccerTableViews) {

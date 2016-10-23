@@ -2,14 +2,17 @@
 require.config({
     baseUrl: '.',
     nodeRequire: require,
+    packages: [{
+        name: 'moment',
+        location: '../../build/bower_components/moment',
+        main: 'moment'
+    }],
     paths: {
         'jquery': '../../build/bower_components/jquery/dist/jquery',
         'bootstrap': '../../build/bower_components/bootstrap/dist/js/bootstrap',
         'underscore': '../../build/bower_components/underscore/underscore',
         'backbone': '../../build/bower_components/backbone/backbone',
         'marionette': '../../build/bower_components/marionette/lib/backbone.marionette',
-        'moment': '../../build/bower_components/moment/moment',
-        'moment.nb': '../../build/bower_components/moment/locale/nb',
         'toastr': '../../build/bower_components/toastr/toastr',
 
         'chai': '../../node_modules/chai/chai',

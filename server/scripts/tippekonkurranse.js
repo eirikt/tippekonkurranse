@@ -5,7 +5,7 @@ var env = process.env.NODE_ENV || "development",
 
 // Module dependencies, external
     __ = require("underscore"),
-    RQ = require("async-rq"),
+    RQ = require("rq-commonjs"),
     rq = require("rq-essentials"),
 
 // Module dependencies, local generic
@@ -180,7 +180,7 @@ var env = process.env.NODE_ENV || "development",
                     // TODO: Liten svakhet: Hvis OBOS-liga har runde mens Tippeliga ikke har det så blir ikke runden oppdatert ...
 
                     dbCount = dbMatchesCount[round].length;
-                    if (root.app.isCompletedRound(round, year)) {
+                    if (global.app.isCompletedRound(round, year)) {
                         logMsg += " is completed => no need for updating db with new results";
                         console.log(logMsg);
 
@@ -229,8 +229,8 @@ var env = process.env.NODE_ENV || "development",
 
                             var tippekonkurranseData = new TippekonkurranseData();
 
-                            tippekonkurranseData.isHistoricDataAvailable = root.app.isDbConnected;
-                            tippekonkurranseData.isLiveDataAvailable = root.app.isLiveDataAvailable;
+                            tippekonkurranseData.isHistoricDataAvailable = global.app.isDbConnected;
+                            tippekonkurranseData.isLiveDataAvailable = global.app.isLiveDataAvailable;
                             tippekonkurranseData.isLive = false;
                             tippekonkurranseData.matchesCountGrouping = null;
                             tippekonkurranseData.scores = null;
@@ -276,23 +276,23 @@ var env = process.env.NODE_ENV || "development",
     _retrieveTippeligaDataRequestory = exports.retrieveTippeligaData =
         function (request) {
             "use strict";
-            var year = request.params.year || root.app.currentYear,
+            var year = request.params.year || global.app.currentYear,
                 round = request.params.round,
                 now,
                 tippekonkurranseData;
 
             // Override with stored Tippeliga data => for statistics/history/development ...
             if (!round && env === "development") {
-                if (root.app.overrideTippeligaDataWithRound) {
-                    round = root.app.overrideTippeligaDataWithRound;
+                if (global.app.overrideTippeligaDataWithRound) {
+                    round = global.app.overrideTippeligaDataWithRound;
                     console.warn(utils.logPreamble() + "Overriding current Tippeliga results with stored data from year=" + year + " and round=" + round);
                 }
             }
 
-            if (root.app.isCompletedRound(round, year)) {
+            if (global.app.isCompletedRound(round, year)) {
                 return curry(_getStoredTippeligaDataRequestor, year, round);
 
-            } else if (!root.app.isLiveDataAvailable) {
+            } else if (!global.app.isLiveDataAvailable) {
                 //console.error(utils.logPreamble() + "Live soccer result data not available ...");
                 //response.status(503).send("Live soccer result data not available");
                 //return;
@@ -300,7 +300,7 @@ var env = process.env.NODE_ENV || "development",
 
                 tippekonkurranseData = new TippekonkurranseData();
 
-                tippekonkurranseData.isHistoricDataAvailable = rq.return(root.app.isDbConnected);
+                tippekonkurranseData.isHistoricDataAvailable = rq.return(global.app.isDbConnected);
                 tippekonkurranseData.isLiveDataAvailable = rq.false;
                 tippekonkurranseData.isLive = rq.false;
 
@@ -324,8 +324,8 @@ var env = process.env.NODE_ENV || "development",
 
                 tippekonkurranseData = new TippekonkurranseData();
 
-                tippekonkurranseData.isHistoricDataAvailable = rq.return(root.app.isDbConnected);
-                tippekonkurranseData.isLiveDataAvailable = rq.return(root.app.isLiveDataAvailable);
+                tippekonkurranseData.isHistoricDataAvailable = rq.return(global.app.isDbConnected);
+                tippekonkurranseData.isLiveDataAvailable = rq.return(global.app.isLiveDataAvailable);
                 tippekonkurranseData.isLive = rq.true;
 
                 tippekonkurranseData.tippeligaTable = norwegianSoccerLeagueService.getCurrentTippeligaTable;
@@ -380,8 +380,8 @@ var env = process.env.NODE_ENV || "development",
                 } else {
                     tippekonkurranseData.currentRound = tippekonkurranseData.round;
                     // Current round is a dynamic value, nice to have it around/available
-                    if (root.app.currentRound < tippekonkurranseData.currentRound) {
-                        root.app.currentRound = tippekonkurranseData.currentRound;
+                    if (global.app.currentRound < tippekonkurranseData.currentRound) {
+                        global.app.currentRound = tippekonkurranseData.currentRound;
                     }
                 }
 
@@ -395,7 +395,7 @@ var env = process.env.NODE_ENV || "development",
                 //    throw new Error("Current round is not set, it should be");
                 //}
                 //} else if (!tippekonkurranseData.isLiveDataAvailable && !tippekonkurranseData.isHistoricDataAvailable) {
-                //    tippekonkurranseData.round = root.app.currentRound;
+                //    tippekonkurranseData.round = global.app.currentRound;
                 //    tippekonkurranseData.currentRound = tippekonkurranseData.round;
 
                 //} else if (!tippekonkurranseData.isLiveDataAvailable && tippekonkurranseData.isHistoricDataAvailable) {
@@ -416,7 +416,7 @@ var env = process.env.NODE_ENV || "development",
             if (!rules || __.isEmpty(rules)) {
                 throw new Error("Rules are missing - cannot calculate Tippekonkurranse scores");
             }
-            //if (!root.app.isLiveDataAvailable) {
+            //if (!global.app.isLiveDataAvailable) {
             //    console.error(utils.logPreamble() + "Live soccer result data not available ...");
             //response.status(503).send("Live soccer result data not available");
             //return;

@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# v1.3.12
+# v1.3.13
 
 CACHE:
 favicon.ico
@@ -17,10 +17,10 @@ bower_components/fontawesome/fonts/fontawesome-webfont.ttf
 bower_components/fontawesome/fonts/fontawesome-webfont.svg
 
 bower_components/requirejs/require.js
-bower_components/underscore/underscore.js
-bower_components/backbone/backbone.js
+bower_components/underscore/underscore-min.js
+bower_components/backbone/backbone-min.js
 bower_components/jquery/dist/jquery.min.js
-bower_components/moment/min/moment.min.js
+bower_components/moment/moment.js
 bower_components/moment/locale/nb.js
 bower_components/bootstrap/dist/js/bootstrap.min.js
 bower_components/toastr/toastr.min.js

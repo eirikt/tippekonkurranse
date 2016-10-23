@@ -18,8 +18,10 @@ client/scripts/fun.js
 client/scripts/string-extensions.js
 client/scripts/utils.js
 build
+data_PREVIOUS
 docs
 node_modules
+npm-debug.log
 
 # Temp files and development stuff
 grunt.cmd
