@@ -54,7 +54,8 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
                     '          <td style="width:33%;vertical-align:top;">' +
                     '            <p>Toppskårer:</p>' +
                     '            <p><strong><%= currentTippeligaToppscorer %></strong></p>' +
-                    '            <p style="margin-top:2rem;">Fortsatt med i cupen:</p>' +
+                    //'            <p style="margin-top:2rem;">Fortsatt med i cupen:</p>' +
+                    '            <p style="margin-top:2rem;">Cupmester:</p>' +
                     '            <p><strong><%= currentRemainingCupContenders %></strong></p>' +
                     '          </td>' +
                     '        </tr>' +
