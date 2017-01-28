@@ -395,7 +395,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test:client-development', ['build:development', 'test:client']);
     grunt.registerTask('test:client-watch', ['connect', 'watch']);
     grunt.registerTask('test:server', ['mochaTest']);
-    grunt.registerTask('test', ['install:client', 'build:client', 'test:server'/*, TODO: 'test:client'*/]);
+    grunt.registerTask('test', ['install:client', 'build:client', 'test:server', 'test:client']);
     grunt.registerTask('test:sauce', ['connect', 'saucelabs-mocha']);
     grunt.registerTask('coverage:server', ['mochacov:report']);
 
