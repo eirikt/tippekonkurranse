@@ -257,7 +257,7 @@ module.exports = function (grunt) {
                     browsers: [
                         { platform: 'Windows 10', browserName: 'chrome', version: '55.0' },
                         { platform: 'Windows 10', browserName: 'firefox', version: '50.0' },
-                        { platform: 'Windows 10', browserName: 'MicrosoftEdge', version: '38.14393' },
+                        { platform: 'Windows 10', browserName: 'MicrosoftEdge', version: '14.14393' },
                         { platform: 'Windows 8.1', browserName: 'internet explorer', version: '11.0' },
                         {
                             platform: 'macOS 10.12',
