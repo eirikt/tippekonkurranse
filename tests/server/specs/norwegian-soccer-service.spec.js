@@ -3,7 +3,6 @@
 
 var expect = require('chai').expect,
     R = require('ramda'),
-    RQ = require('async-rq'),
     rq = require('rq-essentials'),
 
     TeamPlacement = require('../../../shared/scripts/app.models').TeamPlacement,
