@@ -26,9 +26,13 @@ var __ = require("underscore"),
     predictions2016 = tippekonkurranse.predictions[2016],
     rules2016 = tippekonkurranse.rules[2016],
 
+    predictions2017 = tippekonkurranse.predictions[2017],
+    rules2017 = tippekonkurranse.rules[2017],
+
     addTippekonkurranseScores2014 = curry(addTippekonkurranseScoresRequestor, predictions2014, rules2014),
     addTippekonkurranseScores2015 = curry(addTippekonkurranseScoresRequestor, predictions2015, rules2015),
     addTippekonkurranseScores2016 = curry(addTippekonkurranseScoresRequestor, predictions2016, rules2016),
+    addTippekonkurranseScores2017 = curry(addTippekonkurranseScoresRequestor, predictions2017, rules2017),
 
     expectDefaultGlobalStatePreserved = function () {
         "use strict";

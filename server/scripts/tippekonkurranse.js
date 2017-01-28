@@ -19,9 +19,11 @@ var env = process.env.NODE_ENV || "development",
     predictions2014 = require("./tippekonkurranse-2014-user-predictions").predictions,
     predictions2015 = require("./tippekonkurranse-2015-user-predictions").predictions,
     predictions2016 = require("./tippekonkurranse-2016-user-predictions").predictions,
+    predictions2017 = require("./tippekonkurranse-2017-user-predictions").predictions,
     rules2014 = require("./tippekonkurranse-2014-rules").rules,
     rules2015 = require("./tippekonkurranse-2015-rules").rules,
     rules2016 = require("./tippekonkurranse-2016-rules").rules,
+    rules2017 = require("./tippekonkurranse-2017-rules").rules,
 
 // Module dependencies, local application-specific
     appModels = require("./../../shared/scripts/app.models"),
@@ -31,13 +33,15 @@ var env = process.env.NODE_ENV || "development",
     _predictions = exports.predictions = {
         2014: predictions2014,
         2015: predictions2015,
-        2016: predictions2016
+        2016: predictions2016,
+        2017: predictions2017
     },
 
     _rules = exports.rules = {
         2014: rules2014,
         2015: rules2015,
-        2016: rules2016
+        2016: rules2016,
+        2017: rules2017
     },
 
 

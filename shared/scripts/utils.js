@@ -65,7 +65,7 @@
                         presence = false;
                     }
                 });
-                return presence ? (polarity === '-' ? -weight : weight) : 0;
+                return presence ? polarity === '-' ? -weight : weight : 0;
             },
 
 

@@ -163,6 +163,9 @@ sequence([
                 dbSchema.TippeligaRound.count({ year: 2016 }, function (err, count) {
                     console.log(utils.logPreamble() + app.name + " " + "2016 count: " + count);
                 });
+                dbSchema.TippeligaRound.count({ year: 2017 }, function (err, count) {
+                    console.log(utils.logPreamble() + app.name + " " + "2017 count: " + count);
+                });
 
                 if (!latestTippeligaRound) {
                     console.warn(utils.logPreamble() + "No round found for season " + args.currentYear + " ... setting it to 0");

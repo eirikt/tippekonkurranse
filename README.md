@@ -36,10 +36,18 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
-#### v1.3.13 : _Deployed 26.10.2016_
+#### v1.3.14 : _Deployed 28.01.2017_
+* 2017 pre-season updates
+* Dependency updates
 * Node.js 6.x
+
+_Status: Done_
+
+
+#### v1.3.13 : _Deployed 26.10.2016_
 * Results updates
 * Dependency updates
+* ~~Node.js 6.x~~
 
 _Status: Done_
 
