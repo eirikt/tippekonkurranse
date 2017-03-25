@@ -1,4 +1,5 @@
 var _rules2016 = exports.rules = {
+    year: 2016,
     tabellScoresStrategy: {
         polarity: '+',
         weight: 1

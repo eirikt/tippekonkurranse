@@ -1,4 +1,5 @@
 var _rules2017 = exports.rules = {
+    year: 2017,
     tabellScoresStrategy: {
         polarity: '+',
         weight: 1
@@ -29,10 +30,10 @@ var _rules2017 = exports.rules = {
     },
     opprykkScoreStrategy: {
         polarity: '-',
-        weight: 4
+        weight: 2
     },
     cupScoreStrategy: {
         polarity: '-',
-        weight: 5
+        weight: 4
     }
 };

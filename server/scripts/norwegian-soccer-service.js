@@ -56,8 +56,8 @@ var R = require('ramda'),
     },
 
 
-    currentTippeligaTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&subCmd=total&live=true&useFullUrl=false',
-    parseTippeligaTable = parseAltOmFotballHtmlTable,
+    currentEliteserieTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&subCmd=total&live=true&useFullUrl=false',
+    parseEliteserieTable = parseAltOmFotballHtmlTable,
 
 
     currentObosligaTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=2&subCmd=total&live=true&useFullUrl=false',
@@ -67,7 +67,7 @@ var R = require('ramda'),
     /**
      * Publicly available for testing purposes only
      */
-    parseTippeligaTopScorerTable = exports._parseTippeligaTopScorerTable = function (htmlContent) {
+    parseEliteserieTopScorerTable = exports._parseEliteserieTopScorerTable = function (htmlContent) {
         'use strict';
         var topScorers = [],
             $, rows, maxGoals;
@@ -106,7 +106,7 @@ var R = require('ramda'),
         return topScorers;
     },
 
-    currentTippeligaToppscorerTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&seasonId=&teamId=&useFullUrl=false',
+    currentEliteserieToppscorerTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&seasonId=&teamId=&useFullUrl=false',
 
 
 //////////////////////////////////////////////
@@ -114,10 +114,10 @@ var R = require('ramda'),
 //////////////////////////////////////////////
 
 // These are 'data generator' requestors => No forwarding of existing data ...
-    getCurrentTippeligaTableRequestor = exports.getCurrentTippeligaTable =
+    getCurrentEliteserieTableRequestor = exports.getCurrentEliteserieTable =
         RQ.sequence([
-            get(currentTippeligaTableUrl),
-            then(parseTippeligaTable)
+            get(currentEliteserieTableUrl),
+            then(parseEliteserieTable)
         ]),
 
     getCurrentObosligaTableRequestor = exports.getCurrentObosligaTable =
@@ -126,10 +126,10 @@ var R = require('ramda'),
             then(parseObosligaTable)
         ]),
 
-    getCurrentTippeligaTopScorerRequestor = exports.getCurrentTippeligaTopScorer =
+    getCurrentEliteserieTopScorerRequestor = exports.getCurrentEliteserieTopScorer =
         RQ.sequence([
-            get(currentTippeligaToppscorerTableUrl),
-            then(parseTippeligaTopScorerTable)
+            get(currentEliteserieToppscorerTableUrl),
+            then(parseEliteserieTopScorerTable)
         ]),
 
     /**
@@ -161,9 +161,9 @@ var R = require('ramda'),
 // TODO: ...
     isEnabled = exports.isEnabled =
         RQ.parallel([
-            getCurrentTippeligaTableRequestor,
+            getCurrentEliteserieTableRequestor,
             getCurrentObosligaTableRequestor,
-            getCurrentTippeligaTopScorerRequestor
+            getCurrentEliteserieTopScorerRequestor
         ]),
 
 
@@ -177,38 +177,38 @@ var R = require('ramda'),
             function (callback, args) {
                 'use strict';
                 var current = rq.stack._getStack().pop(),
-                    tippeligaTable,
+                    eliteserieTable,
                     obosligaTable,
-                    tippeligaTableTopScorer;
+                    eliteserieTopScorer;
 
                 if (!args || !args.length || args.length !== 3) {
                     return callback(null, { message: 'Internal error in RQ.js ("norwegian-soccer-service.js")' });
                 }
 
-                tippeligaTable = args[0];
+                eliteserieTable = args[0];
                 obosligaTable = args[1];
-                tippeligaTableTopScorer = args[2];
+                eliteserieTopScorer = args[2];
 
-                if (parseInt(tippeligaTable.length, 10) !== 16) {
-                    return callback(null, { message: 'Retrieved tippeliga table result has not 16 teams ("norwegian-soccer-service.js")' });
+                if (parseInt(eliteserieTable.length, 10) !== 16) {
+                    return callback(null, { message: 'Retrieved eliteserie table result has not 16 teams ("norwegian-soccer-service.js")' });
                 }
                 if (parseInt(obosligaTable.length, 10) !== 16) {
                     return callback(null, { message: 'Retrieved obosliga table result has not 16 teams ("norwegian-soccer-service.js")' });
                 }
 
                 // TODO: Revisit this logic ... during 2016 - those below are not specific enough! Crashed the app in round 1 and the start of round 2 ...
-                if (parseInt(tippeligaTable[0].matches, 10) < current.currentRound) {
-                    //return callback(null, { message: 'Retrieved tippeligatable result is not in sync with stored results - is it a new season?' });
-                    console.warn('Retrieved tippeliga table result is not in sync with stored results - is it a new season?');
+                if (parseInt(eliteserieTable[0].matches, 10) < current.currentRound) {
+                    //return callback(null, { message: 'Retrieved eliteserie table result is not in sync with stored results - is it a new season?' });
+                    console.warn('Retrieved eliteserie table result is not in sync with stored results - is it a new season?');
                 }
                 if (parseInt(obosligaTable[0].matches, 10) < current.currentRound) {
-                    //return callback(null, { message: 'Retrieved obosligatable result is not in sync with stored results - is it a new season?' });
+                    //return callback(null, { message: 'Retrieved obosliga table result is not in sync with stored results - is it a new season?' });
                     console.warn('Retrieved obosliga table result is not in sync with stored results - is it a new season?');
                 }
 
                 // Extra check for end of season/new season results available and predictions are not
-                if (/*!rqInternalStack.isDbConnected &&*/ new Date().getMonth() >= 11 && tippeligaTable[0].matches && parseInt(tippeligaTable[0].matches, 10) === 0) {
-                    return callback(null, { message: "Retrieved tippeliga table result is not in sync with stored results - is it a new season?" });
+                if (/*!rqInternalStack.isDbConnected &&*/ new Date().getMonth() >= 11 && eliteserieTable[0].matches && parseInt(eliteserieTable[0].matches, 10) === 0) {
+                    return callback(null, { message: "Retrieved eliteserie table result is not in sync with stored results - is it a new season?" });
                 }
 
                 return callback(args);

@@ -10,5 +10,8 @@
         "toastr": "2.x",
         "jqplot-bower": "1.x",
         "jquery.countdown": "2.x"
+    },
+    "resolutions": {
+        "jquery": "2.x"
     }
 }

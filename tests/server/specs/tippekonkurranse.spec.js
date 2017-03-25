@@ -387,7 +387,7 @@ describe("Tippekonkurranse", function () {
                     expect(perfectPrediction.scores.john.nedrykk).to.equal(-1);
                 };
 
-            inputArgs.tippeligaTable = actualTable;
+            inputArgs.eliteserieTable = actualTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -441,7 +441,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.tabell).to.equal(2);
                 };
 
-            inputArgs.tippeligaTable = twoPenaltyPoints;
+            inputArgs.eliteserieTable = twoPenaltyPoints;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -495,7 +495,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.tabell).to.equal(10);
                 };
 
-            inputArgs.tippeligaTable = tenPenaltyPoints;
+            inputArgs.eliteserieTable = tenPenaltyPoints;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -549,7 +549,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.tabell).to.equal(32);
                 };
 
-            inputArgs.tippeligaTable = thirtyTwoPenaltyPoints;
+            inputArgs.eliteserieTable = thirtyTwoPenaltyPoints;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -592,7 +592,7 @@ describe("Tippekonkurranse", function () {
                 reversedTable[i] = new TeamPlacement(reversedClonedPredictionTable[i], i + 1, reversedClonedPredictionTable.length * 2 - 2);
             }
 
-            inputArgs.tippeligaTable = reversedTable;
+            inputArgs.eliteserieTable = reversedTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -652,7 +652,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.nedrykk).to.equal(-1);
                 };
 
-            inputArgs.tippeligaTable = actualNedrykkTable;
+            inputArgs.eliteserieTable = actualNedrykkTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -709,7 +709,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.nedrykk).to.equal(0);
                 };
 
-            inputArgs.tippeligaTable = actualNedrykkTable;
+            inputArgs.eliteserieTable = actualNedrykkTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -766,13 +766,13 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.nedrykk).to.equal(-1);
                 };
 
-            inputArgs.tippeligaTable = actualNedrykkTable;
+            inputArgs.eliteserieTable = actualNedrykkTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
-        it("should give nothing if only one team exist in prediction, whatever order 1", function (done) {
+        it("should give nothing if only one team exist in prediction, whatever order 1 (2015 and onwards)", function (done) {
             var userPredictions = {
                     john: {
                         tabell: [
@@ -816,20 +816,20 @@ describe("Tippekonkurranse", function () {
                     { name: "TeamA", no: 15, matches: 30 },
                     { name: "N", no: 16, matches: 30 }
                 ],
-                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2015),
                 inputArgs = new TippekonkurranseData(),
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
                     expect(tippekonkurranseData.scores.scores.john.nedrykk).to.equal(0);
                 };
 
-            inputArgs.tippeligaTable = actualNedrykkTable;
+            inputArgs.eliteserieTable = actualNedrykkTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
 
 
-        it("should give nothing if only one team exist in prediction, whatever order 2", function (done) {
+        it("should give nothing if only one team exist in prediction, whatever order 2 (2015 and onwards)", function (done) {
             var userPredictions = {
                     john: {
                         tabell: [
@@ -880,7 +880,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.nedrykk).to.equal(0);
                 };
 
-            inputArgs.tippeligaTable = actualNedrykkTable;
+            inputArgs.eliteserieTable = actualNedrykkTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -944,7 +944,7 @@ describe("Tippekonkurranse", function () {
         });
 
 
-        it("2014: should give nothing if only one team exist in prediction, whatever order 1", function (done) {
+        it("2014: should give nothing if only one team exist in prediction, whatever order (1)", function (done) {
             var userPredictions = {
                     john: {
                         tabell: null,
@@ -972,7 +972,7 @@ describe("Tippekonkurranse", function () {
         });
 
 
-        it("2014: should give nothing if only one team exist in prediction, whatever order 2", function (done) {
+        it("2014: should give nothing if only one team exist in prediction, whatever order (2)", function (done) {
             var userPredictions = {
                     john: {
                         tabell: null,
@@ -992,6 +992,62 @@ describe("Tippekonkurranse", function () {
                 verify = function (args) {
                     var tippekonkurranseData = new TippekonkurranseData(args);
                     expect(tippekonkurranseData.scores.scores.john.opprykk).to.equal(0);
+                };
+
+            inputArgs.obosligaTable = actualOpprykkTable;
+
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("2017: should give -2 for each team in prediction, whatever order (1)", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: null,
+                        toppscorer: null,
+                        opprykk: ["TeamA", "TeamC"],
+                        cup: null
+                    }
+                },
+                actualOpprykkTable = [
+                    { name: "TeamC", no: 1, matches: 3 },
+                    { name: "TeamB", no: 2, matches: 3 },
+                    { name: "TeamA", no: 3, matches: 3 },
+                    { name: "And one more team", no: 4, matches: 3 }
+                ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2017),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.opprykk).to.equal(-2);
+                };
+
+            inputArgs.obosligaTable = actualOpprykkTable;
+
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
+
+
+        it("2017: should give -4 when both team are in prediction, whatever order (1)", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: null,
+                        toppscorer: null,
+                        opprykk: ["TeamB", "TeamA"],
+                        cup: null
+                    }
+                },
+                actualOpprykkTable = [
+                    { name: "TeamA", no: 1, matches: 3 },
+                    { name: "TeamB", no: 2, matches: 3 },
+                    { name: "TeamC", no: 3, matches: 3 },
+                    { name: "And one more team", no: 4, matches: 3 }
+                ],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2017),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.opprykk).to.equal(-4);
                 };
 
             inputArgs.obosligaTable = actualOpprykkTable;
@@ -1020,7 +1076,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.toppscorer).to.equal(-1);
                 };
 
-            inputArgs.tippeligaTopScorer = actualToppscorerTable;
+            inputArgs.eliteserieTopScorer = actualToppscorerTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -1043,7 +1099,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.toppscorer).to.equal(-5);
                 };
 
-            inputArgs.tippeligaTopScorer = actualToppscorerTable;
+            inputArgs.eliteserieTopScorer = actualToppscorerTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -1066,7 +1122,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.toppscorer).to.equal(0);
                 };
 
-            inputArgs.tippeligaTopScorer = actualToppscorerTable;
+            inputArgs.eliteserieTopScorer = actualToppscorerTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -1089,7 +1145,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.toppscorer).to.equal(0);
                 };
 
-            inputArgs.tippeligaTopScorer = actualToppscorerTable;
+            inputArgs.eliteserieTopScorer = actualToppscorerTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -1112,7 +1168,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.toppscorer).to.equal(-1);
                 };
 
-            inputArgs.tippeligaTopScorer = actualToppscorerTable;
+            inputArgs.eliteserieTopScorer = actualToppscorerTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
@@ -1135,7 +1191,7 @@ describe("Tippekonkurranse", function () {
                     expect(tippekonkurranseData.scores.scores.john.toppscorer).to.equal(-5);
                 };
 
-            inputArgs.tippeligaTopScorer = actualToppscorerTable;
+            inputArgs.eliteserieTopScorer = actualToppscorerTable;
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });

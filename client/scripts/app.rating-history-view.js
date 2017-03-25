@@ -74,7 +74,7 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette' ],
                     },
                     axes: {
                         xaxis: {
-                            label: 'Tippeligarunde',
+                            label: 'Eliteserierunde',
                             min: 0,
                             max: this.collection.round + 4,
                             numberTicks: this.collection.round + 5

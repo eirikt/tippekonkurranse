@@ -151,8 +151,8 @@ define([
                     round: null,
                     currentYear: null,
                     currentRound: null,
-                    currentTippeligaSeasonStartDate: null,
-                    currentTippeligaSeasonHasStarted: null
+                    currentEliteserieSeasonStartDate: null,
+                    currentEliteserieSeasonHasStarted: null
                 }));
 
                 // Table header row

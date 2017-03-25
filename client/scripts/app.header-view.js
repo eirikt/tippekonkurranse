@@ -39,7 +39,7 @@ define(['jquery', 'underscore', 'moment', 'backbone', 'marionette'],
                         '</span>' +
 
                         '<span class="countdown pull-right" style="white-space:nowrap;">' +
-                            // TODO: This is a view!
+                        // TODO: This is a view!
                         '  <span id="autoPageRefresh" class="x-small"></span>' +
 
                         '  <span class="pull-right" style="margin-left:.4rem;">' +
@@ -54,7 +54,7 @@ define(['jquery', 'underscore', 'moment', 'backbone', 'marionette'],
                     });
                 }
 
-                if (!window.app.model.get('currentTippeligaSeasonHasStarted')) {
+                if (!window.app.model.get('currentEliteserieSeasonHasStarted')) {
                     return _.template(preSeasonTemplate, { variable: 'args' })({
                         year: scores ? scores.year : '?',
                         round: scores ? scores.round : '?'
@@ -75,10 +75,13 @@ define(['jquery', 'underscore', 'moment', 'backbone', 'marionette'],
 
             onRender: function () {
                 // TODO: Is this a view?
-                this.$('#countdown').countdown(window.app.model.get('currentTippeligaSeasonStartDate'), function (event) {
+                this.$('#countdown').countdown(window.app.model.get('currentEliteserieSeasonStartDate'), function (event) {
                     if (event.type === "finish") {
-                        console.warn("FINISHED!");
-                        window.location.reload();
+                        // TODO: Workaround for endless reloading ... 'window.location.reload()' is just not the thing to do!
+                        if (event.timeStamp - event.finalDate < 1000) {
+                            console.warn("FINISHED!");
+                            window.location.reload();
+                        }
                     }
                     $(this).html(event.strftime(
                         '<span class="contrast"><strong>%w</strong></span> uker ' +

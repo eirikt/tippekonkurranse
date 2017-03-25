@@ -116,9 +116,9 @@ sequence([
     function (callback, args) {
         "use strict";
         if (env === "development") {
-            // Override live data retrieval with stored Tippeliga data => for statistics/history/development ...
-            args.overrideTippeligaDataWithYear = args.currentYear;
-            //args.overrideTippeligaDataWithRound = 2;
+            // Override live data retrieval with stored Eliteserie data => for statistics/history/development ...
+            args.overrideEliteserieDataWithYear = args.currentYear;
+            //args.overrideEliteserieDataWithRound = 2;
         }
         return callback(args);
     },
@@ -139,14 +139,14 @@ sequence([
     // Initial global state
     function (callback, args) {
         "use strict";
-        if (args.overrideTippeligaDataWithYear && (args.overrideTippeligaDataWithRound || args.overrideTippeligaDataWithRound === 0)) {
-            args.currentRound = args.overrideTippeligaDataWithRound;
+        if (args.overrideEliteserieDataWithYear && (args.overrideEliteserieDataWithRound || args.overrideEliteserieDataWithRound === 0)) {
+            args.currentRound = args.overrideEliteserieDataWithRound;
             console.log(utils.logPreamble() + app.name + ", Initialized with: current season " + args.currentYear + ", current round " + args.currentRound + " [DEVELOPMENT mode, using stored data]");
 
             return callback(args);
 
         } else if (args.isDbConnected) {
-            dbSchema.TippeligaRound.findOne({ year: args.currentYear }).sort("-round").exec(function (err, latestTippeligaRound) {
+            dbSchema.EliteserieRound.findOne({ year: args.currentYear }).sort("-round").exec(function (err, latestEliteserieRound) {
                 if (err) {
                     console.warn(utils.logPreamble() + "No round found for season " + args.currentYear + " ... setting it to 0");
                     args.currentRound = 0;
@@ -154,25 +154,25 @@ sequence([
                     return callback(args);
                 }
 
-                dbSchema.TippeligaRound.count({ year: 2014 }, function (err, count) {
+                dbSchema.EliteserieRound.count({ year: 2014 }, function (err, count) {
                     console.log(utils.logPreamble() + app.name + " " + "2014 count: " + count);
                 });
-                dbSchema.TippeligaRound.count({ year: 2015 }, function (err, count) {
+                dbSchema.EliteserieRound.count({ year: 2015 }, function (err, count) {
                     console.log(utils.logPreamble() + app.name + " " + "2015 count: " + count);
                 });
-                dbSchema.TippeligaRound.count({ year: 2016 }, function (err, count) {
+                dbSchema.EliteserieRound.count({ year: 2016 }, function (err, count) {
                     console.log(utils.logPreamble() + app.name + " " + "2016 count: " + count);
                 });
-                dbSchema.TippeligaRound.count({ year: 2017 }, function (err, count) {
+                dbSchema.EliteserieRound.count({ year: 2017 }, function (err, count) {
                     console.log(utils.logPreamble() + app.name + " " + "2017 count: " + count);
                 });
 
-                if (!latestTippeligaRound) {
+                if (!latestEliteserieRound) {
                     console.warn(utils.logPreamble() + "No round found for season " + args.currentYear + " ... setting it to 0");
                     args.currentRound = 0;
 
                 } else {
-                    args.currentRound = latestTippeligaRound.round;
+                    args.currentRound = latestEliteserieRound.round;
                     console.log(utils.logPreamble() + app.name + " " + "Initialized with: current season " + args.currentYear + ", current round " + args.currentRound);
                 }
 

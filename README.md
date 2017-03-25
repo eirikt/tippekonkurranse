@@ -1,10 +1,10 @@
 # Tippekonkurranse
 
 A full-stack JavaScript-based web application,
-using [Express][51],
-persisting data using [Mongoose][53],
-with server-side functional composition by [RQ][54],
-and keeping client-side somewhat tidy and sane with [Backbone][60].[Marionette][61].
+using [Express][52],
+persisting data using [Mongoose][54],
+with server-side functional composition by [RQ][55],
+and keeping client-side somewhat tidy and sane with [Backbone][61].[Marionette][62] and [RequireJS][60].
 Hosted [here][1].
 
 ##### Badge-o-rama ...
@@ -29,12 +29,21 @@ Hosted [here][1].
 * Screen-scraping norwegian soccer result web pages
 * Calculating rating and rank
 * Simple multi-device-friendly presentation
-* Idiomatic code base (well, 2014-style at least)
+* ~~Idiomatic code base~~ (2014-style idiomatic code base, that is)
 * Deployment to [Heroku][30]
 
 
 
 ## Version history/roadmap
+
+#### v1.3.15 : _Deployed 26.03.2017_
+* 2017 rules modifications
+* 'Tippeligaen' -> 'Eliteserien'
+* Bugfix: OBOS-liga results handling
+* Dependency updates
+
+_Status: Done_
+
 
 #### v1.3.14 : _Deployed 28.01.2017_
 * 2017 pre-season updates
@@ -47,7 +56,6 @@ _Status: Done_
 #### v1.3.13 : _Deployed 26.10.2016_
 * Results updates
 * Dependency updates
-* ~~Node.js 6.x~~
 
 _Status: Done_
 
@@ -328,7 +336,7 @@ _Status: Done_
 * Very minimalistic client version (just a web page skeleton)
 * ~~[Deploy][31] to Heroku => http://lit-ravine-2113.herokuapp.com~~
 * [Deploy][31] to Heroku => http://tippekonkurranse.herokuapp.com
-* ~~Custom shortened URL using [Tiny.cc][40] => http://tiny.cc/tippekonkurranse~~ (obsolete)
+* ~~Custom shortened URL using Tiny.cc => http://tiny.cc/tippekonkurranse~~ (obsolete)
 * Deploy it!
 
 _Status: Done_
@@ -352,7 +360,7 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 * ~~Small-screen-friendly version ...~~ Seems to be just fine
 
 #### v? : Proper URL
-* [Heroku/Custom domains][31]
+* [Heroku/Custom domains][32]
 
 #### v? : Error handling
 * Gather onerror-info via GitHub Issues API
@@ -387,7 +395,7 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 ## [License](#license)
 The MIT License (MIT)
 
-Copyright (c) 2014-2016 Eirik Torske
+Copyright (c) 2014-2017 Eirik Torske
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -419,11 +427,13 @@ SOFTWARE.
 [32]: https://devcenter.heroku.com/articles/custom-domains
 [35]: https://mongolab.com
 
-[50]: https://iojs.org
-[51]: http://expressjs.com
-[52]: https://www.mongodb.org
-[53]: http://mongoosejs.com
-[54]: https://github.com/douglascrockford/RQ
+[50]: https://nodejs.org
+[51]: https://iojs.org
+[52]: http://expressjs.com
+[53]: https://www.mongodb.org
+[54]: http://mongoosejs.com
+[55]: https://github.com/douglascrockford/RQ
 
-[60]: http://backbonejs.org
-[61]: http://marionettejs.com
+[60]: http://requirejs.org/
+[61]: http://backbonejs.org
+[62]: http://marionettejs.com

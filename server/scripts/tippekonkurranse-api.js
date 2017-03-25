@@ -28,7 +28,6 @@ var __ = require("underscore"),
     _handlePredictionsRequest = exports.handlePredictionsRequest =
         function (request, response) {
             "use strict";
-
             var year = parseInt(request.params.year, 10),
                 userId = request.params.userId,
                 predictions = tippekonkurranse.predictions[year][userId];
@@ -46,9 +45,9 @@ var __ = require("underscore"),
     _handleResultsRequest = exports.handleResultsRequest =
         function (request, response) {
             "use strict";
-            var getData = tippekonkurranse.retrieveTippeligaData(request),
+            var getData = tippekonkurranse.retrieveEliteserieData(request),
                 dispatchForPresentation = curry(tippekonkurranse.dispatchResultsToClientForPresentation, response),
-                storeData = tippekonkurranse.storeTippeligaRoundMatchData;
+                storeData = tippekonkurranse.storeEliteserieRoundMatchData;
 
             sequence([
                 getData,
@@ -66,11 +65,11 @@ var __ = require("underscore"),
                 rulesOfTheYear = tippekonkurranse.rules[year],
                 predictionsOfTheYear = tippekonkurranse.predictions[year],
 
-                getData = tippekonkurranse.retrieveTippeligaData(request),
+                getData = tippekonkurranse.retrieveEliteserieData(request),
                 thenAddScores = curry(tippekonkurranse.addTippekonkurranseScoresRequestor, predictionsOfTheYear, rulesOfTheYear),
                 thenAddPreviousScores = curry(tippekonkurranse.addPreviousMatchRoundRatingToEachParticipantRequestor, predictionsOfTheYear, rulesOfTheYear),
                 presentData = curry(tippekonkurranse.dispatchScoresToClientForPresentation, response),
-                storeData = tippekonkurranse.storeTippeligaRoundMatchData,
+                storeData = tippekonkurranse.storeEliteserieRoundMatchData,
 
                 isLiveRequest = global.app.isLiveRequest(request);
 
@@ -174,11 +173,11 @@ var __ = require("underscore"),
             sortByRound = curry(sortByElementIndex, tippekonkurranseData.indexOfRound);
             cacheTheResults = curry(utils.memoizationWriter, true, cache, curry(global.app.isCompletedRound, round, year), key);
 
-            // 3. Create array of requestors: all historic Tippeligakonkurranse scores - and then execute and wait for all to finish
+            // 3. Create array of requestors: all historic Tippetipskonkurranse scores - and then execute and wait for all to finish
             for (; roundIndex <= round; roundIndex += 1) {
                 getTippekonkurranseScoresHistory.push(
                     sequence([
-                        curry(tippekonkurranse.getStoredTippeligaDataRequestor, year, roundIndex),
+                        curry(tippekonkurranse.getStoredEliteserieDataRequestor, year, roundIndex),
                         then(tippekonkurranse.addGroupingOfTeamAndNumberOfMatchesPlayed),
                         then(tippekonkurranse.addRound),
                         curry(tippekonkurranse.addTippekonkurranseScoresRequestor, predictionsOfTheYear, rulesOfTheYear)

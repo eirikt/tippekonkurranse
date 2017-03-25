@@ -39,7 +39,7 @@
                 }
             },
 
-        // TODO: Are we missing the 'tippeligaStandingsModel'/'tippeligaRankingsModel'?
+        // TODO: Are we missing the 'eliteserieStandingsModel'/'eliteserieRankingsModel'?
 
         // TODO: Consider renaming it to 'ratingModel'/'scoresAndRatingModel'
         // TODO: Promote this to a 'type'/'class', like 'TippekonkurranseData'
@@ -106,10 +106,10 @@
                 }
                 var _isHistoricDataAvailable = 0,   // Is database connection available and working?
                     _isLiveDataAvailable = 1,       // Is external data source services available and working?
-                    _isLiveData = 2,                // Live or historic Tippeliga data (when '_isHistoricDataAvailable' === false then always true)
+                    _isLiveData = 2,                // Live or historic Eliteserie data (when '_isHistoricDataAvailable' === false then always true)
 
-                    _tippeligaTable = 3,            // The Tippeliga table, on the format defined by TeamPlacement function
-                    _tippeligaTopScorer = 4,        // The Tippeliga top scorer, array of strings
+                    _eliteserieTable = 3,            // The Eliteserie table, on the format defined by TeamPlacement function
+                    _eliteserieTopScorer = 4,        // The Eliteserie top scorer, array of strings
                     _obosligaTable = 5,             // The OBOS-liga table, on the format defined by TeamPlacement function
                     _remainingCupContenders = 6,    // The remaining cup contenders, array of strings
 
@@ -131,8 +131,8 @@
                     Object.defineProperty(this, 'isHistoricDataAvailable', utils.mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'isLiveDataAvailable', utils.mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'isLive', utils.mutablePropertyWithDefaultValue(null));
-                    Object.defineProperty(this, 'tippeligaTable', utils.mutablePropertyWithDefaultValue(null));
-                    Object.defineProperty(this, 'tippeligaTopScorer', utils.mutablePropertyWithDefaultValue(null));
+                    Object.defineProperty(this, 'eliteserieTable', utils.mutablePropertyWithDefaultValue(null));
+                    Object.defineProperty(this, 'eliteserieTopScorer', utils.mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'obosligaTable', utils.mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'remainingCupContenders', utils.mutablePropertyWithDefaultValue(null));
                     Object.defineProperty(this, 'round', utils.mutablePropertyWithDefaultValue(0));
@@ -145,8 +145,8 @@
                     Object.defineProperty(this, 'isHistoricDataAvailable', utils.mutablePropertyWithDefaultValue(updatedPropertyArray[ _isHistoricDataAvailable ]));
                     Object.defineProperty(this, 'isLiveDataAvailable', utils.mutablePropertyWithDefaultValue(updatedPropertyArray[ _isLiveDataAvailable ]));
                     Object.defineProperty(this, 'isLive', utils.mutablePropertyWithDefaultValue(updatedPropertyArray[ _isLiveData ]));
-                    Object.defineProperty(this, 'tippeligaTable', utils.mutablePropertyWithDefaultValue(updatedPropertyArray[ _tippeligaTable ]));
-                    Object.defineProperty(this, 'tippeligaTopScorer', utils.mutablePropertyWithDefaultValue(updatedPropertyArray[ _tippeligaTopScorer ]));
+                    Object.defineProperty(this, 'eliteserieTable', utils.mutablePropertyWithDefaultValue(updatedPropertyArray[ _eliteserieTable ]));
+                    Object.defineProperty(this, 'eliteserieTopScorer', utils.mutablePropertyWithDefaultValue(updatedPropertyArray[ _eliteserieTopScorer ]));
                     Object.defineProperty(this, 'obosligaTable', utils.mutablePropertyWithDefaultValue(updatedPropertyArray[ _obosligaTable ]));
                     Object.defineProperty(this, 'remainingCupContenders', utils.mutablePropertyWithDefaultValue(updatedPropertyArray[ _remainingCupContenders ]));
                     Object.defineProperty(this, 'round', utils.mutablePropertyWithDefaultValue(updatedPropertyArray[ _round ]));
@@ -173,8 +173,8 @@
                         this.isHistoricDataAvailable,
                         this.isLiveDataAvailable,
                         this.isLive,
-                        this.tippeligaTable,
-                        this.tippeligaTopScorer,
+                        this.eliteserieTable,
+                        this.eliteserieTopScorer,
                         this.obosligaTable,
                         this.remainingCupContenders,
                         this.round,

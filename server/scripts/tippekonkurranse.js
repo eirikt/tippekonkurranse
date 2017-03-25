@@ -45,10 +45,10 @@ var env = process.env.NODE_ENV || "development",
     },
 
 
-    _calculateTippeligaScores =
-        function (strategy, participantObj, tippeligaTable) {
+    _calculateEliteserieScores =
+        function (strategy, participantObj, eliteserieTable) {
             "use strict";
-            var tableScore, pallScore, pallBonusScore, nedrykkScore, indexedTippeligaTable;
+            var tableScore, pallScore, pallBonusScore, nedrykkScore, indexedEliteserieTable;
 
             if (__.isEmpty(participantObj.tabell)) {
                 console.warn(utils.logPreamble() + "'Tabell' property is missing, returning 1000 points for all predictions ...");
@@ -57,12 +57,12 @@ var env = process.env.NODE_ENV || "development",
 
             // Create associative array with team name as key, by extracting 'name'
             // => a team-name-indexed data structure
-            indexedTippeligaTable = __.indexBy(tippeligaTable, "name");
+            indexedEliteserieTable = __.indexBy(eliteserieTable, "name");
 
             tableScore = __.reduce(participantObj.tabell, function (memo, teamName, index) {
                 try {
                     var predictedTeamPlacing = index + 1,
-                        actualTeamPlacing = indexedTippeligaTable[teamName].no;
+                        actualTeamPlacing = indexedEliteserieTable[teamName].no;
 
                     return memo + utils.getDisplacementPoints(strategy.tabellScoresStrategy.polarity, strategy.tabellScoresStrategy.weight,
                             predictedTeamPlacing,
@@ -76,20 +76,20 @@ var env = process.env.NODE_ENV || "development",
 
             pallScore =
                 utils.getMatchPoints(strategy.pall1ScoreStrategy.polarity, strategy.pall1ScoreStrategy.weight,
-                    participantObj.tabell[0], tippeligaTable[0].name) +
+                    participantObj.tabell[0], eliteserieTable[0].name) +
                 utils.getMatchPoints(strategy.pall2ScoreStrategy.polarity, strategy.pall2ScoreStrategy.weight,
-                    participantObj.tabell[1], tippeligaTable[1].name) +
+                    participantObj.tabell[1], eliteserieTable[1].name) +
                 utils.getMatchPoints(strategy.pall3ScoreStrategy.polarity, strategy.pall3ScoreStrategy.weight,
-                    participantObj.tabell[2], tippeligaTable[2].name);
+                    participantObj.tabell[2], eliteserieTable[2].name);
 
             pallBonusScore = utils.getMatchPoints(strategy.pallBonusScoreStrategy.polarity, strategy.pallBonusScoreStrategy.weight,
                 [participantObj.tabell[0], participantObj.tabell[1], participantObj.tabell[2]],
-                [tippeligaTable[0].name, tippeligaTable[1].name, tippeligaTable[2].name]
+                [eliteserieTable[0].name, eliteserieTable[1].name, eliteserieTable[2].name]
             );
 
             nedrykkScore = utils.getPresentPoints(strategy.nedrykkScoreStrategy.polarity, strategy.nedrykkScoreStrategy.weight,
                 [participantObj.tabell[14], participantObj.tabell[15]],
-                [tippeligaTable[14].name, tippeligaTable[15].name]
+                [eliteserieTable[14].name, eliteserieTable[15].name]
             );
 
             return [tableScore, pallScore, pallBonusScore, nedrykkScore];
@@ -105,23 +105,40 @@ var env = process.env.NODE_ENV || "development",
             }
             /* jshint -W035 */
             if (!obosligaTable) {
-                //console.warn(JSON.stringify(strategy));
-                //console.warn(JSON.stringify(participantObj));
-                //console.warn(JSON.stringify(obosligaTable));
+                console.warn(JSON.stringify(strategy));
+                console.warn(JSON.stringify(participantObj));
+                console.warn(JSON.stringify(obosligaTable));
             } else {
-                //console.log(JSON.stringify(strategy));
-                //console.log(JSON.stringify(participantObj));
-                //console.log(JSON.stringify(obosligaTable));
-                return utils.getPresentPoints(strategy.opprykkScoreStrategy.polarity, strategy.opprykkScoreStrategy.weight,
-                    [participantObj.opprykk[0], participantObj.opprykk[1]],
-                    [obosligaTable[0].name, obosligaTable[1].name]
-                );
+                console.log(JSON.stringify(strategy));
+                console.log(JSON.stringify(participantObj));
+                console.log(JSON.stringify(obosligaTable));
+                if (strategy.year === 2016) {
+                    // Catastrophic failure in 2016 - no Adecco/OBOS-liga results got persisted due to obosliga/adeccoliga naming mismatch in database schema/code ...
+                    return 0;
+                }
+                if (strategy.year < 2017) {
+                    return utils.getAllPresentPoints(strategy.opprykkScoreStrategy.polarity, strategy.opprykkScoreStrategy.weight,
+                        [participantObj.opprykk[0], participantObj.opprykk[1]],
+                        [obosligaTable[0].name, obosligaTable[1].name]
+                    );
+                }
+                return utils.getPresentPoints(
+                        strategy.opprykkScoreStrategy.polarity,
+                        strategy.opprykkScoreStrategy.weight,
+                        participantObj.opprykk[0],
+                        [obosligaTable[0].name, obosligaTable[1].name])
+                    +
+                    utils.getPresentPoints(
+                        strategy.opprykkScoreStrategy.polarity,
+                        strategy.opprykkScoreStrategy.weight,
+                        participantObj.opprykk[1],
+                        [obosligaTable[0].name, obosligaTable[1].name]);
             }
         },
 
 
     _calculateToppscorerScores =
-        function (strategy, participantObj, tippeligaToppscorer) {
+        function (strategy, participantObj, eliteserieToppscorer) {
             "use strict";
             if (__.isEmpty(participantObj.toppscorer)) {
                 console.warn(utils.logPreamble() + "'Toppscorer' property is missing");
@@ -129,7 +146,7 @@ var env = process.env.NODE_ENV || "development",
             }
             return utils.getPresentPoints(strategy.toppscorerScoreStrategy.polarity, strategy.toppscorerScoreStrategy.weight,
                 participantObj.toppscorer[0],
-                tippeligaToppscorer
+                eliteserieToppscorer
             );
         },
 
@@ -158,22 +175,22 @@ var env = process.env.NODE_ENV || "development",
      * </p>
      * @private
      */
-    _storeTippeligaRound =
-        function (currentTippeligaTable, currentTippeligaToppscorer, currentObosligaTable, currentRemainingCupContenders, year, round, currentRoundCount, mongoDbErr, storedTippeligaRound) {
+    _storeEliteserieRound =
+        function (currentEliteserieTable, currentEliteserieToppscorer, currentObosligaTable, currentRemainingCupContenders, year, round, currentRoundCount, mongoDbErr, storedEliteserieRound) {
             "use strict";
             var method = null,
-                tippeligaResults,
+                eliteserieResults,
                 dbMatchesCount,
                 dbCount,
-                logMsg = utils.logPreamble() + "Tippeliga " + year + " round #" + round;
+                logMsg = utils.logPreamble() + "Eliteserien " + year + " round #" + round;
 
-            if (!storedTippeligaRound) {
+            if (!storedEliteserieRound) {
                 method = "CREATE";
                 logMsg += " is not yet stored";
 
             } else {
-                tippeligaResults = storedTippeligaRound.tippeliga;
-                dbMatchesCount = __.groupBy(tippeligaResults, "matches");
+                eliteserieResults = storedEliteserieRound.tippeliga;
+                dbMatchesCount = __.groupBy(eliteserieResults, "matches");
 
                 if (!dbMatchesCount[round]) {
                     method = "CREATE";
@@ -181,7 +198,7 @@ var env = process.env.NODE_ENV || "development",
 
                 } else {
                     // TODO: Revisit logic, seems a bit strange!
-                    // TODO: Liten svakhet: Hvis OBOS-liga har runde mens Tippeliga ikke har det så blir ikke runden oppdatert ...
+                    // TODO: Liten svakhet: Hvis OBOS-liga har runde mens Eliteserien ikke har det så blir ikke runden oppdatert ...
 
                     dbCount = dbMatchesCount[round].length;
                     if (global.app.isCompletedRound(round, year)) {
@@ -199,12 +216,12 @@ var env = process.env.NODE_ENV || "development",
                 }
             }
             if (method) {
-                dbSchema.TippeligaRound.update(
+                dbSchema.EliteserieRound.update(
                     { year: year, round: parseInt(round, 10) },
                     {
-                        tippeliga: currentTippeligaTable,
-                        toppscorer: currentTippeligaToppscorer,
-                        obosliga: currentObosligaTable,
+                        tippeliga: currentEliteserieTable,
+                        toppscorer: currentEliteserieToppscorer,
+                        adeccoliga: currentObosligaTable,
                         remainingCupContenders: currentRemainingCupContenders,
                         date: new Date() // Which as you see should be named 'documentLastModificationTimestamp'
                     },
@@ -217,16 +234,16 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
-    _getStoredTippeligaDataRequestor = exports.getStoredTippeligaDataRequestor =
+    _getStoredEliteserieDataRequestor = exports.getStoredEliteserieDataRequestor =
         function (year, round, callback, args) {
             "use strict";
-            dbSchema.TippeligaRound.find({ year: year }).exec(
-                function (err, allTippeligaRounds) {
+            dbSchema.EliteserieRound.find({ year: year }).exec(
+                function (err, allEliteserieRounds) {
                     if (err) {
                         return callback(undefined, err);
                     }
-                    dbSchema.TippeligaRound.findOne({ year: year, round: round }).exec(
-                        function (err, tippeligaRound) {
+                    dbSchema.EliteserieRound.findOne({ year: year, round: round }).exec(
+                        function (err, eliteserieRound) {
                             if (err) {
                                 return callback(undefined, err); // => Blank screen ...
                             }
@@ -239,16 +256,16 @@ var env = process.env.NODE_ENV || "development",
                             tippekonkurranseData.matchesCountGrouping = null;
                             tippekonkurranseData.scores = null;
 
-                            if (tippeligaRound) {
-                                tippekonkurranseData.tippeligaTable = tippeligaRound.tippeliga;
-                                tippekonkurranseData.tippeligaTopScorer = tippeligaRound.toppscorer;
-                                tippekonkurranseData.obosligaTable = tippeligaRound.obosliga;
-                                tippekonkurranseData.remainingCupContenders = tippeligaRound.remainingCupContenders;
+                            if (eliteserieRound) {
+                                tippekonkurranseData.eliteserieTable = eliteserieRound.tippeliga;
+                                tippekonkurranseData.eliteserieTopScorer = eliteserieRound.toppscorer;
+                                tippekonkurranseData.obosligaTable = eliteserieRound.adeccoliga;
+                                tippekonkurranseData.remainingCupContenders = eliteserieRound.remainingCupContenders;
 
-                                tippekonkurranseData.round = tippeligaRound.round;
-                                tippekonkurranseData.date = tippeligaRound.date;
+                                tippekonkurranseData.round = eliteserieRound.round;
+                                tippekonkurranseData.date = eliteserieRound.date;
 
-                                tippekonkurranseData.currentRound = allTippeligaRounds.length;
+                                tippekonkurranseData.currentRound = allEliteserieRounds.length;
                                 //tippekonkurranseData.currentDate = new Date();
 
                             } else {
@@ -266,7 +283,7 @@ var env = process.env.NODE_ENV || "development",
 
                             // Workaround for strangely missing stored 'date' property for some rounds ...
                             if (!tippekonkurranseData.date) {
-                                tippekonkurranseData.date = tippeligaRound._id.getTimestamp();
+                                tippekonkurranseData.date = eliteserieRound._id.getTimestamp();
                             }
 
                             return callback(tippekonkurranseData.toArray());
@@ -277,7 +294,7 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
-    _retrieveTippeligaDataRequestory = exports.retrieveTippeligaData =
+    _retrieveEliteserieDataRequestory = exports.retrieveEliteserieData =
         function (request) {
             "use strict";
             var year = request.params.year || global.app.currentYear,
@@ -285,16 +302,16 @@ var env = process.env.NODE_ENV || "development",
                 now,
                 tippekonkurranseData;
 
-            // Override with stored Tippeliga data => for statistics/history/development ...
+            // Override with stored Eliteserien data => for statistics/history/development ...
             if (!round && env === "development") {
-                if (global.app.overrideTippeligaDataWithRound) {
-                    round = global.app.overrideTippeligaDataWithRound;
-                    console.warn(utils.logPreamble() + "Overriding current Tippeliga results with stored data from year=" + year + " and round=" + round);
+                if (global.app.overrideEliteserieDataWithRound) {
+                    round = global.app.overrideEliteserieDataWithRound;
+                    console.warn(utils.logPreamble() + "Overriding current Eliteserie results with stored data from year=" + year + " and round=" + round);
                 }
             }
 
             if (global.app.isCompletedRound(round, year)) {
-                return curry(_getStoredTippeligaDataRequestor, year, round);
+                return curry(_getStoredEliteserieDataRequestor, year, round);
 
             } else if (!global.app.isLiveDataAvailable) {
                 //console.error(utils.logPreamble() + "Live soccer result data not available ...");
@@ -308,8 +325,8 @@ var env = process.env.NODE_ENV || "development",
                 tippekonkurranseData.isLiveDataAvailable = rq.false;
                 tippekonkurranseData.isLive = rq.false;
 
-                tippekonkurranseData.tippeligaTable = rq.null;
-                tippekonkurranseData.tippeligaTopScorer = rq.null;
+                tippekonkurranseData.eliteserieTable = rq.null;
+                tippekonkurranseData.eliteserieTopScorer = rq.null;
                 tippekonkurranseData.obosligaTable = rq.null;
                 tippekonkurranseData.remainingCupContenders = rq.null;
 
@@ -332,8 +349,8 @@ var env = process.env.NODE_ENV || "development",
                 tippekonkurranseData.isLiveDataAvailable = rq.return(global.app.isLiveDataAvailable);
                 tippekonkurranseData.isLive = rq.true;
 
-                tippekonkurranseData.tippeligaTable = norwegianSoccerLeagueService.getCurrentTippeligaTable;
-                tippekonkurranseData.tippeligaTopScorer = norwegianSoccerLeagueService.getCurrentTippeligaTopScorer;
+                tippekonkurranseData.eliteserieTable = norwegianSoccerLeagueService.getCurrentEliteserieTable;
+                tippekonkurranseData.eliteserieTopScorer = norwegianSoccerLeagueService.getCurrentEliteserieTopScorer;
                 tippekonkurranseData.obosligaTable = norwegianSoccerLeagueService.getCurrentObosligaTable;
                 tippekonkurranseData.remainingCupContenders = norwegianSoccerLeagueService.getCurrentRemainingCupContenders;
 
@@ -357,7 +374,7 @@ var env = process.env.NODE_ENV || "development",
         function (args) {
             "use strict";
             var tippekonkurranseData = new TippekonkurranseData(args);
-            tippekonkurranseData.matchesCountGrouping = __.groupBy(tippekonkurranseData.tippeligaTable, "matches");
+            tippekonkurranseData.matchesCountGrouping = __.groupBy(tippekonkurranseData.eliteserieTable, "matches");
             return tippekonkurranseData.toArray();
         },
 
@@ -374,8 +391,8 @@ var env = process.env.NODE_ENV || "development",
                     throw new Error("Round is already set, it shouldn't be - it is the sole responsibility of this function");
 
                 } else {
-                    var allMatchRoundsPresentInCurrentTippeligaTable = __.keys(tippekonkurranseData.matchesCountGrouping);
-                    tippekonkurranseData.round = Math.max.apply(null, allMatchRoundsPresentInCurrentTippeligaTable);
+                    var allMatchRoundsPresentInCurrentEliteserieTable = __.keys(tippekonkurranseData.matchesCountGrouping);
+                    tippekonkurranseData.round = Math.max.apply(null, allMatchRoundsPresentInCurrentEliteserieTable);
                 }
 
                 if (tippekonkurranseData.currentRound) {
@@ -437,7 +454,7 @@ var env = process.env.NODE_ENV || "development",
             var currentStanding = {},
                 scoresRequestors = [],
 
-            // The app-conventional argument ordering for tippekonkurranse scores requestors
+                // The app-conventional argument ordering for tippekonkurranse scores requestors
                 tabellScoreIndex = 0,
                 pallScoreIndex = 1,
                 pallBonusScoreIndex = 2,
@@ -518,8 +535,8 @@ var env = process.env.NODE_ENV || "development",
                     scoresRequestors.push(
                         RQ.sequence([
                             RQ.parallel([
-                                rq.requestorize(curry(_calculateTippeligaScores, rules, userPredictions[participant], tippekonkurranseData.tippeligaTable)),
-                                rq.requestorize(curry(_calculateToppscorerScores, rules, userPredictions[participant], tippekonkurranseData.tippeligaTopScorer)),
+                                rq.requestorize(curry(_calculateEliteserieScores, rules, userPredictions[participant], tippekonkurranseData.eliteserieTable)),
+                                rq.requestorize(curry(_calculateToppscorerScores, rules, userPredictions[participant], tippekonkurranseData.eliteserieTopScorer)),
                                 rq.requestorize(curry(_calculateOpprykkScores, rules, userPredictions[participant], tippekonkurranseData.obosligaTable)),
                                 rq.requestorize(curry(_calculateCupScores, rules, userPredictions[participant], tippekonkurranseData.remainingCupContenders))
                             ]),
@@ -546,7 +563,7 @@ var env = process.env.NODE_ENV || "development",
 
                 year = tippekonkurranseData.getYear(),
                 previousRound = tippekonkurranseData.round - 1,
-                getPreviousRoundTippeligaData = curry(_getStoredTippeligaDataRequestor, year, previousRound),
+                getPreviousRoundEliteserieData = curry(_getStoredEliteserieDataRequestor, year, previousRound),
                 addTippekonkurranseScores = curry(_addTippekonkurranseScoresRequestor, userPredictions, scoresStrategy),
 
                 parentRequestion = callback;
@@ -556,7 +573,7 @@ var env = process.env.NODE_ENV || "development",
 
             } else {
                 return RQ.sequence([
-                    getPreviousRoundTippeligaData,
+                    getPreviousRoundEliteserieData,
                     rq.requestorize(_addGroupingOfTeamAndNumberOfMatchesPlayed),
                     rq.requestorize(_addRound),
                     addTippekonkurranseScores,
@@ -614,8 +631,8 @@ var env = process.env.NODE_ENV || "development",
             "use strict";
             var tippekonkurranseData = new TippekonkurranseData(args);
             response.json({
-                currentTippeligaTable: tippekonkurranseData.tippeligaTable,
-                currentTippeligaToppscorer: tippekonkurranseData.tippeligaTopScorer,
+                currentEliteserieTable: tippekonkurranseData.eliteserieTable,
+                currentEliteserieTopScorer: tippekonkurranseData.eliteserieTopScorer,
                 currentObosligaTable: tippekonkurranseData.obosligaTable,
                 currentRemainingCupContenders: tippekonkurranseData.remainingCupContenders,
                 currentYear: tippekonkurranseData.getYear(),
@@ -626,7 +643,7 @@ var env = process.env.NODE_ENV || "development",
         },
 
 
-    _storeTippeligaRoundMatchData = exports.storeTippeligaRoundMatchData =
+    _storeEliteserieRoundMatchData = exports.storeEliteserieRoundMatchData =
         function (args) {
             "use strict";
             var tippekonkurranseData = new TippekonkurranseData(args);
@@ -636,18 +653,18 @@ var env = process.env.NODE_ENV || "development",
 
                 var roundNo = parseInt(tippekonkurranseData.round, 10),
                     currentMatchCountInRound = tippekonkurranseData.matchesCountGrouping[tippekonkurranseData.round].length,
-                    conditionallyStoreTippeligaRound = curry(_storeTippeligaRound,
-                        tippekonkurranseData.tippeligaTable,
-                        tippekonkurranseData.tippeligaTopScorer,
+                    conditionallyStoreEliteserieRound = curry(_storeEliteserieRound,
+                        tippekonkurranseData.eliteserieTable,
+                        tippekonkurranseData.eliteserieTopScorer,
                         tippekonkurranseData.obosligaTable,
                         tippekonkurranseData.remainingCupContenders,
                         tippekonkurranseData.getYear(),
                         tippekonkurranseData.round,
                         currentMatchCountInRound);
 
-                dbSchema.TippeligaRound
+                dbSchema.EliteserieRound
                     .findOne({ year: tippekonkurranseData.getYear(), round: roundNo })
-                    .exec(conditionallyStoreTippeligaRound);
+                    .exec(conditionallyStoreEliteserieRound);
             }
             return args;
         };

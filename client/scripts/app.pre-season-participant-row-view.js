@@ -32,7 +32,7 @@ define(
                     '      <table>' +
                     '        <tr>' +
                     '          <td>' +
-                    '            <p style="margin-left:.8rem;">Tippeliga:<br/><strong><%= ' + App.scoreModel.tabellPropertyName + ' %></strong></p>' +
+                    '            <p style="margin-left:.8rem;">Eliteserien:<br/><strong><%= ' + App.scoreModel.tabellPropertyName + ' %></strong></p>' +
                     '          </td>' +
                     '          <td style="vertical-align:top;padding-left:4rem;">' +
                     '            <p>Toppskårer:</p>' +
@@ -121,11 +121,11 @@ define(
                         return "<span class='icon-check' style='padding-left:6rem;'></span>";
 
                     } else {
-                        var tippeligaSeasonStartDate = window.app.model.get("currentTippeligaSeasonStartDate"),
-                            tippeligaSeasonHasStarted = window.app.model.get("currentTippeligaSeasonHasStarted");
+                        var eliteserieSeasonStartDate = window.app.model.get("currentEliteserieSeasonStartDate"),
+                            eliteserieSeasonHasStarted = window.app.model.get("currentEliteserieSeasonHasStarted");
 
-                        return tippeligaSeasonHasStarted
-                            ? "<span style='color:red;padding-left:6rem;'>Tippetips ikke mottatt! Tippeligaen startet " + new Moment(tippeligaSeasonStartDate).fromNow() + "!!</span>"
+                        return eliteserieSeasonHasStarted
+                            ? "<span style='color:red;padding-left:6rem;'>Tippetips ikke mottatt! Eliteserien startet " + new Moment(eliteserieSeasonStartDate).fromNow() + "!!</span>"
                             : "<span style='padding-left:6rem;'>Årets tippetips ikke mottatt ennå";
                     }
                 }

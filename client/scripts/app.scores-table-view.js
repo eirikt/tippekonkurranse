@@ -44,18 +44,18 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
                     '      <table style="width:100%">' +
                     '        <tr>' +
                     '          <td style="width:33%;vertical-align:top;">' +
-                    '            <p style="margin-left:.8rem">Tippeliga:</p>' +
-                    '            <p><strong><%= currentTippeligaTable %></strong></p>' +
+                    '            <p style="margin-left:.8rem">Eliteserien:</p>' +
+                    '            <p><strong><%= currentEliteserieTable %></strong></p>' +
                     '          </td>' +
                     '          <td style="width:33%;vertical-align:top;">' +
-                    '            <p style="margin-left:.8rem">OBOS-liga:</p>' +
+                    '            <p style="margin-left:.8rem">OBOS-ligaen:</p>' +
                     '            <p><strong><%= currentObosligaTable %></strong></p>' +
                     '          </td>' +
                     '          <td style="width:33%;vertical-align:top;">' +
                     '            <p>Toppskårer:</p>' +
-                    '            <p><strong><%= currentTippeligaToppscorer %></strong></p>' +
-                    //'            <p style="margin-top:2rem;">Fortsatt med i cupen:</p>' +
-                    '            <p style="margin-top:2rem;">Cupmester:</p>' +
+                    '            <p><strong><%= currentEliteserieTopScorer %></strong></p>' +
+                    '            <p style="margin-top:2rem;">Fortsatt med i cupen:</p>' +
+                    //'            <p style="margin-top:2rem;">Cupmester:</p>' +
                     '            <p><strong><%= currentRemainingCupContenders %></strong></p>' +
                     '          </td>' +
                     '        </tr>' +
@@ -93,10 +93,10 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
 
                     // Pretty tabell presentation
                     prettyTabellView = new SoccerTableViews.SimpleTableView({
-                        model: this.model.get('currentTippeligaTable'),
+                        model: this.model.get('currentEliteserieTable'),
                         emphasizeFormat: '3+0'
                     });
-                    this.model.set('currentTippeligaTable', prettyTabellView.render().$el.html(), { silent: true });
+                    this.model.set('currentEliteserieTable', prettyTabellView.render().$el.html(), { silent: true });
 
                     // Pretty tabell presentation
                     prettyTabellView = new SoccerTableViews.SimpleTableView({
@@ -106,18 +106,28 @@ define([ 'jquery', 'underscore', 'backbone', 'marionette', 'bootstrap', 'moment'
                     this.model.set('currentObosligaTable', prettyTabellView.render().$el.html(), { silent: true });
 
                     // Pretty toppscorer presentation
-                    toppscorer = this.model.get('currentTippeligaToppscorer');
-                    toppscorer = _.reduce(toppscorer, function (result, toppscorer, index) {
-                        return result += toppscorer + '<br/>';
-                    }, '');
-                    this.model.set('currentTippeligaToppscorer', toppscorer, { silent: true });
+                    toppscorer = this.model.get('currentEliteserieTopScorer');
+                    // Hack: If no top scorers are present -> "all"
+                    if (!toppscorer || toppscorer.length < 1) {
+                        toppscorer = "Alle";
+                    } else {
+                        toppscorer = _.reduce(toppscorer, function (result, toppscorer, index) {
+                            return result += toppscorer + '<br/>';
+                        }, '');
+                    }
+                    this.model.set('currentEliteserieTopScorer', toppscorer, { silent: true });
 
                     // Pretty cup presentation
                     cupContenders = this.model.get('currentRemainingCupContenders');
-                    cupContenders = _.reduce(cupContenders, function (result, team, index) {
-                        //return index > 0 ? result += ' og ' + team : result += team;
-                        return result += team + '<br/>';
-                    }, '');
+                    // Hack: If all eliteserie teams are present -> "all"
+                    if (!cupContenders || cupContenders.length === 16) {
+                        cupContenders = "Alle";
+                    } else {
+                        cupContenders = _.reduce(cupContenders, function (result, team, index) {
+                            //return index > 0 ? result += ' og ' + team : result += team;
+                            return result += team + '<br/>';
+                        }, '');
+                    }
                     this.model.set('currentRemainingCupContenders', cupContenders, { silent: true });
                 },
                 onRender: function () {

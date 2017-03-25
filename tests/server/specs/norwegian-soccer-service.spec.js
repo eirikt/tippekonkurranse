@@ -12,7 +12,7 @@ var expect = require('chai').expect,
 describe('Norwegian Soccer Service', function () {
     'use strict';
 
-    describe('parseTippeligaTable', function () {
+    describe('parseEliteserieTable', function () {
 
         it('should exist as a function', function () {
             expect(norwegianSoccerService._parseAltOmFotballHtmlTable).to.exist;
@@ -38,13 +38,13 @@ describe('Norwegian Soccer Service', function () {
 
 
         it('should return empty array if invoked with an no-content argument', function () {
-            var tippeligaTable = norwegianSoccerService._parseAltOmFotballHtmlTable('  ');
-            expect(tippeligaTable).to.be.an.array;
-            expect(tippeligaTable).to.be.empty;
+            var eliteserieTable = norwegianSoccerService._parseAltOmFotballHtmlTable('  ');
+            expect(eliteserieTable).to.be.an.array;
+            expect(eliteserieTable).to.be.empty;
 
-            tippeligaTable = norwegianSoccerService._parseAltOmFotballHtmlTable('Yo Man!');
-            expect(tippeligaTable).to.be.an.array;
-            expect(tippeligaTable).to.be.empty;
+            eliteserieTable = norwegianSoccerService._parseAltOmFotballHtmlTable('Yo Man!');
+            expect(eliteserieTable).to.be.an.array;
+            expect(eliteserieTable).to.be.empty;
         });
 
 
@@ -109,63 +109,63 @@ describe('Norwegian Soccer Service', function () {
                     '  </tbody>' +
                     '</table>',
 
-                tippeligaTable = norwegianSoccerService._parseAltOmFotballHtmlTable(altOmFotballHtmlTable);
+                eliteserieTable = norwegianSoccerService._parseAltOmFotballHtmlTable(altOmFotballHtmlTable);
 
-            expect(tippeligaTable).to.be.an.array;
-            expect(tippeligaTable.length).to.equal(3);
+            expect(eliteserieTable).to.be.an.array;
+            expect(eliteserieTable.length).to.equal(3);
 
-            expect(tippeligaTable[0]).to.be.an.instanceOf(TeamPlacement);
-            expect(tippeligaTable[1]).to.be.an.instanceOf(TeamPlacement);
-            expect(tippeligaTable[2]).to.be.an.instanceOf(TeamPlacement);
+            expect(eliteserieTable[0]).to.be.an.instanceOf(TeamPlacement);
+            expect(eliteserieTable[1]).to.be.an.instanceOf(TeamPlacement);
+            expect(eliteserieTable[2]).to.be.an.instanceOf(TeamPlacement);
 
-            expect(tippeligaTable[0].no).to.equal(1);
-            expect(tippeligaTable[1].no).to.equal(2);
-            expect(tippeligaTable[2].no).to.equal(3);
+            expect(eliteserieTable[0].no).to.equal(1);
+            expect(eliteserieTable[1].no).to.equal(2);
+            expect(eliteserieTable[2].no).to.equal(3);
 
-            expect(tippeligaTable[0].name).to.equal('Bodø/Glimt');
-            expect(tippeligaTable[1].name).to.equal('Brann');
-            expect(tippeligaTable[2].name).to.equal('Haugesund');
+            expect(eliteserieTable[0].name).to.equal('Bodø/Glimt');
+            expect(eliteserieTable[1].name).to.equal('Brann');
+            expect(eliteserieTable[2].name).to.equal('Haugesund');
 
-            expect(tippeligaTable[0].matches).to.equal('0');
-            expect(tippeligaTable[1].matches).to.equal('2');
-            expect(tippeligaTable[2].matches).to.equal('1');
+            expect(eliteserieTable[0].matches).to.equal('0');
+            expect(eliteserieTable[1].matches).to.equal('2');
+            expect(eliteserieTable[2].matches).to.equal('1');
         });
     });
 
 
-    describe('parseTippeligaTopScorerTable', function () {
+    describe('parseEliteserieTopScorerTable', function () {
 
         it('should exist as a function', function () {
-            expect(norwegianSoccerService._parseTippeligaTopScorerTable).to.exist;
-            expect(R.is(Function, norwegianSoccerService._parseTippeligaTopScorerTable)).to.be.true;
+            expect(norwegianSoccerService._parseEliteserieTopScorerTable).to.exist;
+            expect(R.is(Function, norwegianSoccerService._parseEliteserieTopScorerTable)).to.be.true;
         });
 
 
         it('should throw error if invoked with no argument', function () {
-            expect(norwegianSoccerService._parseTippeligaTopScorerTable).to.throw(Error, 'Argument is missing - cannot parse');
+            expect(norwegianSoccerService._parseEliteserieTopScorerTable).to.throw(Error, 'Argument is missing - cannot parse');
 
-            var noArg = norwegianSoccerService._parseTippeligaTopScorerTable.bind(undefined, undefined);
+            var noArg = norwegianSoccerService._parseEliteserieTopScorerTable.bind(undefined, undefined);
             expect(noArg).to.throw(Error, 'Argument is missing - cannot parse');
 
-            var emptyArg = norwegianSoccerService._parseTippeligaTopScorerTable.bind(undefined, '');
+            var emptyArg = norwegianSoccerService._parseEliteserieTopScorerTable.bind(undefined, '');
             expect(emptyArg).to.throw(Error, 'Argument is missing - cannot parse');
         });
 
 
         it('should throw error if not invoked with a string argument', function () {
-            var noArg = norwegianSoccerService._parseTippeligaTopScorerTable.bind(undefined, {});
+            var noArg = norwegianSoccerService._parseEliteserieTopScorerTable.bind(undefined, {});
             expect(noArg).to.throw(Error, 'Argument is not a string - cannot parse');
         });
 
 
         it('should return empty array if invoked with an no-content argument', function () {
-            var tippeligaTable = norwegianSoccerService._parseTippeligaTopScorerTable('  ');
-            expect(tippeligaTable).to.be.an.array;
-            expect(tippeligaTable).to.be.empty;
+            var eliteserieTable = norwegianSoccerService._parseEliteserieTopScorerTable('  ');
+            expect(eliteserieTable).to.be.an.array;
+            expect(eliteserieTable).to.be.empty;
 
-            tippeligaTable = norwegianSoccerService._parseTippeligaTopScorerTable('Yo Man!');
-            expect(tippeligaTable).to.be.an.array;
-            expect(tippeligaTable).to.be.empty;
+            eliteserieTable = norwegianSoccerService._parseEliteserieTopScorerTable('Yo Man!');
+            expect(eliteserieTable).to.be.an.array;
+            expect(eliteserieTable).to.be.empty;
         });
 
 
@@ -183,10 +183,10 @@ describe('Norwegian Soccer Service', function () {
                     '  <tbody></tbody>' +
                     '</table>',
 
-                tippeligaTopScorers = norwegianSoccerService._parseTippeligaTopScorerTable(altOmFotballHtmlTopScorerTableByAjax);
+                eliteserieTopScorers = norwegianSoccerService._parseEliteserieTopScorerTable(altOmFotballHtmlTopScorerTableByAjax);
 
-            expect(tippeligaTopScorers).to.be.an.array;
-            expect(tippeligaTopScorers.length).is.empty;
+            expect(eliteserieTopScorers).to.be.an.array;
+            expect(eliteserieTopScorers.length).is.empty;
         });
 
 
@@ -223,11 +223,11 @@ describe('Norwegian Soccer Service', function () {
                     '  </tbody>' +
                     '</table>',
 
-                tippeligaTopScorers = norwegianSoccerService._parseTippeligaTopScorerTable(altOmFotballHtmlTopScorerTableByAjax);
+                eliteserieTopScorers = norwegianSoccerService._parseEliteserieTopScorerTable(altOmFotballHtmlTopScorerTableByAjax);
 
-            expect(tippeligaTopScorers).to.be.an.array;
-            expect(tippeligaTopScorers.length).to.equal(1);
-            expect(tippeligaTopScorers[0]).to.equal('Alexander Søderlund');
+            expect(eliteserieTopScorers).to.be.an.array;
+            expect(eliteserieTopScorers.length).to.equal(1);
+            expect(eliteserieTopScorers[0]).to.equal('Alexander Søderlund');
         });
     });
 

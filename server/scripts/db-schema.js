@@ -13,7 +13,7 @@ var mongoose = require("mongoose"),
         matches: { type: Number, index: true, min: 0, max: 30 }
     }),
 
-    TippeligaRoundMongooseSchema = exports.TippeligaRoundMongooseSchema = new Schema({
+    EliteserieRoundMongooseSchema = exports.EliteserieRoundMongooseSchema = new Schema({
         year: { type: Number, index: true },
         round: { type: Number, index: true },
         date: { type: Date },
@@ -24,4 +24,4 @@ var mongoose = require("mongoose"),
     }),
 
 // Mongoose models
-    TippeligaRound = exports.TippeligaRound = mongoose.model("tippeligaround", TippeligaRoundMongooseSchema);
+    EliteserieRound = exports.EliteserieRound = mongoose.model("tippeligaround", EliteserieRoundMongooseSchema);

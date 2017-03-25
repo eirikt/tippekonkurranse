@@ -22,7 +22,7 @@ define([
         var app = new Marionette.Application(),
 
         // NB! To be set manually for now ...
-            currentTippeligaSeasonStartDate = new Date(2017, 4 - 1, 1, 18, 0, 0),
+            currentEliteserieSeasonStartDate = new Date(2017, 3 - 1, 25, 18, 0, 0),
 
             TippekonkurranseModel = Backbone.Model.extend({
                 defaults: {
@@ -30,10 +30,10 @@ define([
                     initialRound: 1,
                     year: null,
                     round: null,
-                    currentYear: currentTippeligaSeasonStartDate.getFullYear(),
+                    currentYear: currentEliteserieSeasonStartDate.getFullYear(),
                     currentRound: null,
-                    currentTippeligaSeasonStartDate: currentTippeligaSeasonStartDate,
-                    currentTippeligaSeasonHasStarted: Date.now() - currentTippeligaSeasonStartDate > 0,
+                    currentEliteserieSeasonStartDate: currentEliteserieSeasonStartDate,
+                    currentEliteserieSeasonHasStarted: Date.now() - currentEliteserieSeasonStartDate > 0,
                     numberOfRounds: 30,
                     isHistoricDataAvailable: null,
                     isLiveDataAvailable: null//,
@@ -203,7 +203,7 @@ define([
 
             // Temporary ... To be removed when applying animations
             //if (hasNoData) {
-            if (appModel.get("year") === appModel.get("currentYear") && !appModel.get("currentTippeligaSeasonHasStarted")) {
+            if (appModel.get("year") === appModel.get("currentYear") && !appModel.get("currentEliteserieSeasonHasStarted")) {
                 headerModel.set("hasNoData", true);
             }
             //if (!hasNoMainContentView) {
@@ -211,7 +211,7 @@ define([
             currentScores.unshift(headerModel);
             //}
             //if (hasNoData) {
-            if (appModel.get("year") === appModel.get("currentYear") && !appModel.get("currentTippeligaSeasonHasStarted")) {
+            if (appModel.get("year") === appModel.get("currentYear") && !appModel.get("currentEliteserieSeasonHasStarted")) {
                 app.mainContent.show(new PreSeasonView({
                     model: appModel,
                     collection: currentScores
@@ -299,7 +299,7 @@ define([
             window.console.log('app.js :: Init');
             console.log('initializing::getTippekonkurranseScores');
             app.execute('getTippekonkurranseScores');
-            if (appModel.get("currentTippeligaSeasonHasStarted")) {
+            if (appModel.get("currentEliteserieSeasonHasStarted")) {
                 autoPageRefreshCountdown();
             }
         });

@@ -28,7 +28,7 @@ define(
                     '      <table>' +
                     '        <tr>' +
                     '          <td>' +
-                    '            <p style="margin-left:.8rem;">Tippeliga:<br/><strong><%= args.' + App.scoreModel.tabellPropertyName + ' %></strong></p>' +
+                    '            <p style="margin-left:.8rem;">Eliteserien:<br/><strong><%= args.' + App.scoreModel.tabellPropertyName + ' %></strong></p>' +
                     '          </td>' +
                     '          <td style="vertical-align:top;padding-left:4rem;">' +
                     '            <p>Toppskårer:</p>' +

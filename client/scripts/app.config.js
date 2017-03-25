@@ -17,7 +17,7 @@ require.config({
     // Development ('grunt [run|deploy:development]' and IDE execution):
     //baseUrl: 'scripts',
     // Standard:
-    baseUrl: '1.3.14/scripts',
+    baseUrl: '1.3.15/scripts',
 
     // See: http://momentjs.com/docs/#/use-it/require-js/
     packages: [{
@@ -149,6 +149,7 @@ require(['underscore', 'jquery', 'backbone', 'marionette', 'toastr', 'jqplot', '
                             var self = this;
                             this.$el.modal({ keyboard: false })
                                 .on('click', '#reload1', function () {
+                                    var u = 2;
                                     window.location.reload();
                                 })
                                 .on('shown.bs.modal', function () {
@@ -194,6 +195,7 @@ require(['underscore', 'jquery', 'backbone', 'marionette', 'toastr', 'jqplot', '
                                 var self = this;
                                 this.$el.modal({ keyboard: false })
                                     .on('click', '#reload2', function () {
+                                        var u = 3;
                                         window.location.reload();
                                     })
                                     .on('shown.bs.modal', function () {

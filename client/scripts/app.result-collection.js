@@ -72,7 +72,7 @@ define([
             },
 
             parse: function (response) {
-                if (response === 404/* || response === 503*/) {
+                if (!response || response === 404/* || response === 503*/) {
                     return this.models;
                 }
                 this.year = response.metadata.year;

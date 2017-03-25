@@ -74,9 +74,11 @@ define([ "chai", "underscore", "../../../shared/scripts/fun".curry, "../../../sh
                 expect(Utils.getPresentPoints(null, null, [ 1, 2, 3, 4 ], 3)).to.be.equal(0);
             });
             it("should return -1 when polarity is '-', weight is 1, and location arrays contains the same values", function () {
+                expect(Utils.getPresentPoints('-', 1, 2, 2)).to.be.equal(-1);
                 expect(Utils.getPresentPoints('-', 1, 2, [ 2, 1, 3 ])).to.be.equal(-1);
             });
             it("should return 1 when polarity is '+', weight is 1, and location arrays contains the same values", function () {
+                expect(Utils.getPresentPoints('+', 1, 1, 1)).to.be.equal(1);
                 expect(Utils.getPresentPoints('+', 1, 1, [ 2, 1, 3 ])).to.be.equal(1);
                 expect(Utils.getPresentPoints('+', 1, [ 2, 3 ], [ 2, 1, 3 ])).to.be.equal(1);
                 expect(Utils.getPresentPoints('+', 1, [ 1, 2, 3 ], [ 2, 1, 3 ])).to.be.equal(1);
@@ -98,7 +100,7 @@ define([ "chai", "underscore", "../../../shared/scripts/fun".curry, "../../../sh
                 expect(_.partial(Utils.maxDisplacementSumInPermutationOfLength, 3.14)).to.throw(Error, "Natural number (including zero) argument is mandatory");
             });
 
-            it("should specify the A007590 arithmetic sequence", function () {
+            it("should specify the 'A007590' arithmetic sequence", function () {
                 expect(Utils.maxDisplacementSumInPermutationOfLength(0)).to.equal(0);
                 expect(Utils.maxDisplacementSumInPermutationOfLength(1)).to.equal(0);
                 expect(Utils.maxDisplacementSumInPermutationOfLength(2)).to.equal(2);

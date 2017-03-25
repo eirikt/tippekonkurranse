@@ -7,6 +7,7 @@ var expect = require("chai").expect,
     getDisplacementPoints = require("../../../shared/scripts/utils").getDisplacementPoints,
     getMatchPoints = require("../../../shared/scripts/utils").getMatchPoints,
     getPresentPoints = require("../../../shared/scripts/utils").getPresentPoints,
+    getAllPresentPoints = require("../../../shared/scripts/utils").getAllPresentPoints,
 
     maxDisplacementSumInPermutationOfLength = require("../../../shared/scripts/utils").maxDisplacementSumInPermutationOfLength;
 
@@ -46,33 +47,52 @@ describe("Points calculation functions", function () {
             expect(getMatchPoints(null, null, 0, 1)).to.be.equal(0);
             expect(getMatchPoints(null, null, 10, 8)).to.be.equal(0);
         });
-        it("should return 1 when polarity is '+', weight is 1, and locations are equal", function () {
+        it("should return 1 when polarity is '+', weight is 1, and given values are equal", function () {
             expect(getMatchPoints('+', 1, 0, 0)).to.be.equal(1);
             expect(getMatchPoints('+', 1, 10, 10)).to.be.equal(1);
             expect(getMatchPoints('+', 1, -1, -1)).to.be.equal(1);
         });
-        it("should return -10 when polarity is '-', weight is 10, and locations are equal", function () {
+        it("should return -10 when polarity is '-', weight is 10, and given values are equal", function () {
             expect(getMatchPoints('-', 10, 0, 0)).to.be.equal(-10);
         });
-        it("should return 4 when polarity is '+', weight is 4, and location arrays are equal", function () {
-            expect(getMatchPoints('+', 4, [ 1, 2, 3 ], [ 1, 2, 3 ])).to.be.equal(4);
+        it("should return 4 when polarity is '+', weight is 4, and given values are equal", function () {
+            expect(getMatchPoints('+', 4, [1, 2, 3], [1, 2, 3])).to.be.equal(4);
         });
     });
 
     describe("getPresentPoints", function () {
-        it("should return 0 if not all expected elements are present in actual collection", function () {
-            expect(getPresentPoints(null, null, [ 11, 12, 13 ], [ 2, 1, 3 ])).to.be.equal(0);
+        it("should return 0 if not all expected elements are present in actual value(s)", function () {
+            expect(getPresentPoints(null, null, [11, 12, 13], [2, 1, 3])).to.be.equal(0);
             expect(getPresentPoints(null, null, 11, 22)).to.be.equal(0);
-            expect(getPresentPoints(null, null, [ 1, 2, 3, 4 ], [ 1, 2, 3 ])).to.be.equal(0);
-            expect(getPresentPoints(null, null, [ 1, 2, 3, 4 ], 3)).to.be.equal(0);
+            expect(getPresentPoints(null, null, [1, 2, 3, 4], [1, 2, 3])).to.be.equal(0);
+            expect(getPresentPoints(null, null, [1, 2, 3, 4], 3)).to.be.equal(0);
         });
-        it("should return -1 when polarity is '-', weight is 1, and location arrays contains the same values", function () {
-            expect(getPresentPoints('-', 1, 2, [ 2, 1, 3 ])).to.be.equal(-1);
+        it("should return -1 when polarity is '-', weight is 1, and otherwise test is OK", function () {
+            expect(getPresentPoints('-', 1, [2, 1, 3], [2, 11, 33])).to.be.equal(-1);
+            expect(getPresentPoints('-', -1, [2, 1, 3], [2, 11, 33])).to.be.equal(1); // Strange, but OK
         });
-        it("should return 1 when polarity is '+', weight is 1, and location arrays contains the same values", function () {
-            expect(getPresentPoints('+', 1, 1, [ 2, 1, 3 ])).to.be.equal(1);
-            expect(getPresentPoints('+', 1, [ 2, 3 ], [ 2, 1, 3 ])).to.be.equal(1);
-            expect(getPresentPoints('+', 1, [ 1, 2, 3 ], [ 2, 1, 3 ])).to.be.equal(1);
+        it("should return 1 when polarity is '+', weight is 1, and otherwise test is OK", function () {
+            expect(getPresentPoints('+', 1, 1, [2, 1, 3])).to.be.equal(1);
+            expect(getPresentPoints('+', 1, [2, 3], 3)).to.be.equal(1);
+            expect(getPresentPoints('+', 1, [1, 2, 3], [2, 1, 3])).to.be.equal(1);
+            expect(getPresentPoints('+', -1, [1, 2, 3], [2, 11, 33])).to.be.equal(-1); // Strange, but OK
+        });
+    });
+
+    describe("getAllPresentPoints", function () {
+        it("should return 0 if not all expected elements are present in actual value(s)", function () {
+            expect(getAllPresentPoints(null, null, [11, 12, 13], [2, 1, 3])).to.be.equal(0);
+            expect(getAllPresentPoints(null, null, 11, 22)).to.be.equal(0);
+            expect(getAllPresentPoints(null, null, [1, 2, 3, 4], [1, 2, 3])).to.be.equal(0);
+            expect(getAllPresentPoints(null, null, [1, 2, 3, 4], 3)).to.be.equal(0);
+        });
+        it("should return -1 when polarity is '-', weight is 1, and otherwise test is OK", function () {
+            expect(getAllPresentPoints('-', 1, 2, [2, 1, 3])).to.be.equal(-1);
+        });
+        it("should return 1 when polarity is '+', weight is 1, and otherwise test is OK", function () {
+            expect(getAllPresentPoints('+', 1, 1, [2, 1, 3])).to.be.equal(1);
+            expect(getAllPresentPoints('+', 1, [2, 3], [2, 1, 3])).to.be.equal(1);
+            expect(getAllPresentPoints('+', 1, [1, 2, 3], [2, 1, 3])).to.be.equal(1);
         });
     });
 });
