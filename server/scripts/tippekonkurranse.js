@@ -126,8 +126,7 @@ var env = process.env.NODE_ENV || "development",
                         strategy.opprykkScoreStrategy.polarity,
                         strategy.opprykkScoreStrategy.weight,
                         participantObj.opprykk[0],
-                        [obosligaTable[0].name, obosligaTable[1].name])
-                    +
+                        [obosligaTable[0].name, obosligaTable[1].name]) +
                     utils.getPresentPoints(
                         strategy.opprykkScoreStrategy.polarity,
                         strategy.opprykkScoreStrategy.weight,
