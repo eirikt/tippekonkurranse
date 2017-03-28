@@ -64,7 +64,9 @@ var env = process.env.NODE_ENV || "development",
                     var predictedTeamPlacing = index + 1,
                         actualTeamPlacing = indexedEliteserieTable[teamName].no;
 
-                    return memo + utils.getDisplacementPoints(strategy.tabellScoresStrategy.polarity, strategy.tabellScoresStrategy.weight,
+                    return memo + utils.getDisplacementPoints(
+                            strategy.tabellScoresStrategy.polarity,
+                            strategy.tabellScoresStrategy.weight,
                             predictedTeamPlacing,
                             actualTeamPlacing);
                 } catch (e) {
@@ -75,19 +77,32 @@ var env = process.env.NODE_ENV || "development",
             }, 0);
 
             pallScore =
-                utils.getMatchPoints(strategy.pall1ScoreStrategy.polarity, strategy.pall1ScoreStrategy.weight,
-                    participantObj.tabell[0], eliteserieTable[0].name) +
-                utils.getMatchPoints(strategy.pall2ScoreStrategy.polarity, strategy.pall2ScoreStrategy.weight,
-                    participantObj.tabell[1], eliteserieTable[1].name) +
-                utils.getMatchPoints(strategy.pall3ScoreStrategy.polarity, strategy.pall3ScoreStrategy.weight,
-                    participantObj.tabell[2], eliteserieTable[2].name);
+                utils.getMatchPoints(
+                    strategy.pall1ScoreStrategy.polarity,
+                    strategy.pall1ScoreStrategy.weight,
+                    participantObj.tabell[0],
+                    eliteserieTable[0].name) +
+                utils.getMatchPoints(
+                    strategy.pall2ScoreStrategy.polarity,
+                    strategy.pall2ScoreStrategy.weight,
+                    participantObj.tabell[1],
+                    eliteserieTable[1].name) +
+                utils.getMatchPoints(
+                    strategy.pall3ScoreStrategy.polarity,
+                    strategy.pall3ScoreStrategy.weight,
+                    participantObj.tabell[2],
+                    eliteserieTable[2].name);
 
-            pallBonusScore = utils.getMatchPoints(strategy.pallBonusScoreStrategy.polarity, strategy.pallBonusScoreStrategy.weight,
+            pallBonusScore = utils.getMatchPoints(
+                strategy.pallBonusScoreStrategy.polarity,
+                strategy.pallBonusScoreStrategy.weight,
                 [participantObj.tabell[0], participantObj.tabell[1], participantObj.tabell[2]],
                 [eliteserieTable[0].name, eliteserieTable[1].name, eliteserieTable[2].name]
             );
 
-            nedrykkScore = utils.getPresentPoints(strategy.nedrykkScoreStrategy.polarity, strategy.nedrykkScoreStrategy.weight,
+            nedrykkScore = utils.getPresentPoints(
+                strategy.nedrykkScoreStrategy.polarity,
+                strategy.nedrykkScoreStrategy.weight,
                 [participantObj.tabell[14], participantObj.tabell[15]],
                 [eliteserieTable[14].name, eliteserieTable[15].name]
             );
@@ -105,19 +120,21 @@ var env = process.env.NODE_ENV || "development",
             }
             /* jshint -W035 */
             if (!obosligaTable) {
-                console.warn(JSON.stringify(strategy));
-                console.warn(JSON.stringify(participantObj));
-                console.warn(JSON.stringify(obosligaTable));
+                //console.warn(JSON.stringify(strategy));
+                //console.warn(JSON.stringify(participantObj));
+                //console.warn(JSON.stringify(obosligaTable));
             } else {
-                console.log(JSON.stringify(strategy));
-                console.log(JSON.stringify(participantObj));
-                console.log(JSON.stringify(obosligaTable));
+                //console.log(JSON.stringify(strategy));
+                //console.log(JSON.stringify(participantObj));
+                //console.log(JSON.stringify(obosligaTable));
                 if (strategy.year === 2016) {
                     // Catastrophic failure in 2016 - no Adecco/OBOS-liga results got persisted due to obosliga/adeccoliga naming mismatch in database schema/code ...
                     return 0;
                 }
                 if (strategy.year < 2017) {
-                    return utils.getAllPresentPoints(strategy.opprykkScoreStrategy.polarity, strategy.opprykkScoreStrategy.weight,
+                    return utils.getAllPresentPoints(
+                        strategy.opprykkScoreStrategy.polarity,
+                        strategy.opprykkScoreStrategy.weight,
                         [participantObj.opprykk[0], participantObj.opprykk[1]],
                         [obosligaTable[0].name, obosligaTable[1].name]
                     );
@@ -143,7 +160,15 @@ var env = process.env.NODE_ENV || "development",
                 console.warn(utils.logPreamble() + "'Toppscorer' property is missing");
                 return 1000;
             }
-            return utils.getPresentPoints(strategy.toppscorerScoreStrategy.polarity, strategy.toppscorerScoreStrategy.weight,
+            if (__.isEmpty(eliteserieToppscorer)) {
+                var polarityCoefficient = strategy.toppscorerScoreStrategy.polarity === '-' ? -1 : 1,
+                    weight = strategy.toppscorerScoreStrategy.weight;
+
+                return polarityCoefficient * weight;
+            }
+            return utils.getPresentPoints(
+                strategy.toppscorerScoreStrategy.polarity,
+                strategy.toppscorerScoreStrategy.weight,
                 participantObj.toppscorer[0],
                 eliteserieToppscorer
             );
@@ -157,7 +182,9 @@ var env = process.env.NODE_ENV || "development",
                 console.warn(utils.logPreamble() + "'Cup' property is missing");
                 return 1000;
             }
-            return utils.getPresentPoints(strategy.cupScoreStrategy.polarity, strategy.cupScoreStrategy.weight,
+            return utils.getPresentPoints(
+                strategy.cupScoreStrategy.polarity,
+                strategy.cupScoreStrategy.weight,
                 participantObj.cup[0],
                 remainingCupContenders
             );

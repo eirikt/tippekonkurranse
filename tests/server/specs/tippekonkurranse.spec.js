@@ -1195,5 +1195,28 @@ describe("Tippekonkurranse", function () {
 
             rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
         });
+
+
+        it("2015: should give -5 if no toppscorers are present in toppscorer collection (They are all top scorers unitl the first goal)", function (done) {
+            var userPredictions = {
+                    john: {
+                        tabell: null,
+                        toppscorer: ["Mr. T"],
+                        opprykk: null,
+                        cup: null
+                    }
+                },
+                actualToppscorerTable = [],
+                addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2015),
+                inputArgs = new TippekonkurranseData(),
+                verify = function (args) {
+                    var tippekonkurranseData = new TippekonkurranseData(args);
+                    expect(tippekonkurranseData.scores.scores.john.toppscorer).to.equal(-5);
+                };
+
+            inputArgs.eliteserieTopScorer = actualToppscorerTable;
+
+            rq.mocha.executeAndVerify(addTippekonkurranseScores, inputArgs.toArray(), verify, done);
+        });
     });
 });
