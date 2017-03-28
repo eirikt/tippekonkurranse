@@ -55,10 +55,27 @@ var _predictions2017 = exports.predictions = {
         cup: []
     },
     steinar: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Brann',
+            'Odd',
+            'Haugesund',
+            'Molde',
+            'Sarpsborg 08',
+            'Strømsgodset',
+            'Viking',
+            'Aalesund',
+            'Vålerenga',
+            'Sogndal',
+            'Lillestrøm',
+            'Tromsø',
+            'Stabæk',
+            'Kristiansund BK',
+            'Sandefjord'
+        ],
+        opprykk: ['Bodø/Glimt', 'Jerv'],
+        toppscorer: ['Mos'],
+        cup: ['Rosenborg']
     },
     tore: {
         tabell: [],
