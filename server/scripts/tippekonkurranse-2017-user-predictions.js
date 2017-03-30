@@ -1,10 +1,27 @@
 /* jshint -W106 */
 var _predictions2017 = exports.predictions = {
     einar: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Vålerenga',
+            'Strømsgodset',
+            'Odd',
+            'Molde',
+            'Brann',
+            'Sarpsborg 08',
+            'Aalesund',
+            'Lillestrøm',
+            'Haugesund',
+            'Stabæk',
+            'Tromsø',
+            'Viking',
+            'Sogndal',
+            'Kristiansund BK',
+            'Sandefjord'
+        ],
+        opprykk: ['Bodø/Glimt', 'Start'],
+        toppscorer: ['Nicklas Bendtner'],
+        cup: ['Rosenborg']
     },
     eirik: {
         tabell: [],
@@ -49,10 +66,27 @@ var _predictions2017 = exports.predictions = {
         cup: []
     },
     svein_tore: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Odd',
+            'Molde',
+            'Brann',
+            'Viking',
+            'Haugesund',
+            'Vålerenga',
+            'Lillestrøm',
+            'Strømsgodset',
+            'Aalesund',
+            'Tromsø',
+            'Sogndal',
+            'Stabæk',
+            'Sarpsborg 08',
+            'Sandefjord',
+            'Kristiansund BK'
+        ],
+        opprykk: ['Start', 'Sandnes Ulf'],
+        toppscorer: ['Mushaga Bakenga'],
+        cup: ['Molde']
     },
     steinar: {
         tabell: [
@@ -84,9 +118,26 @@ var _predictions2017 = exports.predictions = {
         cup: []
     },
     trond: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Odd',
+            'Strømsgodset',
+            'Brann',
+            'Molde',
+            'Vålerenga',
+            'Haugesund',
+            'Sarpsborg 08',
+            'Viking',
+            'Aalesund',
+            'Lillestrøm',
+            'Sogndal',
+            'Stabæk',
+            'Tromsø',
+            'Kristiansund BK',
+            'Sandefjord'
+        ],
+        opprykk: ['Bodø/Glimt', 'Sandnes Ulf'],
+        toppscorer: ['Nicklas Bendtner'],
+        cup: ['Odd']
     }
 };
