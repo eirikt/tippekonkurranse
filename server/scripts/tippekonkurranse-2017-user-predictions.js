@@ -47,10 +47,26 @@ var _predictions2017 = exports.predictions = {
         cup: ['Molde']
     },
     hans_bernhard: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Molde',
+            'Odd',
+            'Vålerenga',
+            'Brann',
+            'Viking',
+            'Strømsgodset',
+            'Sarpsborg 08',
+            'Haugesund',
+            'Stabæk',
+            'Aalesund',
+            'Sogndal',
+            'Kristiansund BK',
+            'Tromsø',
+            'Sandefjord'
+        ],
+        opprykk: ['Bodø/Glimt', 'Jerv'],
+        toppscorer: ['Sander Svendsen'],
+        cup: ['Rosenbord']
     },
     jan_tore: {
         tabell: [
@@ -73,9 +89,7 @@ var _predictions2017 = exports.predictions = {
         ],
         opprykk: ['Bodø/Glimt', 'Start'],
         toppscorer: ['Nicklas Bendtner'],
-        cup: ['']
-
-
+        cup: ['Rosenborg']
     },
     oddgeir: {
         tabell: [
