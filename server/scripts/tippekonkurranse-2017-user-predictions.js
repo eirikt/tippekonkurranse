@@ -199,10 +199,27 @@ var _predictions2017 = exports.predictions = {
         cup: ['Rosenborg']
     },
     tore: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Molde',
+            'Odd',
+            'Rosenborg',
+            'Brann',
+            'Vålerenga',
+            'Strømsgodset',
+            'Viking',
+            'Sarpsborg 08',
+            'Haugesund',
+            'Lillestrøm',
+            'Aalesund',
+            'Stabæk',
+            'Sogndal',
+            'Tromsø',
+            'Kristiansund BK',
+            'Sandefjord'
+        ],
+        opprykk: ['Bodø/Glimt', 'Start'],
+        toppscorer: ['Sander Svendsen'],
+        cup: ['Molde']
     },
     trond: {
         tabell: [
