@@ -138,10 +138,27 @@ var _predictions2017 = exports.predictions = {
         cup: ['Odd']
     },
     ole_erik: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Molde',
+            'Rosenborg',
+            'Odd',
+            'Brann',
+            'Sarpsborg 08',
+            'Vålerenga',
+            'Strømsgodset',
+            'Haugesund',
+            'Sandefjord',
+            'Tromsø',
+            'Sogndal',
+            'Viking',
+            'Kristiansund BK',
+            'Stabæk',
+            'Lillestrøm',
+            'Aalesund'
+        ],
+        opprykk: ['Bodø/Glimt', 'Sandnes Ulf'],
+        toppscorer: ['Björn Bergmann Sigurdarson'],
+        cup: ['Molde']
     },
     rikard: {
         tabell: [
