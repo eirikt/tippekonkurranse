@@ -24,10 +24,27 @@ var _predictions2017 = exports.predictions = {
         cup: ['Rosenborg']
     },
     eirik: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Vålerenga',
+            'Sarpsborg 08',
+            'Haugesund',
+            'Molde',
+            'Odd',
+            'Brann',
+            'Tromsø',
+            'Aalesund',
+            'Lillestrøm',
+            'Sogndal',
+            'Stabæk',
+            'Strømsgodset',
+            'Viking',
+            'Kristiansund BK',
+            'Sandefjord'
+        ],
+        opprykk: ['Bodø/Glimt', 'Sandnes Ulf'],
+        toppscorer: ['Nicklas Bendtner'],
+        cup: ['Molde']
     },
     hans_bernhard: {
         tabell: [],
@@ -36,10 +53,29 @@ var _predictions2017 = exports.predictions = {
         cup: []
     },
     jan_tore: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Molde',
+            'Odd',
+            'Vålerenga',
+            'Strømsgodset',
+            'Brann',
+            'Tromsø',
+            'Sarpsborg 08',
+            'Haugesund',
+            'Viking',
+            'Lillestrøm',
+            'Aalesund',
+            'Sogndal',
+            'Stabæk',
+            'Kristiansund BK',
+            'Sandefjord'
+        ],
+        opprykk: ['Bodø/Glimt', 'Start'],
+        toppscorer: ['Nicklas Bendtner'],
+        cup: ['']
+
+
     },
     oddgeir: {
         tabell: [
@@ -65,10 +101,27 @@ var _predictions2017 = exports.predictions = {
         cup: ['Vålerenga']
     },
     oddvar: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Vålerenga',
+            'Odd',
+            'Molde',
+            'Strømsgodset',
+            'Brann',
+            'Sarpsborg 08',
+            'Lillestrøm',
+            'Tromsø',
+            'Haugesund',
+            'Aalesund',
+            'Kristiansund BK',
+            'Viking',
+            'Sogndal',
+            'Stabæk',
+            'Sandefjord'
+        ],
+        opprykk: ['Bodø/Glimt', 'Sandnes Ulf'],
+        toppscorer: ['Marcus Pedersen'],
+        cup: ['Odd']
     },
     ole_erik: {
         tabell: [],
