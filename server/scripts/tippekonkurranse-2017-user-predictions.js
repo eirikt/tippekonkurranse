@@ -66,7 +66,7 @@ var _predictions2017 = exports.predictions = {
         ],
         opprykk: ['Bodø/Glimt', 'Jerv'],
         toppscorer: ['Sander Svendsen'],
-        cup: ['Rosenbord']
+        cup: ['Rosenborg']
     },
     jan_tore: {
         tabell: [
