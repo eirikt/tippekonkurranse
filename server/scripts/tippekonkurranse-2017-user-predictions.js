@@ -51,6 +51,7 @@ var _predictions2017 = exports.predictions = {
             'Rosenborg',
             'Molde',
             'Odd',
+            'Lillestrøm',
             'Vålerenga',
             'Brann',
             'Viking',
