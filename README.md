@@ -29,7 +29,7 @@ Hosted [here][1].
 * Screen-scraping norwegian soccer result web pages
 * Calculating rating and rank
 * Simple multi-device-friendly presentation
-* ~~Idiomatic code base~~ (2014-style idiomatic code base, that is)
+* ~~Idiomatic code base~~ (2013/2014-style idiomatic code base, that is)
 * Deployment to [Heroku][30]
 
 
