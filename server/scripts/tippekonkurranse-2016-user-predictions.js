@@ -247,7 +247,6 @@ var _predictions2016 = exports.predictions = {
             'Brann',
             'Bodø/Glimt',
             'Aalesund',
-            'Sogndal',
             'Sarpsborg 08',
             'Haugesund',
             'Sogndal',

@@ -1,6 +1,8 @@
 // TODO: Promote this to a 'type'/'class', and move this to 'app.models.js' (like 'TippekonkurranseData')
 var _rules2014 = exports.rules = {
     year: 2014,
+    numberOfTeams: 16,
+
     // 'exact' is permutation-like, 'present' is combination-like
     tabellScoresStrategy: {
         //target: 'tippeligatabell',

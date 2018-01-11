@@ -51,7 +51,10 @@ var _predictions2017 = exports.predictions = {
             'Rosenborg',
             'Molde',
             'Odd',
+
+            // TODO: Deactivate and error-proofe:
             'Lillestrøm',
+
             'Vålerenga',
             'Brann',
             'Viking',

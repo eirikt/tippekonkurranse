@@ -17,7 +17,7 @@ require.config({
     // Development ('grunt [run|deploy:development]' and IDE execution):
     //baseUrl: 'scripts',
     // Standard:
-    baseUrl: '1.3.15/scripts',
+    baseUrl: '1.3.16/scripts',
 
     // See: http://momentjs.com/docs/#/use-it/require-js/
     packages: [{
@@ -28,6 +28,7 @@ require.config({
 
     paths: {
         'jquery': '../bower_components/jquery/dist/jquery.min',
+        //'popper': '../bower_components/popper.js/build/popper.min', // Bootstrap 4.x dependency - failed...
         'bootstrap': '../bower_components/bootstrap/dist/js/bootstrap.min',
         'underscore': '../bower_components/underscore/underscore-min',
         'backbone': '../bower_components/backbone/backbone-min',
@@ -45,18 +46,9 @@ require.config({
         jquery: {
             exports: '$'
         },
-        bootstrap: {
-            deps: ['jquery'],
-            exports: '$'
-        },
-        jqplot: {
-            deps: ['jquery'],
-            exports: '$'
-        },
-        'jquery.bootstrap.switch': {
-            deps: ['jquery', 'bootstrap'],
-            exports: '$'
-        },
+        bootstrap: ['jquery'],
+        jqplot: ['jquery'],
+        'jquery.bootstrap.switch': ['jquery', 'bootstrap'],
         enforceDefine: true
     },
     config: {

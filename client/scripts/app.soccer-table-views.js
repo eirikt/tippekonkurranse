@@ -38,7 +38,7 @@ define([ "jquery", "underscore", "backbone" ],
                 }
             },
             getNormalTableRow: function (team) {
-                if (team && team.matches) {
+                if (team && (team.matches || team.matches === 0)) {
                     return '' +
                         '<tr>' +
                         '  <td style="text-align:right;">' + team.no + '.&nbsp;</td>' +
@@ -54,7 +54,7 @@ define([ "jquery", "underscore", "backbone" ],
                 }
             },
             getEmphasizedTableRow: function (team) {
-                if (team && team.matches) {
+                if (team && (team.matches || team.matches === 0)) {
                     return '' +
                         '<tr>' +
                         '  <td style="font-weight:bold;text-align:right;">' + team.no + '.&nbsp;</td>' +

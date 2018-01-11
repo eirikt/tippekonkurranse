@@ -166,6 +166,9 @@ sequence([
                 dbSchema.EliteserieRound.count({ year: 2017 }, function (err, count) {
                     console.log(utils.logPreamble() + app.name + " " + "2017 count: " + count);
                 });
+                dbSchema.EliteserieRound.count({ year: 2018 }, function (err, count) {
+                    console.log(utils.logPreamble() + app.name + " " + "2018 count: " + count);
+                });
 
                 if (!latestEliteserieRound) {
                     console.warn(utils.logPreamble() + "No round found for season " + args.currentYear + " ... setting it to 0");

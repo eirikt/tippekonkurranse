@@ -26,10 +26,12 @@ var R = require('ramda'),
             $, rows;
 
         if (!htmlContent) {
-            throw new Error('Argument is missing - cannot parse');
+            //throw new Error('parseAltOmFotballHtmlTable: Missing soccer results - cannot parse');
+            console.error('parseAltOmFotballHtmlTable: Missing soccer results - cannot parse');
+            return currentTable;
         }
         if (!R.is(String, htmlContent)) {
-            throw new Error('Argument is not a string - cannot parse');
+            throw new Error('parseAltOmFotballHtmlTable: Argument is not a string - cannot parse');
         }
 
         $ = cheerio.load(htmlContent, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false });
@@ -56,10 +58,12 @@ var R = require('ramda'),
     },
 
 
+    // 2017: currentEliteserieTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&seasonId=339&useFullUrl=false',
     currentEliteserieTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&subCmd=total&live=true&useFullUrl=false',
     parseEliteserieTable = parseAltOmFotballHtmlTable,
 
 
+    // 2017: currentObosligaTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=2&&seasonId=339&useFullUrl=false',
     currentObosligaTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=2&subCmd=total&live=true&useFullUrl=false',
     parseObosligaTable = parseAltOmFotballHtmlTable,
 
@@ -73,10 +77,10 @@ var R = require('ramda'),
             $, rows, maxGoals;
 
         if (!htmlContent) {
-            throw new Error('Argument is missing - cannot parse');
+            throw new Error('parseEliteserieTopScorerTable: Argument is missing - cannot parse');
         }
         if (!R.is(String, htmlContent)) {
-            throw new Error('Argument is not a string - cannot parse');
+            throw new Error('parseEliteserieTopScorerTable: Argument is not a string - cannot parse');
         }
 
         $ = cheerio.load(htmlContent, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false });
@@ -106,6 +110,7 @@ var R = require('ramda'),
         return topScorers;
     },
 
+    // 2017: currentEliteserieToppscorerTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&seasonId=339&teamId=&useFullUrl=false';
     currentEliteserieToppscorerTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&seasonId=&teamId=&useFullUrl=false',
 
 
@@ -121,10 +126,33 @@ var R = require('ramda'),
         ]),
 
     getCurrentObosligaTableRequestor = exports.getCurrentObosligaTable =
-        RQ.sequence([
-            get(currentObosligaTableUrl),
-            then(parseObosligaTable)
-        ]),
+        //RQ.sequence([
+        //    get(currentObosligaTableUrl),
+        //    then(parseObosligaTable)
+        //]),
+        // TODO: Switch when OBOS-ligaen is present in altomfotball web site!
+        function (callback, args) {
+            'use strict';
+            var currentTable = [];
+            currentTable.push(new TeamPlacement('Aalesund', 1, 0));
+            currentTable.push(new TeamPlacement('Florø', 2, 0));
+            currentTable.push(new TeamPlacement('HamKam', 3, 0));
+            currentTable.push(new TeamPlacement('Jerv', 4, 0));
+            currentTable.push(new TeamPlacement('Kongsvinger', 5, 0));
+            currentTable.push(new TeamPlacement('Levanger', 6, 0));
+            currentTable.push(new TeamPlacement('Mjøndalen', 7, 0));
+            currentTable.push(new TeamPlacement('Nest-Sotra', 8, 0));
+            currentTable.push(new TeamPlacement('Notodden', 9, 0));
+            currentTable.push(new TeamPlacement('Sandnes Ulf', 10, 0));
+            currentTable.push(new TeamPlacement('Sogndal', 11, 0));
+            currentTable.push(new TeamPlacement('Strømmen', 12, 0));
+            currentTable.push(new TeamPlacement('Tromsdalen', 13, 0));
+            currentTable.push(new TeamPlacement('Ullensaker/Kisa', 14, 0));
+            currentTable.push(new TeamPlacement('Viking', 15, 0));
+            currentTable.push(new TeamPlacement('Åsane', 16, 0));
+
+            return callback(currentTable);
+        },
 
     getCurrentEliteserieTopScorerRequestor = exports.getCurrentEliteserieTopScorer =
         RQ.sequence([
@@ -137,8 +165,39 @@ var R = require('ramda'),
      */
     getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
         rq.return([
+            'Bodø/Glimt',
+            'Brann',
+            'Haugesund',
+            'Kristiansund BK',
             'Lillestrøm',
-            'Sarpsborg 08'
+            'Molde',
+            'Odd',
+            'Ranheim',
+            'Rosenborg',
+            'Sandefjord',
+            'Sarpsborg 08',
+            'Stabæk',
+            'Start',
+            'Strømsgodset',
+            'Tromsø',
+            'Vålerenga',
+
+            'Aalesund',
+            'Florø',
+            'HamKam',
+            'Jerv',
+            'Kongsvinger',
+            'Levanger',
+            'Mjøndalen',
+            'Nest-Sotra',
+            'Notodden',
+            'Sandnes Ulf',
+            'Sogndal',
+            'Strømmen',
+            'Tromsdalen',
+            'Ullensaker/Kisa',
+            'Viking',
+            'Åsane'
         ]),
 // /'Data generator' requestors
 

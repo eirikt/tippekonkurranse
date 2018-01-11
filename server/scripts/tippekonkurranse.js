@@ -20,10 +20,12 @@ var env = process.env.NODE_ENV || "development",
     predictions2015 = require("./tippekonkurranse-2015-user-predictions").predictions,
     predictions2016 = require("./tippekonkurranse-2016-user-predictions").predictions,
     predictions2017 = require("./tippekonkurranse-2017-user-predictions").predictions,
+    predictions2018 = require("./tippekonkurranse-2018-user-predictions").predictions,
     rules2014 = require("./tippekonkurranse-2014-rules").rules,
     rules2015 = require("./tippekonkurranse-2015-rules").rules,
     rules2016 = require("./tippekonkurranse-2016-rules").rules,
     rules2017 = require("./tippekonkurranse-2017-rules").rules,
+    rules2018 = require("./tippekonkurranse-2018-rules").rules,
 
 // Module dependencies, local application-specific
     appModels = require("./../../shared/scripts/app.models"),
@@ -34,24 +36,37 @@ var env = process.env.NODE_ENV || "development",
         2014: predictions2014,
         2015: predictions2015,
         2016: predictions2016,
-        2017: predictions2017
+        2017: predictions2017,
+        2018: predictions2018
     },
 
     _rules = exports.rules = {
         2014: rules2014,
         2015: rules2015,
         2016: rules2016,
-        2017: rules2017
+        2017: rules2017,
+        2018: rules2018
     },
 
 
     _calculateEliteserieScores =
-        function (strategy, participantObj, eliteserieTable) {
+        function (strategy, allPredictions, participant, eliteserieTable) {
             "use strict";
-            var tableScore, pallScore, pallBonusScore, nedrykkScore, indexedEliteserieTable;
+            var tableScore,
+                pallScore,
+                pallBonusScore,
+                nedrykkScore,
 
-            if (__.isEmpty(participantObj.tabell)) {
-                console.warn(utils.logPreamble() + "'Tabell' property is missing, returning 1000 points for all predictions ...");
+                indexedEliteserieTable,
+
+                prediction = allPredictions[participant];
+
+            if (__.isEmpty(prediction.tabell)) {
+                console.warn(utils.logPreamble() + "'Tabell' property is missing for participant '" + participant + "' - returning max points!");
+                return [1000, 1000, 1000, 1000];
+            }
+            if (prediction.tabell.length !== strategy.numberOfTeams) {
+                console.warn(utils.logPreamble() + "Size of predicted table (" + strategy.numberOfTeams + ") does not correspond to actual number of teams (" + prediction.tabell.length + ") for participant '" + participant + "' - returning max points!");
                 return [1000, 1000, 1000, 1000];
             }
 
@@ -59,7 +74,7 @@ var env = process.env.NODE_ENV || "development",
             // => a team-name-indexed data structure
             indexedEliteserieTable = __.indexBy(eliteserieTable, "name");
 
-            tableScore = __.reduce(participantObj.tabell, function (memo, teamName, index) {
+            tableScore = __.reduce(prediction.tabell, function (memo, teamName, index) {
                 try {
                     var predictedTeamPlacing = index + 1,
                         actualTeamPlacing = indexedEliteserieTable[teamName].no;
@@ -70,7 +85,7 @@ var env = process.env.NODE_ENV || "development",
                             predictedTeamPlacing,
                             actualTeamPlacing);
                 } catch (e) {
-                    var errorMessage = utils.logPreamble() + "Unable to calculate scores for team '" + participantObj.tabell[index] + "' for participant '" + participantObj.name + "' - probably illegal data format";
+                    var errorMessage = utils.logPreamble() + "Unable to calculate scores for team '" + prediction.tabell[index] + "' for participant '" + participant + "' - probably illegal data format";
                     console.warn(errorMessage);
                     throw new Error(errorMessage);
                 }
@@ -80,30 +95,30 @@ var env = process.env.NODE_ENV || "development",
                 utils.getMatchPoints(
                     strategy.pall1ScoreStrategy.polarity,
                     strategy.pall1ScoreStrategy.weight,
-                    participantObj.tabell[0],
+                    prediction.tabell[0],
                     eliteserieTable[0].name) +
                 utils.getMatchPoints(
                     strategy.pall2ScoreStrategy.polarity,
                     strategy.pall2ScoreStrategy.weight,
-                    participantObj.tabell[1],
+                    prediction.tabell[1],
                     eliteserieTable[1].name) +
                 utils.getMatchPoints(
                     strategy.pall3ScoreStrategy.polarity,
                     strategy.pall3ScoreStrategy.weight,
-                    participantObj.tabell[2],
+                    prediction.tabell[2],
                     eliteserieTable[2].name);
 
             pallBonusScore = utils.getMatchPoints(
                 strategy.pallBonusScoreStrategy.polarity,
                 strategy.pallBonusScoreStrategy.weight,
-                [participantObj.tabell[0], participantObj.tabell[1], participantObj.tabell[2]],
+                [prediction.tabell[0], prediction.tabell[1], prediction.tabell[2]],
                 [eliteserieTable[0].name, eliteserieTable[1].name, eliteserieTable[2].name]
             );
 
             nedrykkScore = utils.getPresentPoints(
                 strategy.nedrykkScoreStrategy.polarity,
                 strategy.nedrykkScoreStrategy.weight,
-                [participantObj.tabell[14], participantObj.tabell[15]],
+                [prediction.tabell[14], prediction.tabell[15]],
                 [eliteserieTable[14].name, eliteserieTable[15].name]
             );
 
@@ -112,10 +127,12 @@ var env = process.env.NODE_ENV || "development",
 
 
     _calculateOpprykkScores =
-        function (strategy, participantObj, obosligaTable) {
+        function (strategy, allPredictions, participant, obosligaTable) {
             "use strict";
-            if (__.isEmpty(participantObj.opprykk)) {
-                console.warn(utils.logPreamble() + "'Opprykk' property is missing");
+            var prediction = allPredictions[participant];
+
+            if (__.isEmpty(prediction.opprykk)) {
+                console.warn(utils.logPreamble() + "'Opprykk' property is missing for participant '" + participant + "'");
                 return 1000;
             }
             /* jshint -W035 */
@@ -128,36 +145,38 @@ var env = process.env.NODE_ENV || "development",
                 //console.log(JSON.stringify(participantObj));
                 //console.log(JSON.stringify(obosligaTable));
                 if (strategy.year === 2016) {
-                    // Catastrophic failure in 2016 - no Adecco/OBOS-liga results got persisted due to obosliga/adeccoliga naming mismatch in database schema/code ...
+                    // NB! Catastrophic failure in 2016 - no Adecco/OBOS-liga results got persisted due to obosliga/adeccoliga naming mismatch in database schema/code ...
                     return 0;
                 }
                 if (strategy.year < 2017) {
                     return utils.getAllPresentPoints(
                         strategy.opprykkScoreStrategy.polarity,
                         strategy.opprykkScoreStrategy.weight,
-                        [participantObj.opprykk[0], participantObj.opprykk[1]],
+                        [prediction.opprykk[0], prediction.opprykk[1]],
                         [obosligaTable[0].name, obosligaTable[1].name]
                     );
                 }
                 return utils.getPresentPoints(
                         strategy.opprykkScoreStrategy.polarity,
                         strategy.opprykkScoreStrategy.weight,
-                        participantObj.opprykk[0],
+                        prediction.opprykk[0],
                         [obosligaTable[0].name, obosligaTable[1].name]) +
                     utils.getPresentPoints(
                         strategy.opprykkScoreStrategy.polarity,
                         strategy.opprykkScoreStrategy.weight,
-                        participantObj.opprykk[1],
+                        prediction.opprykk[1],
                         [obosligaTable[0].name, obosligaTable[1].name]);
             }
         },
 
 
     _calculateToppscorerScores =
-        function (strategy, participantObj, eliteserieToppscorer) {
+        function (strategy, allPredictions, participant, eliteserieToppscorer) {
             "use strict";
-            if (__.isEmpty(participantObj.toppscorer)) {
-                console.warn(utils.logPreamble() + "'Toppscorer' property is missing");
+            var prediction = allPredictions[participant];
+
+            if (__.isEmpty(prediction.toppscorer)) {
+                console.warn(utils.logPreamble() + "'Toppscorer' property is missing for participant '" + participant + "'");
                 return 1000;
             }
             if (__.isEmpty(eliteserieToppscorer)) {
@@ -169,23 +188,25 @@ var env = process.env.NODE_ENV || "development",
             return utils.getPresentPoints(
                 strategy.toppscorerScoreStrategy.polarity,
                 strategy.toppscorerScoreStrategy.weight,
-                participantObj.toppscorer[0],
+                prediction.toppscorer[0],
                 eliteserieToppscorer
             );
         },
 
 
     _calculateCupScores =
-        function (strategy, participantObj, remainingCupContenders) {
+        function (strategy, allPredictions, participant, remainingCupContenders) {
             "use strict";
-            if (__.isEmpty(participantObj.cup)) {
-                console.warn(utils.logPreamble() + "'Cup' property is missing");
+            var prediction = allPredictions[participant];
+
+            if (__.isEmpty(prediction.cup)) {
+                console.warn(utils.logPreamble() + "'Cup' property is missing for participant '" + participant + "'");
                 return 1000;
             }
             return utils.getPresentPoints(
                 strategy.cupScoreStrategy.polarity,
                 strategy.cupScoreStrategy.weight,
-                participantObj.cup[0],
+                prediction.cup[0],
                 remainingCupContenders
             );
         },
@@ -561,10 +582,10 @@ var env = process.env.NODE_ENV || "development",
                     scoresRequestors.push(
                         RQ.sequence([
                             RQ.parallel([
-                                rq.requestorize(curry(_calculateEliteserieScores, rules, userPredictions[participant], tippekonkurranseData.eliteserieTable)),
-                                rq.requestorize(curry(_calculateToppscorerScores, rules, userPredictions[participant], tippekonkurranseData.eliteserieTopScorer)),
-                                rq.requestorize(curry(_calculateOpprykkScores, rules, userPredictions[participant], tippekonkurranseData.obosligaTable)),
-                                rq.requestorize(curry(_calculateCupScores, rules, userPredictions[participant], tippekonkurranseData.remainingCupContenders))
+                                rq.requestorize(curry(_calculateEliteserieScores, rules, userPredictions, participant, tippekonkurranseData.eliteserieTable)),
+                                rq.requestorize(curry(_calculateToppscorerScores, rules, userPredictions, participant, tippekonkurranseData.eliteserieTopScorer)),
+                                rq.requestorize(curry(_calculateOpprykkScores, rules, userPredictions, participant, tippekonkurranseData.obosligaTable)),
+                                rq.requestorize(curry(_calculateCupScores, rules, userPredictions, participant, tippekonkurranseData.remainingCupContenders))
                             ]),
                             curry(_sum, ratingIndex),
                             rq.requestorize(curry(_currentStandingUpdate, currentStanding, participant))

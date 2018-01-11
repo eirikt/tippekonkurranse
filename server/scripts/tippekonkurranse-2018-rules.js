@@ -1,5 +1,5 @@
-var _rules2017 = exports.rules = {
-    year: 2017,
+var _rules2018 = exports.rules = {
+    year: 2018,
     numberOfTeams: 16,
     numberOfOpprykkTeams: 2,
 

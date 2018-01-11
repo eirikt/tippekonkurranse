@@ -36,6 +36,15 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
+#### v1.3.16 : _Deployed 10.01.2018_
+* 2018 pre-season updates
+* Bugfixes
+* Dependency updates
+* Node.js 8.x / npm 5.x (I presume Heroku will provide)
+
+_Status: Done_
+
+
 #### v1.3.15 : _Deployed 26.03.2017_
 * 2017 rules modifications
 * 'Tippeligaen' -> 'Eliteserien'

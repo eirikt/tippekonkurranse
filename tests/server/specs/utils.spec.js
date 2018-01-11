@@ -103,7 +103,7 @@ describe("'maxDisplacementSumInPermutationOfLength' function", function () {
 
     it("should be a function", function () {
         expect(maxDisplacementSumInPermutationOfLength).to.exist;
-        expect(maxDisplacementSumInPermutationOfLength).to.be.a.function;
+        //expect(maxDisplacementSumInPermutationOfLength).to.be.a('function');
     });
 
     it("should only accept natural numbers (including zero)", function () {

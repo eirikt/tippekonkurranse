@@ -143,15 +143,16 @@ describe("Tippekonkurranse", function () {
                 addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 verify = function (args) {
                     expect(args).to.exist;
-                    expect(args).to.be.an.object;
-                    expect(args).to.not.be.an.empty.object;
 
                     var tippekonkurranseData = new TippekonkurranseData(args);
                     expect(tippekonkurranseData.scores).to.exist;
-                    expect(tippekonkurranseData.scores).to.be.an.object;
+                    expect(tippekonkurranseData.scores).to.be.an('object');
+
+                    expect(tippekonkurranseData.scores).to.have.property('metadata');
                     expect(tippekonkurranseData.scores.metadata).to.be.null;
-                    expect(tippekonkurranseData.scores.scores).not.to.be.an.empty.object;
-                    expect(tippekonkurranseData.scores.metadata).to.be.null;
+
+                    expect(tippekonkurranseData.scores).to.have.property('scores');
+                    expect(tippekonkurranseData.scores.scores).to.be.an('object');
                     expect(JSON.stringify(tippekonkurranseData.scores.scores)).to.be.equal(
                         JSON.stringify({
                             john: {
@@ -179,15 +180,16 @@ describe("Tippekonkurranse", function () {
                 addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 verify = function (args) {
                     expect(args).to.exist;
-                    expect(args).to.be.an.object;
-                    expect(args).to.not.be.an.empty.object;
 
                     var tippekonkurranseData = new TippekonkurranseData(args);
                     expect(tippekonkurranseData.scores).to.exist;
-                    expect(tippekonkurranseData.scores).to.be.an.object;
+                    expect(tippekonkurranseData.scores).to.be.an('object');
+
+                    expect(tippekonkurranseData.scores).to.have.property('metadata');
                     expect(tippekonkurranseData.scores.metadata).to.be.null;
-                    expect(tippekonkurranseData.scores.scores).not.to.be.an.empty.object;
-                    expect(tippekonkurranseData.scores.metadata).to.be.null;
+
+                    expect(tippekonkurranseData.scores).to.have.property('scores');
+                    expect(tippekonkurranseData.scores.scores).to.be.an('object');
                     expect(JSON.stringify(tippekonkurranseData.scores.scores)).to.be.equal(
                         JSON.stringify({
                             john: {
@@ -217,15 +219,16 @@ describe("Tippekonkurranse", function () {
                 addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 verify = function (args) {
                     expect(args).to.exist;
-                    expect(args).to.be.an.object;
-                    expect(args).to.not.be.an.empty.object;
 
                     var tippekonkurranseData = new TippekonkurranseData(args);
                     expect(tippekonkurranseData.scores).to.exist;
-                    expect(tippekonkurranseData.scores).to.be.an.object;
+                    expect(tippekonkurranseData.scores).to.be.an('object');
+
+                    expect(tippekonkurranseData.scores).to.have.property('metadata');
                     expect(tippekonkurranseData.scores.metadata).to.be.null;
-                    expect(tippekonkurranseData.scores.scores).not.to.be.an.empty.object;
-                    expect(tippekonkurranseData.scores.metadata).to.be.null;
+
+                    expect(tippekonkurranseData.scores).to.have.property('scores');
+                    expect(tippekonkurranseData.scores.scores).to.be.an('object');
                     expect(JSON.stringify(tippekonkurranseData.scores.scores)).to.be.equal(
                         JSON.stringify({
                             john: {
@@ -258,15 +261,16 @@ describe("Tippekonkurranse", function () {
                 addTippekonkurranseScores = curry(addTippekonkurranseScoresRequestor, userPredictions, rules2014),
                 verify = function (args) {
                     expect(args).to.exist;
-                    expect(args).to.be.an.object;
-                    expect(args).to.not.be.an.empty.object;
 
                     var tippekonkurranseData = new TippekonkurranseData(args);
                     expect(tippekonkurranseData.scores).to.exist;
-                    expect(tippekonkurranseData.scores).to.be.an.object;
+                    expect(tippekonkurranseData.scores).to.be.an('object');
+
+                    expect(tippekonkurranseData.scores).to.have.property('metadata');
                     expect(tippekonkurranseData.scores.metadata).to.be.null;
-                    expect(tippekonkurranseData.scores.scores).not.to.be.an.empty.object;
-                    expect(tippekonkurranseData.scores.metadata).to.be.null;
+
+                    expect(tippekonkurranseData.scores).to.have.property('scores');
+                    expect(tippekonkurranseData.scores.scores).to.be.an('object');
                     expect(JSON.stringify(tippekonkurranseData.scores.scores)).to.be.equal(
                         JSON.stringify({
                             john: {
