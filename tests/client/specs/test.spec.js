@@ -22,7 +22,6 @@ define(["chai", "sinon"],
 
             describe("Chai", function () {
                 it("should use 'expect' to check e.g. truthiness and equality", function () {
-                    expect(true).to.be.OK;
                     expect(true).to.be.true;
                     expect(1 === 1).to.be.true;
                     expect(hello()).to.equal("Hello world!");

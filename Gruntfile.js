@@ -255,9 +255,9 @@ module.exports = function (grunt) {
                     build: process.env.TRAVIS_JOB_ID,
                     'max-duration': 360,
                     browsers: [
-                        { platform: 'Windows 10', browserName: 'chrome', version: '55.0' },
-                        { platform: 'Windows 10', browserName: 'firefox', version: '50.0' },
-                        { platform: 'Windows 10', browserName: 'MicrosoftEdge', version: '14.14393' },
+                        { platform: 'Windows 10', browserName: 'chrome', version: '63.0' },
+                        { platform: 'Windows 10', browserName: 'firefox', version: '57.0' },
+                        { platform: 'Windows 10', browserName: 'MicrosoftEdge', version: '41.16299.15.0' },
                         { platform: 'Windows 8.1', browserName: 'internet explorer', version: '11.0' },
                         {
                             platform: 'macOS 10.12',

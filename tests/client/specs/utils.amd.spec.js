@@ -88,7 +88,7 @@ define([ "chai", "underscore", "../../../shared/scripts/fun".curry, "../../../sh
         describe("'maxDisplacementSumInPermutationOfLength' function", function () {
             it("should be a function", function () {
                 expect(Utils.maxDisplacementSumInPermutationOfLength).to.exist;
-                expect(Utils.maxDisplacementSumInPermutationOfLength).to.be.a.function;
+                expect(Utils.maxDisplacementSumInPermutationOfLength).to.be.a('function');
             });
 
             it("should only accept natural numbers (including zero)", function () {
