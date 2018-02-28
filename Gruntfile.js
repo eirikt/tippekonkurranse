@@ -255,36 +255,11 @@ module.exports = function (grunt) {
                     build: process.env.TRAVIS_JOB_ID,
                     'max-duration': 360,
                     browsers: [
-                        { platform: 'Windows 10', browserName: 'chrome', version: '63.0' },
-                        { platform: 'Windows 10', browserName: 'firefox', version: '57.0' },
-                        { platform: 'Windows 10', browserName: 'MicrosoftEdge', version: '41.16299.15.0' },
+                        { platform: 'Windows 10', browserName: 'chrome', version: '64.0' },
+                        { platform: 'Windows 10', browserName: 'firefox', version: '58.0' },
+                        { platform: 'Windows 10', browserName: 'MicrosoftEdge', version: '16.16299' },
                         { platform: 'Windows 8.1', browserName: 'internet explorer', version: '11.0' },
-                        {
-                            platform: 'macOS 10.12',
-                            browserName: 'safari',
-                            version: '10.0'
-                        },
-                        {
-                            platform: 'OS X 10.10',
-                            browserName: 'iphone',
-                            version: '9.2',
-                            deviceName: 'iPhone 6',
-                            deviceOrientation: 'portrait'
-                        },
-                        {
-                            platform: 'OS X 10.10',
-                            browserName: 'iphone',
-                            version: '9.2',
-                            deviceName: 'iPad Retina',
-                            deviceOrientation: 'portrait'
-                        },
-                        {
-                            platform: 'Linux',
-                            browserName: 'android',
-                            version: '5.1',
-                            deviceName: 'Android Emulator',
-                            deviceOrientation: 'portrait'
-                        }
+                        { platform: 'macOS 10.13', browserName: 'safari', version: '11.0' }
                     ]
                 }
             }

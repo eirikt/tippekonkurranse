@@ -12,6 +12,12 @@ var _predictions2018 = exports.predictions = {
         toppscorer: [],
         cup: []
     },
+    geir: {
+        tabell: [],
+        opprykk: [],
+        toppscorer: [],
+        cup: []
+    },
     hans_bernhard: {
         tabell: [],
         opprykk: [],
