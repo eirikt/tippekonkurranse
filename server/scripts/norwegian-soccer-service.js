@@ -27,7 +27,8 @@ var R = require('ramda'),
 
         if (!htmlContent) {
             //throw new Error('parseAltOmFotballHtmlTable: Missing soccer results - cannot parse');
-            console.error('parseAltOmFotballHtmlTable: Missing soccer results - cannot parse');
+            //console.error('parseAltOmFotballHtmlTable: Missing soccer results - cannot parse');
+            console.warn('parseAltOmFotballHtmlTable: Missing soccer results - cannot parse');
             return currentTable;
         }
         if (!R.is(String, htmlContent)) {

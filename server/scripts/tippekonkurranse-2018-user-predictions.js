@@ -17,7 +17,7 @@ var _predictions2018 = exports.predictions = {
             'Bodø/Glimt',
             'Haugesund',
             'Ranheim TF',
-            'Sandefjord'
+            'Sandefjord Fotball'
         ],
         opprykk: ['Aalesund', 'Sogndal'],
         toppscorer: ['Nicklas Bendtner'],
@@ -55,7 +55,7 @@ var _predictions2018 = exports.predictions = {
             'Tromsø',
             'Lillestrøm',
             'Kristiansund BK',
-            'Sandefjord',
+            'Sandefjord Fotball',
             'Bodø/Glimt',
             'Start',
             'Ranheim TF'
@@ -72,16 +72,50 @@ var _predictions2018 = exports.predictions = {
         cup: []
     },
     oddvar: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Strømsgodset',
+            'Molde',
+            'Sarpsborg 08',
+            'Vålerenga',
+            'Brann',
+            'Bodø/Glimt',
+            'Odd',
+            'Tromsø',
+            'Lillestrøm',
+            'Start',
+            'Stabæk',
+            'Haugesund',
+            'Kristiansund BK',
+            'Ranheim TF',
+            'Sandefjord Fotball'
+        ],
+        opprykk: ['Aalesund', 'Viking'],
+        toppscorer: ['Patrick Mortensen'],
+        cup: ['Vålerenga']
     },
     ole_erik: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Molde',
+            'Rosenborg',
+            'Strømsgodset',
+            'Sarpsborg 08',
+            'Brann',
+            'Vålerenga',
+            'Stabæk',
+            'Lillestrøm',
+            'Bodø/Glimt',
+            'Tromsø',
+            'Start',
+            'Haugesund',
+            'Odd',
+            'Sandefjord Fotball',
+            'Ranheim TF',
+            'Kristiansund BK'
+        ],
+        opprykk: ['Sogndal', 'Viking'],
+        toppscorer: ['Thomas Amang'],
+        cup: ['Molde']
     },
     rikard: {
         tabell: [
@@ -99,7 +133,7 @@ var _predictions2018 = exports.predictions = {
             'Bodø/Glimt',
             'Haugesund',
             'Kristiansund BK',
-            'Sandefjord',
+            'Sandefjord Fotball',
             'Ranheim TF'
         ],
         opprykk: ['Aalesund', 'Sogndal'],
