@@ -256,10 +256,7 @@ module.exports = function (grunt) {
                     'max-duration': 360,
                     browsers: [
                         { platform: 'Windows 10', browserName: 'chrome', version: '64.0' },
-                        { platform: 'Windows 10', browserName: 'firefox', version: '58.0' },
-                        { platform: 'Windows 10', browserName: 'MicrosoftEdge', version: '16.16299' },
-                        { platform: 'Windows 8.1', browserName: 'internet explorer', version: '11.0' },
-                        { platform: 'macOS 10.13', browserName: 'safari', version: '11.0' }
+                        { platform: 'Windows 10', browserName: 'firefox', version: '58.0' }
                     ]
                 }
             }

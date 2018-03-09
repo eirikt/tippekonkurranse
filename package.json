@@ -34,7 +34,7 @@
         "iconv-lite": "0.x",
         "logdown": "^3.2.3",
         "mocha-phantomjs": "4.x",
-        "moment": "2.x",
+        "moment": "^2.21.0",
         "mongodb": "^2.2.35",
         "mongoose": "^4.13.11",
         "phantomjs-prebuilt": "2.x",
