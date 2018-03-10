@@ -16,8 +16,8 @@ var _predictions2018 = exports.predictions = {
             'Kristiansund BK',
             'Bodø/Glimt',
             'Haugesund',
-            'Ranheim TF',
-            'Sandefjord Fotball'
+            'Ranheim',
+            'Sandefjord'
         ],
         opprykk: ['Aalesund', 'Sogndal'],
         toppscorer: ['Nicklas Bendtner'],
@@ -30,10 +30,27 @@ var _predictions2018 = exports.predictions = {
         cup: []
     },
     geir: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Strømsgodset',
+            'Molde',
+            'Brann',
+            'Sarpsborg 08',
+            'Vålerenga',
+            'Odd',
+            'Lillestrøm',
+            'Stabæk',
+            'Kristiansund BK',
+            'Bodø/Glimt',
+            'Tromsø',
+            'Start',
+            'Haugesund',
+            'Ranheim',
+            'Sandefjord'
+        ],
+        opprykk: ['Sogndal', 'Viking'],
+        toppscorer: ['Nicklas Bendtner'],
+        cup: ['Molde']
     },
     hans_bernhard: {
         tabell: [],
@@ -55,10 +72,10 @@ var _predictions2018 = exports.predictions = {
             'Tromsø',
             'Lillestrøm',
             'Kristiansund BK',
-            'Sandefjord Fotball',
+            'Sandefjord',
             'Bodø/Glimt',
             'Start',
-            'Ranheim TF'
+            'Ranheim'
         ],
         opprykk: ['Ålesund', 'Viking'],
         toppscorer: ['Alexander Søderlund'],
@@ -66,10 +83,27 @@ var _predictions2018 = exports.predictions = {
 
     },
     oddgeir: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Molde',
+            'Strømsgodset',
+            'Brann',
+            'Sarpsborg 08',
+            'Vålerenga',
+            'Odd',
+            'Haugesund',
+            'Tromsø',
+            'Stabæk',
+            'Bodø/Glimt',
+            'Lillestrøm',
+            'Start',
+            'Kristiansund BK',
+            'Sandefjord',
+            'Ranheim'
+        ],
+        opprykk: ['Viking', 'Sogndal'],
+        toppscorer: ['Alexander Søderlund'],
+        cup: ['Rosenborg']
     },
     oddvar: {
         tabell: [
@@ -87,8 +121,8 @@ var _predictions2018 = exports.predictions = {
             'Stabæk',
             'Haugesund',
             'Kristiansund BK',
-            'Ranheim TF',
-            'Sandefjord Fotball'
+            'Ranheim',
+            'Sandefjord'
         ],
         opprykk: ['Aalesund', 'Viking'],
         toppscorer: ['Patrick Mortensen'],
@@ -109,8 +143,8 @@ var _predictions2018 = exports.predictions = {
             'Start',
             'Haugesund',
             'Odd',
-            'Sandefjord Fotball',
-            'Ranheim TF',
+            'Sandefjord',
+            'Ranheim',
             'Kristiansund BK'
         ],
         opprykk: ['Sogndal', 'Viking'],
@@ -133,8 +167,8 @@ var _predictions2018 = exports.predictions = {
             'Bodø/Glimt',
             'Haugesund',
             'Kristiansund BK',
-            'Sandefjord Fotball',
-            'Ranheim TF'
+            'Sandefjord',
+            'Ranheim'
         ],
         opprykk: ['Aalesund', 'Sogndal'],
         toppscorer: ['Daniel Chima Chukwu'],
@@ -162,8 +196,8 @@ var _predictions2018 = exports.predictions = {
             'Start',
             'Haugesund',
             'Kristiansund BK',
-            'Sandefjord Fotball',
-            'Ranheim TF'
+            'Sandefjord',
+            'Ranheim'
         ],
         opprykk: ['Aalesund', 'Sandnes Ulf'],
         toppscorer: ['Daniel Chima Chukwu'],
@@ -183,19 +217,36 @@ var _predictions2018 = exports.predictions = {
             'Stabæk',
             'Lillestrøm',
             'Haugesund',
-            'Sandefjord Fotball',
+            'Sandefjord',
             'Kristiansund BK',
             'Bodø/Glimt',
-            'Ranheim TF'
+            'Ranheim'
         ],
         opprykk: ['Aalesund', 'Viking'],
         toppscorer: ['Tobias Svendsen'],
         cup: ['Molde']
     },
     trond: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Strømsgodset',
+            'Molde',
+            'Sarpsborg 08',
+            'Brann',
+            'Vålerenga',
+            'Odd',
+            'Lillestrøm',
+            'Haugesund',
+            'Tromsø',
+            'Stabæk',
+            'Start',
+            'Kristiansund BK',
+            'Bodø/Glimt',
+            'Sandefjord',
+            'Ranheim'
+        ],
+        opprykk: ['Aalesund', 'Sogndal'],
+        toppscorer: ['Alexander Søderlund'],
+        cup: ['Sarpsborg 08']
     }
 };
