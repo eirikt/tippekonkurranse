@@ -147,16 +147,50 @@ var _predictions2018 = exports.predictions = {
         cup: []
     },
     steinar: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Molde',
+            'Rosenborg',
+            'Strømsgodset',
+            'Sarpsborg 08',
+            'Vålerenga',
+            'Lillestrøm',
+            'Stabæk',
+            'Tromsø',
+            'Odd',
+            'Brann',
+            'Bodø/Glimt',
+            'Start',
+            'Haugesund',
+            'Kristiansund BK',
+            'Sandefjord Fotball',
+            'Ranheim TF'
+        ],
+        opprykk: ['Aalesund', 'Sandnes Ulf'],
+        toppscorer: ['Daniel Chima Chukwu'],
+        cup: ['Molde']
     },
     tore: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Molde',
+            'Rosenborg',
+            'Strømsgodset',
+            'Brann',
+            'Sarpsborg 08',
+            'Vålerenga',
+            'Odd',
+            'Tromsø',
+            'Start',
+            'Stabæk',
+            'Lillestrøm',
+            'Haugesund',
+            'Sandefjord Fotball',
+            'Kristiansund BK',
+            'Bodø/Glimt',
+            'Ranheim TF'
+        ],
+        opprykk: ['Aalesund', 'Viking'],
+        toppscorer: ['Tobias Svendsen'],
+        cup: ['Molde']
     },
     trond: {
         tabell: [],
