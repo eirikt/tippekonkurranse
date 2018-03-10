@@ -24,10 +24,27 @@ var _predictions2018 = exports.predictions = {
         cup: ['Rosenborg']
     },
     eirik: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Molde',
+            'Vålerenga',
+            'Sarpsborg 08',
+            'Start',
+            'Bodø/Glimt',
+            'Brann',
+            'Strømsgodset',
+            'Odd',
+            'Stabæk',
+            'Haugesund',
+            'Lillestrøm',
+            'Tromsø',
+            'Ranheim',
+            'Sandefjord',
+            'Kristiansund BK'
+        ],
+        opprykk: ['Aalesund', 'Sogndal'],
+        toppscorer: ['Nicklas Bendtner'],
+        cup: ['Vålerenga']
     },
     geir: {
         tabell: [
@@ -53,10 +70,27 @@ var _predictions2018 = exports.predictions = {
         cup: ['Molde']
     },
     hans_bernhard: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Odd',
+            'Rosenborg',
+            'Molde',
+            'Brann',
+            'Stabæk',
+            'Vålerenga',
+            'Lillestrøm',
+            'Strømsgodset',
+            'Bodø/Glimt',
+            'Ranheim',
+            'Sandefjord',
+            'Sarpsborg 08',
+            'Start',
+            'Kristiansund BK',
+            'Tromsø',
+            'Haugesund'
+        ],
+        opprykk: ['Sogndal', 'Mjøndalen'],
+        toppscorer: ['Nicklas Bendtner'],
+        cup: ['Odd']
     },
     jan_tore: {
         tabell: [
@@ -175,10 +209,27 @@ var _predictions2018 = exports.predictions = {
         cup: ['Molde']
     },
     svein_tore: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Rosenborg',
+            'Molde',
+            'Brann',
+            'Vålerenga',
+            'Sarpsborg 08',
+            'Odd',
+            'Lillestrøm',
+            'Strømsgodset',
+            'Haugesund',
+            'Stabæk',
+            'Sandefjord',
+            'Kristiansund BK',
+            'Ranheim',
+            'Bodø/Glimt',
+            'Tromsø',
+            'Start'
+        ],
+        opprykk: ['Viking', 'Ålesund'],
+        toppscorer: ['Daniel Chima Chukwu'],
+        cup: ['Rosenborg']
     },
     steinar: {
         tabell: [
