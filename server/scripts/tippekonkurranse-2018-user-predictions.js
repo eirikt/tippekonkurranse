@@ -16,7 +16,7 @@ var _predictions2018 = exports.predictions = {
             'Kristiansund BK',
             'Bodø/Glimt',
             'Haugesund',
-            'Ranheim',
+            'Ranheim TF',
             'Sandefjord'
         ],
         opprykk: ['Aalesund', 'Sogndal'],
@@ -38,7 +38,7 @@ var _predictions2018 = exports.predictions = {
             'Haugesund',
             'Lillestrøm',
             'Tromsø',
-            'Ranheim',
+            'Ranheim TF',
             'Sandefjord',
             'Kristiansund BK'
         ],
@@ -62,7 +62,7 @@ var _predictions2018 = exports.predictions = {
             'Tromsø',
             'Start',
             'Haugesund',
-            'Ranheim',
+            'Ranheim TF',
             'Sandefjord'
         ],
         opprykk: ['Sogndal', 'Viking'],
@@ -80,7 +80,7 @@ var _predictions2018 = exports.predictions = {
             'Lillestrøm',
             'Strømsgodset',
             'Bodø/Glimt',
-            'Ranheim',
+            'Ranheim TF',
             'Sandefjord',
             'Sarpsborg 08',
             'Start',
@@ -109,7 +109,7 @@ var _predictions2018 = exports.predictions = {
             'Sandefjord',
             'Bodø/Glimt',
             'Start',
-            'Ranheim'
+            'Ranheim TF'
         ],
         opprykk: ['Ålesund', 'Viking'],
         toppscorer: ['Alexander Søderlund'],
@@ -133,7 +133,7 @@ var _predictions2018 = exports.predictions = {
             'Start',
             'Kristiansund BK',
             'Sandefjord',
-            'Ranheim'
+            'Ranheim TF'
         ],
         opprykk: ['Viking', 'Sogndal'],
         toppscorer: ['Alexander Søderlund'],
@@ -155,7 +155,7 @@ var _predictions2018 = exports.predictions = {
             'Stabæk',
             'Haugesund',
             'Kristiansund BK',
-            'Ranheim',
+            'Ranheim TF',
             'Sandefjord'
         ],
         opprykk: ['Aalesund', 'Viking'],
@@ -178,7 +178,7 @@ var _predictions2018 = exports.predictions = {
             'Haugesund',
             'Odd',
             'Sandefjord',
-            'Ranheim',
+            'Ranheim TF',
             'Kristiansund BK'
         ],
         opprykk: ['Sogndal', 'Viking'],
@@ -202,7 +202,7 @@ var _predictions2018 = exports.predictions = {
             'Haugesund',
             'Kristiansund BK',
             'Sandefjord',
-            'Ranheim'
+            'Ranheim TF'
         ],
         opprykk: ['Aalesund', 'Sogndal'],
         toppscorer: ['Daniel Chima Chukwu'],
@@ -222,7 +222,7 @@ var _predictions2018 = exports.predictions = {
             'Stabæk',
             'Sandefjord',
             'Kristiansund BK',
-            'Ranheim',
+            'Ranheim TF',
             'Bodø/Glimt',
             'Tromsø',
             'Start'
@@ -248,7 +248,7 @@ var _predictions2018 = exports.predictions = {
             'Haugesund',
             'Kristiansund BK',
             'Sandefjord',
-            'Ranheim'
+            'Ranheim TF'
         ],
         opprykk: ['Aalesund', 'Sandnes Ulf'],
         toppscorer: ['Daniel Chima Chukwu'],
@@ -271,7 +271,7 @@ var _predictions2018 = exports.predictions = {
             'Sandefjord',
             'Kristiansund BK',
             'Bodø/Glimt',
-            'Ranheim'
+            'Ranheim TF'
         ],
         opprykk: ['Aalesund', 'Viking'],
         toppscorer: ['Tobias Svendsen'],
@@ -294,7 +294,7 @@ var _predictions2018 = exports.predictions = {
             'Kristiansund BK',
             'Bodø/Glimt',
             'Sandefjord',
-            'Ranheim'
+            'Ranheim TF'
         ],
         opprykk: ['Aalesund', 'Sogndal'],
         toppscorer: ['Alexander Søderlund'],

@@ -1,19 +1,18 @@
 /* global require:false, describe:false, beforeEach:false, it:false, fail:false, root:false */
 /* jshint -W030 */
 
-//var //expect = require('chai').expect,
-    //R = require('ramda'),
-    //rq = require('rq-essentials'),
+var expect = require('chai').expect,
+    R = require('ramda'),
+    rq = require('rq-essentials'),
 
-    //TeamPlacement = require('../../../shared/scripts/app.models').TeamPlacement,
-    //norwegianSoccerService = require('../../../server/scripts/norwegian-soccer-service');
+    TeamPlacement = require('../../../shared/scripts/app.models').TeamPlacement,
+    norwegianSoccerService = require('../../../server/scripts/norwegian-soccer-service');
 
 
 describe('Norwegian Soccer Service', function () {
     'use strict';
 
     describe('parseEliteserieTable', function () {
-        /* TODO: Reactivate ASAP
         it('should exist as a function', function () {
             expect(norwegianSoccerService._parseAltOmFotballHtmlTable).to.exist;
             expect(R.is(Function, norwegianSoccerService._parseAltOmFotballHtmlTable)).to.be.true;
@@ -130,12 +129,10 @@ describe('Norwegian Soccer Service', function () {
             expect(eliteserieTable[1].matches).to.equal('2');
             expect(eliteserieTable[2].matches).to.equal('1');
         });
-        */
     });
 
 
     describe('parseEliteserieTopScorerTable', function () {
-        /* TODO: Reactivate ASAP
         it('should exist as a function', function () {
             expect(norwegianSoccerService._parseEliteserieTopScorerTable).to.exist;
             expect(R.is(Function, norwegianSoccerService._parseEliteserieTopScorerTable)).to.be.true;
@@ -230,26 +227,21 @@ describe('Norwegian Soccer Service', function () {
             expect(eliteserieTopScorers.length).to.equal(1);
             expect(eliteserieTopScorers[0]).to.equal('Alexander Søderlund');
         });
-        */
     });
 
 
     describe('isEnabled', function () {
-        /* TODO: Reactivate ASAP
         it('should exist as a function', function () {
             expect(norwegianSoccerService.isEnabled).to.exist;
             expect(R.is(Function, norwegianSoccerService.isEnabled)).to.be.true;
         });
-        */
     });
 
 
     describe('isValid', function () {
-        /* TODO: Reactivate ASAP
         it('should exist as a function', function () {
             expect(norwegianSoccerService.isValid).to.exist;
             expect(R.is(Function, norwegianSoccerService.isValid)).to.be.true;
         });
-        */
     });
 });
