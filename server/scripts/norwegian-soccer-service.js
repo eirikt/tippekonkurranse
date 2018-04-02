@@ -127,33 +127,10 @@ var R = require('ramda'),
         ]),
 
     getCurrentObosligaTableRequestor = exports.getCurrentObosligaTable =
-        //RQ.sequence([
-        //    get(currentObosligaTableUrl),
-        //    then(parseObosligaTable)
-        //]),
-        // TODO: Switch when OBOS-ligaen is present in altomfotball web site!
-        function (callback, args) {
-            'use strict';
-            var currentTable = [];
-            currentTable.push(new TeamPlacement('Aalesund', 1, 0));
-            currentTable.push(new TeamPlacement('Florø', 2, 0));
-            currentTable.push(new TeamPlacement('HamKam', 3, 0));
-            currentTable.push(new TeamPlacement('Jerv', 4, 0));
-            currentTable.push(new TeamPlacement('Kongsvinger', 5, 0));
-            currentTable.push(new TeamPlacement('Levanger', 6, 0));
-            currentTable.push(new TeamPlacement('Mjøndalen', 7, 0));
-            currentTable.push(new TeamPlacement('Nest-Sotra', 8, 0));
-            currentTable.push(new TeamPlacement('Notodden', 9, 0));
-            currentTable.push(new TeamPlacement('Sandnes Ulf', 10, 0));
-            currentTable.push(new TeamPlacement('Sogndal', 11, 0));
-            currentTable.push(new TeamPlacement('Strømmen', 12, 0));
-            currentTable.push(new TeamPlacement('Tromsdalen', 13, 0));
-            currentTable.push(new TeamPlacement('Ullensaker/Kisa', 14, 0));
-            currentTable.push(new TeamPlacement('Viking', 15, 0));
-            currentTable.push(new TeamPlacement('Åsane', 16, 0));
-
-            return callback(currentTable);
-        },
+        RQ.sequence([
+            get(currentObosligaTableUrl),
+            then(parseObosligaTable)
+        ]),
 
     getCurrentEliteserieTopScorerRequestor = exports.getCurrentEliteserieTopScorer =
         RQ.sequence([
