@@ -375,7 +375,7 @@ module.exports = function (grunt) {
     grunt.registerTask('test:sauce', ['connect', 'saucelabs-mocha']);
     grunt.registerTask('coverage:server', ['mochacov:report']);
 
-    grunt.registerTask('build:travis', ['test', 'saucelabs-mocha', /*'blanket_mocha',*/ 'mochacov:travis', 'jshint', 'jsdoc']);
+    grunt.registerTask('build:travis', ['test', 'saucelabs-mocha', /*'blanket_mocha', 'mochacov:travis',*/ 'jshint', 'jsdoc']);
 
     grunt.registerTask('deploy:development', ['install:client', 'copy:to-client', 'shell:run']);
     grunt.registerTask('deploy:local', ['env:prod', 'install:client', 'build:client', 'shell:run']);
