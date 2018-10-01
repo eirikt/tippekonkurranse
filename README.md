@@ -11,7 +11,7 @@ Hosted [here][1].
 
 [![Build Status](https://travis-ci.org/eirikt/tippekonkurranse.png?branch=master)](https://travis-ci.org/eirikt/tippekonkurranse)
 &nbsp;&nbsp;&nbsp;
-[![Codacy Badge](https://www.codacy.com/project/badge/4f9fda90eb834d27ae6cc2f539ae263c)](https://www.codacy.com/public/eiriktorske/tippekonkurranse/dashboard)
+[![Codacy Badge](https://app.codacy.com/project/badge/4f9fda90eb834d27ae6cc2f539ae263c)](https://app.codacy.com/project/eiriktorske/tippekonkurranse/dashboard)
 &nbsp;&nbsp;&nbsp;
 [![License](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/eirikt/tippekonkurranse/blob/master/README.md#license)
 
@@ -35,6 +35,13 @@ Hosted [here][1].
 
 
 ## Version history/roadmap
+
+#### v1.3.17 : _Deployed 01.10.2018_
+* Cup results update
+* Dependency updates
+
+_Status: Done_
+
 
 #### v1.3.16 : _Deployed 10.01.2018_
 * 2018 pre-season updates

@@ -143,17 +143,10 @@ var R = require('ramda'),
      */
     getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
         rq.return([
-            'Bodø/Glimt',
-            'Brann',
-            'Haugesund',
             'Lillestrøm',
-            'Odd',
-            'Ranheim',
             'Rosenborg',
             'Start',
-            'Strømsgodset',
-            'Tromsø',
-            'Vålerenga'
+            'Strømsgodset'
         ]),
 // /'Data generator' requestors
 
