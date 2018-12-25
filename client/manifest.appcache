@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# v1.3.17_2
+# v1.3.18_1
 
 CACHE:
 favicon.ico
@@ -53,6 +53,20 @@ scripts/client-utils.js
 scripts/utils.js
 
 # Client-side persistent resource caching
+api/predictions/2018/einar
+api/predictions/2018/eirik
+api/predictions/2018/geir
+api/predictions/2018/hans_bernhard
+api/predictions/2018/jan_tore
+api/predictions/2018/oddgeir
+api/predictions/2018/oddvar
+api/predictions/2018/ole_erik
+api/predictions/2018/rikard
+api/predictions/2018/svein_tore
+api/predictions/2018/steinar
+api/predictions/2018/tore
+api/predictions/2018/trond
+
 api/predictions/2017/einar
 api/predictions/2017/eirik
 api/predictions/2017/hans_bernhard

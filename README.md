@@ -36,6 +36,13 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
+#### v1.3.18 : _Deployed 25.12.2018_
+* 2019 pre-season updates
+* Node.js 10.x / npm 6.x (I presume Heroku will provide)
+
+_Status: Done_
+
+
 #### v1.3.17 : _Deployed 01.10.2018_
 * Cup results update
 * Dependency updates
@@ -47,7 +54,7 @@ _Status: Done_
 * 2018 pre-season updates
 * Bugfixes
 * Dependency updates
-* Node.js 8.x / npm 5.x (I presume Heroku will provide)
+* Node.js 8.x / npm 5.x
 
 _Status: Done_
 

@@ -22,7 +22,7 @@ define([
         var app = new Marionette.Application(),
 
             // NB! To be set manually for now ...
-            currentEliteserieSeasonStartDate = new Date(2018, 3 - 1, 11, 18, 0, 0),
+            currentEliteserieSeasonStartDate = new Date(2019, 3 - 1, 30, 15, 30, 0),
 
             TippekonkurranseModel = Backbone.Model.extend({
                 defaults: {
@@ -152,6 +152,10 @@ define([
 
                 participants, gold, silver, bronze, rank, rankTrend, rating, ratingTrend;
 
+            /*if (appModel.get('currentYearOverride') && scores.year !== appModel.get('currentYearOverride')) {
+                appModel.set('year', appModel.get('currentYearOverride'));
+                appModel.set('round', 0);
+            } else */
             if (/*scores.isLiveDataAvailable &&*/ hasNoData) {
                 appModel.set('year', appModel.get('currentYear'));
                 appModel.set('round', 0);

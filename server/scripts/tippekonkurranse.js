@@ -21,11 +21,13 @@ var env = process.env.NODE_ENV || "development",
     predictions2016 = require("./tippekonkurranse-2016-user-predictions").predictions,
     predictions2017 = require("./tippekonkurranse-2017-user-predictions").predictions,
     predictions2018 = require("./tippekonkurranse-2018-user-predictions").predictions,
+    predictions2019 = require("./tippekonkurranse-2019-user-predictions").predictions,
     rules2014 = require("./tippekonkurranse-2014-rules").rules,
     rules2015 = require("./tippekonkurranse-2015-rules").rules,
     rules2016 = require("./tippekonkurranse-2016-rules").rules,
     rules2017 = require("./tippekonkurranse-2017-rules").rules,
     rules2018 = require("./tippekonkurranse-2018-rules").rules,
+    rules2019 = require("./tippekonkurranse-2019-rules").rules,
 
 // Module dependencies, local application-specific
     appModels = require("./../../shared/scripts/app.models"),
@@ -37,7 +39,8 @@ var env = process.env.NODE_ENV || "development",
         2015: predictions2015,
         2016: predictions2016,
         2017: predictions2017,
-        2018: predictions2018
+        2018: predictions2018,
+        2019: predictions2019
     },
 
     _rules = exports.rules = {
@@ -45,7 +48,8 @@ var env = process.env.NODE_ENV || "development",
         2015: rules2015,
         2016: rules2016,
         2017: rules2017,
-        2018: rules2018
+        2018: rules2018,
+        2019: rules2019
     },
 
 

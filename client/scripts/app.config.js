@@ -17,7 +17,7 @@ require.config({
     // Development ('grunt [run|deploy:development]' and IDE execution):
     //baseUrl: 'scripts',
     // Standard:
-    baseUrl: '1.3.17/scripts',
+    baseUrl: '1.3.18/scripts',
 
     // See: http://momentjs.com/docs/#/use-it/require-js/
     packages: [{
