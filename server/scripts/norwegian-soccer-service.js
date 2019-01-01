@@ -60,19 +60,17 @@ var R = require('ramda'),
 
 
     // Archived 2017: currentEliteserieTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&seasonId=339&useFullUrl=false',
-    // TODO: NB! Archived 2018
-    currentEliteserieTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&subCmd=total&live=true&useFullUrl=false&seasonId=340',
+    // Archived 2018: currentEliteserieTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&subCmd=total&live=true&useFullUrl=false&seasonId=340',
     // Live:
-    //currentEliteserieTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&subCmd=total&live=true&useFullUrl=false',
+    currentEliteserieTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=1&subCmd=total&live=true&useFullUrl=false',
 
     parseEliteserieTable = parseAltOmFotballHtmlTable,
 
 
     // Archived 2017: currentObosligaTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=2&&seasonId=339&useFullUrl=false',
-    // TODO: NB! Archived 2018
-    currentObosligaTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=2&subCmd=total&live=true&useFullUrl=false&seasonId=340',
+    // Archived 2018: currentObosligaTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=2&subCmd=total&live=true&useFullUrl=false&seasonId=340',
     // Live:
-    //currentObosligaTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=2&subCmd=total&live=true&useFullUrl=false',
+    currentObosligaTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=table&tournamentId=2&subCmd=total&live=true&useFullUrl=false',
 
     parseObosligaTable = parseAltOmFotballHtmlTable,
 
@@ -120,10 +118,9 @@ var R = require('ramda'),
     },
 
     // Archived 2017: currentEliteserieToppscorerTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&seasonId=339&teamId=&useFullUrl=false';
-    // TODO: NB! Archived 2018
-    currentEliteserieToppscorerTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&useFullUrl=false&seasonId=340',
+    // Archived 2018: currentEliteserieToppscorerTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&useFullUrl=false&seasonId=340',
     // Live:
-    //currentEliteserieToppscorerTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&seasonId=&teamId=&useFullUrl=false',
+    currentEliteserieToppscorerTableUrl = 'http://www.altomfotball.no/elementsCommonAjax.do?cmd=statistics&subCmd=goals&tournamentId=1&seasonId=&teamId=&useFullUrl=false',
 
 
 //////////////////////////////////////////////

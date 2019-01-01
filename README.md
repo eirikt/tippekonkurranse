@@ -36,11 +36,19 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
-#### v1.3.18 : _Deployed 25.12.2018_
+#### v1.3.19 : _Deployed 01.01.2019
 * 2019 pre-season updates
-* Node.js 10.x / npm 6.x (I presume Heroku will provide)
+* Node.js 10.x / npm 6.x
+* Dependency updates
 
 _Status: Done_
+
+
+#### v1.3.18 : _Deployed 25.12.2018_
+* 2019 pre-season updates
+* Node.js 10.x / npm 6.x
+
+~~_Status: Done_~~ Corrupted somehow
 
 
 #### v1.3.17 : _Deployed 01.10.2018_
@@ -418,7 +426,7 @@ _Abandoned!_ Couldn't find any CORS/JSONP-supporting Tippeliga data service ...
 ## [License](#license)
 The MIT License (MIT)
 
-Copyright (c) 2014-2017 Eirik Torske
+Copyright (c) 2014-2019 Eirik Torske
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
