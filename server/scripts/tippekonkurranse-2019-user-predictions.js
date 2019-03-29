@@ -29,12 +29,29 @@ var _predictions2019 = exports.predictions = {
         opprykk: [],
         toppscorer: [],
         cup: []
-   },
+    },
     oddgeir: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Molde',
+            'Rosenborg',
+            'Brann',
+            'Sarpsborg 08',
+            'Vålerenga',
+            'Odd',
+            'Kristiansund BK',
+            'Haugesund',
+            'Strømsgodset',
+            'Lillestrøm',
+            'Ranheim TF',
+            'Tromsø',
+            'Viking',
+            'Bodø/Glimt',
+            'Stabæk',
+            'Mjøndalen'
+        ],
+        opprykk: ['Sandefjord', 'Aalesund'],
+        toppscorer: ['Aleksander Søderlund'],
+        cup: ['Sarpsborg 08']
     },
     oddvar: {
         tabell: [],
@@ -77,5 +94,5 @@ var _predictions2019 = exports.predictions = {
         opprykk: [],
         toppscorer: [],
         cup: []
-   }
+    }
 };
