@@ -36,7 +36,7 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
-#### v1.3.19 : _Deployed 01.01.2019
+#### v1.3.19 : _Deployed 01.01.2019_
 * 2019 pre-season updates
 * Node.js 10.x / npm 6.x
 * Dependency updates
