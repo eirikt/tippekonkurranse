@@ -35,7 +35,7 @@ var R = require('ramda'),
             throw new Error('parseAltOmFotballHtmlTable: Argument is not a string - cannot parse');
         }
 
-        $ = cheerio.load(htmlContent, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false });
+        $ = cheerio.load(htmlContent, {decodeEntities: false, normalizeWhitespace: false, xmlMode: false});
         rows = $('table').first().find('tbody').find('tr');
 
         R.forEach(function (element) {
@@ -90,7 +90,7 @@ var R = require('ramda'),
             throw new Error('parseEliteserieTopScorerTable: Argument is not a string - cannot parse');
         }
 
-        $ = cheerio.load(htmlContent, { decodeEntities: false, normalizeWhitespace: false, xmlMode: false });
+        $ = cheerio.load(htmlContent, {decodeEntities: false, normalizeWhitespace: false, xmlMode: false});
         rows = $('tbody').find('tr');
 
         R.forEach(function (element) {
@@ -151,7 +151,39 @@ var R = require('ramda'),
      */
     getCurrentRemainingCupContenders = exports.getCurrentRemainingCupContenders =
         rq.return([
-            'Rosenborg'
+            'Bodø/Glimt',
+            'Brann',
+            'Haugesund',
+            'Kristiansund BK',
+            'Lillestrøm',
+            'Mjøndalen',
+            'Molde',
+            'Odd',
+            'Ranheim TF',
+            'Rosenborg',
+            'Sarpsborg 08',
+            'Stabæk',
+            'Strømsgodset',
+            'Tromsø',
+            'Viking',
+            'Vålerenga',
+
+            'Aalesund',
+            'HamKam',
+            'Jerv',
+            'KFUM',
+            'Kongsvinger',
+            'Nest-Sotra',
+            'Notodden',
+            'Raufoss',
+            'Sandefjord',
+            'Sandnes Ulf',
+            'Skeid',
+            'Sogndal',
+            'Start',
+            'Strømmen',
+            'Tromsdalen',
+            'Ullensaker/Kisa'
         ]),
 // /'Data generator' requestors
 
@@ -181,7 +213,7 @@ var R = require('ramda'),
                     eliteserieTopScorer;
 
                 if (!args || !args.length || args.length !== 3) {
-                    return callback(null, { message: 'Internal error in RQ.js ("norwegian-soccer-service.js")' });
+                    return callback(null, {message: 'Internal error in RQ.js ("norwegian-soccer-service.js")'});
                 }
 
                 eliteserieTable = args[0];
@@ -189,10 +221,10 @@ var R = require('ramda'),
                 eliteserieTopScorer = args[2];
 
                 if (parseInt(eliteserieTable.length, 10) !== 16) {
-                    return callback(null, { message: 'Retrieved eliteserie table result has not 16 teams ("norwegian-soccer-service.js")' });
+                    return callback(null, {message: 'Retrieved eliteserie table result has not 16 teams ("norwegian-soccer-service.js")'});
                 }
                 if (parseInt(obosligaTable.length, 10) !== 16) {
-                    return callback(null, { message: 'Retrieved obosliga table result has not 16 teams ("norwegian-soccer-service.js")' });
+                    return callback(null, {message: 'Retrieved obosliga table result has not 16 teams ("norwegian-soccer-service.js")'});
                 }
 
                 // TODO: Revisit this logic ... during 2016 - those below are not specific enough! Crashed the app in round 1 and the start of round 2 ...
@@ -207,7 +239,7 @@ var R = require('ramda'),
 
                 // Extra check for end of season/new season results available and predictions are not
                 if (/*!rqInternalStack.isDbConnected &&*/ new Date().getMonth() >= 11 && eliteserieTable[0].matches && parseInt(eliteserieTable[0].matches, 10) === 0) {
-                    return callback(null, { message: "Retrieved eliteserie table result is not in sync with stored results - is it a new season?" });
+                    return callback(null, {message: "Retrieved eliteserie table result is not in sync with stored results - is it a new season?"});
                 }
 
                 return callback(args);
