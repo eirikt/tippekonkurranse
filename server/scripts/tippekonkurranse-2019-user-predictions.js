@@ -7,10 +7,27 @@ var _predictions2019 = exports.predictions = {
         cup: []
     },
     eirik: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Molde',
+            'Vålerenga',
+            'Brann',
+            'Rosenborg',
+            'Sarpsborg 08',
+            'Strømsgodset',
+            'Tromsø',
+            'Odd',
+            'Haugesund',
+            'Viking',
+            'Lillestrøm',
+            'Ranheim TF',
+            'Kristiansund BK',
+            'Mjøndalen',
+            'Bodø/Glimt',
+            'Stabæk'
+        ],
+        opprykk: ['Start', 'Aalesund'],
+        toppscorer: ['Ohi Omoijuanfo'],
+        cup: ['Vålerenga']
     },
     geir: {
         tabell: [],
@@ -54,10 +71,26 @@ var _predictions2019 = exports.predictions = {
         cup: ['Sarpsborg 08']
     },
     oddvar: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Vålerenga',
+            'Rosenborg',
+            'Molde',
+            'Sarpsborg 08',
+            'Brann',
+            'Haugesund',
+            'Lillestrøm',
+            'Strømsgodset',
+            'Odd',
+            'Viking',
+            'Bodø/Glimt',
+            'Kristiansund BK',
+            'Stabæk',
+            'Tromsø',
+            'Ranheim TF',
+            'Mjøndalen'],
+        opprykk: ['Aalesund', 'Sandefjord'],
+        toppscorer: ['Matthías Vilhjálmsson'],
+        cup: ['Rosenborg']
     },
     ole_erik: {
         tabell: [],
