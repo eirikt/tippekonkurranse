@@ -208,9 +208,26 @@ var _predictions2019 = exports.predictions = {
         cup: []
     },
     trond: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Molde',
+            'Odd',
+            'Rosenborg',
+            'Sarpsborg 08',
+            'Viking',
+            'Haugesund',
+            'Viking',
+            'Strømsgodset',
+            'Vålerenga',
+            'Brann',
+            'Lillestrøm',
+            'Bodø/Glimt',
+            'Stabæk',
+            'Ranheim TF',
+            'Tromsø',
+            'Kristiansund BK'
+        ],
+        opprykk: ['Sandnes Ulf', 'Skeid'],
+        toppscorer: ['Odd Børven'],
+        cup: ['Odd']
     }
 };
