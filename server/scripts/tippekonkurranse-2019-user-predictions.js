@@ -196,10 +196,27 @@ var _predictions2019 = exports.predictions = {
         cup: []
     },
     steinar: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
+        tabell: [
+            'Molde',
+            'Brann',
+            'Rosenborg',
+            'Sarpsborg 08',
+            'Vålerenga',
+            'Odd',
+            'Haugesund',
+            'Strømsgodset',
+            'Lillestrøm',
+            'Kristiansund BK',
+            'Bodø/Glimt',
+            'Ranheim TF',
+            'Tromsø',
+            'Viking',
+            'Stabæk',
+            'Mjøndalen'
+        ],
+        opprykk: ['Aalesund', 'Sandefjord'],
+        toppscorer: ['Ohi Omoijuanfo'],
+        cup: ['Molde']
     },
     tore: {
         tabell: [],
