@@ -232,7 +232,6 @@ var _predictions2019 = exports.predictions = {
             'Sarpsborg 08',
             'Viking',
             'Haugesund',
-            'Viking',
             'Strømsgodset',
             'Vålerenga',
             'Brann',
@@ -241,7 +240,8 @@ var _predictions2019 = exports.predictions = {
             'Stabæk',
             'Ranheim TF',
             'Tromsø',
-            'Kristiansund BK'
+            'Kristiansund BK',
+            'Mjøndalen'
         ],
         opprykk: ['Sandnes Ulf', 'Skeid'],
         toppscorer: ['Odd Børven'],
