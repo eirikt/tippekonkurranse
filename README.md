@@ -36,6 +36,14 @@ Hosted [here][1].
 
 ## Version history/roadmap
 
+#### v1.3.21 : _Deployed 21.06.2019_
+* Inactive users removed
+* Cup results update
+* Dependency updates
+
+_Status: Done_
+
+
 #### v1.3.20 : _Deployed 01.04.2019_
 * 2019 predictions
 * Dependency updates

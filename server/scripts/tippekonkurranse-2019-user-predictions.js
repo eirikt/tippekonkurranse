@@ -69,12 +69,6 @@ var _predictions2019 = exports.predictions = {
         toppscorer: ['Ohi Omoijuanfo'],
         cup: ['Sarpsborg 08']
     },
-    hans_bernhard: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
-    },
     jan_tore: {
         tabell: [
             'Molde',
@@ -189,12 +183,6 @@ var _predictions2019 = exports.predictions = {
         toppscorer: ['Ohi Omoijuanfo'],
         cup: ['Molde']
     },
-    svein_tore: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
-    },
     steinar: {
         tabell: [
             'Molde',
@@ -217,12 +205,6 @@ var _predictions2019 = exports.predictions = {
         opprykk: ['Aalesund', 'Sandefjord'],
         toppscorer: ['Ohi Omoijuanfo'],
         cup: ['Molde']
-    },
-    tore: {
-        tabell: [],
-        opprykk: [],
-        toppscorer: [],
-        cup: []
     },
     trond: {
         tabell: [
