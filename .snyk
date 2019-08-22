@@ -1,0 +1,67 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.13.5
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:extend:20180424':
+    - grunt-cli > liftoff > extend:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-saucelabs > requestretry > extend:
+        patched: '2019-08-22T09:08:44.348Z'
+  'npm:hoek:20180212':
+    - grunt-mocha-cov > request > hawk > cryptiles > boom > hoek:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-mocha-cov > request > hawk > boom > hoek:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-mocha-cov > request > hawk > sntp > hoek:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-mocha-cov > request > hawk > hoek:
+        patched: '2019-08-22T09:08:44.348Z'
+  SNYK-JS-LODASH-450202:
+    - grunt-blanket-mocha > grunt > grunt-legacy-log > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt > grunt-legacy-log > grunt-legacy-log-utils > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-blanket-mocha > grunt > grunt-legacy-log > grunt-legacy-log-utils > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-contrib-watch > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-mocha > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-saucelabs > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-contrib-watch > async > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt > grunt-legacy-util > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt > grunt-legacy-log > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-contrib-clean > async > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - mongoose > async > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-contrib-connect > async > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-contrib-jshint > jshint > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-contrib-watch > gaze > globule > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-contrib-connect > portscanner > async > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-jsdoc > jsdoc > catharsis > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-jsdoc > jsdoc > requizzle > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-blanket-mocha > grunt > grunt-legacy-util > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+  'npm:lodash:20180130':
+    - grunt-blanket-mocha > lodash:
+        patched: '2019-08-22T09:08:44.348Z'
+  'npm:minimatch:20160620':
+    - grunt-blanket-mocha > mocha > glob > minimatch:
+        patched: '2019-08-22T09:08:44.348Z'
+    - grunt-mocha-cov > mocha > glob > minimatch:
+        patched: '2019-08-22T09:08:44.348Z'
+  'npm:qs:20140806':
+    - mocha-phantomjs > phantomjs > request > qs:
+        patched: '2019-08-22T09:08:44.348Z'
