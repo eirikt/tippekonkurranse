@@ -226,7 +226,7 @@ var _predictions2019 = exports.predictions = {
             'Mjøndalen'
         ],
         opprykk: ['Sandnes Ulf', 'Skeid'],
-        toppscorer: ['Odd Børven'],
+        toppscorer: ['Torgeir Børven'],
         cup: ['Odd']
     }
 };
