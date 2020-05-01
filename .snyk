@@ -1,0 +1,84 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - grunt-contrib-watch > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-mocha > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-saucelabs > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt > grunt-legacy-log > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt > grunt-legacy-util > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-contrib-clean > async > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-contrib-connect > async > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-contrib-watch > async > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-contrib-jshint > jshint > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - mongoose > async > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt > grunt-legacy-log > grunt-legacy-log-utils > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-blanket-mocha > grunt > grunt-legacy-log > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-env > grunt > grunt-legacy-log > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-blanket-mocha > grunt > grunt-legacy-util > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-env > grunt > grunt-legacy-util > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-env > grunt-contrib-clean > async > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-contrib-connect > portscanner > async > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-contrib-watch > gaze > globule > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-jsdoc > jsdoc > catharsis > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-jsdoc > jsdoc > requizzle > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-blanket-mocha > grunt > grunt-legacy-log > grunt-legacy-log-utils > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-env > grunt > grunt-legacy-log > grunt-legacy-log-utils > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - grunt-env > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > @snyk/dep-graph > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > inquirer > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > snyk-config > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > snyk-mvn-plugin > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > snyk-nodejs-lockfile-parser > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > snyk-nuget-plugin > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > @snyk/dep-graph > graphlib > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > snyk-go-plugin > graphlib > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > snyk-nodejs-lockfile-parser > graphlib > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > @snyk/snyk-cocoapods-plugin > @snyk/dep-graph > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > snyk-nuget-plugin > dotnet-deps-parser > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > snyk-php-plugin > @snyk/composer-lockfile-parser > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > @snyk/snyk-cocoapods-plugin > @snyk/dep-graph > graphlib > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > @snyk/snyk-cocoapods-plugin > @snyk/cocoapods-lockfile-parser > @snyk/ruby-semver > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
+    - snyk > @snyk/snyk-cocoapods-plugin > @snyk/cocoapods-lockfile-parser > @snyk/dep-graph > graphlib > lodash:
+        patched: '2020-05-01T04:10:11.094Z'
