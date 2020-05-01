@@ -1,66 +1,69 @@
 {
-    "name": "Tippekonkurranse",
-    "version": "1.3.22",
-    "description": "A Node-based web application hosted on Heroku (2014-idiomatic overall design)",
-    "author": "Eirik Torske <eirik.torske@gmail.com>",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/eirikt/tippekonkurranse.git"
-    },
-    "dependencies": {
-        "bower": "^1.8.8",
-        "chai": "^4.2.0",
-        "chai-jquery": "^2.1.0",
-        "cheerio": "0.x",
-        "express": "^4.17.1",
-        "grunt": "^1.0.4",
-        "grunt-blanket-mocha": "^1.0.0",
-        "grunt-cli": "^1.3.2",
-        "grunt-contrib-clean": "^2.0.0",
-        "grunt-contrib-connect": "^2.0.0",
-        "grunt-contrib-copy": "1.x",
-        "grunt-contrib-cssmin": "^3.0.0",
-        "grunt-contrib-jshint": "^2.1.0",
-        "grunt-contrib-uglify": "^4.0.1",
-        "grunt-contrib-watch": "^1.1.0",
-        "grunt-env": "1.0.0",
-        "grunt-jsdoc": "^2.4.0",
-        "grunt-mocha": "^1.2.0",
-        "grunt-mocha-cov": "0.x",
-        "grunt-mocha-test": "0.x",
-        "grunt-saucelabs": "^9.0.1",
-        "grunt-shell": "^3.0.1",
-        "iconv-lite": "^0.4.24",
-        "logdown": "^3.2.8",
-        "mocha-phantomjs": "4.x",
-        "moment": "^2.24.0",
-        "mongodb": "^3.2.7",
-        "mongoose": "^5.6.0",
-        "phantomjs-prebuilt": "2.x",
-        "proxyquire": "^2.1.0",
-        "ramda": "^0.26.1",
-        "request": "^2.88.0",
-        "rq-commonjs": "github:eirikt/RQ",
-        "rq-essentials": "github:eirikt/rq-essentials",
-        "rq-essentials-request": "github:eirikt/rq-essentials-request",
-        "scoreunder": "0.x",
-        "sinon": "^1.17.7",
-        "time-grunt": "^2.0.0",
-        "underscore": "^1.9.1",
-        "snyk": "^1.217.3"
-    },
-    "scripts": {
-        "postinstall": "echo postinstall time; ./node_modules/grunt-cli/bin/grunt deploy:heroku",
-        "start": "node server/scripts/server.js",
-        "test": "grunt test",
-        "run": "grunt run"
-    },
-    "config": {
-        "blanket": {
-            "pattern": [
-                "server/scripts"
-            ]
-        }
+  "name": "Tippekonkurranse",
+  "version": "1.3.22",
+  "description": "A Node-based web application hosted on Heroku (2014-idiomatic overall design)",
+  "author": "Eirik Torske <eirik.torske@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eirikt/tippekonkurranse.git"
+  },
+  "dependencies": {
+    "bower": "^1.8.8",
+    "chai": "^4.2.0",
+    "chai-jquery": "^2.1.0",
+    "cheerio": "0.x",
+    "express": "^4.17.1",
+    "grunt": "^1.0.4",
+    "grunt-blanket-mocha": "^1.0.0",
+    "grunt-cli": "^1.3.2",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-connect": "^2.0.0",
+    "grunt-contrib-copy": "1.x",
+    "grunt-contrib-cssmin": "^3.0.0",
+    "grunt-contrib-jshint": "^2.1.0",
+    "grunt-contrib-uglify": "^4.0.1",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-env": "1.0.0",
+    "grunt-jsdoc": "^2.4.0",
+    "grunt-mocha": "^1.2.0",
+    "grunt-mocha-cov": "0.x",
+    "grunt-mocha-test": "0.x",
+    "grunt-saucelabs": "^9.0.1",
+    "grunt-shell": "^3.0.1",
+    "iconv-lite": "^0.4.24",
+    "logdown": "^3.2.8",
+    "mocha-phantomjs": "4.x",
+    "moment": "^2.24.0",
+    "mongodb": "^3.2.7",
+    "mongoose": "^5.6.0",
+    "phantomjs-prebuilt": "2.x",
+    "proxyquire": "^2.1.0",
+    "ramda": "^0.26.1",
+    "request": "^2.88.0",
+    "rq-commonjs": "github:eirikt/RQ",
+    "rq-essentials": "github:eirikt/rq-essentials",
+    "rq-essentials-request": "github:eirikt/rq-essentials-request",
+    "scoreunder": "0.x",
+    "sinon": "^1.17.7",
+    "time-grunt": "^2.0.0",
+    "underscore": "^1.9.1",
+    "snyk": "^1.316.1"
+  },
+  "scripts": {
+    "postinstall": "echo postinstall time; ./node_modules/grunt-cli/bin/grunt deploy:heroku",
+    "start": "node server/scripts/server.js",
+    "test": "grunt test",
+    "run": "grunt run",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "config": {
+    "blanket": {
+      "pattern": [
+        "server/scripts"
+      ]
     }
+  },
+  "snyk": true
 }
