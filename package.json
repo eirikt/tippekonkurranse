@@ -47,7 +47,7 @@
         "scoreunder": "0.x",
         "sinon": "^1.17.7",
         "time-grunt": "^2.0.0",
-        "underscore": "^1.9.1",
+        "underscore": "^1.12.1",
         "snyk": "^1.217.3"
     },
     "scripts": {
