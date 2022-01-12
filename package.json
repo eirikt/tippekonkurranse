@@ -39,7 +39,7 @@
         "mongoose": "^5.6.0",
         "phantomjs-prebuilt": "2.x",
         "proxyquire": "^2.1.0",
-        "ramda": "^0.26.1",
+        "ramda": "^0.27.2",
         "request": "^2.88.0",
         "rq-commonjs": "github:eirikt/RQ",
         "rq-essentials": "github:eirikt/rq-essentials",
