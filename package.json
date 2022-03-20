@@ -30,7 +30,7 @@
         "grunt-mocha-cov": "0.x",
         "grunt-mocha-test": "0.x",
         "grunt-saucelabs": "^9.0.1",
-        "grunt-shell": "^3.0.1",
+        "grunt-shell": "^4.0.0",
         "iconv-lite": "^0.4.24",
         "logdown": "^3.2.8",
         "mocha-phantomjs": "4.x",
