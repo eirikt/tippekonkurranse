@@ -48,7 +48,7 @@
         "sinon": "^1.17.7",
         "time-grunt": "^2.0.0",
         "underscore": "^1.9.1",
-        "snyk": "^1.217.3"
+        "snyk": "^1.1064.0"
     },
     "scripts": {
         "postinstall": "echo postinstall time; ./node_modules/grunt-cli/bin/grunt deploy:heroku",
