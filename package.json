@@ -40,7 +40,7 @@
         "phantomjs-prebuilt": "2.x",
         "proxyquire": "^2.1.0",
         "ramda": "^0.26.1",
-        "request": "^2.88.0",
+        "request": "^2.88.2",
         "rq-commonjs": "github:eirikt/RQ",
         "rq-essentials": "github:eirikt/rq-essentials",
         "rq-essentials-request": "github:eirikt/rq-essentials-request",
