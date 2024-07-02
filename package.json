@@ -24,7 +24,7 @@
         "grunt-contrib-jshint": "^2.1.0",
         "grunt-contrib-uglify": "^4.0.1",
         "grunt-contrib-watch": "^1.1.0",
-        "grunt-env": "1.0.0",
+        "grunt-env": "1.0.1",
         "grunt-jsdoc": "^2.4.0",
         "grunt-mocha": "^1.2.0",
         "grunt-mocha-cov": "0.x",
@@ -36,7 +36,7 @@
         "mocha-phantomjs": "4.x",
         "moment": "^2.24.0",
         "mongodb": "^3.2.7",
-        "mongoose": "^5.6.0",
+        "mongoose": "^5.7.3",
         "phantomjs-prebuilt": "2.x",
         "proxyquire": "^2.1.0",
         "ramda": "^0.26.1",
@@ -48,7 +48,7 @@
         "sinon": "^1.17.7",
         "time-grunt": "^2.0.0",
         "underscore": "^1.9.1",
-        "snyk": "^1.217.3"
+        "snyk": "^1.996.0"
     },
     "scripts": {
         "postinstall": "echo postinstall time; ./node_modules/grunt-cli/bin/grunt deploy:heroku",
